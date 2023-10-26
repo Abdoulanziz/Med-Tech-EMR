@@ -148,7 +148,7 @@
                         </div>
                     </div>
                     <div class="section-body" style="padding-block-start: .8rem;">
-                        <h2>All Patients</h2>
+                        <h2 class="special-heading">All Patients</h2>
                         <div class="filter-section">
                             <div class="date-range-picker flex">
                                 <div class="form-group flex flex-column">
@@ -197,41 +197,40 @@
                     <div class="section-body" style="padding-block-start: .8rem;">
                         <div class="grid info">
                             <div class="info-wrapper">
-                                <h2>Personal Information</h2>
-                                <div class="patient-details flex" id="patient-info-section_01">
+                                <h2 class="special-heading">Personal Information</h2>
+                                <div class="patient-details" id="patient-info-section_01">
                                     <div class="patient-info">
                                         <div class="patient-info-item">
                                             <div class="content content-major flex">
-                                              <img class="avatar" src="/assets/img/profiledefault.png" style="inline-size: 40px;block-size: 40px;border: 1px solid #ccc;"/>
-                                              <div class="flex" style="align-items: flex-start; flex-direction: column">
-                                                <h5 class="label">Name: <span id="patient-name"></span></h5>
-                                                <h5 class="label">Address: <span id="home-address">Not provided</span> <i class="ti-pencil" style="font-size: 14px;"></i> </h5>
-                                              </div>
+                                                <img class="avatar" src="/assets/img/profiledefault.png">
+                                                <div class="flex" style="align-items: flex-start; flex-direction: column;">
+                                                    <h5 class="label">Name: <span id="patient-name"></span></h5>
+                                                    <h5 class="label">Address: <span id="home-address">Not provided</span> <i class="ti-pencil" style="font-size: 14px;"></i></h5>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="patient-info-item">
                                             <div class="content flex">
-                                              <div class="icon icon-contact">
-                                                <img src="/assets/svg/mail.svg" alt="">
-                                              </div>
-                                              <div class="flex" style="align-items: flex-start; flex-direction: column">
-                                                <h5 class="label">Date of Birth: <span id="date-of-birth"></span></h5>
-                                                <h5 class="label">Gender: <span id="gender"></span></h5>
-
-                                              </div>
+                                                <div class="icon icon-contact">
+                                                    <img src="/assets/svg/mail.svg" alt="">
+                                                </div>
+                                                <div class="flex" style="align-items: flex-start; flex-direction: column;">
+                                                    <h5 class="label">Date of Birth: <span id="date-of-birth"></span></h5>
+                                                    <h5 class="label">Gender: <span id="gender"></span></h5>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="patient-info-item">
                                             <div class="content flex" style="justify-content: space-between;">
-                                              <div class="content flex">
-                                                <div class="icon icon-phone">
-                                                  <img src="/assets/svg/phone.svg" alt="">
+                                                <div class="content flex">
+                                                    <div class="icon icon-phone">
+                                                        <img src="/assets/svg/phone.svg" alt="">
+                                                    </div>
+                                                    <div class="flex" style="align-items: flex-start; flex-direction: column;">
+                                                        <h5 class="label">Contact: <span id="contact-number"></span> <i class="ti-pencil" style="font-size: 14px;"></i></h5>
+                                                        <h5 class="label">Other: <span id="alternative-contact-number"></span> <i class="ti-pencil" style="font-size: 14px;"></i></h5>
+                                                    </div>
                                                 </div>
-                                                <div class="flex" style="align-items: flex-start; flex-direction: column">
-                                                  <h5 class="label">Contact: <span id="contact-number"></span> <i class="ti-pencil" style="font-size: 14px;"></i> </h5>
-                                                  <h5 class="label">Other: <span id="alternative-contact-number">Not provided</span> <i class="ti-pencil" style="font-size: 14px;"></i> </h5>
-                                                </div>
-                                              </div>
                                             </div>
                                         </div>
                                     </div>
@@ -239,7 +238,7 @@
                             </div>
                             
                             <div class="info-wrapper">
-                                <h2>Services</h2>
+                                <h2 class="special-heading">Services</h2>
                                 <div class="ongoing-services">
                                     <div class="service">
                                       <h3>Consultation (UGX 40,000)</h3>
@@ -264,7 +263,7 @@
                                 </div>
                             </div>
                         </div>
-                        <h2>Recent Visits</h2>
+                        <h2 class="special-heading">Recent Visits</h2>
                         <table id="single-patient-visits" class="display" style="width:100%;margin-top:.5rem;">
                             <thead>
                                 <tr>
@@ -510,7 +509,7 @@
                 </div>
             </div>            
 
-            <!-- Add patiient to queue modal -->
+            <!-- Add patient to queue modal -->
             <div id="add-patient-to-queue-modal" class="form-modal">
                 <div class="form-modal-content">
                     <form class="modal-form" id="add-patient-to-queue-form">

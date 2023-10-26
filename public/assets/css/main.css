@@ -339,6 +339,14 @@
   border-radius: 5px;
 }
 
+.modal-form-body .form-section h2 {
+  color: rgb(129, 129, 129);
+  font-weight: 400;
+  font-size: 19px !important;
+  font-family: var(--font-tilt-neon);
+  margin-block-end: .6rem;
+}
+
 .modal-form-body .form-section .remove-test {
   margin-block: .6rem;
 }
@@ -349,8 +357,10 @@
 
 .modal-form-body label {
   display: block;
-  font-weight: bold;
+  font-weight: 300;
   margin-bottom: 5px;
+  color: rgb(67, 67, 67);
+  font-size: 16px !important;
 }
 
 .modal-form-body input[type="text"],
@@ -424,71 +434,6 @@
   background-color: #0056b3;
 }
 
-.total-fees {
-  text-align: right;
-  font-weight: bold;
-}
-
-.grid.info {
-  grid-template-columns: 1fr 1fr;
-  margin-block-end: 4rem;
-  block-size: fit-content;
-  margin-block-end: 1.8rem;
-}
-
-.info-wrapper h2 {
-  font-size: 24px; 
-  margin-bottom: .6rem; 
-  color: #333;
-}
-
-.ongoing-services,
-.patient-details.flex {
-  font-family: sans-serif;
-  background-color: #ffffff;
-  color: #000;
-  padding-inline: 20px;
-  border-radius: 0;
-  border: 1px solid #ddd;
-  block-size: 200px;
-}
-
-.patient-details h1 {
-  margin: 0;
-  font-size: 28px;
-}
-
-.patient-info {
-  margin-top: 20px;
-  inline-size: 100%;
-}
-
-.patient-info p {
-  margin: 5px 0;
-  color: #535353;
-  font-size: 17px;
-}
-
-.patient-info strong {
-  margin: 5px 0;
-  color: #8e8d8d;
-  font-weight: normal;
-}
-
-.ongoing-services.flex,
-.documents.flex {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  padding: 20px;
-  border-radius: 0;
-  opacity: .6;
-  block-size: 200px;
-}
-
-.document-list {
-  margin-top: 20px;
-}
-
 .action-buttons {
   display: flex;
   justify-content: flex-end;
@@ -502,15 +447,41 @@
   font-size: 20px;
 }
 
-.patient-details.flex,
-.documents.flex {
+.total-fees {
+  text-align: right;
+  font-weight: bold;
+}
+
+.special-heading {
+  font-weight: 300;
+  margin-block-end: .6rem;
+  font-family: sans-serif;
+  font-size: 18px;
+  color: #919191;
+}
+
+.grid.info {
+  grid-template-columns: 1fr 1fr;
+  margin-block-end: 4rem;
+  block-size: fit-content;
+  margin-block-end: 1.8rem;
+}
+
+
+.patient-details,
+.ongoing-services,
+.documents {
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
+  block-size: 230px;
+  padding: .6rem .8rem;
+  border: 1px solid #ccc;
+  border-radius: .4rem;
 }
 
-.patient-details.flex .action-buttons,
-.documents.flex .action-buttons {
+.patient-details .action-buttons,
+.documents .action-buttons {
   inline-size: 100%;
 }
 
@@ -519,6 +490,18 @@
   margin: 0;
   border-block-end: 1px solid #d8d8d8;
   padding-block: .4rem;
+}
+
+.patient-info-item .label {
+  font-weight: normal !important; 
+  font-size: 18px !important; 
+  color: #919191;
+  font-family: sans-serif;
+}
+
+.patient-info-item .label span {
+  font-style: italic;
+  color: #343333;
 }
 
 .patient-info-item:last-child {
@@ -542,8 +525,8 @@
   padding: 0.6em;
   color: #ffffff;
   border-radius: 50%;
-  block-size: 40px;
-  inline-size: 40px;
+  block-size: 48px;
+  inline-size: 48px;
 }
 
 .patient-info-item .content.flex .icon.icon-phone {
@@ -562,6 +545,9 @@
   font-size: 14px;
   font-weight: 400;
 }
+
+
+
 
 .file-upload-container {
   border: 2px dashed #ccc;
