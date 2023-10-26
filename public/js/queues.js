@@ -48,14 +48,15 @@ async function loadAllPatientsOnQueue() {
             { data : null }
         ],
         rowCallback: function(row, data, index) {
-            row.style.cursor = "pointer";
-            row.dataset.patient = JSON.stringify(data);
-            
-            row.classList.add("section-toggler");
-            row.dataset.section = "section_01";
+            const rowData = JSON.stringify(data);
 
-            UTILS.sectionToggler(row, "section", () => {
-                displaySelectedPatientDetails("patient-info-section_01", JSON.stringify(data), () => loadSinglePatientVisits(data.patientId));
+            const viewMoreCta = row.cells[6].querySelectorAll("button")[0];
+            viewMoreCta.style.cursor = "pointer";
+            viewMoreCta.classList.add("section-toggler");
+            viewMoreCta.dataset.section = "section_01";
+
+            UTILS.sectionToggler(viewMoreCta, "section", () => {
+                displaySelectedPatientDetails("patient-info-section_01", rowData, () => loadSinglePatientVisits(data.patientId));
             });
         },
         columnDefs: [
@@ -170,16 +171,18 @@ async function loadSinglePatientVisits(patientId) {
             { data : null }
         ],
         rowCallback: function(row, data, index) {
-            row.style.cursor = "pointer";
-            row.dataset.patient = JSON.stringify(data);
-            
-            row.classList.add("section-toggler");
-            row.dataset.section = "section_02";
-
             data.patientId = patientId;
+            const rowDataString = JSON.stringify(data);
 
-            UTILS.sectionToggler(row, "section", () => {
-                displaySelectedPatientDetails("patient-info-section_02", JSON.stringify(data), () => loadSinglePatientVisitRequests(data.visitId));
+            const workOnPatientCta = row.cells[4].querySelectorAll("button")[0];
+            workOnPatientCta.style.cursor = "pointer";
+            workOnPatientCta.dataset.patient = rowDataString;
+
+            workOnPatientCta.classList.add("section-toggler");
+            workOnPatientCta.dataset.section = "section_02";
+
+            UTILS.sectionToggler(workOnPatientCta, "section", () => {
+                displaySelectedPatientDetails("patient-info-section_02", rowDataString, () => loadSinglePatientVisitRequests(data.visitId));
             });
         },
         columnDefs: [
