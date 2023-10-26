@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Med Tech - MIS</title>
+
+
+    <link rel="shortcut icon" href="/assets/svg/favicon.ico" type="image/x-icon"/>
+
+    <link rel="stylesheet" href="/assets/css/utils.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/table.min.css">
+    <link rel="stylesheet" href="/assets/icons/themify-icons.css">
+
+    <script src="/js/jquery-3.5.1.js"></script>
+    <script src="/js/jquery.dataTables.min.js"></script>
+
+    <script src="/js/chart.js"></script>
+    <script src="/js/jspdf.min.js"></script>
+
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main">
+            
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-logo">
+                    <img src="/assets/svg/512x512.png" alt="" class="app-logo">
+                    <span style="margin-inline-start: .6rem;color: #fff;font-family: 'Tilt Neon';font-weight: bolder;font-size: 27px;"><span style="color: rgb(0, 208, 255);">Med</span> <span style="color: yellowgreen;">Tech</span> <span style="color: orange;">MIS</span></span>
+                </div>
+                <ul class="sidebar-menu">
+                    <li class="menu-item active">
+                        <a href="/page/patients">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/patients.png" alt="" class="icon"><span class="text">Patients</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/page/visits">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/visits.png" alt="" class="icon"><span class="text">Visits</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/page/queues">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/doctor.png" alt="" class="icon"><span class="text">Queue</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <!-- <li class="menu-item">
+                        <a href="#">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/laboratory.png" alt="" class="icon"><span class="text">Laboratory</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/cardiology.png" alt="" class="icon"><span class="text">Cardiology</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/radiology.png" alt="" class="icon"><span class="text">Radiology</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/theatre.png" alt="" class="icon"><span class="text">Theatre</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/dental.png" alt="" class="icon"><span class="text">Dental</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/pharmacy.png" alt="" class="icon"><span class="text">Pharmacy</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/cashier.png" alt="" class="icon"><span class="text">Cashier</span></span>
+                            </span>
+                        </a>
+                    </li> -->
+                </ul>
+            </div>
+
+            <!-- Main section -->
+            <div class="content">
+
+                <!-- Navbar -->
+                <div class="navbar">
+                    <nav>
+                        <ul class="nav-links flex">
+                            <img src="/assets/svg/cancel.png" alt="" id="sidebar-toggler" class="sidebar-toggler" style="block-size: 32px;inline-size: 32px;">
+                            <div class="dropdown">
+                                <div class="flex">
+                                    <img src="/assets/svg/account.png" alt="" class="dropdown-avatar" id="toggle-dropdown">
+                                    <img src="/assets/svg/bell.png" alt="" class="">
+                                </div>
+                                <div class="dropdown-menu" id="dropdown-menu">
+                                    <ul class="dropdown-items">
+                                        <li class="dropdown-item header">
+                                            <span id="user-fullname-label"><%= data.user.firstName + ' ' + data.user.lastName %></span>
+                                            <small id="user-email-label"><%= data.user.email%></small>
+                                        </li>
+                                        <li class="dropdown-item"><i class="ti-settings"></i> <a href="#">Settings</a></li>
+                                        <li class="dropdown-item"><i class="ti-user"></i> <a href="#">My Profile</a></li>
+                                        <li class="dropdown-item"><i class="ti-info-alt"></i> <a href="#">About</a></li>
+                                        <li class="dropdown-item footer" id="signout-cta"><a href="#">Sign Out</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </ul>
+                    </nav>
+                </div>
+
+                <!-- Section 00 -->
+                <div class="sections br-0 inview" id="section_00">
+                    <div class="section-header flex">
+                        <div class="flex left">
+                            <div class="breadcrumb">
+                                <a href="#" class="current">Patients</a>
+                            </div>
+                        </div>
+                        <div class="ctas">
+                            <button class="btn section-header-cta modal-trigger" id="open-create-patient-modal-btn" data-modal="create-patient-modal"> <i class="ti-plus"></i> New Patient</button>
+                        </div>
+                    </div>
+                    <div class="section-body" style="padding-block-start: .8rem;">
+                        <h2>All Patients</h2>
+                        <div class="filter-section">
+                            <div class="date-range-picker flex">
+                                <div class="form-group flex flex-column">
+                                    <label for="min-date">From:</label>
+                                    <input type="date" name="from" id="min-date" class="date-range-filter">
+                                </div>
+                                <div class="form-group flex flex-column">
+                                    <label for="max-date">To:</label>
+                                    <input type="date" name="to" id="max-date" class="date-range-filter">
+                                </div>
+                            </div>
+                        </div>
+                        <table id="all-patients-table" class="display" style="width:100%;margin-top:.5rem;">
+                            <thead>
+                                <tr>
+                                    <th>#ID</th>
+                                    <th>Patient Name</th>
+                                    <th>Age</th>
+                                    <th>Phone</th>
+                                    <th>Gender</th>
+                                    <th>Actions</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Section 01 -->
+                <div class="sections br-0" id="section_01">
+                    <div class="section-header flex">
+                        <div class="flex left">
+                            <div class="breadcrumb">
+                                <a href="#" class="section-toggler" data-section="section_00">Patients</a>
+                                <span class="separator">/</span>
+                                <a href="#" class="current">Patient</a>
+                            </div>
+                        </div>
+                        <div class="ctas">
+                            <button class="btn section-header-cta modal-trigger" id="open-add-patient-to-queue-modal-btn" data-modal="add-patient-to-queue-modal"> <i class="ti-plus"></i> Add to Queue</button>
+                            <button class="btn section-header-cta modal-trigger" id="open-create-visit-modal-btn" data-modal="create-visit-modal"> <i class="ti-plus"></i> Create Visit</button>
+                        </div>
+                    </div>
+                    <div class="section-body" style="padding-block-start: .8rem;">
+                        <div class="grid info">
+                            <div class="info-wrapper">
+                                <h2>Personal Information</h2>
+                                <div class="patient-details flex" id="patient-info-section_01">
+                                    <div class="patient-info">
+                                        <div class="patient-info-item">
+                                            <div class="content content-major flex">
+                                              <img class="avatar" src="/assets/img/profiledefault.png" style="inline-size: 40px;block-size: 40px;border: 1px solid #ccc;"/>
+                                              <div class="flex" style="align-items: flex-start; flex-direction: column">
+                                                <h5 class="label">Name: <span id="patient-name"></span></h5>
+                                                <h5 class="label">Address: <span id="home-address">Not provided</span> <i class="ti-pencil" style="font-size: 14px;"></i> </h5>
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="patient-info-item">
+                                            <div class="content flex">
+                                              <div class="icon icon-contact">
+                                                <img src="/assets/svg/mail.svg" alt="">
+                                              </div>
+                                              <div class="flex" style="align-items: flex-start; flex-direction: column">
+                                                <h5 class="label">Date of Birth: <span id="date-of-birth"></span></h5>
+                                                <h5 class="label">Gender: <span id="gender"></span></h5>
+
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="patient-info-item">
+                                            <div class="content flex" style="justify-content: space-between;">
+                                              <div class="content flex">
+                                                <div class="icon icon-phone">
+                                                  <img src="/assets/svg/phone.svg" alt="">
+                                                </div>
+                                                <div class="flex" style="align-items: flex-start; flex-direction: column">
+                                                  <h5 class="label">Contact: <span id="contact-number"></span> <i class="ti-pencil" style="font-size: 14px;"></i> </h5>
+                                                  <h5 class="label">Other: <span id="alternative-contact-number">Not provided</span> <i class="ti-pencil" style="font-size: 14px;"></i> </h5>
+                                                </div>
+                                              </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-wrapper">
+                                <h2>Services</h2>
+                                <div class="ongoing-services">
+                                    <div class="service">
+                                      <h3>Consultation (UGX 40,000)</h3>
+                                      <div class="progress-bar">
+                                        <div class="progress green" style="width: 100%;"></div>
+                                      </div>
+                                    </div>
+                                    
+                                    <div class="service">
+                                      <h3>Lab Tests (UGX 15,000)</h3>
+                                      <div class="progress-bar">
+                                        <div class="progress green" style="width: 100%;"></div>
+                                      </div>
+                                    </div>
+                                    
+                                    <div class="service">
+                                      <h3>Medicines (35,000)</h3>
+                                      <div class="progress-bar">
+                                        <div class="progress" style="width: 0%;"></div>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h2>Recent Visits</h2>
+                        <table id="single-patient-visits" class="display" style="width:100%;margin-top:.5rem;">
+                            <thead>
+                                <tr>
+                                    <th>#ID</th>
+                                    <th>To See Doctor</th>
+                                    <th>Visit Date</th>
+                                    <th>Actions</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create patient modal -->
+            <div id="create-patient-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="create-patient-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Create Patient</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="modal-form-body">
+                            <div class="form-section">
+                                <h2>Patient Information</h2>
+                                <div class="form-group">
+                                    <label for="first-name">First Name:</label>
+                                    <input type="text" class="form-control" id="first-name" name="firstName" required>
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="last-name">Last Name:</label>
+                                    <input type="text" class="form-control" id="last-name" name="lastName" required>
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="nin">National ID:</label>
+                                    <input type="text" class="form-control" id="nin" name="nationalIDNumber">
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="dob">Date of Birth:</label>
+                                    <input type="date" class="form-control" id="dob" name="dateOfBirth" required>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="age">Age:</label>
+                                    <input type="text" class="form-control" id="age" name="age">
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="gender">Gender:</label>
+                                    <select id="gender" class="form-control" name="gender" required>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-section">
+                                <h2>Patient Contact</h2>
+                                <div class="form-group">
+                                    <label for="contact-number">Contact Number:</label>
+                                    <input type="text" class="form-control" id="contact-number" name="contactNumber" required>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="alternative-number">Alternative Number:</label>
+                                    <input type="text" class="form-control" id="alternative-number" name="alternativeContactNumber">
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="home-address">Home Address:</label>
+                                    <input type="text" class="form-control" id="home-address" name="homeAddress" required>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="email-address">Email Address:</label>
+                                    <input type="text" class="form-control" id="email-address" name="emailAddress">
+                                </div>
+                            </div>
+                          
+                            <div class="form-section">
+                                <h2>Next of Kin Information</h2>
+                                <div class="form-group">
+                                    <label for="nok-first-name">NOK First Name:</label>
+                                    <input type="text" class="form-control" id="nok-first-name" name="nokFirstName">
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="nok-last-name">NOK Last Name:</label>
+                                    <input type="text" class="form-control" id="nok-last-name" name="nokLastName">
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="nok-relationship">NOK Relationship:</label>
+                                    <select id="nok-relationship" class="form-control" name="nokRelationship">
+                                        <option value="brother">Brother</option>
+                                        <option value="sister">Sister</option>
+                                        <option value="husband">Husband</option>
+                                        <option value="wife">Wife</option>
+                                        <option value="father">Father</option>
+                                        <option value="mother">Mother</option>
+                                        <option value="son">Son</option>
+                                        <option value="daughter">Daughter</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="nok-contact-number">NOK Contact Number:</label>
+                                    <input type="text" class="form-control" id="nok-contact-number" name="nokContactNumber">
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="nok-home-address">NOK Home Address:</label>
+                                    <input type="text" class="form-control" id="nok-home-address" name="nokHomeAddress">
+                                </div>
+                            </div>
+                          
+                            <div class="form-section">
+                                <h2>Billing Information</h2>
+                                <div class="form-group">
+                                    <label for="billing-method">Billing Method:</label>
+                                    <select id="billing-method" class="form-control" name="billingMethodId">
+                                        <option value="1">Cash</option>
+                                        <option value="2">Account</option>
+                                        <option value="3">Insurance</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Create visit modal -->
+            <div id="create-visit-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="create-visit-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Create Visit</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="modal-form-body">
+                            <div class="form-section">
+                                <h2>Visit Information</h2>
+                                <div class="form-group">
+                                    <label for="category">Visit Category:</label>
+                                    <select id="category" class="form-control" name="visitCategoryId" required>
+                                        <option value="1">Consultation</option>
+                                        <option value="2">Treatment</option>
+                                        <option value="3">Other</option>
+                                    </select>
+                                </div>
+    
+                                <div class="form-group">
+                                    <label for="user-id">To See Doctor:</label>
+                                    <select id="user-id" class="form-control" name="userId" required>
+                                        <option value="1">Caxton Mulondo</option>
+                                        <option value="2">John North</option>
+                                        <option value="3">Abdoulanziz Ally</option>
+                                    </select>
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="visit-date">Date:</label>
+                                    <input type="date" class="form-control" id="visit-date" name="visitDate" required>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Add patiient to queue modal -->
+            <div id="add-patient-to-queue-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="add-patient-to-queue-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Add Patient to Queue</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="modal-form-body">
+                            <div class="form-section">
+                                <h2>Queue Information</h2>
+                                <div class="form-group">
+                                    <label for="category">Queue Category:</label>
+                                    <select id="category" class="form-control" name="queueCategory" required>
+                                        <option value="1">Consultation</option>
+                                        <option value="2">Treatment</option>
+                                        <option value="3">Other</option>
+                                    </select>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="user-id">To See Doctor:</label>
+                                    <select id="user-id" class="form-control" name="userId" required>
+                                        <option value="1">Caxton Mulondo</option>
+                                        <option value="2">John North</option>
+                                        <option value="3">Abdoulanziz Ally</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script src="/js/moment.min.js"></script>
+
+    <!-- Load modules -->
+    <script type="module" src="/js/ui.js"></script>
+    <script type="module" src="/js/patients.js"></script>
+
+</body>
+</html>
