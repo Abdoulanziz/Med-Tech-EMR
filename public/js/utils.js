@@ -113,8 +113,18 @@ export const UTILS = {
         const dataModal = trigger.dataset[dataAttrName];
         modalToShow = document.querySelector(`#${dataModal}`);
 
-        // Hide this modal
+        // Hide this modal using Close button
         modalToShow.querySelector(".close-modal-btn")?.addEventListener("click", () => {
+            // Display a confirmation dialog
+            UTILS.showConfirmationModal(modalToShow, "Are you sure you want to close this modal?", () => {
+                removeThisModal();
+            }, () => {
+                // TODO: Run when cancelled
+            });
+        });
+
+        // Hide this modal using Cancel button
+        modalToShow.querySelector("button[type='button']")?.addEventListener("click", () => {
             // Display a confirmation dialog
             UTILS.showConfirmationModal(modalToShow, "Are you sure you want to close this modal?", () => {
                 removeThisModal();
