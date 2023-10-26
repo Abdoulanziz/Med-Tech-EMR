@@ -280,11 +280,14 @@ const fetchVisits = async (req, res) => {
     // Access the doctor's fields in each visit result
     const visitsWithDoctorInfo = result.rows.map((visit) => ({
       // Extract fields from the 'doctor' association
-      doctorFirstName: visit.User.firstName,
-      doctorLastName: visit.User.lastName,
-      patientFirstName: visit.Patient.firstName,
-      patientLastName: visit.Patient.lastName,
+      // doctorFirstName: visit.User.firstName,
+      // doctorLastName: visit.User.lastName,
+      doctorFullName: `${visit.User.firstName} ${visit.User.lastName}`,
+      // patientFirstName: visit.Patient.firstName,
+      // patientLastName: visit.Patient.lastName,
+      patientFullName: `${visit.Patient.firstName} ${visit.Patient.lastName}`,
       visitId: visit.visitId,
+      visitCategoryId: visit.visitCategoryId,
       visitDate: visit.visitDate,
       visitCreatedAt: visit.createdAt,
     }));
@@ -373,11 +376,13 @@ const fetchVisitsByPatientId = async (req, res) => {
     // Access the doctor's fields in each visit result
     const visitsWithDoctorInfo = result.rows.map((visit) => ({
       // Extract fields from the 'doctor' association
-      doctorFirstName: visit.User.firstName,
-      doctorLastName: visit.User.lastName,
-      patientFirstName: visit.Patient.firstName,
-      patientLastName: visit.Patient.lastName,
+      // doctorFirstName: visit.User.firstName,
+      // doctorLastName: visit.User.lastName,
+      doctorFullName: `${visit.User.firstName} ${visit.User.lastName}`,
+      // patientFirstName: visit.Patient.firstName,
+      // patientLastName: visit.Patient.lastName,
       visitId: visit.visitId,
+      visitCategoryId: visit.visitCategoryId,
       visitDate: visit.visitDate,
       visitCreatedAt: visit.createdAt,
     }));
@@ -493,12 +498,15 @@ const fetchAllPatientsOnQueue = async (req, res) => {
     // Access the doctor's fields in each queue result
     const allPatientsOnQueue = result.rows.map((record) => ({
       // Extract fields from the 'doctor' association
-      doctorFirstName: record.User.firstName,
-      doctorLastName: record.User.lastName,
+      // doctorFirstName: record.User.firstName,
+      // doctorLastName: record.User.lastName,
+
+      doctorFullName: `${record.User.firstName} ${record.User.lastName}`,
 
       patientId: record.Patient.patientId,
-      patientFirstName: record.Patient.firstName,
-      patientLastName: record.Patient.lastName,
+      // patientFirstName: record.Patient.firstName,
+      // patientLastName: record.Patient.lastName,
+      patientFullName: `${record.Patient.firstName} ${record.Patient.lastName}`,
       patientDateOfBirth: record.Patient.dateOfBirth,
       
       queueStatus: record.queueStatus,

@@ -61,15 +61,33 @@ async function loadAllPatients() {
 
         // Execute function on each row
         rowCallback: function(row, data, index) {
-            row.style.cursor = "pointer";
-            row.dataset.patient = JSON.stringify(data);
-            
-            row.classList.add("section-toggler");
-            row.dataset.section = "section_01";
+            const rowDataString = JSON.stringify(data);
+            const viewMoreCta = row.cells[5].querySelectorAll("button")[0];
 
-            UTILS.sectionToggler(row, "section", () => {
-                displaySelectedPatientDetails("patient-info-section_01", JSON.stringify(data), () => loadSinglePatientVists(data.patientId));
+            viewMoreCta.dataset.patient = rowDataString;
+            viewMoreCta.style.cursor = "pointer";
+            viewMoreCta.classList.add("section-toggler");
+            viewMoreCta.dataset.section = "section_01";
+
+            UTILS.sectionToggler(viewMoreCta, "section", () => {
+                displaySelectedPatientDetails("patient-info-section_01", rowDataString, () => loadSinglePatientVists(data.patientId));
             });
+
+            // UTILS.triggerModal(viewMoreCta, "modal", () => {
+            //     // Populate the form with the rowData
+            //     populateFormWithData(
+            //         "edit-patient-triage-data-modal",
+            //         rowData,
+            //         [
+            //             "bloodPressure",
+            //             "heartRate",
+            //             "respiratoryRate",
+            //             "signsAndSymptoms",
+            //             "injuryDetails"
+            //         ]
+            //     );
+            // });
+            
         },
 
         // Load the data to the columns
@@ -212,8 +230,28 @@ async function loadSinglePatientVists(patientId) {
             { data : null }
         ],
         rowCallback: function(row, data, index) {
-            row.style.cursor = "pointer";
-            row.dataset.patient = JSON.stringify(data);
+            const rowDataString = JSON.stringify(data);
+            const editVisitCta = row.cells[3].querySelectorAll("button")[0];
+            const viewVisitCta = row.cells[3].querySelectorAll("button")[1];
+            const deleteVisitCta = row.cells[3].querySelectorAll("button")[2];
+
+            editVisitCta.dataset.patient = rowDataString;
+            editVisitCta.style.cursor = "pointer";
+            editVisitCta.classList.add("modal-trigger");
+            editVisitCta.dataset.modal = "edit-visit-modal";
+
+            UTILS.triggerModal(editVisitCta, "modal", () => {
+                // Populate the form with the rowData
+                populateFormWithData(
+                    "edit-visit-modal",
+                    rowDataString,
+                    [
+                        "visitCategoryId",
+                        "doctorFullName",
+                        "visitDate"
+                    ]
+                );
+            });
          },
         columnDefs: [
             {
@@ -225,7 +263,7 @@ async function loadSinglePatientVists(patientId) {
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return data.doctorFirstName + " " + data.doctorLastName;
+                    return data.doctorFullName;
                 },
             },
             {
@@ -412,5 +450,21 @@ async function handleAddPatientToQueueForm() {
         }, () => {
             // TODO: Run when cancelled
         });
+    });
+}
+
+
+// Populate form with data
+function populateFormWithData(formId, data, formFieldsNamesArray) {
+    // Parse the form id
+    const form = document.querySelector(`#${formId}`);
+    const parsedData = JSON.parse(data);
+
+    // Use the names of the fields not their ids
+    formFieldsNamesArray.forEach(fieldName => {
+        const field = form.querySelector(`[name=${fieldName}]`);
+        if (field) {
+            field.value = parsedData[fieldName] || null;
+        }
     });
 }

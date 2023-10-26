@@ -68,7 +68,7 @@ async function loadAllPatientsOnQueue() {
             {
                 targets: 1,
                 render: function(data, type, row, meta) {
-                    return data.patientFirstName + " " + data.patientLastName;
+                    return data.patientFullName;
                 }
             },
             {
@@ -93,7 +93,7 @@ async function loadAllPatientsOnQueue() {
             {
                 targets: 5,
                 render: function(data, type, row, meta) {
-                    return data.doctorFirstName + " " + data.doctorLastName;
+                    return data.doctorFullName;
                 }
             },
             
@@ -192,7 +192,7 @@ async function loadSinglePatientVisits(patientId) {
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return data.doctorFirstName + " " + data.doctorLastName;
+                    return data.doctorFullName;
                 },
             },
             {

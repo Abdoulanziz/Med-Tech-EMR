@@ -40,7 +40,28 @@ async function loadAllVisits() {
             { data : null }
         ],
         rowCallback: function(row, data, index) {
-            row.style.cursor = "pointer";
+            const rowDataString = JSON.stringify(data);
+            const editVisitCta = row.cells[4].querySelectorAll("button")[0];
+            const viewVisitCta = row.cells[4].querySelectorAll("button")[1];
+            const deleteVisitCta = row.cells[4].querySelectorAll("button")[2];
+
+            editVisitCta.dataset.patient = rowDataString;
+            editVisitCta.style.cursor = "pointer";
+            editVisitCta.classList.add("modal-trigger");
+            editVisitCta.dataset.modal = "edit-visit-modal";
+
+            UTILS.triggerModal(editVisitCta, "modal", () => {
+                // Populate the form with the rowData
+                populateFormWithData(
+                    "edit-visit-modal",
+                    rowDataString,
+                    [
+                        "visitCategoryId",
+                        "doctorFullName",
+                        "visitDate"
+                    ]
+                );
+            });
         },
         columnDefs: [
             {
@@ -56,7 +77,7 @@ async function loadAllVisits() {
                     <td>
                         <div style="display:flex; justify-content:flex-start; align-items:center; gap: .2rem;">
                             <img src="/assets/svg/folder.png" alt="" class="icon" style="inline-size: 28px; block-size: 28px;" />
-                            <span>${data.patientFirstName} ${data.patientLastName}</span>
+                            <span>${data.patientFullName}</span>
                         </div>
                     </td>
                     `;
@@ -65,7 +86,7 @@ async function loadAllVisits() {
             {
                 targets: 2,
                 render: function (data, type, row, meta) {
-                    return data.doctorFirstName + " " + data.doctorLastName;
+                    return data.doctorFullName;
                 },
             },
             {
@@ -316,5 +337,21 @@ async function handleVisitForm() {
         }, () => {
             // TODO: Run when cancelled
         });
+    });
+}
+
+
+// Populate form with data
+function populateFormWithData(formId, data, formFieldsNamesArray) {
+    // Parse the form id
+    const form = document.querySelector(`#${formId}`);
+    const parsedData = JSON.parse(data);
+
+    // Use the names of the fields not their ids
+    formFieldsNamesArray.forEach(fieldName => {
+        const field = form.querySelector(`[name=${fieldName}]`);
+        if (field) {
+            field.value = parsedData[fieldName] || null;
+        }
     });
 }

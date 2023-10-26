@@ -131,7 +131,7 @@ export const UI = {
   // Render sections
   renderSections: () => {
     const sectionTogglers = document.querySelectorAll(".section-toggler");
-    sectionTogglers.forEach(toggler => UTILS.sectionToggler(toggler, "section", () => {}));
+    sectionTogglers.forEach(toggler => UTILS.sectionToggler(toggler, "section"));
   },
 
   // Render menus

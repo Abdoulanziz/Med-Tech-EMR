@@ -462,6 +462,54 @@
                 </div>
             </div>
 
+            <!-- Edit visit modal -->
+            <div id="edit-visit-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="edit-visit-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Edit Visit</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="modal-form-body">
+                            <div class="form-section">
+                                <h2>Visit Information</h2>
+                                <div class="form-group">
+                                    <label for="category">Visit Category:</label>
+                                    <select id="category" class="form-control" name="visitCategoryId" required>
+                                        <option value="1">Consultation</option>
+                                        <option value="2">Treatment</option>
+                                        <option value="3">Other</option>
+                                    </select>
+                                </div>
+    
+                                <div class="form-group">
+                                    <label for="user-id">To See Doctor:</label>
+                                    <select id="user-id" class="form-control" name="userId" required>
+                                        <option value="1">Caxton Mulondo</option>
+                                        <option value="2">John North</option>
+                                        <option value="3">Abdoulanziz Ally</option>
+                                    </select>
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="visit-date">Date:</label>
+                                    <input type="date" class="form-control" id="visit-date" name="visitDate" required>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>            
+
             <!-- Add patiient to queue modal -->
             <div id="add-patient-to-queue-modal" class="form-modal">
                 <div class="form-modal-content">

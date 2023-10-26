@@ -1,6 +1,6 @@
 export const UTILS = {
     // Section togglers
-    sectionToggler: (trigger, dataAttrName, callback) => {
+    sectionToggler: (trigger, dataAttrName, callback=null) => {
 
         const dataSection = trigger.dataset[dataAttrName];
         const sectionToShow = document.querySelector(`#${dataSection}`);
@@ -20,14 +20,14 @@ export const UTILS = {
         trigger.addEventListener("click", () => {
             removeVisibleSections();
             addSection();
-            callback();
+            if (typeof callback === 'function') callback();
         });
     },
 
     // Row click
     rowClick: (row, callback) => {
         row.addEventListener("click", () => {
-            callback();
+            if (typeof callback === 'function') callback();
         });
     },
 
@@ -86,7 +86,7 @@ export const UTILS = {
     },
 
     // Modal triggers
-    triggerModal: (trigger, dataAttrName, callback) => {
+    triggerModal: (trigger, dataAttrName, callback=null) => {
         let modalToShow;
         
         const addModal = () => {
@@ -107,7 +107,7 @@ export const UTILS = {
         trigger.addEventListener("click", () => {
             removeVisibleModals();
             addModal();
-            callback();
+            if(typeof callback === 'function') callback();
         });
 
         const dataModal = trigger.dataset[dataAttrName];
