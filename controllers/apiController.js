@@ -9,6 +9,7 @@ const { Queue } = require('../models');
 
 const { Triage } = require('../models');
 const { Allergy } = require('../models');
+const { Diagnosis } = require('../models');
 
 const Op = Sequelize.Op;
 
@@ -696,5 +697,33 @@ const fetchRequestsByVisitId = async (req, res) => {
   }
 };
 
+// Create new diagnoses
+const createDiagnoses = async (req, res) => {
+  try {
+    // Convert empty strings to null for nullable fields
+    const diagnoses = req.body;
 
-module.exports = { checkAPIStatus, createUser, createPatient, fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchRequestsByVisitId };
+    // Empty array to store the new diagnoses
+    const newDiagnoses = [];
+
+    // Iterate over the diagnoses array and insert each object as a separate record
+    for (const diagnosis of diagnoses) {
+      const newDiagnosis = await Diagnosis.create({
+        testName: diagnosis.testName,
+        fees: diagnosis.fees,
+        visitId: diagnosis.visitId,
+        // userId
+      });
+
+      // Add the new diagnosis to the newDiagnoses array.
+      newDiagnoses.push(newDiagnosis);
+    }
+    return res.status(201).json({ status: 'success', message: 'Diagnoses records created successfully', data: newDiagnoses });
+  } catch (error) {
+    console.error('Error creating diagnoses:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
+module.exports = { checkAPIStatus, createUser, createPatient, fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchRequestsByVisitId, createDiagnoses };

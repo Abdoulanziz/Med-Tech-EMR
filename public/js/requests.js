@@ -236,4 +236,14 @@ export const API = {
             return await API.makePostRequest(endpoint, id);
         },
     },
+
+
+    // Diagnoses 
+    diagnoses: {
+        // Add to diagnoses POST api/v1/diagnoses
+        create: async (diagnosis, fromFormData) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/diagnoses`;
+            return await API.makePostRequest(endpoint, diagnosis, fromFormData);
+        },
+    },
 }

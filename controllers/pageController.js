@@ -10,5 +10,9 @@ const renderQueues = (req, res) => {
     res.render("pages/queues" , {data: {user:req.session.user}});
 };
 
+const renderLab = (req, res) => {
+    res.render("pages/lab" , {data: {user:req.session.user}});
+};
 
-module.exports = { renderPatients, renderVisits, renderQueues };
+
+module.exports = { renderPatients, renderVisits, renderQueues, renderLab };

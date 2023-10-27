@@ -46,14 +46,14 @@
                             </span>
                         </a>
                     </li>
-                    <li class="menu-item active">
+                    <li class="menu-item">
                         <a href="/page/queues">
                             <span class="flex">
                                 <span class="flex"><img src="/assets/actions/doctor.png" alt="" class="icon"><span class="text">Queue</span></span>
                             </span>
                         </a>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item active">
                         <a href="/page/lab">
                             <span class="flex">
                                 <span class="flex"><img src="/assets/actions/laboratory.png" alt="" class="icon"><span class="text">Laboratory</span></span>
@@ -278,7 +278,7 @@
                                 <a href="#" class="current">Medical History</a>
                             </div>
                         </div>
-                        <div class="flex" style="gap: .8rem;">
+                        <!-- <div class="flex" style="gap: .8rem;">
                             <div class="btn section-header-cta section-dropdown" data-menu="menu_00">
                                 <div class="section-dropdown-cta">
                                     <span>General <i class="ti-angle-down"></i> </span>
@@ -314,7 +314,7 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="section-body" style="padding-block-start: .8rem;">
                         <div class="grid info">
@@ -465,14 +465,14 @@
                 </div>
             </div>
 
-            <!-- Edit patient triage modal -->
-            <div id="edit-patient-triage-data-modal" class="form-modal">
+            <!-- View patient triage modal -->
+            <div id="view-patient-triage-data-modal" class="form-modal">
                 <div class="form-modal-content">
                     <form class="modal-form" id="patient-triage-form">
                         <div class="form-modal-header flex">
                             <div class="form-modal-header-left flex">
                                 <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Edit Patient Triage</h2>
+                                <h2 class="title">View Patient Triage</h2>
                             </div>
                             <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
                         </div>
@@ -516,10 +516,7 @@
                             </div>
                         </div>
             
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
-                        </div>
+                        <div class="form-modal-footer flex"></div>
                     </form>
                 </div>
             </div>
@@ -555,14 +552,14 @@
                 </div>
             </div>
 
-            <!-- Edit patient allergies modal -->
-            <div id="edit-patient-allergies-data-modal" class="form-modal">
+            <!-- View patient allergies modal -->
+            <div id="view-patient-allergies-data-modal" class="form-modal">
                 <div class="form-modal-content">
                     <form class="modal-form" id="patient-allergy-form">
                         <div class="form-modal-header flex">
                             <div class="form-modal-header-left flex">
                                 <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Edit Patient Allergies</h2>
+                                <h2 class="title">View Patient Allergies</h2>
                             </div>
                             <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
                         </div>
@@ -578,10 +575,7 @@
                             </div>
                         </div>
             
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
-                        </div>
+                        <div class="form-modal-footer flex"></div>
                     </form>
                 </div>
             </div>
@@ -1088,11 +1082,50 @@
 
     <!-- Load modules -->
     <script type="module" src="/js/ui.js"></script>
-    <script type="module" src="/js/queues.js"></script>
+    <script type="module" src="/js/lab.js"></script>
     
 
 
     <script>
+        // Set up diagnosis with dynamic test items and total fees calculation
+        function createDiagnosisForm(formId, formBodyId) {
+            const form = document.getElementById(formId);
+            const formBody = form.querySelector(`#${formBodyId}`);
+            const totalFeesDisplay = formBody.querySelector(".total-fees");
+
+            function addTestItem() {
+                const testItem = document.createElement("div");
+                testItem.classList.add("form-section");
+                testItem.innerHTML = `
+                    <label for="testName">Diagnosis Test</label>
+                    <input type="text" name="testName[]">
+                    <label for="fees">Fees ($)</label>
+                    <input type="number" name="fees[]">
+                    <button type="button" class="btn remove-test"> <i class="ti-trash"></i> Remove</button>
+                `;
+
+                formBody.insertBefore(testItem, formBody.lastElementChild);
+
+                const removeTestButton = testItem.querySelector(".remove-test");
+                removeTestButton.addEventListener("click", () => {
+                    formBody.removeChild(testItem);
+                    recalculateTotalFees();
+                });
+            }
+
+            function recalculateTotalFees() {
+                const feeInputs = Array.from(formBody.querySelectorAll("input[name='fees[]']"));
+                const totalFees = feeInputs.reduce((total, input) => {
+                    const fee = parseFloat(input.value) || 0;
+                    return total + fee;
+                }, 0).toFixed(2);
+                totalFeesDisplay.textContent = `Total Fees: $${totalFees}`;
+            }
+
+            const addTestButton = form.querySelector("#addTest");
+            addTestButton.addEventListener("click", addTestItem);
+            formBody.addEventListener("input", recalculateTotalFees);
+        }
 
         // Set up dental with dynamic test items and total fees calculation
         function createDentalForm(formId, formBodyId) {
@@ -1138,6 +1171,21 @@
             formBody.addEventListener("input", recalculateTotalFees);
         }
 
+        function getDiagnosisFormValues(formId) {
+            const form = document.getElementById(formId);
+            const testNames = form.querySelectorAll("input[name='testName[]']");
+            const fees = form.querySelectorAll("input[name='fees[]']");
+
+            const values = [];
+
+            for (let i = 0; i < testNames.length; i++) {
+                const testName = testNames[i].value;
+                const fee = parseFloat(fees[i].value) || 0;
+                values.push({ testName, fee });
+            }
+
+            return values;
+        }
 
         function getDentalFormValues(formId) {
             const form = document.getElementById(formId);
@@ -1162,6 +1210,10 @@
         }
 
 
+
+        // Create diagnosis form
+        createDiagnosisForm("create-patient-diagnosis-form", "create-patient-diagnosis-form-body");
+
         // Create dental form
         createDentalForm("create-patient-dental-request-form", "create-patient-dental-request-form-body");
 
@@ -1172,7 +1224,21 @@
 
 
 
-        
+        // Handle diagnosis create form
+        async function handleCreateDiagnosisForm() {
+            const patientDiagnosisForm = document.querySelector('#create-patient-diagnosis-form');
+            patientDiagnosisForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                // Call the getDiagnosisFormValues function to retrieve the values
+                const formId = "create-patient-diagnosis-form";
+                const formValues = getDiagnosisFormValues(formId);
+
+                console.log(formValues);
+
+            });
+        }
+        handleCreateDiagnosisForm();
 
 
 

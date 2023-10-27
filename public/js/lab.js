@@ -14,12 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle create allergy
     handleCreateAllergyForm();
-
-    // Render diagnosis form
-    renderDiagnosisForm();
-
-    // Handle diagnosis form
-    handleCreateDiagnosisForm();
     
 });
 
@@ -284,12 +278,12 @@ async function loadSinglePatientVisitRequests(visitId) {
                 const viewRequestCta = row.cells[4].querySelectorAll("button")[0];
                 viewRequestCta.style.cursor = "pointer";
                 viewRequestCta.classList.add("modal-trigger");
-                viewRequestCta.dataset.modal = "edit-patient-triage-data-modal";
+                viewRequestCta.dataset.modal = "view-patient-triage-data-modal";
 
                 UTILS.triggerModal(viewRequestCta, "modal", () => {
                     // Populate the form with the rowData
                     populateFormWithData(
-                        "edit-patient-triage-data-modal",
+                        "view-patient-triage-data-modal",
                         rowData,
                         [
                             "bloodPressure",
@@ -304,12 +298,12 @@ async function loadSinglePatientVisitRequests(visitId) {
                 const viewAlergiesCta = row.cells[4].querySelectorAll("button")[0];
                 viewAlergiesCta.style.cursor = "pointer";
                 viewAlergiesCta.classList.add("modal-trigger");
-                viewAlergiesCta.dataset.modal = "edit-patient-allergies-data-modal";
+                viewAlergiesCta.dataset.modal = "view-patient-allergies-data-modal";
 
                 UTILS.triggerModal(viewAlergiesCta, "modal", () => {
                     // Populate the form with the rowData
                     populateFormWithData(
-                        "edit-patient-allergies-data-modal",
+                        "view-patient-allergies-data-modal",
                         rowData,
                         [
                             "allergies"
@@ -351,8 +345,8 @@ async function loadSinglePatientVisitRequests(visitId) {
                 render: function (data, type, row, meta) {
                     return `
                     <td>
-                        <button class="btn view-request" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Edit Request  <i class="ti-arrow-right"></i> </button>
-                        <button class="btn view-results" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">View Results  <i class="ti-arrow-right"></i> </button>
+                        <button class="btn view-request" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">View Request  <i class="ti-arrow-right"></i> </button>
+                        <button class="btn view-results" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Create Report  <i class="ti-arrow-right"></i> </button>
                     </td>
                     `;
                 },
@@ -505,7 +499,7 @@ async function handleCreateAllergyForm() {
     });
 }
 
-// Populate form with data (pre-fill the form)
+// Populate form with data
 function populateFormWithData(formId, data, formFieldsNamesArray) {
     // Parse the form id
     const form = document.querySelector(`#${formId}`);
@@ -519,119 +513,5 @@ function populateFormWithData(formId, data, formFieldsNamesArray) {
         }
     });
 }
-
-
-// Set up diagnosis with dynamic test items and total fees calculation
-function renderDiagnosisForm() {
-    const form = document.getElementById("create-patient-diagnosis-form");
-    const formBody = form.querySelector("#create-patient-diagnosis-form-body");
-    const totalFeesDisplay = formBody.querySelector(".total-fees");
-
-    function addTestItem() {
-        const testItem = document.createElement("div");
-        testItem.classList.add("form-section");
-        testItem.innerHTML = `
-            <label for="testName">Diagnosis Test</label>
-            <input type="text" name="testName[]">
-            <label for="fees">Fees ($)</label>
-            <input type="number" name="fees[]">
-            <button type="button" class="btn remove-test"> <i class="ti-trash"></i> Remove</button>
-        `;
-
-        formBody.insertBefore(testItem, formBody.lastElementChild);
-
-        const removeTestButton = testItem.querySelector(".remove-test");
-        removeTestButton.addEventListener("click", () => {
-            formBody.removeChild(testItem);
-            recalculateTotalFees();
-        });
-    }
-
-    function recalculateTotalFees() {
-        const feeInputs = Array.from(formBody.querySelectorAll("input[name='fees[]']"));
-        const totalFees = feeInputs.reduce((total, input) => {
-            const fee = parseFloat(input.value) || 0;
-            return total + fee;
-        }, 0).toFixed(2);
-        totalFeesDisplay.textContent = `Total Fees: $${totalFees}`;
-    }
-
-    const addTestButton = form.querySelector("#addTest");
-    addTestButton.addEventListener("click", addTestItem);
-    formBody.addEventListener("input", recalculateTotalFees);
-}
-
-
-function getDiagnosisFormValues() {
-    const form = document.getElementById("create-patient-diagnosis-form");
-    const testNames = form.querySelectorAll("input[name='testName[]']");
-    const testFees = form.querySelectorAll("input[name='fees[]']");
-
-    const values = [];
-
-    for (let i = 0; i < testNames.length; i++) {
-        const testName = testNames[i].value;
-        const fees = parseFloat(testFees[i].value) || 0;
-        values.push({ testName, fees });
-    }
-
-    return values;
-}
-
-
-// Handle diagnosis create form
-async function handleCreateDiagnosisForm() {
-    const patientDiagnosisForm = document.querySelector('#create-patient-diagnosis-form');
-    patientDiagnosisForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        // Get Id of selected visit
-        const selectedVisitId = UTILS.getSelectedVisitId();
-        if (! selectedVisitId) return;
-    
-        // // Collect form data
-        let formValuesArrayOfObjects = getDiagnosisFormValues();
-        formValuesArrayOfObjects = formValuesArrayOfObjects.map(obj => {
-            obj.visitId = selectedVisitId;
-            return obj;
-        });
-
-        // Display a confirmation dialog
-        UTILS.showConfirmationModal(patientDiagnosisForm, "Are you sure you want to save this record?", async () => {
-            try {
-                // Make an API POST request to create a triage record
-                const response = await API.diagnoses.create(formValuesArrayOfObjects, false);
-    
-                // Check if the request was successful
-                if (response.status === 'success') {
-                    // Alert user
-                    // alert('Patient record created successfully!');
-                    // TODO: Create a banner to show triage saved
-    
-                    // Reset the form
-                    patientDiagnosisForm.reset();
-    
-                    // Remove form
-                    patientDiagnosisForm.parentElement.parentElement.classList.remove("inview");
-    
-                    // Reload the requests table
-                    loadSinglePatientVisitRequests(selectedVisitId);
-    
-                } else {
-                    alert('Failed to create diagnoses records. Please check the form data.');
-                }
-            } catch (error) {
-                console.error(error);
-                alert('An error occurred while creating the diagnoses records.');
-            }
-        }, () => {
-            // TODO: Run when cancelled
-        });
-
-    });
-}
-
-
-
 
 
