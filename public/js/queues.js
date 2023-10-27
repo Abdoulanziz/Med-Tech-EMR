@@ -316,6 +316,23 @@ async function loadSinglePatientVisitRequests(visitId) {
                         ]
                     );
                 });
+            }else if("diagnosisUuid" in JSON.parse(rowData)){
+                const viewDiagnosisCta = row.cells[4].querySelectorAll("button")[0];
+                viewDiagnosisCta.style.cursor = "pointer";
+                viewDiagnosisCta.classList.add("modal-trigger");
+                viewDiagnosisCta.dataset.modal = "edit-patient-diagnosis-modal";
+
+                UTILS.triggerModal(viewDiagnosisCta, "modal", () => {
+                    // Populate the form with the rowData
+                    populateFormWithData(
+                        "edit-patient-diagnosis-modal",
+                        rowData,
+                        [
+                            "testName",
+                            "fees"
+                        ]
+                    );
+                });
             }
         },
         columnDefs: [

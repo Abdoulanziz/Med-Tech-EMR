@@ -587,9 +587,6 @@ const createAllergy = async (req, res) => {
 const fetchRequestsByVisitId = async (req, res) => {
   const visitId = req.params.visitId;
 
-
-
-
   try {
     const draw = req.query.draw;
     const start = parseInt(req.query.start);
@@ -647,7 +644,7 @@ const fetchRequestsByVisitId = async (req, res) => {
     };
 
     // Request types to fetch
-    const requestTypes = ['Triage', 'Allergy'];
+    const requestTypes = ['Triage', 'Allergy', 'Diagnosis'];
 
     // Array of promises to fetch data for each request type
     const promises = requestTypes.map(async (requestType) => {
@@ -667,29 +664,6 @@ const fetchRequestsByVisitId = async (req, res) => {
       recordsFiltered: allData.length,
       data: allData,
     });
-
-
-    // // Define the request types you want to fetch
-    // const requestTypes = ['Triage', 'Allergy'];
-
-    // // Create an array of promises to fetch data for each request type
-    // const promises = requestTypes.map(async (requestType) => {
-    //   const results = await models[requestType].findAndCountAll(queryOptions);
-    //   return results;
-    // });
-
-    // // Execute all promises in parallel
-    // const results = await Promise.all(promises);
-
-    // // Flatten the results and obtain a single array
-    // const allData = results.map(obj => obj.rows).flat();
-
-    // return res.status(200).json({
-    //   draw: draw,
-    //   recordsTotal: allData.length,
-    //   recordsFiltered: allData.length,
-    //   data: allData,
-    // });
 
   } catch (error) {
     console.error('Error fetching visits:', error);
