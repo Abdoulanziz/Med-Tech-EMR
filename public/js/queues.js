@@ -188,7 +188,7 @@ async function loadSinglePatientVisits(patientId) {
             workOnPatientCta.dataset.section = "section_02";
 
             UTILS.sectionToggler(workOnPatientCta, "section", () => {
-                displaySelectedPatientDetails("patient-info-section_02", rowDataString, () => loadSinglePatientVisitRequests(data.visitId));
+                displaySelectedPatientDetails("patient-info-section_02", rowDataString, () => loadSinglePatientVisitHistory(data.visitId));
             });
         },
         columnDefs: [
@@ -244,7 +244,7 @@ async function loadSinglePatientVisits(patientId) {
 }
 
 // Load patient visit requests to DOM
-async function loadSinglePatientVisitRequests(visitId) {
+async function loadSinglePatientVisitHistory(visitId) {
     // Get Id of selected visit
     const selectedVisitId = parseInt(visitId);
 
@@ -252,7 +252,7 @@ async function loadSinglePatientVisitRequests(visitId) {
     UTILS.setSelectedVisitId(selectedVisitId);
 
     let allPatients;
-    const apiEndpoint = `${UI.apiBaseURL}/requests/${selectedVisitId}`;
+    const apiEndpoint = `${UI.apiBaseURL}/history/${selectedVisitId}`;
 
     allPatients = $('#single-patient-visit-records').DataTable({
         processing: true,
@@ -456,7 +456,7 @@ async function handleCreateTriageForm() {
                     patientTriageForm.parentElement.parentElement.classList.remove("inview");
     
                     // Reload the requests table
-                    loadSinglePatientVisitRequests(selectedVisitId);
+                    loadSinglePatientVisitHistory(selectedVisitId);
     
                 } else {
                     alert('Failed to create triage record. Please check the form data.');
@@ -507,7 +507,7 @@ async function handleCreateAllergyForm() {
                     patientAllergyForm.parentElement.parentElement.classList.remove("inview");
     
                     // Reload the requests table
-                    loadSinglePatientVisitRequests(selectedVisitId);
+                    loadSinglePatientVisitHistory(selectedVisitId);
     
                 } else {
                     alert('Failed to create allergy record. Please check the form data.');
@@ -632,7 +632,7 @@ async function handleCreateDiagnosisForm() {
                     patientDiagnosisForm.parentElement.parentElement.classList.remove("inview");
     
                     // Reload the requests table
-                    loadSinglePatientVisitRequests(selectedVisitId);
+                    loadSinglePatientVisitHistory(selectedVisitId);
     
                 } else {
                     alert('Failed to create diagnoses records. Please check the form data.');

@@ -614,6 +614,69 @@
                 </div>
             </div>
 
+            <!-- View patient diagnoses modal -->
+            <div id="view-patient-diagnosis-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="view-patient-diagnosis-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">View Medical Diagnosis</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="view-patient-diagnosis-form-body">
+                            <div class="form-section">
+                                <label for="testName">Diagnosis Test</label>
+                                <input type="text" name="testName">
+                                <label for="fees">Fees ($)</label>
+                                <input type="number" name="fees">
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Create patient lab report modal -->
+            <div id="create-patient-lab-report-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="create-patient-lab-report-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Create Lab Report</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="create-patient-lab-report-form-body">
+                            <div class="form-section">
+                                <label for="testName">Diagnosis Test</label>
+                                <input type="text" name="testName">
+                                <label for="fees">Fees ($)</label>
+                                <input type="number" name="fees">
+                            </div>
+                        
+                            <div class="form-section">
+                                <label for="document-input">Lab Report</label>
+                                <textarea id="document-input" style="border-radius: 0 !important;"></textarea>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <!-- Send patient to eye clinic modal -->
             <div id="send-patient-to-eye-clinic-modal" class="form-modal">
                 <div class="form-modal-content">
@@ -1079,6 +1142,7 @@
     </div>
 
     <script src="/js/moment.min.js"></script>
+    <script src="/js/tinymce/js/tinymce/tinymce.min.js"></script>
 
     <!-- Load modules -->
     <script type="module" src="/js/ui.js"></script>
@@ -1257,6 +1321,28 @@
             });
         }
         handleCreateDentalForm();
+
+
+
+
+        tinymce.init({
+            selector: "#document-input",
+            width: "100%",
+            height: 300,
+            setup: function (editor) {
+                // Convert Word document to HTML using mammoth.js
+                // fetch('/docs/med-tech-processes.docx')
+                //     .then(response => response.arrayBuffer())
+                //     .then(arrayBuffer => {
+                //         mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
+                //             .then(result => {
+                //                 editor.setContent(result.value);
+                //             })
+                //             .catch(error => console.error('Error converting Word document:', error));
+                //     })
+                //     .catch(error => console.error('Error loading Word document:', error));
+            }
+        });
 
 
 

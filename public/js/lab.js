@@ -182,7 +182,7 @@ async function loadSinglePatientVisits(patientId) {
             workOnPatientCta.dataset.section = "section_02";
 
             UTILS.sectionToggler(workOnPatientCta, "section", () => {
-                displaySelectedPatientDetails("patient-info-section_02", rowDataString, () => loadSinglePatientVisitRequests(data.visitId));
+                displaySelectedPatientDetails("patient-info-section_02", rowDataString, () => loadSinglePatientVisitLabRequests(data.visitId));
             });
         },
         columnDefs: [
@@ -238,7 +238,7 @@ async function loadSinglePatientVisits(patientId) {
 }
 
 // Load patient visit requests to DOM
-async function loadSinglePatientVisitRequests(visitId) {
+async function loadSinglePatientVisitLabRequests(visitId) {
     // Get Id of selected visit
     const selectedVisitId = parseInt(visitId);
 
@@ -274,42 +274,44 @@ async function loadSinglePatientVisitRequests(visitId) {
         rowCallback: function(row, data, index) {
             const rowData = JSON.stringify(data.dataValues);
 
-            if("triageUuid" in JSON.parse(rowData)){
+            if("diagnosisUuid" in JSON.parse(rowData)){
                 const viewRequestCta = row.cells[4].querySelectorAll("button")[0];
                 viewRequestCta.style.cursor = "pointer";
                 viewRequestCta.classList.add("modal-trigger");
-                viewRequestCta.dataset.modal = "view-patient-triage-data-modal";
+                viewRequestCta.dataset.modal = "view-patient-diagnosis-modal";
 
                 UTILS.triggerModal(viewRequestCta, "modal", () => {
                     // Populate the form with the rowData
                     populateFormWithData(
-                        "view-patient-triage-data-modal",
+                        "view-patient-diagnosis-modal",
                         rowData,
                         [
-                            "bloodPressure",
-                            "heartRate",
-                            "respiratoryRate",
-                            "signsAndSymptoms",
-                            "injuryDetails"
+                            "testName",
+                            "fees"
                         ]
                     );
                 });
-            }else if("allergyUuid" in JSON.parse(rowData)){
-                const viewAlergiesCta = row.cells[4].querySelectorAll("button")[0];
-                viewAlergiesCta.style.cursor = "pointer";
-                viewAlergiesCta.classList.add("modal-trigger");
-                viewAlergiesCta.dataset.modal = "view-patient-allergies-data-modal";
 
-                UTILS.triggerModal(viewAlergiesCta, "modal", () => {
+                const createReportCta = row.cells[4].querySelectorAll("button")[1];
+                createReportCta.style.cursor = "pointer";
+                createReportCta.classList.add("modal-trigger");
+                createReportCta.dataset.modal = "create-patient-lab-report-modal";
+
+                UTILS.triggerModal(createReportCta, "modal", () => {
+                    createReportCta.dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
+                    console.log(JSON.parse(rowData).diagnosisId);
+
                     // Populate the form with the rowData
                     populateFormWithData(
-                        "view-patient-allergies-data-modal",
+                        "create-patient-lab-report-modal",
                         rowData,
                         [
-                            "allergies"
+                            "testName",
+                            "fees"
                         ]
                     );
                 });
+
             }
         },
         columnDefs: [
@@ -433,7 +435,7 @@ async function handleCreateTriageForm() {
                     patientTriageForm.parentElement.parentElement.classList.remove("inview");
     
                     // Reload the requests table
-                    loadSinglePatientVisitRequests(selectedVisitId);
+                    loadSinglePatientVisitLabRequests(selectedVisitId);
     
                 } else {
                     alert('Failed to create triage record. Please check the form data.');
@@ -484,7 +486,7 @@ async function handleCreateAllergyForm() {
                     patientAllergyForm.parentElement.parentElement.classList.remove("inview");
     
                     // Reload the requests table
-                    loadSinglePatientVisitRequests(selectedVisitId);
+                    loadSinglePatientVisitLabRequests(selectedVisitId);
     
                 } else {
                     alert('Failed to create allergy record. Please check the form data.');
