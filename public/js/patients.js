@@ -72,22 +72,6 @@ async function loadAllPatients() {
             UTILS.sectionToggler(viewMoreCta, "section", () => {
                 displaySelectedPatientDetails("patient-info-section_01", rowDataString, () => loadSinglePatientVists(data.patientId));
             });
-
-            // UTILS.triggerModal(viewMoreCta, "modal", () => {
-            //     // Populate the form with the rowData
-            //     populateFormWithData(
-            //         "edit-patient-triage-data-modal",
-            //         rowData,
-            //         [
-            //             "bloodPressure",
-            //             "heartRate",
-            //             "respiratoryRate",
-            //             "signsAndSymptoms",
-            //             "injuryDetails"
-            //         ]
-            //     );
-            // });
-            
         },
 
         // Load the data to the columns
@@ -120,7 +104,7 @@ async function loadAllPatients() {
             {
                 targets: 4,
                 render: function(data, type, row, meta) {
-                    return '<span>' + data + '</span>';
+                    return '<span>' + data.charAt(0).toUpperCase() + data.slice(1) + '</span>';
                 }
             },
             {
@@ -128,7 +112,7 @@ async function loadAllPatients() {
                 render: function (data, type, row, meta) {
                     return `
                     <td>
-                        <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">View More <i class="ti-arrow-right"></i> </button>
+                        <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">View Details <i class="ti-arrow-right"></i> </button>
                     </td>
                     `;
                 }

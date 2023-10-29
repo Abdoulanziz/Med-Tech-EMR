@@ -60,9 +60,6 @@ a {
   margin: 0 auto;
   overflow: hidden;
   padding: 0;
-}
-
-.container-fluid {
   width: 100%;
   max-width: 100vw;
 }
@@ -568,9 +565,11 @@ div.dataTables_paginate .paginate_button.current {
 
 .breadcrumb {
   font-family: Arial, sans-serif;
-  padding: 10px 15px;
-  border-radius: 3px;
+  padding: 6px 15px;
+  border-radius: 6px;
   border: 1px solid #eae9e9;
+  background-color: #9acd32; /*yellowgreen*/
+  background-color: #eff7df;
 }
 
 .breadcrumb a {
@@ -580,11 +579,11 @@ div.dataTables_paginate .paginate_button.current {
 }
 
 .breadcrumb a:hover {
-  color: #333;
+  color: yellowgreen;
 }
 
 .breadcrumb a.current {
-  color: #333;
+  color: yellowgreen;
 }
 
 .separator {
