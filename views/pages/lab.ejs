@@ -614,35 +614,6 @@
                 </div>
             </div>
 
-            <!-- View patient diagnoses modal -->
-            <div id="view-patient-diagnosis-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="view-patient-diagnosis-form">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">View Medical Diagnosis</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="view-patient-diagnosis-form-body">
-                            <div class="form-section">
-                                <label for="testName">Diagnosis Test</label>
-                                <input type="text" name="testName">
-                                <label for="fees">Fees ($)</label>
-                                <input type="number" name="fees">
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save" type="submit">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
             <!-- Create patient lab report modal -->
             <div id="create-patient-lab-report-modal" class="form-modal">
                 <div class="form-modal-content">
@@ -664,8 +635,8 @@
                             </div>
                         
                             <div class="form-section">
-                                <label for="document-input">Lab Report</label>
-                                <textarea id="document-input" style="border-radius: 0 !important;"></textarea>
+                                <label for="lab-report">Lab Report</label>
+                                <textarea id="lab-report" style="border-radius: 0 !important;"></textarea>
                             </div>
                         </div>
             
@@ -1326,7 +1297,7 @@
 
 
         tinymce.init({
-            selector: "#document-input",
+            selector: "#lab-report",
             width: "100%",
             height: 300,
             setup: function (editor) {

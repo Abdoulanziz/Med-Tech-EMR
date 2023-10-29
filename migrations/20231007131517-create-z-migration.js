@@ -33,6 +33,26 @@ module.exports = {
         onDelete: 'CASCADE',
       }),
 
+      queryInterface.changeColumn('diagnoses', 'visit_id', {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'visits',
+          key: 'visit_id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      }),
+
+      queryInterface.changeColumn('diagnosis_reports', 'diagnosis_id', {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'diagnoses',
+          key: 'diagnosis_id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      }),
+
       queryInterface.changeColumn('queues', 'user_id', {
         type: Sequelize.INTEGER,
         references: {

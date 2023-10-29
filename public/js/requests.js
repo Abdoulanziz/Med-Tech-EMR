@@ -246,4 +246,20 @@ export const API = {
             return await API.makePostRequest(endpoint, diagnosis, fromFormData);
         },
     },
+
+
+    // Diagnosis reports 
+    reports: {
+        // Add to diagnosis-reports POST api/v1/reports
+        create: async (report, fromFormData) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/reports`;
+            return await API.makePostRequest(endpoint, report, fromFormData);
+        },
+
+        // Fetch single report GET api/v1/reports/:id
+        fetchByDiagnosisId: async (id) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/reports/${id}`;
+            return await API.makeGetRequest(endpoint);
+        },
+    },
 }

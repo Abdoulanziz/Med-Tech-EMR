@@ -14,6 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle create allergy
     handleCreateAllergyForm();
+
+    // Handle create lab report
+    handleCreatePatientLabReportForm();
     
 });
 
@@ -275,31 +278,17 @@ async function loadSinglePatientVisitLabRequests(visitId) {
             const rowData = JSON.stringify(data.dataValues);
 
             if("diagnosisUuid" in JSON.parse(rowData)){
-                const viewRequestCta = row.cells[4].querySelectorAll("button")[0];
-                viewRequestCta.style.cursor = "pointer";
-                viewRequestCta.classList.add("modal-trigger");
-                viewRequestCta.dataset.modal = "view-patient-diagnosis-modal";
 
-                UTILS.triggerModal(viewRequestCta, "modal", () => {
-                    // Populate the form with the rowData
-                    populateFormWithData(
-                        "view-patient-diagnosis-modal",
-                        rowData,
-                        [
-                            "testName",
-                            "fees"
-                        ]
-                    );
-                });
-
-                const createReportCta = row.cells[4].querySelectorAll("button")[1];
+                const createReportCta = row.cells[4].querySelectorAll("button")[0];
                 createReportCta.style.cursor = "pointer";
                 createReportCta.classList.add("modal-trigger");
                 createReportCta.dataset.modal = "create-patient-lab-report-modal";
 
                 UTILS.triggerModal(createReportCta, "modal", () => {
-                    createReportCta.dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
-                    console.log(JSON.parse(rowData).diagnosisId);
+                    // createReportCta.dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
+                    // console.log(JSON.parse(rowData).diagnosisId);
+
+                    document.querySelector("#create-patient-lab-report-form").dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
 
                     // Populate the form with the rowData
                     populateFormWithData(
@@ -347,7 +336,6 @@ async function loadSinglePatientVisitLabRequests(visitId) {
                 render: function (data, type, row, meta) {
                     return `
                     <td>
-                        <button class="btn view-request" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">View Request  <i class="ti-arrow-right"></i> </button>
                         <button class="btn view-results" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Create Report  <i class="ti-arrow-right"></i> </button>
                     </td>
                     `;
@@ -515,5 +503,75 @@ function populateFormWithData(formId, data, formFieldsNamesArray) {
         }
     });
 }
+
+
+// Handle create diangosis report form
+async function handleCreatePatientLabReportForm() {
+    const patientLabReportForm = document.querySelector('#create-patient-lab-report-form');
+    patientLabReportForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        // Get Id of selected visit
+        const selectedVisitId = UTILS.getSelectedVisitId();
+        if (! selectedVisitId) return;
+
+        // Get Id of selected request
+        const selectedRequestId = patientLabReportForm.dataset.diagnosisId;
+        if (! selectedRequestId) return;
+
+        // Initialize the editor
+        const editor = tinymce.get("lab-report");
+        let formattedContent;
+
+        // Check if the editor is initialized and exists
+        if (editor) {
+            formattedContent = editor.getContent();
+        } else {
+            console.error("Editor not found or initialized.");
+        }
+    
+        // Collect form data
+        const formData = new FormData(patientLabReportForm);
+        formData.append('diagnosisId', selectedRequestId);
+        formData.append('diagnosisReport', formattedContent);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+    
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(patientLabReportForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to create a triage record
+                const response = await API.reports.create(URLEncodedData, true);
+    
+                // Check if the request was successful
+                if (response.status === 'success') {
+                    // Alert user
+                    // alert('Patient record created successfully!');
+                    // TODO: Create a banner to show triage saved
+    
+                    // Reset the form
+                    patientLabReportForm.reset();
+    
+                    // Remove form
+                    patientLabReportForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the requests table
+                    loadSinglePatientVisitLabRequests(selectedVisitId);
+    
+                } else {
+                    alert('Failed to create allergy record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while creating the allergy record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+        });
+    });
+}
+
+
 
 

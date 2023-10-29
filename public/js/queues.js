@@ -333,6 +333,23 @@ async function loadSinglePatientVisitHistory(visitId) {
                         ]
                     );
                 });
+
+
+                const viewReportCta = row.cells[4].querySelectorAll("button")[1];
+                viewReportCta.style.cursor = "pointer";
+                viewReportCta.classList.add("modal-trigger");
+                viewReportCta.dataset.modal = "view-patient-lab-report-modal";
+
+                UTILS.triggerModal(viewReportCta, "modal", () => {
+                    // viewReportCta.dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
+                    // console.log(JSON.parse(rowData).diagnosisId);
+
+                    document.querySelector("#view-patient-lab-report-form").dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
+
+                    // Populate the form with the server data
+                    populateFormWithDataFromServer("view-patient-lab-report-form", JSON.parse(rowData).diagnosisId);
+                    
+                });
             }
         },
         columnDefs: [
@@ -535,6 +552,36 @@ function populateFormWithData(formId, data, formFieldsNamesArray) {
             field.value = parsedData[fieldName] || null;
         }
     });
+}
+
+
+// Populate form with data from server (pre-fill the form)
+async function populateFormWithDataFromServer(formId, diagnosisId) {
+    try {
+        // Parse the form id
+        const form = document.querySelector(`#${formId}`);
+
+        // Make an API POST request to create a triage record
+        const response = await API.reports.fetchByDiagnosisId(diagnosisId);
+        console.log(response)
+
+        // Check if the request was successful
+        const editor = tinymce.get("lab-report");
+        if (response.status === 'success') {
+            // Alert user
+            // alert('Patient record fetched successfully!');
+            // TODO: Create a banner to show data fetched
+
+            editor.setContent(response.data.diagnosisReport);
+
+        } else {
+            // alert('Failed to fetch diagnosis report.');
+            editor.setContent("");
+        }
+    } catch (error) {
+        console.error(error);
+        alert('An error occurred while fetching the diagnosis report.');
+    }
 }
 
 

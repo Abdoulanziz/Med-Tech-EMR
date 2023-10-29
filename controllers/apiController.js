@@ -10,6 +10,7 @@ const { Queue } = require('../models');
 const { Triage } = require('../models');
 const { Allergy } = require('../models');
 const { Diagnosis } = require('../models');
+const { DiagnosisReport } = require('../models');
 
 const Op = Sequelize.Op;
 
@@ -166,8 +167,6 @@ const fetchPatient = async (req, res) => {
     if (patientId) {
       // If patientId is provided, fetch the specific patient by ID
       const patient = await Patient.findByPk(patientId);
-
-      console.log(patient);
 
       if (!patient) {
         return res.status(404).json({ message: 'Patient not found' });
@@ -787,5 +786,56 @@ const createDiagnoses = async (req, res) => {
   }
 };
 
+// Create new lab report
+const createDiagnosisReport = async (req, res) => {
+  try {
+    // Convert empty strings to null for nullable fields
+    const diagnosisReport = req.body;
 
-module.exports = { checkAPIStatus, createUser, createPatient, fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchLabRequestsByVisitId, fetchMedicalHistoryByVisitId, createDiagnoses };
+    const newDiagnosisReport = await DiagnosisReport.create({
+      diagnosisId: diagnosisReport.diagnosisId,
+      diagnosisReport: diagnosisReport.diagnosisReport,
+      // userId
+    });
+
+    return res.status(201).json({ status: 'success', message: 'Diagnosis report created successfully', data: newDiagnosisReport });
+  } catch (error) {
+    console.error('Error creating diagnosis report:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Fetch lab report
+const fetchDiagnosisReportByDiagnosisId = async (req, res) => {
+  try {
+    const diagnosisId = req.params.diagnosisId;
+    // Sequelize query
+    const queryOptions = {
+      where: { diagnosis_id: diagnosisId }
+    };
+
+    const results = await DiagnosisReport.findOne(queryOptions);
+
+    if (results) {
+      // Report found
+      return res.status(200).json({
+        status: 'success',
+        data: results,
+      });
+    } else {
+      // No report found
+      return res.status(404).json({
+        status: 'not found',
+        message: 'Diagnosis report not found',
+      });
+    }
+
+  } catch (error) {
+    console.error('Error fetching diagnosis report:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
+
+module.exports = { checkAPIStatus, createUser, createPatient, fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchLabRequestsByVisitId, fetchMedicalHistoryByVisitId, createDiagnoses, createDiagnosisReport, fetchDiagnosisReportByDiagnosisId };

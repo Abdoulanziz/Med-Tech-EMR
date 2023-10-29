@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { checkAPIStatus, createUser, createPatient, /*createDoctor, createAppointment,*/ fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchLabRequestsByVisitId, fetchMedicalHistoryByVisitId, createDiagnoses } = require("../controllers/apiController");
+const { checkAPIStatus, createUser, createPatient, /*createDoctor, createAppointment,*/ fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchLabRequestsByVisitId, fetchMedicalHistoryByVisitId, createDiagnoses, createDiagnosisReport, fetchDiagnosisReportByDiagnosisId } = require("../controllers/apiController");
 
 router.get("/status", checkAPIStatus);
 
@@ -29,6 +29,9 @@ router.post("/triage", createTriage);
 router.post("/allergy", createAllergy);
 
 router.post("/diagnoses", createDiagnoses);
+
+router.post("/reports", createDiagnosisReport);
+router.get("/reports/:diagnosisId", fetchDiagnosisReportByDiagnosisId);
 
 
 module.exports = router;
