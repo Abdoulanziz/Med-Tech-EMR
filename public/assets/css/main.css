@@ -489,7 +489,8 @@
   padding: 1.2rem;
   border: 1px solid #9dd0ff;
   border-radius: .4rem;
-  background-color: #c4e3ff;
+  background-color: #f7fbff;
+  background-color: #cce6fe;
 }
 
 .patient-details .action-buttons,
@@ -511,13 +512,13 @@
 .patient-info-item .label {
   font-weight: normal !important; 
   font-size: 16px !important;
-  color: #343333;
+  color: #919191;
   font-family: sans-serif;
 }
 
 .patient-info-item .label span {
   font-weight: 400;
-  color: #919191;
+  color: #1da1f2;
 }
 
 .patient-info-item:last-child {
@@ -600,13 +601,40 @@
 }
 
 .service {
-  padding: 10px;
+  display: inline-block;
+  padding: 6px 14px;
+  background-color: #fff;
+  inline-size: fit-content;
+  border-radius: 16px;
+  border: 1px solid #1da1f2;
+  margin-block: .2rem;
 }
 
-.service h3 {
+.service.paid {
+  border: 1px solid yellowgreen;
+  background-color: yellowgreen;
+}
+
+.service.paid h3 {
+  color: #ffffff;
+}
+
+.service-content.flex {
+  justify-content: space-between;
+  gap: .4rem;
+}
+
+.service-content h3 {
   font-size: 16px;
   font-weight: 400;
   margin: 0;
+  color: #707070;
+}
+
+.service-content img {
+  block-size: 20px;
+  inline-size: 20px;
+  cursor: pointer;
 }
 
 .progress-bar {
