@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const models = require('../models');
 
 const { User } = require('../models');
+const { Doctor } = require('../models');
 const { Patient } = require('../models');
 
 const { Visit } = require('../models');
@@ -23,16 +24,16 @@ const checkAPIStatus = (req, res) => {
 const createUser = async (req, res) => {
   try {
     // Extract user data from the request body
-    const { firstName, lastName, dateOfBirth, gender, contactNumber, email, password, roleId } = req.body;
+    const { username, password, roleId } = req.body;
 
-    // Check if the email already exists in the database
-    const existingUser = await User.findOne({ where: { email } });
+    // Check if the username already exists in the database
+    const existingUser = await User.findOne({ where: { username } });
     if (existingUser) {
-      return res.status(400).json({ message: 'Email already exists' });
+      return res.status(400).json({ message: 'Username already taken' });
     }
 
     // Create a new user record in the database
-    const newUser = await User.create({ firstName, lastName, dateOfBirth, gender, contactNumber, email, password, roleId });
+    const newUser = await User.create({ username, password, roleId });
 
     // Respond with the newly created user object
     return res.status(201).json(newUser);
@@ -188,7 +189,7 @@ const createVisit = async (req, res) => {
     const visitDate = req.body.visitDate || null;
     const visitCategoryId = req.body.visitCategoryId || null;
     const patientId = req.body.patientId || null;
-    const userId = req.body.userId || null;
+    const doctorId = req.body.doctorId || null;
     // const doctorSpecialityId = req.body.doctorSpecialityId || null;
 
     const existingVisit = await Visit.findOne({ where: { patientId: patientId, visitDate: visitDate } });
@@ -200,7 +201,7 @@ const createVisit = async (req, res) => {
       visitDate,
       visitCategoryId,
       patientId,
-      userId,
+      doctorId,
       // doctorSpecialityId
     });
 
@@ -265,7 +266,7 @@ const fetchVisits = async (req, res) => {
       order: sort,
       include: [
         {
-          model: models.User,
+          model: models.Doctor,
           attributes: ['firstName', 'lastName'],
         },
         {
@@ -280,9 +281,9 @@ const fetchVisits = async (req, res) => {
     // Access the doctor's fields in each visit result
     const visitsWithDoctorInfo = result.rows.map((visit) => ({
       // Extract fields from the 'doctor' association
-      // doctorFirstName: visit.User.firstName,
-      // doctorLastName: visit.User.lastName,
-      doctorFullName: `${visit.User.firstName} ${visit.User.lastName}`,
+      // doctorFirstName: visit.Doctor.firstName,
+      // doctorLastName: visit.Doctor.lastName,
+      doctorFullName: `${visit.Doctor.firstName} ${visit.Doctor.lastName}`,
       // patientFirstName: visit.Patient.firstName,
       // patientLastName: visit.Patient.lastName,
       patientFullName: `${visit.Patient.firstName} ${visit.Patient.lastName}`,
@@ -361,7 +362,7 @@ const fetchVisitsByPatientId = async (req, res) => {
       order: sort,
       include: [
         {
-          model: models.User,
+          model: models.Doctor,
           attributes: ['firstName', 'lastName'],
         },
         {
@@ -376,9 +377,9 @@ const fetchVisitsByPatientId = async (req, res) => {
     // Access the doctor's fields in each visit result
     const visitsWithDoctorInfo = result.rows.map((visit) => ({
       // Extract fields from the 'doctor' association
-      // doctorFirstName: visit.User.firstName,
-      // doctorLastName: visit.User.lastName,
-      doctorFullName: `${visit.User.firstName} ${visit.User.lastName}`,
+      // doctorFirstName: visit.Doctor.firstName,
+      // doctorLastName: visit.Doctor.lastName,
+      doctorFullName: `${visit.Doctor.firstName} ${visit.Doctor.lastName}`,
       // patientFirstName: visit.Patient.firstName,
       // patientLastName: visit.Patient.lastName,
       visitId: visit.visitId,
@@ -407,7 +408,7 @@ const addPatientToQueue = async (req, res) => {
 
     // Convert empty strings to null for nullable fields
     const patientId = req.body.patientId || null;
-    const userId = req.body.userId || null;
+    const doctorId = req.body.doctorId || null;
     const queueCategory = req.body.queueCategory || null;
 
     // const existingInQueue = await Queue.findOne({ where: { patientId: patientId/*, visitDate: visitDate*/ } });
@@ -417,7 +418,7 @@ const addPatientToQueue = async (req, res) => {
 
     const newPatientToQueue = await Queue.create({
       patientId,
-      userId,
+      doctorId,
       queueCategory
     });
 
@@ -482,7 +483,7 @@ const fetchAllPatientsOnQueue = async (req, res) => {
       order: sort,
       include: [
         {
-          model: models.User,
+          model: models.Doctor,
           attributes: ['firstName', 'lastName'],
         },
         {
@@ -498,10 +499,10 @@ const fetchAllPatientsOnQueue = async (req, res) => {
     // Access the doctor's fields in each queue result
     const allPatientsOnQueue = result.rows.map((record) => ({
       // Extract fields from the 'doctor' association
-      // doctorFirstName: record.User.firstName,
-      // doctorLastName: record.User.lastName,
+      // doctorFirstName: record.Doctor.firstName,
+      // doctorLastName: record.Doctor.lastName,
 
-      doctorFullName: `${record.User.firstName} ${record.User.lastName}`,
+      doctorFullName: `${record.Doctor.firstName} ${record.Doctor.lastName}`,
 
       patientId: record.Patient.patientId,
       // patientFirstName: record.Patient.firstName,

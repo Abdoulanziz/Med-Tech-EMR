@@ -3,6 +3,26 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.all([
+      queryInterface.changeColumn('users', 'role_id', {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'roles',
+          key: 'role_id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      }),
+
+      queryInterface.changeColumn('doctors', 'user_id', {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'user_id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      }),
+
       queryInterface.changeColumn('visits', 'patient_id', {
         type: Sequelize.INTEGER,
         references: {
@@ -13,11 +33,11 @@ module.exports = {
         onDelete: 'CASCADE',
       }),
 
-      queryInterface.changeColumn('visits', 'user_id', {
+      queryInterface.changeColumn('visits', 'doctor_id', {
         type: Sequelize.INTEGER,
         references: {
-          model: 'users',
-          key: 'user_id',
+          model: 'doctors',
+          key: 'doctor_id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
@@ -53,11 +73,11 @@ module.exports = {
         onDelete: 'CASCADE',
       }),
 
-      queryInterface.changeColumn('queues', 'user_id', {
+      queryInterface.changeColumn('queues', 'doctor_id', {
         type: Sequelize.INTEGER,
         references: {
-          model: 'users',
-          key: 'user_id',
+          model: 'doctors',
+          key: 'doctor_id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
@@ -68,16 +88,6 @@ module.exports = {
         references: {
           model: 'patients',
           key: 'patient_id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      }),
-
-      queryInterface.changeColumn('users', 'role_id', {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'roles',
-          key: 'role_id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
@@ -97,12 +107,15 @@ module.exports = {
 
   down: (queryInterface, Sequelize) => {
     return Promise.all([
-      queryInterface.removeColumn('visits', 'patient_id'),
-      queryInterface.removeColumn('visits', 'user_id'),
-      queryInterface.removeColumn('allergies', 'visit_id'),
-      queryInterface.removeColumn('queues', 'user_id'),
-      queryInterface.removeColumn('queues', 'patient_id'),
       queryInterface.removeColumn('users', 'role_id'),
+      queryInterface.removeColumn('doctors', 'user_id'),
+      queryInterface.removeColumn('visits', 'patient_id'),
+      queryInterface.removeColumn('visits', 'doctor_id'),
+      queryInterface.removeColumn('allergies', 'visit_id'),
+      queryInterface.removeColumn('diagnoses', 'visit_id'),
+      queryInterface.removeColumn('diagnosis_reports', 'diagnosis_id'),
+      queryInterface.removeColumn('queues', 'doctor_id'),
+      queryInterface.removeColumn('queues', 'patient_id'),
       queryInterface.removeColumn('triages', 'visit_id'),
     ]);
   },

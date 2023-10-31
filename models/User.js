@@ -25,39 +25,11 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
         field: 'user_uuid',
       },
-      firstName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        field: 'first_name',
-      },
-      lastName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        field: 'last_name',
-      },
-      dateOfBirth: {
-        type: DataTypes.DATEONLY,
-        allowNull: false,
-        field: 'date_of_birth',
-      },
-      gender: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        field: 'gender',
-      },
-      contactNumber: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        field: 'contact_number',
-      },
-      email: {
+      username: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
-        validate: {
-          isEmail: true,
-        },
-        field: 'email',
+        field: 'username',
       },
       password: {
         type: DataTypes.STRING,
@@ -68,16 +40,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         field: 'role_id',
-      },
-      specialtyId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        field: 'specialty_id',
-      },
-      department: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        field: 'department',
       },
       createdAt: {
         type: DataTypes.DATE,

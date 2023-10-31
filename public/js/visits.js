@@ -288,6 +288,9 @@ async function handleCreatePatientForm() {
             }
         }, () => {
             // TODO: Run when cancelled
+
+            // Reset the form
+            createPatientForm.reset();
         });
     });
 }
@@ -338,6 +341,9 @@ async function handleVisitForm() {
             }
         }, () => {
             // TODO: Run when cancelled
+
+            // Reset the form
+            createVisitForm.reset();
         });
     });
 }

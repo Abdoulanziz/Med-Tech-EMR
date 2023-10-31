@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Queue extends Model {
+  class Service extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,45 +11,33 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Queue.belongsTo(models.Doctor, { foreignKey: 'doctorId' });
-      Queue.belongsTo(models.Patient, { foreignKey: 'patientId' });
+      Service.belongsTo(models.Visit, { foreignKey: 'visitId' });
     }
   }
-  Queue.init({ 
-    queueId: {
+  Service.init({ 
+    serviceId: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false,
-      field: 'queue_id',
+      field: 'service_id',
     },
-    queueUuid: {
+    serviceUuid: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
       unique: true,
-      field: 'queue_uuid',
+      field: 'service_uuid',
     },
-    patientId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      field: 'patient_id',
-    },
-    doctorId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      field: 'doctor_id',
-    },
-    queueCategory: {
+    serviceName: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: 'queue_category',
+      field: 'service_name',
     },
-    queueStatus: {
-      type: DataTypes.ENUM('Scheduled', 'Cancelled', 'Completed'),
+    serviceFees: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 'Scheduled',
-      field: 'queue_status',
+      field: 'service_fees',
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -63,8 +51,8 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'Queue',
-    tableName: 'queues',
+    modelName: 'Service',
+    tableName: 'services',
   });
-  return Queue;
+  return Service;
 };

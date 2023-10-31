@@ -121,13 +121,14 @@
                                 <div class="dropdown-menu" id="dropdown-menu">
                                     <ul class="dropdown-items">
                                         <li class="dropdown-item header">
-                                            <span id="user-fullname-label"><%= data.user.firstName + ' ' + data.user.lastName %></span>
-                                            <small id="user-email-label"><%= data.user.email%></small>
+                                            <span id="user-fullname-label"><%= data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1) %></span>
+                                            <br>
+                                            <small id="user-email-label">admin@coire.live</small>
                                         </li>
                                         <li class="dropdown-item"><i class="ti-settings"></i> <a href="#">Settings</a></li>
                                         <li class="dropdown-item"><i class="ti-user"></i> <a href="#">My Profile</a></li>
                                         <li class="dropdown-item"><i class="ti-info-alt"></i> <a href="#">About</a></li>
-                                        <li class="dropdown-item footer" id="signout-cta"><a href="#">Sign Out</a></li>
+                                        <li class="dropdown-item footer" id="signout-cta"><span>Sign Out</span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -442,8 +443,8 @@
                                 </div>
     
                                 <div class="form-group">
-                                    <label for="user-id">To See Doctor:</label>
-                                    <select id="user-id" class="form-control" name="userId" required>
+                                    <label for="doctor-id">To See Doctor:</label>
+                                    <select id="doctor-id" class="form-control" name="doctorId" required>
                                         <option value="1">Caxton Mulondo</option>
                                         <option value="2">John North</option>
                                         <option value="3">Abdoulanziz Ally</option>
@@ -490,8 +491,8 @@
                                 </div>
     
                                 <div class="form-group">
-                                    <label for="user-id">To See Doctor:</label>
-                                    <select id="user-id" class="form-control" name="userId" required>
+                                    <label for="doctor-id">To See Doctor:</label>
+                                    <select id="doctor-id" class="form-control" name="doctorId" required>
                                         <option value="1">Caxton Mulondo</option>
                                         <option value="2">John North</option>
                                         <option value="3">Abdoulanziz Ally</option>
@@ -538,8 +539,8 @@
                                 </div>
         
                                 <div class="form-group">
-                                    <label for="user-id">To See Doctor:</label>
-                                    <select id="user-id" class="form-control" name="userId" required>
+                                    <label for="doctor-id">To See Doctor:</label>
+                                    <select id="doctor-id" class="form-control" name="doctorId" required>
                                         <option value="1">Caxton Mulondo</option>
                                         <option value="2">John North</option>
                                         <option value="3">Abdoulanziz Ally</option>

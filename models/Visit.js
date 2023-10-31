@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Visit.belongsTo(models.User, { foreignKey: 'userId' });
+      Visit.belongsTo(models.Doctor, { foreignKey: 'doctorId' });
       Visit.belongsTo(models.Patient, { foreignKey: 'patientId' });
     }
   }
@@ -51,10 +51,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       field: 'patient_id',
     },
-    userId: {
-      type: DataTypes.INTEGER, // Doctor's id
+    doctorId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-      field: 'user_id',
+      field: 'doctor_id',
     },
     createdAt: {
       type: DataTypes.DATE,

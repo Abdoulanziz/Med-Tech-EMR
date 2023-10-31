@@ -15,10 +15,10 @@ const renderSignin = (req, res) => {
 };
 
 const handleSignin = async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   try {
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ where: { username } });
 
     if (!user) {
       res.redirect("/auth/signin");

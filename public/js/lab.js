@@ -434,6 +434,9 @@ async function handleCreateTriageForm() {
             }
         }, () => {
             // TODO: Run when cancelled
+
+            // Reset the form
+            patientTriageForm.reset();
         });
     });
 }
@@ -485,6 +488,9 @@ async function handleCreateAllergyForm() {
             }
         }, () => {
             // TODO: Run when cancelled
+
+            // Reset the form
+            patientAllergyForm.reset();
         });
     });
 }
@@ -568,6 +574,9 @@ async function handleCreatePatientLabReportForm() {
             }
         }, () => {
             // TODO: Run when cancelled
+
+            // Reset the form
+            patientLabReportForm.reset();
         });
     });
 }

@@ -38,12 +38,12 @@ module.exports = {
         // onUpdate: 'CASCADE',
         // onDelete: 'CASCADE',
       },
-      user_id: {
+      doctor_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         // references: {
-        //   model: 'users',
-        //   key: 'user_id',
+        //   model: 'doctors',
+        //   key: 'doctor_id',
         // },
         // onUpdate: 'CASCADE',
         // onDelete: 'CASCADE',
