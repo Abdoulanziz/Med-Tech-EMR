@@ -61,7 +61,7 @@ async function loadAllPatientsOnQueue() {
             UTILS.sectionToggler(viewMoreCta, "section", () => {
                 displaySelectedPatientDetails("patient-info-section_01", rowData, () => {
                     loadSinglePatientVisits(data.patientId);
-                    displaySelectedPatientDiagnosesBills("ongoing-services-01");
+                    // displaySelectedPatientDiagnosesBills("ongoing-services-01");
                 });
             });
         },
@@ -398,21 +398,26 @@ async function displaySelectedPatientDetails(divID, data, callback) {
 // Function to display diagnoses bills
 async function displaySelectedPatientDiagnosesBills(divId) {
     // Get Id of selected visit
-    // const selectedVisitId = UTILS.getSelectedVisitId();
-    const selectedVisitId = 1;
+    const selectedVisitId = UTILS.getSelectedVisitId();
 
     // Fetch and display the bills of the selected visit
     const response = await API.diagnoses.fetchAllBills(selectedVisitId);
     const selectedBills = await response.data;
 
-    // You can populate the patient details section with the fetched data
+    // Populate the patient details section with the fetched data
     const billItems = selectedBills.rows;
     if (billItems) {
         const billContainer = document.querySelector(`#${divId}`);
-        billItems.forEach((billItem) => {
+
+        // Clear the existing items in the container
+        while (billContainer.firstChild) {
+            billContainer.removeChild(billContainer.firstChild);
+        }
+
+        billItems.forEach((billItem, index) => {
             // Create a template for each bill item
             const template = `
-            <div class="service paid">
+            <div class="service ${index === 0 || index === 1 ? 'paid' : 'unpaid'}">
                 <div class="service-content flex">
                 <h3>${billItem.testName} (UGX ${billItem.fees})</h3>
                 <img src="/assets/svg/cancel.png" alt="remove service icon">

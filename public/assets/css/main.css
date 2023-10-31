@@ -607,6 +607,7 @@
   border-radius: 16px;
   border: 1px solid #1da1f2;
   margin-block: .2rem;
+  margin-inline-end: .2rem;
 }
 
 .service.paid {
