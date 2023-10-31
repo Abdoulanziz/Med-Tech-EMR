@@ -837,6 +837,37 @@ const fetchDiagnosisReportByDiagnosisId = async (req, res) => {
   }
 };
 
+// Fetch diagnosis bills
+const fetchAllDiagnosisBillsByVisitId = async (req, res) => {
+  try {
+    const visitId = req.params.visitId;
+    // Sequelize query
+    const queryOptions = {
+      where: { visit_id: visitId }
+    };
+
+    const results = await Diagnosis.findAndCountAll(queryOptions);
+
+    if (results) {
+      // Results found
+      return res.status(200).json({
+        status: 'success',
+        data: results,
+      });
+    } else {
+      // No result found
+      return res.status(404).json({
+        status: 'not found',
+        message: 'Diagnosis bill not found',
+      });
+    }
+
+  } catch (error) {
+    console.error('Error fetching diagnosis report:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 
 
-module.exports = { checkAPIStatus, createUser, createPatient, fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchLabRequestsByVisitId, fetchMedicalHistoryByVisitId, createDiagnoses, createDiagnosisReport, fetchDiagnosisReportByDiagnosisId };
+
+module.exports = { checkAPIStatus, createUser, createPatient, fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchLabRequestsByVisitId, fetchMedicalHistoryByVisitId, createDiagnoses, fetchAllDiagnosisBillsByVisitId, createDiagnosisReport, fetchDiagnosisReportByDiagnosisId };

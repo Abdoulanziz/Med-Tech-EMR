@@ -70,7 +70,10 @@ async function loadAllPatients() {
             viewMoreCta.dataset.section = "section_01";
 
             UTILS.sectionToggler(viewMoreCta, "section", () => {
-                displaySelectedPatientDetails("patient-info-section_01", rowDataString, () => loadSinglePatientVists(data.patientId));
+                displaySelectedPatientDetails("patient-info-section_01", rowDataString, () => {
+                    loadSinglePatientVists(data.patientId);
+                    displaySelectedPatientDiagnosesBills("ongoing-services");
+                });
             });
         },
 
@@ -185,6 +188,41 @@ async function displaySelectedPatientDetails(divID, data, callback) {
 
     // Render other UI section
     callback(patientId);
+}
+
+// Function to display diagnoses bills
+async function displaySelectedPatientDiagnosesBills(divClass) {
+    // Get Id of selected visit
+    // const selectedVisitId = UTILS.getSelectedVisitId();
+    const selectedVisitId = 1;
+
+    // Fetch and display the bills of the selected visit
+    const response = await API.diagnoses.fetchAllBills(selectedVisitId);
+    const selectedBills = await response.data;
+
+    // You can populate the patient details section with the fetched data
+    const billItems = selectedBills.rows;
+    if (billItems) {
+        const billContainer = document.querySelector(`.${divClass}`);
+        billItems.forEach((billItem) => {
+            // Create a template for each bill item
+            const template = `
+            <div class="service paid">
+                <div class="service-content flex">
+                <h3>${billItem.testName} (UGX ${billItem.fees})</h3>
+                <img src="/assets/svg/cancel.png" alt="remove service icon">
+                </div>
+            </div>
+            `;
+
+            // Temporary container element to hold the template
+            const tempContainer = document.createElement("div");
+            tempContainer.innerHTML = template;
+
+            // Append the template to the billContainer
+            billContainer.appendChild(tempContainer.firstElementChild);
+        });
+    }
 }
 
 

@@ -82,21 +82,21 @@ export const API = {
             return await API.makeGetRequest(endpoint);
         },
 
-        // Fetch all patients GET api/v1/patients/fetch
+        // Fetch all patients GET api/v1/patients
         fetchAll: async () => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/fetch/all`;
+            const endpoint = `${API.BACKEND_BASE_API_URI}/patients`;
             return await API.makeGetRequest(endpoint);
         },
 
-        // Update patient POST api/v1/patients/update/
+        // Update patient POST api/v1/patients/:id
         update: async (id) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/update`;
+            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/${id}`;
             return await API.makePatchRequest(endpoint, id);
         },
 
-        // Delete patient POST api/v1/patients/delete
+        // Delete patient POST api/v1/patients/:id
         delete: async (id) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/delete`;
+            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/${id}`;
             return await API.makePostRequest(endpoint, id);
         },
     },
@@ -115,24 +115,6 @@ export const API = {
             const endpoint = `${API.BACKEND_BASE_API_URI}/visits/${id}`;
             return await API.makeGetRequest(endpoint);
         },
-
-        // Fetch all patients GET api/v1/patients/fetch
-        fetchAll: async () => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/fetch/all`;
-            return await API.makeGetRequest(endpoint);
-        },
-
-        // Update patient POST api/v1/patients/update/
-        update: async (id) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/update`;
-            return await API.makePatchRequest(endpoint, id);
-        },
-
-        // Delete patient POST api/v1/patients/delete
-        delete: async (id) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/delete`;
-            return await API.makePostRequest(endpoint, id);
-        },
     },
 
 
@@ -142,30 +124,6 @@ export const API = {
         addPatient: async (data, fromFormData) => {
             const endpoint = `${API.BACKEND_BASE_API_URI}/queues`;
             return await API.makePostRequest(endpoint, data, fromFormData);
-        },
-
-        // Fetch single patient GET api/v1/patients/:id
-        fetchByPatientId: async (id) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/visits/${id}`;
-            return await API.makeGetRequest(endpoint);
-        },
-
-        // Fetch all patients GET api/v1/patients/fetch
-        fetchAll: async () => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/fetch/all`;
-            return await API.makeGetRequest(endpoint);
-        },
-
-        // Update patient POST api/v1/patients/update/
-        update: async (id) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/update`;
-            return await API.makePatchRequest(endpoint, id);
-        },
-
-        // Delete patient POST api/v1/patients/delete
-        delete: async (id) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/delete`;
-            return await API.makePostRequest(endpoint, id);
         },
     },
 
@@ -177,30 +135,6 @@ export const API = {
             const endpoint = `${API.BACKEND_BASE_API_URI}/triage`;
             return await API.makePostRequest(endpoint, triage, fromFormData);
         },
-
-        // Fetch single patient GET api/v1/patients/:id
-        fetchByPatientId: async (id) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/visits/${id}`;
-            return await API.makeGetRequest(endpoint);
-        },
-
-        // Fetch all patients GET api/v1/patients/fetch
-        fetchAll: async () => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/fetch/all`;
-            return await API.makeGetRequest(endpoint);
-        },
-
-        // Update patient POST api/v1/patients/update/
-        update: async (id) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/update`;
-            return await API.makePatchRequest(endpoint, id);
-        },
-
-        // Delete patient POST api/v1/patients/delete
-        delete: async (id) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/delete`;
-            return await API.makePostRequest(endpoint, id);
-        },
     },
 
      
@@ -210,30 +144,6 @@ export const API = {
         create: async (allergy, fromFormData) => {
             const endpoint = `${API.BACKEND_BASE_API_URI}/allergy`;
             return await API.makePostRequest(endpoint, allergy, fromFormData);
-        },
-
-        // Fetch single patient GET api/v1/patients/:id
-        fetchByPatientId: async (id) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/visits/${id}`;
-            return await API.makeGetRequest(endpoint);
-        },
-
-        // Fetch all patients GET api/v1/patients/fetch
-        fetchAll: async () => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/fetch/all`;
-            return await API.makeGetRequest(endpoint);
-        },
-
-        // Update patient POST api/v1/patients/update/
-        update: async (id) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/update`;
-            return await API.makePatchRequest(endpoint, id);
-        },
-
-        // Delete patient POST api/v1/patients/delete
-        delete: async (id) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/delete`;
-            return await API.makePostRequest(endpoint, id);
         },
     },
 
@@ -245,6 +155,12 @@ export const API = {
             const endpoint = `${API.BACKEND_BASE_API_URI}/diagnoses`;
             return await API.makePostRequest(endpoint, diagnosis, fromFormData);
         },
+
+        // Fetch all bills GET api/v1/diagnoses-bills/:visitId
+        fetchAllBills: async (visitId) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/diagnoses/bill/${visitId}`;
+            return await API.makeGetRequest(endpoint);
+        }
     },
 
 
