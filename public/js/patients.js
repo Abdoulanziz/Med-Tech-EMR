@@ -72,7 +72,7 @@ async function loadAllPatients() {
             UTILS.sectionToggler(viewMoreCta, "section", () => {
                 displaySelectedPatientDetails("patient-info-section_01", rowDataString, () => {
                     loadSinglePatientVists(data.patientId);
-                    displaySelectedPatientDiagnosesBills("ongoing-services");
+                    displaySelectedPatientDiagnosesBills("ongoing-services-01");
                 });
             });
         },
@@ -191,7 +191,7 @@ async function displaySelectedPatientDetails(divID, data, callback) {
 }
 
 // Function to display diagnoses bills
-async function displaySelectedPatientDiagnosesBills(divClass) {
+async function displaySelectedPatientDiagnosesBills(divId) {
     // Get Id of selected visit
     // const selectedVisitId = UTILS.getSelectedVisitId();
     const selectedVisitId = 1;
@@ -203,7 +203,7 @@ async function displaySelectedPatientDiagnosesBills(divClass) {
     // You can populate the patient details section with the fetched data
     const billItems = selectedBills.rows;
     if (billItems) {
-        const billContainer = document.querySelector(`.${divClass}`);
+        const billContainer = document.querySelector(`#${divId}`);
         billItems.forEach((billItem) => {
             // Create a template for each bill item
             const template = `
