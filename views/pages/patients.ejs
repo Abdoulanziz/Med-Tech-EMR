@@ -238,10 +238,10 @@
                                 </div>
                             </div>
                             
-                            <div class="info-wrapper">
+                            <!-- <div class="info-wrapper">
                                 <h2 class="special-heading">Billing Services</h2>
                                 <div class="ongoing-services" id="ongoing-services-01">
-                                    <!-- <div class="service paid">
+                                    <div class="service paid">
                                       <div class="service-content flex">
                                         <h3>Consultation (UGX 40,000)</h3>
                                         <img src="/assets/svg/cancel.png" alt="remove service icon">
@@ -264,7 +264,20 @@
                                           <h3>Root Canal (UGX 200,000)</h3>
                                           <img src="/assets/svg/cancel.png" alt="remove service icon">
                                         </div>
-                                    </div> -->
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <div class="info-wrapper">
+                                <h2 class="special-heading">Special Documents</h2>
+                                <div class="documents flex" id="special-documents-01">
+                                    <div class="file-upload-container flex" id="file-drop-area">
+                                        <div>
+                                            <label for="file-input" class="file-label">Drag & Drop or Click to Upload</label>
+                                            <input type="file" id="file-input" class="file-input" accept=".pdf, .doc, .docx, .jpg, .png" onchange="displayFileName()">
+                                            <p class="selected-file" id="selected-file"></p> 
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -565,6 +578,42 @@
     <!-- Load modules -->
     <script type="module" src="/js/ui.js"></script>
     <script type="module" src="/js/patients.js"></script>
+
+
+    <script>
+        // FILE UPLOAD FUNCTIONALITY
+        // Display the selected file name when a file is chosen
+        function displayFileName() {
+            const fileInput = document.querySelector('#file-input');
+            const selectedFile = document.querySelector('#selected-file');
+
+            if (fileInput.files.length > 0) {
+                selectedFile.textContent = 'Selected File: ' + fileInput.files[0].name;
+            } else {
+                selectedFile.textContent = '';
+            }
+        }
+
+        // Enable drag and drop functionality
+        const fileDropArea = document.querySelector('#file-drop-area');
+        fileDropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.add('file-upload-container-active');
+        });
+
+        fileDropArea.addEventListener('dragleave', () => {
+            fileDropArea.classList.remove('file-upload-container-active');
+        });
+
+        fileDropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.remove('file-upload-container-active');
+            const fileInput = document.querySelector('#file-input');
+            fileInput.files = e.dataTransfer.files;
+            displayFileName();
+        });
+        // FILE UPLOAD FUNCTIONALITY
+    </script>
 
 </body>
 </html>
