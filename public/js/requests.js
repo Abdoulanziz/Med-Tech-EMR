@@ -110,11 +110,17 @@ export const API = {
             return await API.makePostRequest(endpoint, visit, fromFormData);
         },
 
-        // Fetch single patient GET api/v1/patients/:id
+        // Fetch single patient GET api/v1/visits/:id
         fetchByPatientId: async (id) => {
             const endpoint = `${API.BACKEND_BASE_API_URI}/visits/${id}`;
             return await API.makeGetRequest(endpoint);
         },
+
+        // Fetch patient GET api/v1/visit/:id/patient
+        fetchPatientByVisitId: async (id) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/visit/${id}/patient`;
+            return await API.makeGetRequest(endpoint);
+        }
     },
 
 

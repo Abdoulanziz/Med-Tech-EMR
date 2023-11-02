@@ -403,6 +403,38 @@ const fetchVisitsByPatientId = async (req, res) => {
   }
 };
 
+// Fetch visit
+const fetchPatientByVisitId = async (req, res) => {
+  const visitId = req.params.id;
+
+  try {
+
+    const filter = {
+      visit_id: visitId, // Filter by visit ID
+    };
+
+    // Construct the Sequelize query
+    const queryOptions = {
+      where: filter,
+      include: [
+        {
+          model: models.Patient,
+          attributes: ['patientId', 'firstName', 'lastName', 'dateOfBirth', 'gender'],
+        },
+      ],
+    };
+
+    const result = await Visit.findOne(queryOptions);
+
+    return res.status(200).json({
+      data: result.Patient,
+    });
+  } catch (error) {
+    console.error('Error fetching visits:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 // Add patient to queue
 const addPatientToQueue = async (req, res) => {
   try {
@@ -885,4 +917,4 @@ const fetchTests = async (req, res) => {
 
 
 
-module.exports = { checkAPIStatus, createUser, createPatient, fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchLabRequestsByVisitId, fetchMedicalHistoryByVisitId, createDiagnoses, fetchAllDiagnosisBillsByVisitId, createDiagnosisReport, fetchDiagnosisReportByDiagnosisId, fetchTests };
+module.exports = { checkAPIStatus, createUser, createPatient, fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, fetchPatientByVisitId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchLabRequestsByVisitId, fetchMedicalHistoryByVisitId, createDiagnoses, fetchAllDiagnosisBillsByVisitId, createDiagnosisReport, fetchDiagnosisReportByDiagnosisId, fetchTests };

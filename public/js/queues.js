@@ -23,6 +23,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle diagnosis form
     handleCreateDiagnosisForm();
+
+    // Set up tinymce
+    setupLabReportTinymce();
+
+    
     
 });
 
@@ -349,7 +354,7 @@ async function loadSinglePatientVisitHistory(visitId) {
                 viewReportCta.classList.add("modal-trigger");
                 viewReportCta.dataset.modal = "view-patient-lab-report-modal";
 
-                UTILS.triggerModal(viewReportCta, "modal", () => {
+                UTILS.triggerModal(viewReportCta, "modal", async () => {
                     // viewReportCta.dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
                     // console.log(JSON.parse(rowData).diagnosisId);
 
@@ -357,6 +362,13 @@ async function loadSinglePatientVisitHistory(visitId) {
 
                     // Populate the form with the server data
                     populateFormWithDataFromServer("view-patient-lab-report-form", JSON.parse(rowData).diagnosisId);
+
+                    // Get patient id from visit id
+                    const patient = await API.visits.fetchPatientByVisitId(selectedVisitId);
+                    const patientData = patient.data;
+
+                    // Trigger print lab report
+                    triggerPrintLabReport(patientData);
                     
                 });
             }
@@ -620,7 +632,6 @@ async function populateFormWithDataFromServer(formId, diagnosisId) {
 
         // Make an API POST request to create a triage record
         const response = await API.reports.fetchByDiagnosisId(diagnosisId);
-        console.log(response)
 
         // Check if the request was successful
         const editor = tinymce.get("lab-report");
@@ -952,6 +963,52 @@ async function populateDropdownList() {
     }
 }
 
+function setupLabReportTinymce() {
+    tinymce.init({
+        selector: "#lab-report",
+        width: "100%",
+        height: 400,
+        setup: function (editor) {
+            // TODO: something();
+        }
+    });
+}
+
+async function triggerPrintLabReport(patient) {
+    // Print lab report
+    const printLabReportBtn = document.querySelector("#print-lab-report-btn");
+    printLabReportBtn.addEventListener("click", event => {
+        event.preventDefault();
+        printReport("lab-report", "Lab Report", patient);
+    });
+}
+
+function printReport(editorId, title, patient){
+    const patientAge = new Date().getFullYear() - new Date(patient.dateOfBirth).getFullYear();
+    var editorContent = tinymce.get(editorId).getContent();
+    // Create a new window for printing
+    var printWindow = window.open('', '', 'width=800,height=600');
+
+    // Write the HTML content to the print window
+    printWindow.document.open();
+    printWindow.document.write('<html><head><title>'+ title +'</title>');
+    printWindow.document.write('</head><body>');
+
+    // Include the patient's details
+    printWindow.document.write('<h2>Patient Details</h2>');
+    printWindow.document.write('<p><strong>Name:</strong> ' + patient.firstName + " " + patient.lastName + '</p>');
+    printWindow.document.write('<p><strong>Age:</strong> ' + patientAge + '</p>');
+    printWindow.document.write('<p><strong>Gender:</strong> ' + patient.gender.charAt(0).toUpperCase() + patient.gender.slice(1) + '</p>');
+
+    printWindow.document.write('<div id="editor-container">' + editorContent + '</div>');
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+
+    // Focus and print the window
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+}
 
 
 

@@ -628,11 +628,6 @@
                                     <div class="dropdown">
                                         <input type="text" class="dropdown-input" placeholder="Type to filter tests">
                                         <div class="dropdown-list" id="dropdownList">
-                                            <!-- <span class="dropdown-item" data-test="Test 1" data-fee="50" onclick="addItemToTable(this)">Test 1</span>
-                                            <span class="dropdown-item" data-test="Test 2" data-fee="75" onclick="addItemToTable(this)">Test 2</span>
-                                            <span class="dropdown-item" data-test="Test 3" data-fee="100" onclick="addItemToTable(this)">Test 3</span>
-                                            <span class="dropdown-item" data-test="Test 4" data-fee="85" onclick="addItemToTable(this)">Test 4</span>
-                                            <span class="dropdown-item" data-test="Test 5" data-fee="120" onclick="addItemToTable(this)">Test 5</span> -->
                                         </div>
                                     </div>
                                 </div>
@@ -1298,47 +1293,7 @@
 
 
 
-        tinymce.init({
-            selector: "#lab-report",
-            width: "100%",
-            height: 400,
-            setup: function (editor) {
-            }
-        });
-
-        function printReport(editorId, title, patient){
-            var editorContent = tinymce.get(editorId).getContent();
-            // Create a new window for printing
-            var printWindow = window.open('', '', 'width=800,height=600');
-
-            // Write the HTML content to the print window
-            printWindow.document.open();
-            printWindow.document.write('<html><head><title>'+ title +'</title>');
-            printWindow.document.write('</head><body>');
-
-            // Include the patient's details
-            // printWindow.document.write('<h2>Patient Details</h2>');
-            // printWindow.document.write('<p><strong>Name:</strong> ' + patient.name + '</p>');
-            // printWindow.document.write('<p><strong>Age:</strong> ' + patient.age + '</p>');
-            // printWindow.document.write('<p><strong>Gender:</strong> ' + patient.gender + '</p>');
-
-            printWindow.document.write('<div id="editor-container">' + editorContent + '</div>');
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-
-            // Focus and print the window
-            printWindow.focus();
-            printWindow.print();
-            printWindow.close();
-        }
-
-        // Print lab report
-        const printLabReportBtn = document.querySelector("#print-lab-report-btn");
-        printLabReportBtn.addEventListener("click", event => {
-            event.preventDefault();
-            printReport("lab-report", "Lab Report", {});
-            
-        });
+        
 
 
         // Display the selected file name when a file is chosen
