@@ -492,6 +492,10 @@
   background-color: #cce6fe;
 }
 
+.ongoing-services {
+  overflow-y: scroll;
+}
+
 .patient-details .action-buttons,
 .documents .action-buttons {
   inline-size: 100%;
@@ -661,6 +665,76 @@
 
 .progress.orange {
   background-color: orange;
+}
+
+
+.diagnosis-form .request-form {
+  max-inline-size: 500px;
+  margin: 0 auto;
+}
+
+.diagnosis-form .dropdown {
+  position: relative;
+  margin-block-end: 20px;
+}
+
+.diagnosis-form .dropdown-input {
+  inline-size: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.diagnosis-form .dropdown-list {
+  display: none;
+  position: absolute;
+  inline-size: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  z-index: 1;
+  max-block-size: 150px;
+  overflow-y: auto;
+}
+
+.diagnosis-form .dropdown-item {
+  display: block;
+  padding: 12px 10px;
+  cursor: pointer;
+  border: 1px solid #f9f9f9;
+  border-radius: 6px;
+  margin: .2rem .4rem;
+}
+
+.diagnosis-form .dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+.diagnosis-form table {
+  inline-size: 100%;
+  border-collapse: collapse;
+}
+
+.diagnosis-form th, 
+.diagnosis-form td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.diagnosis-form .remove-button {
+  cursor: pointer;
+  color: orange;
+}
+
+.diagnosis-form .test-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.diagnosis-form .total-row {
+  font-weight: bold;
 }
 
 

@@ -148,6 +148,22 @@ export const API = {
     },
 
 
+    // Tests 
+    tests: {
+        // Add to tests POST api/v1/tests
+        create: async (test, fromFormData) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/tests`;
+            return await API.makePostRequest(endpoint, test, fromFormData);
+        },
+
+        // Fetch all tests GET api/v1/tests
+        fetchAll: async () => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/tests`;
+            return await API.makeGetRequest(endpoint);
+        }
+    },
+
+
     // Diagnoses 
     diagnoses: {
         // Add to diagnoses POST api/v1/diagnoses

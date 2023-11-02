@@ -386,18 +386,22 @@ a {
 
 
 /* Data Tables */
+table.testsTable,
 table.dataTable {
   width: 100%;
   border-collapse: collapse;
   margin: 0 auto;
 }
 
+table.testsTable th,
+table.testsTable td,
 table.dataTable th,
 table.dataTable td {
   padding: 12px 15px;
   border: 1px solid #ddd;
 }
 
+table.testsTable,
 table.dataTable {
   font-family: Arial, sans-serif;
   font-size: 14px;
@@ -405,6 +409,8 @@ table.dataTable {
   clear: both;
 }
 
+table.testsTable thead th,
+table.testsTable thead td,
 table.dataTable thead th,
 table.dataTable thead td {
   font-weight: bold;
@@ -415,6 +421,8 @@ table.dataTable thead td {
   border-bottom: 1px solid #ddd;
 }
 
+table.testsTable tbody th,
+table.testsTable tbody td,
 table.dataTable tbody th,
 table.dataTable tbody td {
   padding: 10px;

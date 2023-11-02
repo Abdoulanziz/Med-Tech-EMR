@@ -16,7 +16,10 @@ document.addEventListener("DOMContentLoaded", () => {
     handleCreateAllergyForm();
 
     // Render diagnosis form
-    renderDiagnosisForm();
+    // renderDiagnosisForm();
+
+    // Render diagnostic tests in dropdown
+    populateDropdownList();
 
     // Handle diagnosis form
     handleCreateDiagnosisForm();
@@ -639,95 +642,165 @@ async function populateFormWithDataFromServer(formId, diagnosisId) {
 }
 
 
-// Set up diagnosis with dynamic test items and total fees calculation
-function renderDiagnosisForm() {
-    const form = document.getElementById("create-patient-diagnosis-form");
-    const formBody = form.querySelector("#create-patient-diagnosis-form-body");
-    const totalFeesDisplay = formBody.querySelector(".total-fees");
+// // Set up diagnosis with dynamic test items and total fees calculation
+// function renderDiagnosisForm() {
+//     const form = document.getElementById("create-patient-diagnosis-form");
+//     const formBody = form.querySelector("#create-patient-diagnosis-form-body");
+//     const totalFeesDisplay = formBody.querySelector(".total-fees");
 
-    function addTestItem() {
-        const testItem = document.createElement("div");
-        testItem.classList.add("form-section");
-        testItem.innerHTML = `
-            <label for="testName">Diagnosis Test</label>
-            <input type="text" name="testName[]">
-            <label for="fees">Fees ($)</label>
-            <input type="number" name="fees[]">
-            <button type="button" class="btn remove-test"> <i class="ti-trash"></i> Remove</button>
-        `;
+//     function addTestItem() {
+//         const testItem = document.createElement("div");
+//         testItem.classList.add("form-section");
+//         testItem.innerHTML = `
+//             <label for="testName">Diagnosis Test</label>
+//             <input type="text" name="testName[]">
+//             <label for="fees">Fees ($)</label>
+//             <input type="number" name="fees[]">
+//             <button type="button" class="btn remove-test"> <i class="ti-trash"></i> Remove</button>
+//         `;
 
-        formBody.insertBefore(testItem, formBody.lastElementChild);
+//         formBody.insertBefore(testItem, formBody.lastElementChild);
 
-        const removeTestButton = testItem.querySelector(".remove-test");
-        removeTestButton.addEventListener("click", () => {
-            formBody.removeChild(testItem);
-            recalculateTotalFees();
-        });
-    }
+//         const removeTestButton = testItem.querySelector(".remove-test");
+//         removeTestButton.addEventListener("click", () => {
+//             formBody.removeChild(testItem);
+//             recalculateTotalFees();
+//         });
+//     }
 
-    function recalculateTotalFees() {
-        const feeInputs = Array.from(formBody.querySelectorAll("input[name='fees[]']"));
-        const totalFees = feeInputs.reduce((total, input) => {
-            const fee = parseFloat(input.value) || 0;
-            return total + fee;
-        }, 0).toFixed(2);
-        totalFeesDisplay.textContent = `Total Fees: $${totalFees}`;
-    }
+//     function recalculateTotalFees() {
+//         const feeInputs = Array.from(formBody.querySelectorAll("input[name='fees[]']"));
+//         const totalFees = feeInputs.reduce((total, input) => {
+//             const fee = parseFloat(input.value) || 0;
+//             return total + fee;
+//         }, 0).toFixed(2);
+//         totalFeesDisplay.textContent = `Total Fees: $${totalFees}`;
+//     }
 
-    const addTestButton = form.querySelector("#addTest");
-    addTestButton.addEventListener("click", addTestItem);
-    formBody.addEventListener("input", recalculateTotalFees);
-}
+//     const addTestButton = form.querySelector("#addTest");
+//     addTestButton.addEventListener("click", addTestItem);
+//     formBody.addEventListener("input", recalculateTotalFees);
+// }
 
 
-function getDiagnosisFormValues() {
-    const form = document.getElementById("create-patient-diagnosis-form");
-    const testNames = form.querySelectorAll("input[name='testName[]']");
-    const testFees = form.querySelectorAll("input[name='fees[]']");
+// function getDiagnosisFormValues() {
+//     const form = document.getElementById("create-patient-diagnosis-form");
+//     const testNames = form.querySelectorAll("input[name='testName[]']");
+//     const testFees = form.querySelectorAll("input[name='fees[]']");
 
-    const values = [];
+//     const values = [];
 
-    for (let i = 0; i < testNames.length; i++) {
-        const testName = testNames[i].value;
-        const fees = parseFloat(testFees[i].value) || 0;
-        values.push({ testName, fees });
-    }
+//     for (let i = 0; i < testNames.length; i++) {
+//         const testName = testNames[i].value;
+//         const fees = parseFloat(testFees[i].value) || 0;
+//         values.push({ testName, fees });
+//     }
 
-    return values;
-}
+//     return values;
+// }
+
+
+// // Handle diagnosis create form
+// async function handleCreateDiagnosisForm() {
+//     const patientDiagnosisForm = document.querySelector('#create-patient-diagnosis-form');
+//     patientDiagnosisForm.addEventListener('submit', (event) => {
+//         event.preventDefault();
+
+//         // Get Id of selected visit
+//         const selectedVisitId = UTILS.getSelectedVisitId();
+//         if (! selectedVisitId) return;
+    
+//         // // Collect form data
+//         let formValuesArrayOfObjects = getDiagnosisFormValues();
+//         formValuesArrayOfObjects = formValuesArrayOfObjects.map(obj => {
+//             obj.visitId = selectedVisitId;
+//             return obj;
+//         });
+
+//         // Display a confirmation dialog
+//         UTILS.showConfirmationModal(patientDiagnosisForm, "Are you sure you want to save this record?", async () => {
+//             try {
+//                 // Make an API POST request to create a triage record
+//                 const response = await API.diagnoses.create(formValuesArrayOfObjects, false);
+    
+//                 // Check if the request was successful
+//                 if (response.status === 'success') {
+//                     // Alert user
+//                     // alert('Patient record created successfully!');
+//                     // TODO: Create a banner to show triage saved
+    
+//                     // Reset the form
+//                     patientDiagnosisForm.reset();
+    
+//                     // Remove form
+//                     patientDiagnosisForm.parentElement.parentElement.classList.remove("inview");
+    
+//                     // Fetch the bills
+//                     displaySelectedPatientDiagnosesBills("ongoing-services-02");
+
+//                     // Reload the requests table
+//                     loadSinglePatientVisitHistory(selectedVisitId);
+
+    
+//                 } else {
+//                     alert('Failed to create diagnoses records. Please check the form data.');
+//                 }
+//             } catch (error) {
+//                 console.error(error);
+//                 alert('An error occurred while creating the diagnoses records.');
+//             }
+//         }, () => {
+//             // TODO: Run when cancelled
+
+//             // Reset the form
+//             patientDiagnosisForm.reset();
+//         });
+
+//     });
+// }
 
 
 // Handle diagnosis create form
 async function handleCreateDiagnosisForm() {
     const patientDiagnosisForm = document.querySelector('#create-patient-diagnosis-form');
-    patientDiagnosisForm.addEventListener('submit', (event) => {
+    patientDiagnosisForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
         // Get Id of selected visit
         const selectedVisitId = UTILS.getSelectedVisitId();
         if (! selectedVisitId) return;
-    
-        // // Collect form data
-        let formValuesArrayOfObjects = getDiagnosisFormValues();
-        formValuesArrayOfObjects = formValuesArrayOfObjects.map(obj => {
-            obj.visitId = selectedVisitId;
-            return obj;
-        });
+
+        // Check if there are selected diagnostic tests
+        const selectedTestsTable = document.getElementById('selected-tests-table').getElementsByTagName('tbody')[0];
+        if (selectedTestsTable.rows.length === 0) {
+            alert('Please select at least one diagnostic test.');
+            return;
+        }
+
+        // Collect selected test data from the table
+        const selectedTestRows = selectedTestsTable.rows;
+        const formValuesArrayOfObjects = [];
+
+        for (let i = 0; i < selectedTestRows.length; i++) {
+            const testName = selectedTestRows[i].cells[0].textContent;
+            const fee = parseFloat(selectedTestRows[i].cells[1].textContent.substring(3));
+            formValuesArrayOfObjects.push({ testName, fees: fee, visitId: selectedVisitId });
+        }
 
         // Display a confirmation dialog
-        UTILS.showConfirmationModal(patientDiagnosisForm, "Are you sure you want to save this record?", async () => {
+        UTILS.showConfirmationModal(patientDiagnosisForm, 'Are you sure you want to save these diagnostic tests?', async () => {
             try {
-                // Make an API POST request to create a triage record
+                // Make an API POST request to create diagnostic records
                 const response = await API.diagnoses.create(formValuesArrayOfObjects, false);
-    
+
                 // Check if the request was successful
                 if (response.status === 'success') {
                     // Alert user
-                    // alert('Patient record created successfully!');
-                    // TODO: Create a banner to show triage saved
+                    // alert('Test record created successfully!');
+                    // TODO: Create a banner to show record saved
     
                     // Reset the form
-                    patientDiagnosisForm.reset();
+                    clearSelectedTests();
     
                     // Remove form
                     patientDiagnosisForm.parentElement.parentElement.classList.remove("inview");
@@ -738,23 +811,147 @@ async function handleCreateDiagnosisForm() {
                     // Reload the requests table
                     loadSinglePatientVisitHistory(selectedVisitId);
 
-    
                 } else {
-                    alert('Failed to create diagnoses records. Please check the form data.');
+                    alert('Failed to create diagnostic tests. Please check the data.');
                 }
             } catch (error) {
                 console.error(error);
-                alert('An error occurred while creating the diagnoses records.');
+                alert('An error occurred while creating the diagnostic tests.');
             }
         }, () => {
-            // TODO: Run when cancelled
-
-            // Reset the form
-            patientDiagnosisForm.reset();
+            // Run when canceled
+            // Reset the form (clear selected tests)
+            clearSelectedTests();
         });
-
     });
 }
+
+// Clear selected diagnostic tests from the table
+function clearSelectedTests() {
+    const selectedTestsTable = document.getElementById('selected-tests-table').getElementsByTagName('tbody')[0];
+    selectedTestsTable.innerHTML = '';
+    updateTotal(); // Update the total fee
+}
+
+async function filterDropdown() {
+    const input = document.querySelector(".dropdown-input");
+    const filter = input.value.toUpperCase();
+  
+    const dropdownList = document.getElementById('dropdownList');
+    const results = await fetchTestData();
+  
+    if (results) {
+      dropdownList.innerHTML = '';
+  
+      results.forEach((test) => {
+        const testName = test.testName.toUpperCase();
+        if (testName.includes(filter)) {
+          const dropdownItem = document.createElement('span');
+          dropdownItem.className = 'dropdown-item';
+          dropdownItem.setAttribute('data-test', test.testName);
+          dropdownItem.setAttribute('data-fee', test.testFees);
+          dropdownItem.textContent = test.testName;
+          dropdownItem.onclick = function () {
+            addItemToTable(this);
+            input.value = "";
+          };
+  
+          dropdownList.appendChild(dropdownItem);
+        }
+      });
+    }
+}
+  
+function toggleDropdown() {
+    const dropdown = document.getElementById("dropdownList");
+    if (dropdown.style.display === "none" || dropdown.style.display === "") {
+        dropdown.style.display = "block";
+    } else {
+        dropdown.style.display = "none";
+    }
+}
+
+function addItemToTable(item) {
+    const selectedTestsTable = document.getElementById("selected-tests-table").getElementsByTagName('tbody')[0];
+    const row = selectedTestsTable.insertRow();
+    const cell1 = row.insertCell(0);
+    const cell2 = row.insertCell(1);
+    const cell3 = row.insertCell(2);
+    
+    const testName = item.getAttribute("data-test");
+    const testNameCell = document.createElement("div");
+    testNameCell.className = "test-name";
+    testNameCell.textContent = testName;
+
+    cell1.appendChild(testNameCell);
+    cell2.innerHTML = "UGX " + item.getAttribute("data-fee");
+    
+    const removeButton = document.createElement("span");
+    removeButton.innerHTML = "Remove";
+    removeButton.className = "remove-button";
+    removeButton.onclick = function() {
+        row.remove();
+        updateTotal();
+    };
+    cell3.appendChild(removeButton);
+    
+    updateTotal();
+    document.getElementById("dropdownList").style.display = "none";
+}
+
+function updateTotal() {
+    const totalFeeCell = document.querySelector(".total-fee");
+    const rows = document.querySelectorAll("#selected-tests-table tbody tr");
+    let totalFee = 0;
+
+    rows.forEach(function(row) {
+        const fee = parseFloat(row.cells[1].textContent.substring(3));
+        totalFee += fee;
+    });
+
+    totalFeeCell.textContent = "UGX " + totalFee;
+    if (totalFee === 0) {
+        document.querySelector(".total-row").style.display = "none";
+    } else {
+        document.querySelector(".total-row").style.display = "table-row";
+    }
+}
+
+// Fetch test data from the API
+async function fetchTestData() {
+    try {
+        const response = await API.tests.fetchAll();
+        const data = await response.data.rows;
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+// Populate the dropdown list
+async function populateDropdownList() {
+    const dropdownInput = document.querySelector('.dropdown-input');
+    const dropdownList = document.getElementById('dropdownList');
+    dropdownInput.addEventListener("click", toggleDropdown);
+    dropdownInput.addEventListener("input", filterDropdown);
+    const testData = await fetchTestData();
+
+    if (testData) {
+        testData.forEach((test) => {
+            const dropdownItem = document.createElement('span');
+            dropdownItem.className = 'dropdown-item';
+            dropdownItem.setAttribute('data-test', test.testName);
+            dropdownItem.setAttribute('data-fee', test.testFees);
+            dropdownItem.textContent = test.testName;
+            dropdownItem.onclick = function () {
+                addItemToTable(this);
+            };
+
+            dropdownList.appendChild(dropdownItem);
+        });
+    }
+}
+
 
 
 

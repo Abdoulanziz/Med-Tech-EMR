@@ -12,6 +12,7 @@ const { Triage } = require('../models');
 const { Allergy } = require('../models');
 const { Diagnosis } = require('../models');
 const { DiagnosisReport } = require('../models');
+const { LabTest } = require('../models');
 
 const Op = Sequelize.Op;
 
@@ -868,6 +869,20 @@ const fetchAllDiagnosisBillsByVisitId = async (req, res) => {
   }
 };
 
+// Fetch tests
+const fetchTests = async (req, res) => {
+  try {
+    const result = await LabTest.findAndCountAll();
+
+    return res.status(200).json({
+      data: result,
+    });
+  } catch (error) {
+    console.error('Error fetching patients:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 
 
-module.exports = { checkAPIStatus, createUser, createPatient, fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchLabRequestsByVisitId, fetchMedicalHistoryByVisitId, createDiagnoses, fetchAllDiagnosisBillsByVisitId, createDiagnosisReport, fetchDiagnosisReportByDiagnosisId };
+
+module.exports = { checkAPIStatus, createUser, createPatient, fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchLabRequestsByVisitId, fetchMedicalHistoryByVisitId, createDiagnoses, fetchAllDiagnosisBillsByVisitId, createDiagnosisReport, fetchDiagnosisReportByDiagnosisId, fetchTests };
