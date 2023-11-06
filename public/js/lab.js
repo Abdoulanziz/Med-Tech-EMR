@@ -320,7 +320,11 @@ async function loadSinglePatientVisitLabRequests(visitId) {
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return '<span>' + data.type + '</span>';
+                    if(data.type === "Diagnosis") {
+                        return '<span>' + data.dataValues.testName + '</span>';
+                    }else{
+                        return '<span>' + data.type + '</span>';
+                    }
                 },
             },
             {
