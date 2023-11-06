@@ -130,6 +130,26 @@ a {
   padding: .8rem 2rem;
 }
 
+.btn.yes {
+  background-color: #0056b3 !important;
+  opacity: .8;
+}
+
+.btn.yes:hover {
+  background-color: #0056b3 !important;
+  opacity: 1;
+}
+
+.btn.no {
+  background-color: rgb(255, 89, 0) !important;
+  opacity: .8;
+}
+
+.btn.no:hover {
+  background-color: rgb(255, 89, 0) !important;
+  opacity: 1;
+}
+
 .card {
   color: var(--text-1);
   background-color: var(--bg-7);

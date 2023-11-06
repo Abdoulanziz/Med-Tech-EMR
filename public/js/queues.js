@@ -26,8 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Set up tinymce
     setupLabReportTinymce();
-
-    
     
 });
 
@@ -926,16 +924,19 @@ function addItemToForm(selectedTest) {
     const testNameInput = document.createElement('input');
     testNameInput.type = 'text';
     testNameInput.style.marginBlock = '.2rem';
+    testNameInput.style.backgroundColor = 'yellowgreen';
+    testNameInput.style.color = '#fff';
     testNameInput.value = testName;
     testNameInput.readOnly = true;
   
     const testClinicalNotesInput = document.createElement('textarea');
     testClinicalNotesInput.placeholder = 'Enter clinical notes';
     testClinicalNotesInput.style.marginBlock = '.2rem';
+    testClinicalNotesInput.style.fontFamily = 'sans-serif';
   
     const addButton = document.createElement('button');
-    addButton.textContent = 'Add';
-    addButton.classList.add("btn");
+    addButton.textContent = 'Create';
+    addButton.classList.add(...["btn", "yes"]);
     addButton.onclick = function () {
       selectedTest.setAttribute('data-notes', testClinicalNotesInput.value);
       addItemToTable(selectedTest);
@@ -943,9 +944,9 @@ function addItemToForm(selectedTest) {
     };
 
     const removeButton = document.createElement('button');
-    removeButton.textContent = 'Cancel';
+    removeButton.textContent = 'Delete';
     removeButton.style.marginInlineEnd = '.6rem';
-    removeButton.classList.add("btn");
+    removeButton.classList.add(...["btn", "no"]);
     removeButton.onclick = function () {
       formRow.remove();
     };
