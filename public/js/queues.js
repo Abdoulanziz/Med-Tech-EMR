@@ -286,14 +286,13 @@ async function loadSinglePatientVisitHistory(visitId) {
             { data : null },
             { data : null },
             { data : null },
-            { data : null },
             { data : null }
         ],
         rowCallback: function(row, data, index) {
             const rowData = JSON.stringify(data.dataValues);
 
             if("triageUuid" in JSON.parse(rowData)){
-                const viewRequestCta = row.cells[4].querySelectorAll("button")[0];
+                const viewRequestCta = row.cells[3].querySelectorAll("button")[0];
                 viewRequestCta.style.cursor = "pointer";
                 viewRequestCta.classList.add("modal-trigger");
                 viewRequestCta.dataset.modal = "edit-patient-triage-data-modal";
@@ -313,7 +312,7 @@ async function loadSinglePatientVisitHistory(visitId) {
                     );
                 });
             }else if("allergyUuid" in JSON.parse(rowData)){
-                const viewAlergiesCta = row.cells[4].querySelectorAll("button")[0];
+                const viewAlergiesCta = row.cells[3].querySelectorAll("button")[0];
                 viewAlergiesCta.style.cursor = "pointer";
                 viewAlergiesCta.classList.add("modal-trigger");
                 viewAlergiesCta.dataset.modal = "edit-patient-allergies-data-modal";
@@ -329,7 +328,7 @@ async function loadSinglePatientVisitHistory(visitId) {
                     );
                 });
             }else if("diagnosisUuid" in JSON.parse(rowData)){
-                const viewDiagnosisCta = row.cells[4].querySelectorAll("button")[0];
+                const viewDiagnosisCta = row.cells[3].querySelectorAll("button")[0];
                 viewDiagnosisCta.style.cursor = "pointer";
                 viewDiagnosisCta.classList.add("modal-trigger");
                 viewDiagnosisCta.dataset.modal = "edit-patient-diagnosis-modal";
@@ -347,7 +346,7 @@ async function loadSinglePatientVisitHistory(visitId) {
                 });
 
 
-                const viewReportCta = row.cells[4].querySelectorAll("button")[1];
+                const viewReportCta = row.cells[3].querySelectorAll("button")[1];
                 viewReportCta.style.cursor = "pointer";
                 viewReportCta.classList.add("modal-trigger");
                 viewReportCta.dataset.modal = "view-patient-lab-report-modal";
@@ -381,7 +380,11 @@ async function loadSinglePatientVisitHistory(visitId) {
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return '<span>' + data.type + '</span>';
+                    if(data.type === "Diagnosis") {
+                        return '<span>' + data.dataValues.testName + '</span>';
+                    }else{
+                        return '<span>' + data.type + '</span>';
+                    }
                 },
             },
             {
@@ -395,12 +398,6 @@ async function loadSinglePatientVisitHistory(visitId) {
             },
             {
                 targets: 3,
-                render: function(data, type, row, meta) {
-                    return '<span>' + "Completed" + '</span>';
-                }
-            },
-            {
-                targets: 4,
                 render: function (data, type, row, meta) {
                     return `
                     <td>
@@ -411,7 +408,7 @@ async function loadSinglePatientVisitHistory(visitId) {
                 },
             },
             {
-                targets: 5,
+                targets: 4,
                 render: function(data, type, row, meta) {
                     const originalDate = data.dataValues.createdAt;
                     const dateObj = new Date(originalDate);
