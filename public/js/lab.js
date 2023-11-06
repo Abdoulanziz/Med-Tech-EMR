@@ -314,7 +314,7 @@ async function loadSinglePatientVisitLabRequests(visitId) {
             {
                 targets: 0,
                 render: function(data, type, row, meta) {
-                    return '<span>' + data.count + '</span>';
+                    return '<span>' + (meta.row + 1) + '</span>';
                 }
             },
             {
@@ -423,8 +423,8 @@ async function displaySelectedPatientDiagnosesBills(divId) {
             const template = `
             <div class="service ${index === 0 || index === 1 ? 'paid' : 'unpaid'}">
                 <div class="service-content flex">
-                <h3>${billItem.testName} (UGX ${billItem.fees})</h3>
-                <img src="/assets/svg/cancel.png" alt="remove service icon">
+                    <h3>${billItem.testName} (UGX ${billItem.fees})</h3>
+                    ${index === 0 || index === 1 ? '<img src="/assets/svg/check.png" alt="remove service icon">' : ''}
                 </div>
             </div>
             `;
