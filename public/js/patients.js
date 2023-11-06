@@ -14,9 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle visit creation from
     handleCreateVisitForm();
-
-    // Handle add to queue form
-    handleAddPatientToQueueForm();
     
 });
 
@@ -407,19 +404,37 @@ async function handleCreateVisitForm() {
 
                 // Check if the request was successful
                 if (response.status === 'success') {
-                    // Alert user
-                    // alert('Visit record created successfully!');
-                    // TODO: Create a banner to show visit saved
 
-                    // Reset the form
-                    createVisitForm.reset();
+                    // Collect form data
+                    const formDataQueue = new FormData();
+                    formDataQueue.append('patientId', selectedPatientId);
+                    formDataQueue.append('doctorId', response.data.doctorId);
+                    formDataQueue.append('visitId', response.data.visitId);
 
-                    // Remove form
-                    createVisitForm.parentElement.parentElement.classList.remove("inview");
+                    // URL encoded data
+                    const URLEncodedDataQueue = new URLSearchParams(formDataQueue).toString();
 
-                    // Reload the visits table
-                    loadSinglePatientVists(selectedPatientId);
+                    // Make an API POST request to add patient to the queue
+                    const responseQueue = await API.queues.addPatient(URLEncodedDataQueue, true);
 
+                    // Check if the request was successful
+                    if (responseQueue.status === 'success') {
+                        // Alert user
+                        // alert('Visit record created successfully!');
+                        // TODO: Create a banner to show visit saved
+
+                        // Reset the form
+                        createVisitForm.reset();
+
+                        // Remove form
+                        createVisitForm.parentElement.parentElement.classList.remove("inview");
+
+                        // Reload the visits table
+                        loadSinglePatientVists(selectedPatientId);
+
+                    } else {
+                        alert('Failed to add patient to the queue.');
+                    }
                 } else {
                     alert('Failed to create visit record. Please check the form data.');
                 }
@@ -432,61 +447,6 @@ async function handleCreateVisitForm() {
 
             // Reset the form
             createVisitForm.reset();
-        });
-    });
-}
-
-// Handle add to queue form submission
-async function handleAddPatientToQueueForm() {
-    // Handle form submission
-    const addPatientToQueueForm = document.querySelector('#add-patient-to-queue-form');
-    addPatientToQueueForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        // Get Id of selected patient
-        const selectedPatientId = UTILS.getSelectedPatientId();
-        if (! selectedPatientId) return;
-
-        // Collect form data
-        const formData = new FormData(addPatientToQueueForm);
-        formData.append('patientId', selectedPatientId);
-
-        // URL encoded data
-        const URLEncodedData = new URLSearchParams(formData).toString();
-
-        // Display a confirmation dialog
-        UTILS.showConfirmationModal(addPatientToQueueForm, "Are you sure you want to add this patient to the queue?", async () => {
-            try {
-                // Make an API POST request to create a visit record
-                const response = await API.queues.addPatient(URLEncodedData, true);
-
-                // Check if the request was successful
-                if (response.status === 'success') {
-                    // Alert user
-                    // alert('Visit record created successfully!');
-                    // TODO: Create a banner to show visit saved
-
-                    // Reset the form
-                    addPatientToQueueForm.reset();
-
-                    // Remove form
-                    addPatientToQueueForm.parentElement.parentElement.classList.remove("inview");
-
-                    // Reload the visits table
-                    loadSinglePatientVists(selectedPatientId);
-
-                } else {
-                    alert('Failed to create visit record. Please check the form data.');
-                }
-            } catch (error) {
-                console.error(error);
-                alert('An error occurred while creating the visit record.');
-            }
-        }, () => {
-            // TODO: Run when cancelled
-
-            // Reset the form
-            addPatientToQueueForm.reset();
         });
     });
 }

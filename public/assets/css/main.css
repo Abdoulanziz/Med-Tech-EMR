@@ -164,7 +164,6 @@
 }
 
 .navbar {
-  /* background-color: #0084ff; */
   background-color: #00c4ff;
   background-color: var(--primary-color);
   justify-content: space-between;
@@ -204,14 +203,43 @@
 }
 
 .content {
-  flex: 1;
   overflow: auto;
-  /* background-color: #f3f4f7; */
   background-color: #dbebfa;
+  inline-size: 100%;
+  position: relative;
+}
+
+.bottom-banner {
+  background-color: #ffffff;
+  justify-content: space-between;
+  block-size: 30px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+
+  display: none;
+}
+
+.banner-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: 1rem;
+  font-family: var(--font-tilt-neon);
+  inline-size: 100%;
+}
+
+.banner-content-right .system-version-label,
+.banner-content-left .logged-in-as-label {
+  color: #707070;
+  font-size: 14px;
 }
 
 .sections {
   padding-inline: 1rem;
+  padding-block-end: 2.4rem;
+  inline-size: 100%;
   display: none;
 }
 

@@ -910,6 +910,50 @@ function addItemToTable(item) {
     document.getElementById("dropdownList").style.display = "none";
 }
 
+function addItemToForm(selectedTest) {
+    toggleDropdown();
+
+    const testName = selectedTest.getAttribute('data-test');
+  
+    const formRow = document.createElement('div');
+    formRow.className = 'form-section';
+  
+    const testNameInput = document.createElement('input');
+    testNameInput.type = 'text';
+    testNameInput.style.marginBlock = '.2rem';
+    testNameInput.value = testName;
+    testNameInput.readOnly = true;
+  
+    const testClinicalNotesInput = document.createElement('textarea');
+    testClinicalNotesInput.placeholder = 'Enter clinical notes';
+    testClinicalNotesInput.style.marginBlock = '.2rem';
+  
+    const addButton = document.createElement('button');
+    addButton.textContent = 'Add';
+    addButton.classList.add("btn");
+    addButton.onclick = function () {
+      addItemToTable(selectedTest);
+      formRow.remove();
+    };
+
+    const removeButton = document.createElement('button');
+    removeButton.textContent = 'Cancel';
+    removeButton.style.marginInlineEnd = '.6rem';
+    removeButton.classList.add("btn");
+    removeButton.onclick = function () {
+      formRow.remove();
+    };
+  
+    formRow.appendChild(testNameInput);
+    formRow.appendChild(testClinicalNotesInput);
+    formRow.appendChild(removeButton);
+    formRow.appendChild(addButton);
+
+    const input = document.querySelector(".dropdown-input");
+    const inputContainer = input.parentElement;
+    inputContainer.appendChild(formRow);
+}
+
 function updateTotal() {
     const totalFeeCell = document.querySelector(".total-fee");
     const rows = document.querySelectorAll("#selected-tests-table tbody tr");
@@ -945,6 +989,7 @@ async function populateDropdownList() {
     const dropdownList = document.getElementById('dropdownList');
     dropdownInput.addEventListener("click", toggleDropdown);
     dropdownInput.addEventListener("input", filterDropdown);
+
     const testData = await fetchTestData();
 
     if (testData) {
@@ -955,7 +1000,7 @@ async function populateDropdownList() {
             dropdownItem.setAttribute('data-fee', test.testFees);
             dropdownItem.textContent = test.testName;
             dropdownItem.onclick = function () {
-                addItemToTable(this);
+                addItemToForm(dropdownItem);
             };
 
             dropdownList.appendChild(dropdownItem);

@@ -191,7 +191,6 @@
                             </div>
                         </div>
                         <div class="ctas">
-                            <button class="btn section-header-cta modal-trigger" id="open-add-patient-to-queue-modal-btn" data-modal="add-patient-to-queue-modal"> <i class="ti-plus"></i> Add to Queue</button>
                             <button class="btn section-header-cta modal-trigger" id="open-create-visit-modal-btn" data-modal="create-visit-modal"> <i class="ti-plus"></i> Create Visit</button>
                         </div>
                     </div>
@@ -297,7 +296,22 @@
                         </table>
                     </div>
                 </div>
+
+                <!-- Bottom banner -->
+                <div class="bottom-banner">
+                    <div class="banner-content">
+                        <div class="banner-content-left">
+                            <span class="logged-in-as-label">Logged in as: <span class="logged-in-as-value"> <%= data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1) %> </span></span>
+                        </div>
+                        <div class="banner-content-right">
+                            <span class="system-version-label">System version: <span class="system-version-value"> 1.0.0 </span></span>
+                        </div>
+                    </div>
+                </div>
+
+                
             </div>
+            
 
             <!-- Create patient modal -->
             <div id="create-patient-modal" class="form-modal">
@@ -515,49 +529,6 @@
                                 <div class="form-group">
                                     <label for="visit-date">Date:</label>
                                     <input type="date" class="form-control" id="visit-date" name="visitDate" required>
-                                </div>
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>            
-
-            <!-- Add patient to queue modal -->
-            <div id="add-patient-to-queue-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="add-patient-to-queue-form">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Add Patient to Queue</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="modal-form-body">
-                            <div class="form-section">
-                                <h2>Queue Information</h2>
-                                <div class="form-group">
-                                    <label for="category">Queue Category:</label>
-                                    <select id="category" class="form-control" name="queueCategory" required>
-                                        <option value="1">Consultation</option>
-                                        <option value="2">Treatment</option>
-                                        <option value="3">Other</option>
-                                    </select>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="doctor-id">To See Doctor:</label>
-                                    <select id="doctor-id" class="form-control" name="doctorId" required>
-                                        <option value="1">Caxton Mulondo</option>
-                                        <option value="2">John North</option>
-                                        <option value="3">Abdoulanziz Ally</option>
-                                    </select>
                                 </div>
                             </div>
                         </div>

@@ -40,10 +40,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       field: 'doctor_id',
     },
-    queueCategory: {
-      type: DataTypes.STRING,
+    visitId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-      field: 'queue_category',
+      field: 'visit_id',
     },
     queueStatus: {
       type: DataTypes.ENUM('Scheduled', 'Cancelled', 'Completed'),

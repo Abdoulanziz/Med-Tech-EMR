@@ -442,7 +442,7 @@ const addPatientToQueue = async (req, res) => {
     // Convert empty strings to null for nullable fields
     const patientId = req.body.patientId || null;
     const doctorId = req.body.doctorId || null;
-    const queueCategory = req.body.queueCategory || null;
+    const visitId = req.body.visitId || null;
 
     // const existingInQueue = await Queue.findOne({ where: { patientId: patientId/*, visitDate: visitDate*/ } });
     // if (existingInQueue) {
@@ -452,7 +452,7 @@ const addPatientToQueue = async (req, res) => {
     const newPatientToQueue = await Queue.create({
       patientId,
       doctorId,
-      queueCategory
+      visitId
     });
 
     return res.status(201).json({ status: 'success', message: 'Patient added to queue successfully', data: newPatientToQueue });

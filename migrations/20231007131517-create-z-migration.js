@@ -83,6 +83,16 @@ module.exports = {
         onDelete: 'CASCADE',
       }),
 
+      queryInterface.changeColumn('queues', 'visit_id', {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'visits',
+          key: 'visit_id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      }),
+
       queryInterface.changeColumn('queues', 'patient_id', {
         type: Sequelize.INTEGER,
         references: {
@@ -115,6 +125,7 @@ module.exports = {
       queryInterface.removeColumn('diagnoses', 'visit_id'),
       queryInterface.removeColumn('diagnosis_reports', 'diagnosis_id'),
       queryInterface.removeColumn('queues', 'doctor_id'),
+      queryInterface.removeColumn('queues', 'visit_id'),
       queryInterface.removeColumn('queues', 'patient_id'),
       queryInterface.removeColumn('triages', 'visit_id'),
     ]);

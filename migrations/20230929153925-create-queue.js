@@ -35,9 +35,15 @@ module.exports = {
         // onUpdate: 'CASCADE',
         // onDelete: 'CASCADE',
       },
-      queue_category: {
-        type: Sequelize.STRING,
+      visit_id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
+        // references: {
+        //   model: 'visits',
+        //   key: 'visit_id',
+        // },
+        // onUpdate: 'CASCADE',
+        // onDelete: 'CASCADE',
       },
       queue_status: {
         type: Sequelize.ENUM('Scheduled', 'Cancelled', 'Completed'),
