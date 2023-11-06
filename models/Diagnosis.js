@@ -34,6 +34,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       field: 'test_name',
     },
+    clinicalNotes: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      field: 'clinical_notes',
+    },
     fees: {
       type: DataTypes.STRING,
       allowNull: false,

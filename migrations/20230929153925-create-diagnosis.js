@@ -19,6 +19,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      clinical_notes: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       fees: {
         type: Sequelize.STRING,
         allowNull: false,

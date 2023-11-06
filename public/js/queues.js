@@ -795,7 +795,10 @@ async function handleCreateDiagnosisForm() {
         for (let i = 0; i < selectedTestRows.length; i++) {
             const testName = selectedTestRows[i].cells[0].textContent;
             const fee = parseFloat(selectedTestRows[i].cells[1].textContent.substring(3));
-            formValuesArrayOfObjects.push({ testName, fees: fee, visitId: selectedVisitId });
+            const clinicalNotes = selectedTestRows[i].dataset.notes;
+
+            console.log(selectedTestRows[i])
+            formValuesArrayOfObjects.push({ testName, clinicalNotes, fees: fee, visitId: selectedVisitId });
         }
 
         // Display a confirmation dialog
@@ -888,6 +891,8 @@ function addItemToTable(item) {
     const cell1 = row.insertCell(0);
     const cell2 = row.insertCell(1);
     const cell3 = row.insertCell(2);
+
+    row.setAttribute("data-notes", item.getAttribute("data-notes"));
     
     const testName = item.getAttribute("data-test");
     const testNameCell = document.createElement("div");
@@ -932,6 +937,7 @@ function addItemToForm(selectedTest) {
     addButton.textContent = 'Add';
     addButton.classList.add("btn");
     addButton.onclick = function () {
+      selectedTest.setAttribute('data-notes', testClinicalNotesInput.value);
       addItemToTable(selectedTest);
       formRow.remove();
     };

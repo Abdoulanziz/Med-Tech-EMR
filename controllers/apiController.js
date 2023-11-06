@@ -798,6 +798,8 @@ const createDiagnoses = async (req, res) => {
     // Convert empty strings to null for nullable fields
     const diagnoses = req.body;
 
+    console.log(diagnoses)
+
     // Empty array to store the new diagnoses
     const newDiagnoses = [];
 
@@ -805,6 +807,7 @@ const createDiagnoses = async (req, res) => {
     for (const diagnosis of diagnoses) {
       const newDiagnosis = await Diagnosis.create({
         testName: diagnosis.testName,
+        clinicalNotes: diagnosis.clinicalNotes,
         fees: diagnosis.fees,
         visitId: diagnosis.visitId,
         // userId
