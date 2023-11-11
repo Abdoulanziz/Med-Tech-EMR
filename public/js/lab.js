@@ -276,22 +276,19 @@ async function loadSinglePatientVisitLabRequests(visitId) {
             { data : null }
         ],
         rowCallback: function(row, data, index) {
-            const rowDataObject = data.dataValues;
+            const rowDataObject = data;
 
-            // Check if the medical record is a request
-            if("diagnosisUuid" in rowDataObject){
-                // Check the specific request (CBC)
-                if(rowDataObject.testName === "Complete Blood Count Test") {
-                    const workOnTestCta = row.cells[4].querySelectorAll("button")[0];
-                    workOnTestCta.style.cursor = "pointer";
-                    workOnTestCta.classList.add("modal-trigger");
-                    workOnTestCta.dataset.modal = "complete-blood-count-results-modal";
+            // Check the specific request (CBC)
+            if(rowDataObject.testName === "Complete Blood Count Test") {
+                const workOnTestCta = row.cells[4].querySelectorAll("button")[0];
+                workOnTestCta.style.cursor = "pointer";
+                workOnTestCta.classList.add("modal-trigger");
+                workOnTestCta.dataset.modal = "complete-blood-count-results-modal";
 
-                    UTILS.triggerModal(workOnTestCta, "modal", () => {
-                        // Parse the diagnosisId to the form
-                        document.querySelector("#complete-blood-count-results-form").dataset.diagnosisId = rowDataObject.diagnosisId;
-                    });
-                }
+                UTILS.triggerModal(workOnTestCta, "modal", () => {
+                    // Parse the diagnosisId to the form
+                    document.querySelector("#complete-blood-count-results-form").dataset.requestId = rowDataObject.requestId;
+                });
             }
         },
         columnDefs: [
@@ -304,17 +301,13 @@ async function loadSinglePatientVisitLabRequests(visitId) {
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    if(data.type === "Diagnosis") {
-                        return '<span>' + data.dataValues.testName + '</span>';
-                    }else{
-                        return '<span>' + data.type + '</span>';
-                    }
+                    return '<span>' + data.testName + '</span>';
                 },
             },
             {
                 targets: 2,
                 render: function(data, type, row, meta) {
-                    const originalDate = data.dataValues.createdAt;
+                    const originalDate = data.requestCreatedAt;
                     const dateObj = new Date(originalDate);
                     const formattedDate = dateObj.toISOString().split('T')[0];
                     return '<span>' + formattedDate + '</span>';
@@ -339,7 +332,7 @@ async function loadSinglePatientVisitLabRequests(visitId) {
             {
                 targets: 5,
                 render: function(data, type, row, meta) {
-                    const originalDate = data.dataValues.createdAt;
+                    const originalDate = data.requestCreatedAt;
                     const dateObj = new Date(originalDate);
                     const formattedDate = dateObj.toISOString().split('T')[0];
                     return '<span>' + formattedDate + '</span>';
@@ -431,54 +424,57 @@ async function handleCompleteBloodCountResultsForm() {
     completeBloodCountResultsForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
+        const requestComment = tinymce.get('complete-blood-count-results-comment-editor').getContent();
+
         // Get Id of selected request
-        const selectedRequestId = completeBloodCountResultsForm.dataset.diagnosisId;
+        const selectedRequestId = completeBloodCountResultsForm.dataset.requestId;
         if (! selectedRequestId) return;
 
-        console.log(selectedRequestId);
+        // Get Id of selected visit
+        const selectedVisitId = UTILS.getSelectedVisitId();
     
-        // // Collect form data
-        // const formData = new FormData(patientLabReportForm);
-        // formData.append('diagnosisId', selectedRequestId);
-        // formData.append('diagnosisReport', formattedContent);
+        // Collect form data
+        const formData = new FormData(completeBloodCountResultsForm);
+        formData.append('requestId', selectedRequestId);
+        formData.append('requestComment', requestComment);
 
-        // // URL encoded data
-        // const URLEncodedData = new URLSearchParams(formData).toString();
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
     
-        // // Display a confirmation dialog
-        // UTILS.showConfirmationModal(patientLabReportForm, "Are you sure you want to save this record?", async () => {
-        //     try {
-        //         // Make an API POST request to create a triage record
-        //         const response = await API.reports.create(URLEncodedData, true);
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(completeBloodCountResultsForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to create a triage record
+                const response = await API.reports.create(URLEncodedData, true);
     
-        //         // Check if the request was successful
-        //         if (response.status === 'success') {
-        //             // Alert user
-        //             // alert('Patient record created successfully!');
-        //             // TODO: Create a banner to show triage saved
+                // Check if the request was successful
+                if (response.status === 'success') {
+                    // Alert user
+                    // alert('Patient record created successfully!');
+                    // TODO: Create a banner to show triage saved
     
-        //             // Reset the form
-        //             patientLabReportForm.reset();
+                    // Reset the form
+                    completeBloodCountResultsForm.reset();
     
-        //             // Remove form
-        //             patientLabReportForm.parentElement.parentElement.classList.remove("inview");
+                    // Remove form
+                    completeBloodCountResultsForm.parentElement.parentElement.classList.remove("inview");
     
-        //             // Reload the requests table
-        //             loadSinglePatientVisitLabRequests(selectedVisitId);
+                    // Reload the requests table
+                    loadSinglePatientVisitLabRequests(selectedVisitId);
     
-        //         } else {
-        //             alert('Failed to create allergy record. Please check the form data.');
-        //         }
-        //     } catch (error) {
-        //         console.error(error);
-        //         alert('An error occurred while creating the allergy record.');
-        //     }
-        // }, () => {
-        //     // TODO: Run when cancelled
+                } else {
+                    alert('Failed to create CBC record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while creating the CBC record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
 
-        //     // Reset the form
-        //     patientLabReportForm.reset();
-        // });
+            // Reset the form
+            patientLabReportForm.reset();
+        });
     });
 }
 

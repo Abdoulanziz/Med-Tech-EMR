@@ -14,6 +14,7 @@ const { Diagnosis } = require('../models');
 const { DiagnosisReport } = require('../models');
 const { LabTest } = require('../models');
 const { LabRequest } = require('../models');
+const { LabResultForCompleteBloodCount } = require('../models');
 
 const Op = Sequelize.Op;
 
@@ -828,20 +829,62 @@ const createDiagnoses = async (req, res) => {
 };
 
 // Create new lab report
-const createDiagnosisReport = async (req, res) => {
+const createReportForCompleteBloodCountTest = async (req, res) => {
   try {
     // Convert empty strings to null for nullable fields
-    const diagnosisReport = req.body;
+    const {
+      whiteBloodCellCount,
+      lymphocyteAbsolute,
+      mid,
+      gran,
+      lymphocytePercentage,
+      midPercentage,
+      granPercentage,
+      haemoglobin,
+      redBloodCellCount,
+      packedCellVolume,
+      meanCellVolume,
+      meanCellHaemoglobin,
+      mchc,
+      rdwCv,
+      rdwSd,
+      plateleteCount,
+      mpv,
+      pwd,
+      pct,
+      erythrocyteSedimentationRate,
+      requestId,
+    } = req.body;
 
-    const newDiagnosisReport = await DiagnosisReport.create({
-      diagnosisId: diagnosisReport.diagnosisId,
-      diagnosisReport: diagnosisReport.diagnosisReport,
-      // userId
+    const newCBCReport = await LabResultForCompleteBloodCount.create({
+      whiteBloodCellCount,
+      lymphocyteAbsolute,
+      mid,
+      gran,
+      lymphocytePercentage,
+      midPercentage,
+      granPercentage,
+      haemoglobin,
+      redBloodCellCount,
+      packedCellVolume,
+      meanCellVolume,
+      meanCellHaemoglobin,
+      mchc,
+      rdwCv,
+      rdwSd,
+      plateleteCount,
+      mpv,
+      pwd,
+      pct,
+      erythrocyteSedimentationRate,
+      requestId,
     });
 
-    return res.status(201).json({ status: 'success', message: 'Diagnosis report created successfully', data: newDiagnosisReport });
+    console.log(newCBCReport)
+
+    return res.status(201).json({ status: 'success', message: 'CBC report created successfully', data: newCBCReport });
   } catch (error) {
-    console.error('Error creating diagnosis report:', error);
+    console.error('Error creating CBC report:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -1024,34 +1067,36 @@ const fetchLabRequestsByVisitId = async (req, res) => {
     // sort.push(['id', 'desc']); // This line will sort by createdAt in descending order
 
 
-    // Sequelize query
+     // Construct the Sequelize query
     const queryOptions = {
-      where: {visit_id: visitId,},
+      where: filter,
       offset: start,
       limit: length,
       order: sort,
+      include: [
+        {
+          model: models.LabTest,
+          attributes: ['testName', 'testFees'],
+        },
+      ],
     };
 
-    // Request types to fetch
-    const requestTypes = ['Diagnosis'];
+    const result = await LabRequest.findAndCountAll(queryOptions);
 
-    // Array of promises to fetch data for each request type
-    const promises = requestTypes.map(async (requestType) => {
-      const results = await models[requestType].findAndCountAll(queryOptions);
-      return { type: requestType, data: results };
-    });
-
-    // Execute all promises in parallel
-    const results = await Promise.all(promises);
-
-    // Flatten the results and obtain a single array with a 'type' property
-    const allData = results.map(obj => obj.data.rows.map((row, index) => ({ ...row, type: obj.type, count: index + 1 }))).flat();
+    // Access the lab test's fields in each request result
+    const requestsWithTestResults = result.rows.map((request) => ({
+      // Extract fields from the 'LabTest' model
+      testName: request.LabTest.testName,
+      testFees: request.LabTest.testFees,
+      requestId: request.requestId,
+      requestCreatedAt: request.createdAt,
+    }));
 
     return res.status(200).json({
       draw: draw,
-      recordsTotal: allData.length,
-      recordsFiltered: allData.length,
-      data: allData,
+      recordsTotal: result.count,
+      recordsFiltered: result.count,
+      data: requestsWithTestResults,
     });
 
   } catch (error) {
@@ -1064,4 +1109,4 @@ const fetchLabRequestsByVisitId = async (req, res) => {
 
 
 
-module.exports = { checkAPIStatus, createUser, createPatient, fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, fetchPatientByVisitId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchLabRequestsByVisitId, fetchMedicalHistoryByVisitId, createDiagnoses, fetchAllDiagnosisBillsByVisitId, createDiagnosisReport, fetchDiagnosisReportByDiagnosisId, fetchTests, createLabRequest };
+module.exports = { checkAPIStatus, createUser, createPatient, fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, fetchPatientByVisitId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchLabRequestsByVisitId, fetchMedicalHistoryByVisitId, createDiagnoses, fetchAllDiagnosisBillsByVisitId, createReportForCompleteBloodCountTest, fetchDiagnosisReportByDiagnosisId, fetchTests, createLabRequest };

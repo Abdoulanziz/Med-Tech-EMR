@@ -292,7 +292,48 @@ async function loadSinglePatientVisitHistory(visitId) {
             { data : null }
         ],
         rowCallback: function(row, data, index) {
-            // const rowData = JSON.stringify(data.dataValues);
+            const rowDataObject = data;
+
+            // Common to all test requests
+            const viewResultsCta = row.cells[3].querySelectorAll("button")[0];
+            viewResultsCta.style.cursor = "pointer";
+            viewResultsCta.classList.add("modal-trigger");
+            viewResultsCta.dataset.modal = "edit-patient-diagnosis-modal";
+
+            UTILS.triggerModal(viewResultsCta, "modal", () => {
+                // Populate the form with the rowData
+                populateFormWithData(
+                    "edit-patient-diagnosis-modal",
+                    JSON.stringify(data),
+                    [
+                        "testName",
+                        "testFees"
+                    ]
+                );
+            });
+
+            // Specific to test request
+            if(rowDataObject.testName === "Complete Blood Count Test"){
+                const viewReportCta = row.cells[3].querySelectorAll("button")[1];
+                viewReportCta.style.cursor = "pointer";
+                viewReportCta.classList.add("modal-trigger");
+                viewReportCta.dataset.modal = "view-patient-lab-report-modal";
+
+                UTILS.triggerModal(viewReportCta, "modal", async () => {
+                    document.querySelector("#view-patient-lab-report-form").dataset.diagnosisId = data.diagnosisId;
+
+                    // Populate the form with the server data
+                    populateFormWithDataFromServer("view-patient-lab-report-form", data.diagnosisId);
+
+                    // Get patient id from visit id
+                    const patient = await API.visits.fetchPatientByVisitId(selectedVisitId);
+                    const patientData = patient.data;
+
+                    // Trigger print lab report
+                    triggerPrintLabReport(patientData);
+                    
+                });
+            }
 
             // if("triageUuid" in JSON.parse(rowData)){
             //     const viewRequestCta = row.cells[3].querySelectorAll("button")[0];
@@ -329,88 +370,6 @@ async function loadSinglePatientVisitHistory(visitId) {
             //                 "allergies"
             //             ]
             //         );
-            //     });
-            // }else if("diagnosisUuid" in JSON.parse(rowData)){
-            //     const viewDiagnosisCta = row.cells[3].querySelectorAll("button")[0];
-            //     viewDiagnosisCta.style.cursor = "pointer";
-            //     viewDiagnosisCta.classList.add("modal-trigger");
-            //     viewDiagnosisCta.dataset.modal = "edit-patient-diagnosis-modal";
-
-            //     UTILS.triggerModal(viewDiagnosisCta, "modal", () => {
-            //         // Populate the form with the rowData
-            //         populateFormWithData(
-            //             "edit-patient-diagnosis-modal",
-            //             rowData,
-            //             [
-            //                 "testName",
-            //                 "fees"
-            //             ]
-            //         );
-            //     });
-
-
-            //     const viewReportCta = row.cells[3].querySelectorAll("button")[1];
-            //     viewReportCta.style.cursor = "pointer";
-            //     viewReportCta.classList.add("modal-trigger");
-            //     viewReportCta.dataset.modal = "view-patient-lab-report-modal";
-
-            //     UTILS.triggerModal(viewReportCta, "modal", async () => {
-            //         // viewReportCta.dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
-            //         // console.log(JSON.parse(rowData).diagnosisId);
-
-            //         document.querySelector("#view-patient-lab-report-form").dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
-
-            //         // Populate the form with the server data
-            //         populateFormWithDataFromServer("view-patient-lab-report-form", JSON.parse(rowData).diagnosisId);
-
-            //         // Get patient id from visit id
-            //         const patient = await API.visits.fetchPatientByVisitId(selectedVisitId);
-            //         const patientData = patient.data;
-
-            //         // Trigger print lab report
-            //         triggerPrintLabReport(patientData);
-                    
-            //     });
-            // }else if("requestUuid" in JSON.parse(rowData)){
-            //     const viewLabRequestCta = row.cells[3].querySelectorAll("button")[0];
-            //     viewLabRequestCta.style.cursor = "pointer";
-            //     viewLabRequestCta.classList.add("modal-trigger");
-            //     viewLabRequestCta.dataset.modal = "edit-patient-diagnosis-modal";
-
-            //     UTILS.triggerModal(viewLabRequestCta, "modal", () => {
-            //         // Populate the form with the rowData
-            //         populateFormWithData(
-            //             "edit-patient-diagnosis-modal",
-            //             rowData,
-            //             [
-            //                 "testName",
-            //                 "fees"
-            //             ]
-            //         );
-            //     });
-
-
-            //     const viewReportCta = row.cells[3].querySelectorAll("button")[1];
-            //     viewReportCta.style.cursor = "pointer";
-            //     viewReportCta.classList.add("modal-trigger");
-            //     viewReportCta.dataset.modal = "view-patient-lab-report-modal";
-
-            //     UTILS.triggerModal(viewReportCta, "modal", async () => {
-            //         // viewReportCta.dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
-            //         // console.log(JSON.parse(rowData).diagnosisId);
-
-            //         document.querySelector("#view-patient-lab-report-form").dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
-
-            //         // Populate the form with the server data
-            //         populateFormWithDataFromServer("view-patient-lab-report-form", JSON.parse(rowData).diagnosisId);
-
-            //         // Get patient id from visit id
-            //         const patient = await API.visits.fetchPatientByVisitId(selectedVisitId);
-            //         const patientData = patient.data;
-
-            //         // Trigger print lab report
-            //         triggerPrintLabReport(patientData);
-                    
             //     });
             // }
         },
