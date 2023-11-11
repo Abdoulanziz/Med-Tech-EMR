@@ -186,6 +186,16 @@ export const API = {
     },
 
 
+    // Lab requests 
+    requests: {
+        // Add to requests POST api/v1/requests
+        create: async (request, fromFormData) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/requests`;
+            return await API.makePostRequest(endpoint, request, fromFormData);
+        }
+    },
+
+
     // Diagnosis reports 
     reports: {
         // Add to diagnosis-reports POST api/v1/reports

@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Appointment extends Model {
+  class LabRequest extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,48 +11,44 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      LabRequest.belongsTo(models.LabTest, { foreignKey: 'testId' });
+      LabRequest.belongsTo(models.Visit, { foreignKey: 'visitId' });
     }
   }
-  Appointment.init({ 
-    appointmentId: {
+  LabRequest.init({ 
+    requestId: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false,
-      field: 'appointment_id',
+      field: 'request_id',
     },
-    appointmentUuid: {
+    requestUuid: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
       unique: true,
-      field: 'appointment_uuid',
+      field: 'request_uuid',
     },
-    appointmentDate: {
-      type: DataTypes.DATE,
+    testId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-      field: 'appointment_date',
+      field: 'test_id',
     },
-    description: {
+    visitId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      field: 'visit_id',
+    },
+    testFees: {
       type: DataTypes.STRING,
       allowNull: true,
-      field: 'description',
+      field: 'test_fees',
     },
-    appointmentStatus: {
-      type: DataTypes.ENUM('Scheduled', 'Cancelled', 'Completed'),
-      allowNull: false,
-      defaultValue: 'Scheduled',
-      field: 'appointment_status',
-    },
-    patientId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      field: 'patient_id',
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      field: 'user_id',
+    clinicalNotes: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      field: 'clinical_notes',
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -66,8 +62,8 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'Appointment',
-    tableName: 'appointments',
+    modelName: 'LabRequest',
+    tableName: 'lab_requests',
   });
-  return Appointment;
+  return LabRequest;
 };

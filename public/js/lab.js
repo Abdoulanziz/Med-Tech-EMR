@@ -9,14 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Load all patients on queue
     loadAllPatientsOnQueue();
 
-    // Handle create triage
-    handleCreateTriageForm();
-
-    // Handle create allergy
-    handleCreateAllergyForm();
-
-    // Handle create lab report
-    handleCreatePatientLabReportForm();
+    // Handle CBC test
+    handleCompleteBloodCountResultsForm();
     
 });
 
@@ -282,32 +276,22 @@ async function loadSinglePatientVisitLabRequests(visitId) {
             { data : null }
         ],
         rowCallback: function(row, data, index) {
-            const rowData = JSON.stringify(data.dataValues);
+            const rowDataObject = data.dataValues;
 
-            if("diagnosisUuid" in JSON.parse(rowData)){
+            // Check if the medical record is a request
+            if("diagnosisUuid" in rowDataObject){
+                // Check the specific request (CBC)
+                if(rowDataObject.testName === "Complete Blood Count Test") {
+                    const workOnTestCta = row.cells[4].querySelectorAll("button")[0];
+                    workOnTestCta.style.cursor = "pointer";
+                    workOnTestCta.classList.add("modal-trigger");
+                    workOnTestCta.dataset.modal = "complete-blood-count-results-modal";
 
-                const createReportCta = row.cells[4].querySelectorAll("button")[0];
-                createReportCta.style.cursor = "pointer";
-                createReportCta.classList.add("modal-trigger");
-                createReportCta.dataset.modal = "create-patient-lab-report-modal";
-
-                UTILS.triggerModal(createReportCta, "modal", () => {
-                    // createReportCta.dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
-                    // console.log(JSON.parse(rowData).diagnosisId);
-
-                    document.querySelector("#create-patient-lab-report-form").dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
-
-                    // Populate the form with the rowData
-                    populateFormWithData(
-                        "create-patient-lab-report-modal",
-                        rowData,
-                        [
-                            "testName",
-                            "fees"
-                        ]
-                    );
-                });
-
+                    UTILS.triggerModal(workOnTestCta, "modal", () => {
+                        // Parse the diagnosisId to the form
+                        document.querySelector("#complete-blood-count-results-form").dataset.diagnosisId = rowDataObject.diagnosisId;
+                    });
+                }
             }
         },
         columnDefs: [
@@ -339,7 +323,7 @@ async function loadSinglePatientVisitLabRequests(visitId) {
             {
                 targets: 3,
                 render: function(data, type, row, meta) {
-                    return '<span>' + "Completed" + '</span>';
+                    return '<span>' + "Pending" + '</span>';
                 }
             },
             {
@@ -347,7 +331,7 @@ async function loadSinglePatientVisitLabRequests(visitId) {
                 render: function (data, type, row, meta) {
                     return `
                     <td>
-                        <button class="btn view-results" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Create Report  <i class="ti-arrow-right"></i> </button>
+                        <button class="btn view-results" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Work on Test </button>
                     </td>
                     `;
                 },
@@ -365,6 +349,7 @@ async function loadSinglePatientVisitLabRequests(visitId) {
     });
 
 }
+
 
 // Function to display selected patient details
 async function displaySelectedPatientDetails(divID, data, callback) {
@@ -440,197 +425,60 @@ async function displaySelectedPatientDiagnosesBills(divId) {
 }
 
 
-// Handle triage create form
-async function handleCreateTriageForm() {
-    const patientTriageForm = document.querySelector('#patient-triage-form');
-    patientTriageForm.addEventListener('submit', (event) => {
+// Handle complete blood count results form
+async function handleCompleteBloodCountResultsForm() {
+    const completeBloodCountResultsForm = document.querySelector('#complete-blood-count-results-form');
+    completeBloodCountResultsForm.addEventListener('submit', (event) => {
         event.preventDefault();
-
-        // Get Id of selected visit
-        const selectedVisitId = UTILS.getSelectedVisitId();
-        if (! selectedVisitId) return;
-    
-        // Collect form data
-        const formData = new FormData(patientTriageForm);
-        formData.append('visitId', selectedVisitId);
-
-        // URL encoded data
-        const URLEncodedData = new URLSearchParams(formData).toString();
-    
-        // Display a confirmation dialog
-        UTILS.showConfirmationModal(patientTriageForm, "Are you sure you want to save this record?", async () => {
-            try {
-                // Make an API POST request to create a triage record
-                const response = await API.triage.create(URLEncodedData, true);
-    
-                // Check if the request was successful
-                if (response.status === 'success') {
-                    // Alert user
-                    // alert('Patient record created successfully!');
-                    // TODO: Create a banner to show triage saved
-    
-                    // Reset the form
-                    patientTriageForm.reset();
-    
-                    // Remove form
-                    patientTriageForm.parentElement.parentElement.classList.remove("inview");
-    
-                    // Reload the requests table
-                    loadSinglePatientVisitLabRequests(selectedVisitId);
-    
-                } else {
-                    alert('Failed to create triage record. Please check the form data.');
-                }
-            } catch (error) {
-                console.error(error);
-                alert('An error occurred while creating the triage record.');
-            }
-        }, () => {
-            // TODO: Run when cancelled
-
-            // Reset the form
-            patientTriageForm.reset();
-        });
-    });
-}
-
-// Handle allergy create form
-async function handleCreateAllergyForm() {
-    const patientAllergyForm = document.querySelector('#patient-allergy-form');
-    patientAllergyForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        // Get Id of selected visit
-        const selectedVisitId = UTILS.getSelectedVisitId();
-        if (! selectedVisitId) return;
-    
-        // Collect form data
-        const formData = new FormData(patientAllergyForm);
-        formData.append('visitId', selectedVisitId);
-
-        // URL encoded data
-        const URLEncodedData = new URLSearchParams(formData).toString();
-    
-        // Display a confirmation dialog
-        UTILS.showConfirmationModal(patientAllergyForm, "Are you sure you want to save this record?", async () => {
-            try {
-                // Make an API POST request to create a triage record
-                const response = await API.allergy.create(URLEncodedData, true);
-    
-                // Check if the request was successful
-                if (response.status === 'success') {
-                    // Alert user
-                    // alert('Patient record created successfully!');
-                    // TODO: Create a banner to show triage saved
-    
-                    // Reset the form
-                    patientAllergyForm.reset();
-    
-                    // Remove form
-                    patientAllergyForm.parentElement.parentElement.classList.remove("inview");
-    
-                    // Reload the requests table
-                    loadSinglePatientVisitLabRequests(selectedVisitId);
-    
-                } else {
-                    alert('Failed to create allergy record. Please check the form data.');
-                }
-            } catch (error) {
-                console.error(error);
-                alert('An error occurred while creating the allergy record.');
-            }
-        }, () => {
-            // TODO: Run when cancelled
-
-            // Reset the form
-            patientAllergyForm.reset();
-        });
-    });
-}
-
-// Populate form with data
-function populateFormWithData(formId, data, formFieldsNamesArray) {
-    // Parse the form id
-    const form = document.querySelector(`#${formId}`);
-    const parsedData = JSON.parse(data);
-
-    // Use the names of the fields not their ids
-    formFieldsNamesArray.forEach(fieldName => {
-        const field = form.querySelector(`[name=${fieldName}]`);
-        if (field) {
-            field.value = parsedData[fieldName] || null;
-        }
-    });
-}
-
-
-// Handle create diangosis report form
-async function handleCreatePatientLabReportForm() {
-    const patientLabReportForm = document.querySelector('#create-patient-lab-report-form');
-    patientLabReportForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        // Get Id of selected visit
-        const selectedVisitId = UTILS.getSelectedVisitId();
-        if (! selectedVisitId) return;
 
         // Get Id of selected request
-        const selectedRequestId = patientLabReportForm.dataset.diagnosisId;
+        const selectedRequestId = completeBloodCountResultsForm.dataset.diagnosisId;
         if (! selectedRequestId) return;
 
-        // Initialize the editor
-        const editor = tinymce.get("lab-report");
-        let formattedContent;
+        console.log(selectedRequestId);
+    
+        // // Collect form data
+        // const formData = new FormData(patientLabReportForm);
+        // formData.append('diagnosisId', selectedRequestId);
+        // formData.append('diagnosisReport', formattedContent);
 
-        // Check if the editor is initialized and exists
-        if (editor) {
-            formattedContent = editor.getContent();
-        } else {
-            console.error("Editor not found or initialized.");
-        }
+        // // URL encoded data
+        // const URLEncodedData = new URLSearchParams(formData).toString();
     
-        // Collect form data
-        const formData = new FormData(patientLabReportForm);
-        formData.append('diagnosisId', selectedRequestId);
-        formData.append('diagnosisReport', formattedContent);
+        // // Display a confirmation dialog
+        // UTILS.showConfirmationModal(patientLabReportForm, "Are you sure you want to save this record?", async () => {
+        //     try {
+        //         // Make an API POST request to create a triage record
+        //         const response = await API.reports.create(URLEncodedData, true);
+    
+        //         // Check if the request was successful
+        //         if (response.status === 'success') {
+        //             // Alert user
+        //             // alert('Patient record created successfully!');
+        //             // TODO: Create a banner to show triage saved
+    
+        //             // Reset the form
+        //             patientLabReportForm.reset();
+    
+        //             // Remove form
+        //             patientLabReportForm.parentElement.parentElement.classList.remove("inview");
+    
+        //             // Reload the requests table
+        //             loadSinglePatientVisitLabRequests(selectedVisitId);
+    
+        //         } else {
+        //             alert('Failed to create allergy record. Please check the form data.');
+        //         }
+        //     } catch (error) {
+        //         console.error(error);
+        //         alert('An error occurred while creating the allergy record.');
+        //     }
+        // }, () => {
+        //     // TODO: Run when cancelled
 
-        // URL encoded data
-        const URLEncodedData = new URLSearchParams(formData).toString();
-    
-        // Display a confirmation dialog
-        UTILS.showConfirmationModal(patientLabReportForm, "Are you sure you want to save this record?", async () => {
-            try {
-                // Make an API POST request to create a triage record
-                const response = await API.reports.create(URLEncodedData, true);
-    
-                // Check if the request was successful
-                if (response.status === 'success') {
-                    // Alert user
-                    // alert('Patient record created successfully!');
-                    // TODO: Create a banner to show triage saved
-    
-                    // Reset the form
-                    patientLabReportForm.reset();
-    
-                    // Remove form
-                    patientLabReportForm.parentElement.parentElement.classList.remove("inview");
-    
-                    // Reload the requests table
-                    loadSinglePatientVisitLabRequests(selectedVisitId);
-    
-                } else {
-                    alert('Failed to create allergy record. Please check the form data.');
-                }
-            } catch (error) {
-                console.error(error);
-                alert('An error occurred while creating the allergy record.');
-            }
-        }, () => {
-            // TODO: Run when cancelled
-
-            // Reset the form
-            patientLabReportForm.reset();
-        });
+        //     // Reset the form
+        //     patientLabReportForm.reset();
+        // });
     });
 }
 

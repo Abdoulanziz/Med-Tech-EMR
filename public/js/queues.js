@@ -22,7 +22,10 @@ document.addEventListener("DOMContentLoaded", () => {
     populateDropdownList();
 
     // Handle diagnosis form
-    handleCreateDiagnosisForm();
+    // handleCreateDiagnosisForm();
+
+    // Handle CBC request form
+    handleLabRequest();
 
     // Set up tinymce
     setupLabReportTinymce();
@@ -289,86 +292,127 @@ async function loadSinglePatientVisitHistory(visitId) {
             { data : null }
         ],
         rowCallback: function(row, data, index) {
-            const rowData = JSON.stringify(data.dataValues);
+            // const rowData = JSON.stringify(data.dataValues);
 
-            if("triageUuid" in JSON.parse(rowData)){
-                const viewRequestCta = row.cells[3].querySelectorAll("button")[0];
-                viewRequestCta.style.cursor = "pointer";
-                viewRequestCta.classList.add("modal-trigger");
-                viewRequestCta.dataset.modal = "edit-patient-triage-data-modal";
+            // if("triageUuid" in JSON.parse(rowData)){
+            //     const viewRequestCta = row.cells[3].querySelectorAll("button")[0];
+            //     viewRequestCta.style.cursor = "pointer";
+            //     viewRequestCta.classList.add("modal-trigger");
+            //     viewRequestCta.dataset.modal = "edit-patient-triage-data-modal";
 
-                UTILS.triggerModal(viewRequestCta, "modal", () => {
-                    // Populate the form with the rowData
-                    populateFormWithData(
-                        "edit-patient-triage-data-modal",
-                        rowData,
-                        [
-                            "bloodPressure",
-                            "heartRate",
-                            "respiratoryRate",
-                            "signsAndSymptoms",
-                            "injuryDetails"
-                        ]
-                    );
-                });
-            }else if("allergyUuid" in JSON.parse(rowData)){
-                const viewAlergiesCta = row.cells[3].querySelectorAll("button")[0];
-                viewAlergiesCta.style.cursor = "pointer";
-                viewAlergiesCta.classList.add("modal-trigger");
-                viewAlergiesCta.dataset.modal = "edit-patient-allergies-data-modal";
+            //     UTILS.triggerModal(viewRequestCta, "modal", () => {
+            //         // Populate the form with the rowData
+            //         populateFormWithData(
+            //             "edit-patient-triage-data-modal",
+            //             rowData,
+            //             [
+            //                 "bloodPressure",
+            //                 "heartRate",
+            //                 "respiratoryRate",
+            //                 "signsAndSymptoms",
+            //                 "injuryDetails"
+            //             ]
+            //         );
+            //     });
+            // }else if("allergyUuid" in JSON.parse(rowData)){
+            //     const viewAlergiesCta = row.cells[3].querySelectorAll("button")[0];
+            //     viewAlergiesCta.style.cursor = "pointer";
+            //     viewAlergiesCta.classList.add("modal-trigger");
+            //     viewAlergiesCta.dataset.modal = "edit-patient-allergies-data-modal";
 
-                UTILS.triggerModal(viewAlergiesCta, "modal", () => {
-                    // Populate the form with the rowData
-                    populateFormWithData(
-                        "edit-patient-allergies-data-modal",
-                        rowData,
-                        [
-                            "allergies"
-                        ]
-                    );
-                });
-            }else if("diagnosisUuid" in JSON.parse(rowData)){
-                const viewDiagnosisCta = row.cells[3].querySelectorAll("button")[0];
-                viewDiagnosisCta.style.cursor = "pointer";
-                viewDiagnosisCta.classList.add("modal-trigger");
-                viewDiagnosisCta.dataset.modal = "edit-patient-diagnosis-modal";
+            //     UTILS.triggerModal(viewAlergiesCta, "modal", () => {
+            //         // Populate the form with the rowData
+            //         populateFormWithData(
+            //             "edit-patient-allergies-data-modal",
+            //             rowData,
+            //             [
+            //                 "allergies"
+            //             ]
+            //         );
+            //     });
+            // }else if("diagnosisUuid" in JSON.parse(rowData)){
+            //     const viewDiagnosisCta = row.cells[3].querySelectorAll("button")[0];
+            //     viewDiagnosisCta.style.cursor = "pointer";
+            //     viewDiagnosisCta.classList.add("modal-trigger");
+            //     viewDiagnosisCta.dataset.modal = "edit-patient-diagnosis-modal";
 
-                UTILS.triggerModal(viewDiagnosisCta, "modal", () => {
-                    // Populate the form with the rowData
-                    populateFormWithData(
-                        "edit-patient-diagnosis-modal",
-                        rowData,
-                        [
-                            "testName",
-                            "fees"
-                        ]
-                    );
-                });
+            //     UTILS.triggerModal(viewDiagnosisCta, "modal", () => {
+            //         // Populate the form with the rowData
+            //         populateFormWithData(
+            //             "edit-patient-diagnosis-modal",
+            //             rowData,
+            //             [
+            //                 "testName",
+            //                 "fees"
+            //             ]
+            //         );
+            //     });
 
 
-                const viewReportCta = row.cells[3].querySelectorAll("button")[1];
-                viewReportCta.style.cursor = "pointer";
-                viewReportCta.classList.add("modal-trigger");
-                viewReportCta.dataset.modal = "view-patient-lab-report-modal";
+            //     const viewReportCta = row.cells[3].querySelectorAll("button")[1];
+            //     viewReportCta.style.cursor = "pointer";
+            //     viewReportCta.classList.add("modal-trigger");
+            //     viewReportCta.dataset.modal = "view-patient-lab-report-modal";
 
-                UTILS.triggerModal(viewReportCta, "modal", async () => {
-                    // viewReportCta.dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
-                    // console.log(JSON.parse(rowData).diagnosisId);
+            //     UTILS.triggerModal(viewReportCta, "modal", async () => {
+            //         // viewReportCta.dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
+            //         // console.log(JSON.parse(rowData).diagnosisId);
 
-                    document.querySelector("#view-patient-lab-report-form").dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
+            //         document.querySelector("#view-patient-lab-report-form").dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
 
-                    // Populate the form with the server data
-                    populateFormWithDataFromServer("view-patient-lab-report-form", JSON.parse(rowData).diagnosisId);
+            //         // Populate the form with the server data
+            //         populateFormWithDataFromServer("view-patient-lab-report-form", JSON.parse(rowData).diagnosisId);
 
-                    // Get patient id from visit id
-                    const patient = await API.visits.fetchPatientByVisitId(selectedVisitId);
-                    const patientData = patient.data;
+            //         // Get patient id from visit id
+            //         const patient = await API.visits.fetchPatientByVisitId(selectedVisitId);
+            //         const patientData = patient.data;
 
-                    // Trigger print lab report
-                    triggerPrintLabReport(patientData);
+            //         // Trigger print lab report
+            //         triggerPrintLabReport(patientData);
                     
-                });
-            }
+            //     });
+            // }else if("requestUuid" in JSON.parse(rowData)){
+            //     const viewLabRequestCta = row.cells[3].querySelectorAll("button")[0];
+            //     viewLabRequestCta.style.cursor = "pointer";
+            //     viewLabRequestCta.classList.add("modal-trigger");
+            //     viewLabRequestCta.dataset.modal = "edit-patient-diagnosis-modal";
+
+            //     UTILS.triggerModal(viewLabRequestCta, "modal", () => {
+            //         // Populate the form with the rowData
+            //         populateFormWithData(
+            //             "edit-patient-diagnosis-modal",
+            //             rowData,
+            //             [
+            //                 "testName",
+            //                 "fees"
+            //             ]
+            //         );
+            //     });
+
+
+            //     const viewReportCta = row.cells[3].querySelectorAll("button")[1];
+            //     viewReportCta.style.cursor = "pointer";
+            //     viewReportCta.classList.add("modal-trigger");
+            //     viewReportCta.dataset.modal = "view-patient-lab-report-modal";
+
+            //     UTILS.triggerModal(viewReportCta, "modal", async () => {
+            //         // viewReportCta.dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
+            //         // console.log(JSON.parse(rowData).diagnosisId);
+
+            //         document.querySelector("#view-patient-lab-report-form").dataset.diagnosisId = JSON.parse(rowData).diagnosisId;
+
+            //         // Populate the form with the server data
+            //         populateFormWithDataFromServer("view-patient-lab-report-form", JSON.parse(rowData).diagnosisId);
+
+            //         // Get patient id from visit id
+            //         const patient = await API.visits.fetchPatientByVisitId(selectedVisitId);
+            //         const patientData = patient.data;
+
+            //         // Trigger print lab report
+            //         triggerPrintLabReport(patientData);
+                    
+            //     });
+            // }
         },
         columnDefs: [
             {
@@ -380,17 +424,13 @@ async function loadSinglePatientVisitHistory(visitId) {
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    if(data.type === "Diagnosis") {
-                        return '<span>' + data.dataValues.testName + '</span>';
-                    }else{
-                        return '<span>' + data.type + '</span>';
-                    }
+                    return '<span>' + data.testName + '</span>';
                 },
             },
             {
                 targets: 2,
                 render: function(data, type, row, meta) {
-                    const originalDate = data.dataValues.createdAt;
+                    const originalDate = data.requestCreatedAt;
                     const dateObj = new Date(originalDate);
                     const formattedDate = dateObj.toISOString().split('T')[0];
                     return '<span>' + formattedDate + '</span>';
@@ -410,7 +450,7 @@ async function loadSinglePatientVisitHistory(visitId) {
             {
                 targets: 4,
                 render: function(data, type, row, meta) {
-                    const originalDate = data.dataValues.createdAt;
+                    const originalDate = data.requestCreatedAt;
                     const dateObj = new Date(originalDate);
                     const formattedDate = dateObj.toISOString().split('T')[0];
                     return '<span>' + formattedDate + '</span>';
@@ -767,7 +807,77 @@ async function populateFormWithDataFromServer(formId, diagnosisId) {
 
 
 // Handle diagnosis create form
-async function handleCreateDiagnosisForm() {
+// async function handleCreateDiagnosisForm() {
+//     const patientDiagnosisForm = document.querySelector('#create-patient-diagnosis-form');
+//     patientDiagnosisForm.addEventListener('submit', async (event) => {
+//         event.preventDefault();
+
+//         // Get Id of selected visit
+//         const selectedVisitId = UTILS.getSelectedVisitId();
+//         if (! selectedVisitId) return;
+
+//         // Check if there are selected diagnostic tests
+//         const selectedTestsTable = document.getElementById('selected-tests-table').getElementsByTagName('tbody')[0];
+//         if (selectedTestsTable.rows.length === 0) {
+//             alert('Please select at least one diagnostic test.');
+//             return;
+//         }
+
+//         // Collect selected test data from the table
+//         const selectedTestRows = selectedTestsTable.rows;
+//         const formValuesArrayOfObjects = [];
+
+//         for (let i = 0; i < selectedTestRows.length; i++) {
+//             const testName = selectedTestRows[i].cells[0].textContent;
+//             const fee = parseFloat(selectedTestRows[i].cells[1].textContent.substring(3));
+//             const clinicalNotes = selectedTestRows[i].dataset.notes;
+
+//             console.log(selectedTestRows[i])
+//             formValuesArrayOfObjects.push({ testName, clinicalNotes, fees: fee, visitId: selectedVisitId });
+//         }
+
+//         // Display a confirmation dialog
+//         UTILS.showConfirmationModal(patientDiagnosisForm, 'Are you sure you want to save these diagnostic tests?', async () => {
+//             try {
+//                 // Make an API POST request to create diagnostic records
+//                 const response = await API.diagnoses.create(formValuesArrayOfObjects, false);
+
+//                 // Check if the request was successful
+//                 if (response.status === 'success') {
+//                     // Alert user
+//                     // alert('Test record created successfully!');
+//                     // TODO: Create a banner to show record saved
+    
+//                     // Reset the form
+//                     clearSelectedTests();
+    
+//                     // Remove form
+//                     patientDiagnosisForm.parentElement.parentElement.classList.remove("inview");
+    
+//                     // Fetch the bills
+//                     displaySelectedPatientDiagnosesBills("ongoing-services-02");
+
+//                     // Reload the requests table
+//                     loadSinglePatientVisitHistory(selectedVisitId);
+
+//                 } else {
+//                     alert('Failed to create diagnostic tests. Please check the data.');
+//                 }
+//             } catch (error) {
+//                 console.error(error);
+//                 alert('An error occurred while creating the diagnostic tests.');
+//             }
+//         }, () => {
+//             // Run when canceled
+//             // Reset the form (clear selected tests)
+//             clearSelectedTests();
+//         });
+//     });
+// }
+
+
+// Handle diagnosis create form
+async function handleLabRequest() {
     const patientDiagnosisForm = document.querySelector('#create-patient-diagnosis-form');
     patientDiagnosisForm.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -788,19 +898,17 @@ async function handleCreateDiagnosisForm() {
         const formValuesArrayOfObjects = [];
 
         for (let i = 0; i < selectedTestRows.length; i++) {
-            const testName = selectedTestRows[i].cells[0].textContent;
-            const fee = parseFloat(selectedTestRows[i].cells[1].textContent.substring(3));
+            const testId = selectedTestRows[i].dataset.id;
+            const fees = parseFloat(selectedTestRows[i].cells[1].textContent.substring(3));
             const clinicalNotes = selectedTestRows[i].dataset.notes;
-
-            console.log(selectedTestRows[i])
-            formValuesArrayOfObjects.push({ testName, clinicalNotes, fees: fee, visitId: selectedVisitId });
+            formValuesArrayOfObjects.push({ testId, clinicalNotes, testFees: fees, visitId: selectedVisitId });
         }
 
         // Display a confirmation dialog
         UTILS.showConfirmationModal(patientDiagnosisForm, 'Are you sure you want to save these diagnostic tests?', async () => {
             try {
                 // Make an API POST request to create diagnostic records
-                const response = await API.diagnoses.create(formValuesArrayOfObjects, false);
+                const response = await API.requests.create(formValuesArrayOfObjects, false);
 
                 // Check if the request was successful
                 if (response.status === 'success') {
@@ -857,6 +965,7 @@ async function filterDropdown() {
         if (testName.includes(filter)) {
           const dropdownItem = document.createElement('span');
           dropdownItem.className = 'dropdown-item';
+          dropdownItem.setAttribute('data-id', test.testId);
           dropdownItem.setAttribute('data-test', test.testName);
           dropdownItem.setAttribute('data-fee', test.testFees);
           dropdownItem.textContent = test.testName;
@@ -887,8 +996,9 @@ function addItemToTable(item) {
     const cell2 = row.insertCell(1);
     const cell3 = row.insertCell(2);
 
+    row.setAttribute("data-id", item.getAttribute("data-id"));
     row.setAttribute("data-notes", item.getAttribute("data-notes"));
-    
+
     const testName = item.getAttribute("data-test");
     const testNameCell = document.createElement("div");
     testNameCell.className = "test-name";
@@ -1000,6 +1110,7 @@ async function populateDropdownList() {
         testData.forEach((test) => {
             const dropdownItem = document.createElement('span');
             dropdownItem.className = 'dropdown-item';
+            dropdownItem.setAttribute('data-id', test.testId);
             dropdownItem.setAttribute('data-test', test.testName);
             dropdownItem.setAttribute('data-fee', test.testFees);
             dropdownItem.textContent = test.testName;

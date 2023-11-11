@@ -765,6 +765,71 @@
   font-weight: bold;
 }
 
+.cbc-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border-color: #ececec;
+}
+
+.cbc-table thead {
+  background-color: #ffffff;
+  font-weight: bold;
+}
+
+.cbc-table thead th {
+  text-align: left;
+}
+
+.cbc-table th.heading {
+  text-transform: uppercase;
+  text-decoration: underline;
+}
+
+
+.cbc-table tbody tr {
+  background-color: #ffffff;
+}
+
+.cbc-table tbody tr td:nth-child(2) {
+  inline-size: 100px;
+}
+
+.cbc-table tbody tr td:nth-child(3) {
+  inline-size: 50px;
+}
+
+.cbc-table td, .cbc-table th {
+  padding-inline: .2rem;
+  border: 1px solid #ececec;
+  text-align: left;
+}
+
+.cbc-table input[type="text"] {
+  width: 50%;
+  padding: 0;
+  border: none;
+  border-radius: 3px;
+  background-color: inherit;
+}
+
+.cbc-table input[type="text"]:focus {
+  outline: none;
+}
+
+.cbc-table select {
+  width: 100%;
+  padding: 5px;
+  border: none;
+  border-radius: 3px;
+  background-color: inherit;
+}
+
+.cbc-table input[type="checkbox"] {
+  margin: 0;
+  width: auto;
+}
+
 
 
 

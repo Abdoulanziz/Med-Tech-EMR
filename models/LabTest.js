@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       field: 'test_name',
     },
     testFees: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
       field: 'test_fees',
     },

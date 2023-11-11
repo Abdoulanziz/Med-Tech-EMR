@@ -2,39 +2,46 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('appointments', {
-      appointment_id: {
+    await queryInterface.createTable('lab_requests', {
+      request_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      appointment_uuid: {
+      request_uuid: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         allowNull: false,
         unique: true,
       },
-      appointment_date: {
-        type: Sequelize.DATE,
+      test_id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
+        // references: {
+        //   model: 'lab_tests',
+        //   key: 'test_id',
+        // },
+        // onUpdate: 'CASCADE',
+        // onDelete: 'CASCADE',
       },
-      description: {
+      visit_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        // references: {
+        //   model: 'visits',
+        //   key: 'visit_id',
+        // },
+        // onUpdate: 'CASCADE',
+        // onDelete: 'CASCADE',
+      },
+      test_fees: {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      appointment_status: {
-        type: Sequelize.ENUM('Scheduled', 'Cancelled', 'Completed'),
-        allowNull: false,
-        defaultValue: 'Scheduled',
-      },
-      patient_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      user_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+      clinical_notes: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       created_at: {
         allowNull: false,
@@ -47,6 +54,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('appointments');
+    await queryInterface.dropTable('lab_requests');
   }
 };
