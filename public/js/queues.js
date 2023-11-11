@@ -499,11 +499,11 @@ async function displaySelectedPatientDiagnosesBills(divId) {
     const selectedVisitId = UTILS.getSelectedVisitId();
 
     // Fetch and display the bills of the selected visit
-    const response = await API.diagnoses.fetchAllBills(selectedVisitId);
+    const response = await API.requests.fetchAllBills(selectedVisitId);
     const selectedBills = await response.data;
 
     // Populate the patient details section with the fetched data
-    const billItems = selectedBills.rows;
+    const billItems = selectedBills;
     if (billItems) {
         const billContainer = document.querySelector(`#${divId}`);
 
@@ -517,7 +517,7 @@ async function displaySelectedPatientDiagnosesBills(divId) {
             const template = `
             <div class="service ${index === 0 || index === 1 ? 'paid' : 'unpaid'}">
                 <div class="service-content flex">
-                    <h3>${billItem.testName} (UGX ${billItem.fees})</h3>
+                    <h3>${billItem.testName} (UGX ${billItem.testFees})</h3>
                     ${index === 0 || index === 1 ? '<img src="/assets/svg/check.png" alt="remove service icon">' : ''}
                 </div>
             </div>

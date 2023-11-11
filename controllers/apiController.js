@@ -692,8 +692,6 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
       requestCreatedAt: request.createdAt,
     }));
 
-    console.log(requestsWithTestResults);
-
     return res.status(200).json({
       draw: draw,
       recordsTotal: result.count,
@@ -882,19 +880,36 @@ const fetchDiagnosisReportByDiagnosisId = async (req, res) => {
 // Fetch diagnosis bills
 const fetchAllDiagnosisBillsByVisitId = async (req, res) => {
   try {
+
     const visitId = req.params.visitId;
-    // Sequelize query
+
+    // Construct the Sequelize query
     const queryOptions = {
-      where: { visit_id: visitId }
+      where: { visit_id: visitId },
+      include: [
+        {
+          model: models.LabTest,
+          attributes: ['testName', 'testFees'],
+        },
+      ],
     };
 
-    const results = await Diagnosis.findAndCountAll(queryOptions);
+    const result = await LabRequest.findAndCountAll(queryOptions);
 
-    if (results) {
+    // Access the lab test's fields in each request result
+    const requestsWithTestResults = result.rows.map((request) => ({
+      // Extract fields from the 'LabTest' model
+      testName: request.LabTest.testName,
+      testFees: request.LabTest.testFees,
+    }));
+
+    
+
+    if (result) {
       // Results found
       return res.status(200).json({
         status: 'success',
-        data: results,
+        data: requestsWithTestResults,
       });
     } else {
       // No result found

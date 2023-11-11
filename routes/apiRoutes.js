@@ -34,6 +34,7 @@ router.post("/diagnoses", createDiagnoses);
 router.get("/diagnoses/bill/:visitId", fetchAllDiagnosisBillsByVisitId);
 
 router.post("/requests", createLabRequest);
+router.get("/requests/bill/:visitId", fetchAllDiagnosisBillsByVisitId);
 
 router.post("/reports", createDiagnosisReport);
 router.get("/reports/:diagnosisId", fetchDiagnosisReportByDiagnosisId);

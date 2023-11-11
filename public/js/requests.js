@@ -192,6 +192,12 @@ export const API = {
         create: async (request, fromFormData) => {
             const endpoint = `${API.BACKEND_BASE_API_URI}/requests`;
             return await API.makePostRequest(endpoint, request, fromFormData);
+        },
+
+        // Fetch all bills GET api/v1/requests/bill/:visitId
+        fetchAllBills: async (visitId) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/requests/bill/${visitId}`;
+            return await API.makeGetRequest(endpoint);
         }
     },
 

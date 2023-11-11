@@ -187,46 +187,6 @@ async function displaySelectedPatientDetails(divID, data, callback) {
     callback(patientId);
 }
 
-// Function to display diagnoses bills
-async function displaySelectedPatientDiagnosesBills(divId) {
-    // Get Id of selected visit
-    const selectedVisitId = UTILS.getSelectedVisitId();
-
-    // Fetch and display the bills of the selected visit
-    const response = await API.diagnoses.fetchAllBills(selectedVisitId);
-    const selectedBills = await response.data;
-
-    // Populate the patient details section with the fetched data
-    const billItems = selectedBills.rows;
-    if (billItems) {
-        const billContainer = document.querySelector(`#${divId}`);
-
-        // Clear the existing items in the container
-        while (billContainer.firstChild) {
-            billContainer.removeChild(billContainer.firstChild);
-        }
-
-        billItems.forEach((billItem, index) => {
-            // Create a template for each bill item
-            const template = `
-            <div class="service ${index === 0 || index === 1 ? 'paid' : 'unpaid'}">
-                <div class="service-content flex">
-                    <h3>${billItem.testName} (UGX ${billItem.fees})</h3>
-                    ${index === 0 || index === 1 ? '<img src="/assets/svg/check.png" alt="remove service icon">' : ''}
-                </div>
-            </div>
-            `;
-
-            // Temporary container element to hold the template
-            const tempContainer = document.createElement("div");
-            tempContainer.innerHTML = template;
-
-            // Append the template to the billContainer
-            billContainer.appendChild(tempContainer.firstElementChild);
-        });
-    }
-}
-
 
 // Load patient to DOM
 async function loadSinglePatientVists(patientId) {
