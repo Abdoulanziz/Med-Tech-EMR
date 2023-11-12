@@ -1,6 +1,6 @@
-import { UI } from "./ui.js";
-import { UTILS } from "./utils.js";
-import { API } from "./requests.js";
+import { UI } from "../core/ui.js";
+import { UTILS } from "../core/utils.js";
+import { API } from "../core/api.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     // Init UI
@@ -15,14 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Handle create allergy
     handleCreateAllergyForm();
 
-    // Render diagnosis form
-    // renderDiagnosisForm();
-
     // Render diagnostic tests in dropdown
     populateDropdownList();
-
-    // Handle diagnosis form
-    // handleCreateDiagnosisForm();
 
     // Handle CBC request form
     handleLabRequest();
@@ -44,6 +38,7 @@ async function loadAllPatientsOnQueue() {
         searching: true,
         filter:true,
         destroy: true,
+
         ajax: {
             url: apiEndpoint,
             dataSrc: "data",
@@ -73,7 +68,6 @@ async function loadAllPatientsOnQueue() {
             UTILS.sectionToggler(viewMoreCta, "section", () => {
                 displaySelectedPatientDetails("patient-info-section_01", rowData, () => {
                     loadSinglePatientVisits(data.patientId);
-                    // displaySelectedPatientDiagnosesBills("ongoing-services-01");
                 });
             });
         },
@@ -202,7 +196,7 @@ async function loadSinglePatientVisits(patientId) {
             UTILS.sectionToggler(workOnPatientCta, "section", () => {
                 displaySelectedPatientDetails("patient-info-section_02", rowDataString, () => {
                     loadSinglePatientVisitHistory(data.visitId);
-                    displaySelectedPatientDiagnosesBills("ongoing-services-02");
+                    displaySelectedPatientBills("ongoing-services-02");
                 });
             });
         },
@@ -276,6 +270,7 @@ async function loadSinglePatientVisitHistory(visitId) {
         searching: true,
         filter:true,
         destroy: true,
+
         ajax: {
             url: apiEndpoint,
             dataSrc: "data",
@@ -447,7 +442,7 @@ async function displaySelectedPatientDetails(divID, data, callback) {
     UTILS.setSelectedPatientId(patientId);
 
     // Fetch and display the details of the selected patient
-    const response = await API.patients.fetchSingle(patientId);
+    const response = await API.patients.fetchById(patientId);
     const selectedPatient = await response.data;
 
     // You can populate the patient details section with the fetched data
@@ -471,12 +466,12 @@ async function displaySelectedPatientDetails(divID, data, callback) {
 }
 
 // Function to display diagnoses bills
-async function displaySelectedPatientDiagnosesBills(divId) {
+async function displaySelectedPatientBills(divId) {
     // Get Id of selected visit
     const selectedVisitId = UTILS.getSelectedVisitId();
 
     // Fetch and display the bills of the selected visit
-    const response = await API.requests.fetchAllBills(selectedVisitId);
+    const response = await API.bills.fetch(selectedVisitId);
     const selectedBills = await response.data;
 
     // Populate the patient details section with the fetched data
@@ -509,8 +504,6 @@ async function displaySelectedPatientDiagnosesBills(divId) {
         });
     }
 }
-
-
 
 // Handle triage create form
 async function handleCreateTriageForm() {
@@ -635,7 +628,6 @@ function populateFormWithData(formId, data, formFieldsNamesArray) {
     });
 }
 
-
 // Populate form with data from server (pre-fill the form)
 async function populateFormWithDataFromServer(formId, diagnosisId) {
     try {
@@ -663,195 +655,6 @@ async function populateFormWithDataFromServer(formId, diagnosisId) {
         alert('An error occurred while fetching the diagnosis report.');
     }
 }
-
-
-// // Set up diagnosis with dynamic test items and total fees calculation
-// function renderDiagnosisForm() {
-//     const form = document.getElementById("create-patient-diagnosis-form");
-//     const formBody = form.querySelector("#create-patient-diagnosis-form-body");
-//     const totalFeesDisplay = formBody.querySelector(".total-fees");
-
-//     function addTestItem() {
-//         const testItem = document.createElement("div");
-//         testItem.classList.add("form-section");
-//         testItem.innerHTML = `
-//             <label for="testName">Diagnosis Test</label>
-//             <input type="text" name="testName[]">
-//             <label for="fees">Fees ($)</label>
-//             <input type="number" name="fees[]">
-//             <button type="button" class="btn remove-test"> <i class="ti-trash"></i> Remove</button>
-//         `;
-
-//         formBody.insertBefore(testItem, formBody.lastElementChild);
-
-//         const removeTestButton = testItem.querySelector(".remove-test");
-//         removeTestButton.addEventListener("click", () => {
-//             formBody.removeChild(testItem);
-//             recalculateTotalFees();
-//         });
-//     }
-
-//     function recalculateTotalFees() {
-//         const feeInputs = Array.from(formBody.querySelectorAll("input[name='fees[]']"));
-//         const totalFees = feeInputs.reduce((total, input) => {
-//             const fee = parseFloat(input.value) || 0;
-//             return total + fee;
-//         }, 0).toFixed(2);
-//         totalFeesDisplay.textContent = `Total Fees: $${totalFees}`;
-//     }
-
-//     const addTestButton = form.querySelector("#addTest");
-//     addTestButton.addEventListener("click", addTestItem);
-//     formBody.addEventListener("input", recalculateTotalFees);
-// }
-
-
-// function getDiagnosisFormValues() {
-//     const form = document.getElementById("create-patient-diagnosis-form");
-//     const testNames = form.querySelectorAll("input[name='testName[]']");
-//     const testFees = form.querySelectorAll("input[name='fees[]']");
-
-//     const values = [];
-
-//     for (let i = 0; i < testNames.length; i++) {
-//         const testName = testNames[i].value;
-//         const fees = parseFloat(testFees[i].value) || 0;
-//         values.push({ testName, fees });
-//     }
-
-//     return values;
-// }
-
-
-// // Handle diagnosis create form
-// async function handleCreateDiagnosisForm() {
-//     const patientDiagnosisForm = document.querySelector('#create-patient-diagnosis-form');
-//     patientDiagnosisForm.addEventListener('submit', (event) => {
-//         event.preventDefault();
-
-//         // Get Id of selected visit
-//         const selectedVisitId = UTILS.getSelectedVisitId();
-//         if (! selectedVisitId) return;
-    
-//         // // Collect form data
-//         let formValuesArrayOfObjects = getDiagnosisFormValues();
-//         formValuesArrayOfObjects = formValuesArrayOfObjects.map(obj => {
-//             obj.visitId = selectedVisitId;
-//             return obj;
-//         });
-
-//         // Display a confirmation dialog
-//         UTILS.showConfirmationModal(patientDiagnosisForm, "Are you sure you want to save this record?", async () => {
-//             try {
-//                 // Make an API POST request to create a triage record
-//                 const response = await API.diagnoses.create(formValuesArrayOfObjects, false);
-    
-//                 // Check if the request was successful
-//                 if (response.status === 'success') {
-//                     // Alert user
-//                     // alert('Patient record created successfully!');
-//                     // TODO: Create a banner to show triage saved
-    
-//                     // Reset the form
-//                     patientDiagnosisForm.reset();
-    
-//                     // Remove form
-//                     patientDiagnosisForm.parentElement.parentElement.classList.remove("inview");
-    
-//                     // Fetch the bills
-//                     displaySelectedPatientDiagnosesBills("ongoing-services-02");
-
-//                     // Reload the requests table
-//                     loadSinglePatientVisitHistory(selectedVisitId);
-
-    
-//                 } else {
-//                     alert('Failed to create diagnoses records. Please check the form data.');
-//                 }
-//             } catch (error) {
-//                 console.error(error);
-//                 alert('An error occurred while creating the diagnoses records.');
-//             }
-//         }, () => {
-//             // TODO: Run when cancelled
-
-//             // Reset the form
-//             patientDiagnosisForm.reset();
-//         });
-
-//     });
-// }
-
-
-// Handle diagnosis create form
-// async function handleCreateDiagnosisForm() {
-//     const patientDiagnosisForm = document.querySelector('#create-patient-diagnosis-form');
-//     patientDiagnosisForm.addEventListener('submit', async (event) => {
-//         event.preventDefault();
-
-//         // Get Id of selected visit
-//         const selectedVisitId = UTILS.getSelectedVisitId();
-//         if (! selectedVisitId) return;
-
-//         // Check if there are selected diagnostic tests
-//         const selectedTestsTable = document.getElementById('selected-tests-table').getElementsByTagName('tbody')[0];
-//         if (selectedTestsTable.rows.length === 0) {
-//             alert('Please select at least one diagnostic test.');
-//             return;
-//         }
-
-//         // Collect selected test data from the table
-//         const selectedTestRows = selectedTestsTable.rows;
-//         const formValuesArrayOfObjects = [];
-
-//         for (let i = 0; i < selectedTestRows.length; i++) {
-//             const testName = selectedTestRows[i].cells[0].textContent;
-//             const fee = parseFloat(selectedTestRows[i].cells[1].textContent.substring(3));
-//             const clinicalNotes = selectedTestRows[i].dataset.notes;
-
-//             console.log(selectedTestRows[i])
-//             formValuesArrayOfObjects.push({ testName, clinicalNotes, fees: fee, visitId: selectedVisitId });
-//         }
-
-//         // Display a confirmation dialog
-//         UTILS.showConfirmationModal(patientDiagnosisForm, 'Are you sure you want to save these diagnostic tests?', async () => {
-//             try {
-//                 // Make an API POST request to create diagnostic records
-//                 const response = await API.diagnoses.create(formValuesArrayOfObjects, false);
-
-//                 // Check if the request was successful
-//                 if (response.status === 'success') {
-//                     // Alert user
-//                     // alert('Test record created successfully!');
-//                     // TODO: Create a banner to show record saved
-    
-//                     // Reset the form
-//                     clearSelectedTests();
-    
-//                     // Remove form
-//                     patientDiagnosisForm.parentElement.parentElement.classList.remove("inview");
-    
-//                     // Fetch the bills
-//                     displaySelectedPatientDiagnosesBills("ongoing-services-02");
-
-//                     // Reload the requests table
-//                     loadSinglePatientVisitHistory(selectedVisitId);
-
-//                 } else {
-//                     alert('Failed to create diagnostic tests. Please check the data.');
-//                 }
-//             } catch (error) {
-//                 console.error(error);
-//                 alert('An error occurred while creating the diagnostic tests.');
-//             }
-//         }, () => {
-//             // Run when canceled
-//             // Reset the form (clear selected tests)
-//             clearSelectedTests();
-//         });
-//     });
-// }
-
 
 // Handle diagnosis create form
 async function handleLabRequest() {
@@ -889,9 +692,6 @@ async function handleLabRequest() {
 
                 // Check if the request was successful
                 if (response.status === 'success') {
-                    // Alert user
-                    // alert('Test record created successfully!');
-                    // TODO: Create a banner to show record saved
     
                     // Reset the form
                     clearSelectedTests();
@@ -900,7 +700,7 @@ async function handleLabRequest() {
                     patientDiagnosisForm.parentElement.parentElement.classList.remove("inview");
     
                     // Fetch the bills
-                    displaySelectedPatientDiagnosesBills("ongoing-services-02");
+                    displaySelectedPatientBills("ongoing-services-02");
 
                     // Reload the requests table
                     loadSinglePatientVisitHistory(selectedVisitId);
@@ -932,7 +732,7 @@ async function filterDropdown() {
     const filter = input.value.toUpperCase();
   
     const dropdownList = document.getElementById('dropdownList');
-    const results = await fetchTestData();
+    const results = await fetchLabTests();
   
     if (results) {
       dropdownList.innerHTML = '';
@@ -1064,9 +864,9 @@ function updateTotal() {
 }
 
 // Fetch test data from the API
-async function fetchTestData() {
+async function fetchLabTests() {
     try {
-        const response = await API.tests.fetchAll();
+        const response = await API.tests.fetch();
         const data = await response.data.rows;
         return data;
     } catch (error) {
@@ -1081,7 +881,7 @@ async function populateDropdownList() {
     dropdownInput.addEventListener("click", toggleDropdown);
     dropdownInput.addEventListener("input", filterDropdown);
 
-    const testData = await fetchTestData();
+    const testData = await fetchLabTests();
 
     if (testData) {
         testData.forEach((test) => {
@@ -1146,8 +946,3 @@ function printReport(editorId, title, patient){
     printWindow.print();
     printWindow.close();
 }
-
-
-
-
-

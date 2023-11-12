@@ -1,6 +1,6 @@
-import { UI } from "./ui.js";
-import { UTILS } from "./utils.js";
-import { API } from "./requests.js";
+import { UI } from "../core/ui.js";
+import { UTILS } from "../core/utils.js";
+import { API } from "../core/api.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     // Init UI
@@ -28,12 +28,12 @@ async function loadAllPatients() {
 
     // Set up Data Tables
     allPatients = $('#all-patients-table').DataTable({
-        processing: true, // Data processing
-        serverSide: true, // Server-side data rendering 
-        paging: true, // Pagination
-        searching: true, // Searching
-        filter:true, // Filtering
-        destroy: true, // Redraw the table each time it is instantiated
+        processing: true,
+        serverSide: true,
+        paging: true,
+        searching: true,
+        filter:true,
+        destroy: true,
 
         // Make the API request
         ajax: {
@@ -69,7 +69,6 @@ async function loadAllPatients() {
             UTILS.sectionToggler(viewMoreCta, "section", () => {
                 displaySelectedPatientDetails("patient-info-section_01", rowDataString, () => {
                     loadSinglePatientVists(data.patientId);
-                    // displaySelectedPatientDiagnosesBills("ongoing-services-01");
                 });
             });
         },
@@ -154,7 +153,6 @@ async function loadAllPatients() {
 
 };
 
-
 // Function to display selected patient details
 async function displaySelectedPatientDetails(divID, data, callback) {
     // Get Id of selected patient
@@ -164,7 +162,7 @@ async function displaySelectedPatientDetails(divID, data, callback) {
     UTILS.setSelectedPatientId(patientId);
 
     // Fetch and display the details of the selected patient
-    const response = await API.patients.fetchSingle(patientId);
+    const response = await API.patients.fetchById(patientId);
     const selectedPatient = await response.data;
 
     // You can populate the patient details section with the fetched data
@@ -187,7 +185,6 @@ async function displaySelectedPatientDetails(divID, data, callback) {
     callback(patientId);
 }
 
-
 // Load patient to DOM
 async function loadSinglePatientVists(patientId) {
     let allPatients;
@@ -200,6 +197,7 @@ async function loadSinglePatientVists(patientId) {
         searching: true,
         filter:true,
         destroy: true,
+
         ajax: {
             url: apiEndpoint,
             dataSrc: "data",
@@ -287,7 +285,6 @@ async function loadSinglePatientVists(patientId) {
 
 }
 
-
 // Handle create patient form submission
 async function handleCreatePatientForm() {
     const createPatientForm = document.querySelector('#create-patient-form');
@@ -308,9 +305,6 @@ async function handleCreatePatientForm() {
     
                 // Check if the request was successful
                 if (response.status === 'success') {
-                    // Alert user
-                    // alert('Patient record created successfully!');
-                    // TODO: Create a banner to show patient saved
     
                     // Reset the form
                     createPatientForm.reset();
@@ -336,7 +330,6 @@ async function handleCreatePatientForm() {
         });
     });
 }
-
 
 // Handle create visit form submission
 async function handleCreateVisitForm() {
@@ -379,9 +372,6 @@ async function handleCreateVisitForm() {
 
                     // Check if the request was successful
                     if (responseQueue.status === 'success') {
-                        // Alert user
-                        // alert('Visit record created successfully!');
-                        // TODO: Create a banner to show visit saved
 
                         // Reset the form
                         createVisitForm.reset();
@@ -410,7 +400,6 @@ async function handleCreateVisitForm() {
         });
     });
 }
-
 
 // Populate form with data
 function populateFormWithData(formId, data, formFieldsNamesArray) {

@@ -1,20 +1,18 @@
 const Sequelize = require('sequelize');
 const models = require('../models');
 
-const { User } = require('../models');
-const { Doctor } = require('../models');
-const { Patient } = require('../models');
+const { 
+  User,
+  Patient,
+  Visit,
+  Queue,
+  Triage,
+  Allergy,
+  LabTest,
+  LabRequest,
+  LabResultForCompleteBloodCount
+} = require('../models');
 
-const { Visit } = require('../models');
-const { Queue } = require('../models');
-
-const { Triage } = require('../models');
-const { Allergy } = require('../models');
-const { Diagnosis } = require('../models');
-const { DiagnosisReport } = require('../models');
-const { LabTest } = require('../models');
-const { LabRequest } = require('../models');
-const { LabResultForCompleteBloodCount } = require('../models');
 
 const Op = Sequelize.Op;
 
@@ -164,7 +162,7 @@ const fetchPatients = async (req, res) => {
 };
 
 // Fetch patient
-const fetchPatient = async (req, res) => {
+const fetchPatientById = async (req, res) => {
   try {
     const patientId = req.params.id;
 
@@ -180,6 +178,38 @@ const fetchPatient = async (req, res) => {
 
   } catch (error) {
     console.error('Error fetching patients:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Fetch patient by visit id
+const fetchPatientByVisitId = async (req, res) => {
+  const visitId = req.params.id;
+
+  try {
+
+    const filter = {
+      visit_id: visitId, // Filter by visit ID
+    };
+
+    // Construct the Sequelize query
+    const queryOptions = {
+      where: filter,
+      include: [
+        {
+          model: models.Patient,
+          attributes: ['patientId', 'firstName', 'lastName', 'dateOfBirth', 'gender'],
+        },
+      ],
+    };
+
+    const result = await Visit.findOne(queryOptions);
+
+    return res.status(200).json({
+      data: result.Patient,
+    });
+  } catch (error) {
+    console.error('Error fetching visits:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -398,38 +428,6 @@ const fetchVisitsByPatientId = async (req, res) => {
       recordsTotal: result.count,
       recordsFiltered: result.count,
       data: visitsWithDoctorInfo,
-    });
-  } catch (error) {
-    console.error('Error fetching visits:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
-  }
-};
-
-// Fetch visit
-const fetchPatientByVisitId = async (req, res) => {
-  const visitId = req.params.id;
-
-  try {
-
-    const filter = {
-      visit_id: visitId, // Filter by visit ID
-    };
-
-    // Construct the Sequelize query
-    const queryOptions = {
-      where: filter,
-      include: [
-        {
-          model: models.Patient,
-          attributes: ['patientId', 'firstName', 'lastName', 'dateOfBirth', 'gender'],
-        },
-      ],
-    };
-
-    const result = await Visit.findOne(queryOptions);
-
-    return res.status(200).json({
-      data: result.Patient,
     });
   } catch (error) {
     console.error('Error fetching visits:', error);
@@ -707,129 +705,7 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
   }
 };
 
-// // Fetch lab requests
-// const fetchLabRequestsByVisitId = async (req, res) => {
-//   const visitId = req.params.visitId;
-
-//   try {
-//     const draw = req.query.draw;
-//     const start = parseInt(req.query.start);
-//     const length = parseInt(req.query.length);
-//     const searchValue = req.query.search.value;
-//     const orderColumnIndex = req.query.order[0].column;
-//     const orderDirection = req.query.order[0].dir;
-//     const minDate = req.query.minDate;
-//     const maxDate = req.query.maxDate;
-
-
-
-//     const filter = {
-//       visit_id: visitId,
-//     };
-
-//     const sort = [];
-
-//     // if (searchValue) {
-//     //   filter[Op.or] = [
-//     //     { patientId: { [Op.iLike]: `%${searchValue}%` } },
-//     //     // { lastName: { [Op.iLike]: `%${searchValue}%` } },
-//     //     // Add more columns to search here as needed
-//     //   ];
-//     // }
-
-//     if (minDate && maxDate) {
-//       filter.createdAt = {
-//         [Op.between]: [new Date(minDate), new Date(maxDate)],
-//       };
-//     }
-
-//     // Define the column mappings for sorting
-//     const columnMappings = {
-//       // 0: 'patient_id', // Map column 0 to the 'id' column
-//       // Add mappings for other columns as needed
-//     };
-
-//     // Check if the column index is valid and get the column name
-//     const columnData = columnMappings[orderColumnIndex];
-//     if (columnData) {
-//       sort.push([columnData, orderDirection]);
-//     }
-
-//     // // Add sorting by createdAt in descending order (latest first)
-//     // sort.push(['id', 'desc']); // This line will sort by createdAt in descending order
-
-
-//     // Sequelize query
-//     const queryOptions = {
-//       where: {visit_id: visitId,},
-//       offset: start,
-//       limit: length,
-//       order: sort,
-//     };
-
-//     // Request types to fetch
-//     const requestTypes = ['Diagnosis'];
-
-//     // Array of promises to fetch data for each request type
-//     const promises = requestTypes.map(async (requestType) => {
-//       const results = await models[requestType].findAndCountAll(queryOptions);
-//       return { type: requestType, data: results };
-//     });
-
-//     // Execute all promises in parallel
-//     const results = await Promise.all(promises);
-
-//     // Flatten the results and obtain a single array with a 'type' property
-//     const allData = results.map(obj => obj.data.rows.map((row, index) => ({ ...row, type: obj.type, count: index + 1 }))).flat();
-
-//     return res.status(200).json({
-//       draw: draw,
-//       recordsTotal: allData.length,
-//       recordsFiltered: allData.length,
-//       data: allData,
-//     });
-
-//   } catch (error) {
-//     console.error('Error fetching visits:', error);
-//     return res.status(500).json({ message: 'Internal Server Error' });
-//   }
-// };
-
-// Create new diagnoses
-const createDiagnoses = async (req, res) => {
-  try {
-    // Convert empty strings to null for nullable fields
-    const diagnoses = req.body;
-
-    // Empty array to store the new diagnoses
-    const newDiagnoses = [];
-
-    // Iterate over the diagnoses array and insert each object as a separate record
-    for (const diagnosis of diagnoses) {
-
-      console.log(diagnosis);
-      return;
-
-
-      const newDiagnosis = await Diagnosis.create({
-        testName: diagnosis.testName,
-        clinicalNotes: diagnosis.clinicalNotes,
-        fees: diagnosis.fees,
-        visitId: diagnosis.visitId,
-        // userId
-      });
-
-      // Add the new diagnosis to the newDiagnoses array.
-      newDiagnoses.push(newDiagnosis);
-    }
-    return res.status(201).json({ status: 'success', message: 'Diagnoses records created successfully', data: newDiagnoses });
-  } catch (error) {
-    console.error('Error creating diagnoses:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
-  }
-};
-
-// Create new lab results
+// Create new CBC results
 const createResultsForCompleteBloodCountTest = async (req, res) => {
   try {
     // Convert empty strings to null for nullable fields
@@ -896,39 +772,38 @@ const createResultsForCompleteBloodCountTest = async (req, res) => {
   }
 };
 
-// Fetch lab report
-const fetchDiagnosisReportByDiagnosisId = async (req, res) => {
+// Fetch CBC results by id
+const fetchResultsForCompleteBloodCountTestByRequestId = async (req, res) => {
   try {
-    const diagnosisId = req.params.diagnosisId;
+    const resultId = req.params.resultId;
     // Sequelize query
     const queryOptions = {
-      where: { diagnosis_id: diagnosisId }
+      where: { result_id: resultId }
     };
 
-    const results = await DiagnosisReport.findOne(queryOptions);
+    const result = await LabResultForCompleteBloodCount.findOne(queryOptions);
 
-    if (results) {
-      // Report found
+    if (result) {
+      // Result found
       return res.status(200).json({
         status: 'success',
-        data: results,
+        data: result,
       });
     } else {
-      // No report found
+      // No result found
       return res.status(404).json({
-        status: 'not found',
-        message: 'Diagnosis report not found',
+        status: 'failure',
+        message: 'CBC result not found',
       });
     }
 
   } catch (error) {
-    console.error('Error fetching diagnosis report:', error);
+    console.error('Error fetching result:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
-// Fetch diagnosis bills
-const fetchAllDiagnosisBillsByVisitId = async (req, res) => {
+const fetchBillsByVisitId = async (req, res) => {
   try {
 
     const visitId = req.params.visitId;
@@ -964,21 +839,16 @@ const fetchAllDiagnosisBillsByVisitId = async (req, res) => {
     } else {
       // No result found
       return res.status(404).json({
-        status: 'not found',
+        status: 'failure',
         message: 'Diagnosis bill not found',
       });
     }
 
   } catch (error) {
-    console.error('Error fetching diagnosis report:', error);
+    console.error('Error fetching bills:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
-
-
-
-// Create test
-// TODO: createTest()
 
 // Fetch tests
 const fetchTests = async (req, res) => {
@@ -1117,4 +987,25 @@ const fetchLabRequestsByVisitId = async (req, res) => {
 
 
 
-module.exports = { checkAPIStatus, createUser, createPatient, fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, fetchPatientByVisitId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchLabRequestsByVisitId, fetchMedicalHistoryByVisitId, createDiagnoses, fetchAllDiagnosisBillsByVisitId, createResultsForCompleteBloodCountTest, fetchDiagnosisReportByDiagnosisId, fetchTests, createLabRequest };
+module.exports = { 
+  checkAPIStatus, 
+  createUser, 
+  createPatient, 
+  fetchPatients, 
+  fetchPatientById, 
+  fetchPatientByVisitId, 
+  createVisit, 
+  fetchVisits, 
+  fetchVisitsByPatientId, 
+  addPatientToQueue, 
+  fetchAllPatientsOnQueue, 
+  createTriage, 
+  createAllergy, 
+  fetchLabRequestsByVisitId, 
+  fetchMedicalHistoryByVisitId, 
+  createResultsForCompleteBloodCountTest, 
+  fetchResultsForCompleteBloodCountTestByRequestId, 
+  fetchTests, 
+  createLabRequest,
+  fetchBillsByVisitId, 
+};

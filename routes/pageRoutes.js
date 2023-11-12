@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { requireLogin } = require("../middlewears/auth");
+const { requireLogin } = require("../middlewares/auth");
 const { renderPatients, renderVisits, renderQueues, renderLab } = require("../controllers/pageController");
 
 router.get("/patients", requireLogin, renderPatients);

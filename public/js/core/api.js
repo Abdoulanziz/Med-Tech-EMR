@@ -76,15 +76,21 @@ export const API = {
             return await API.makePostRequest(endpoint, patient, fromFormData);
         },
 
+        // Fetch all patients GET api/v1/patients
+        fetch: async () => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/patients`;
+            return await API.makeGetRequest(endpoint);
+        },
+
         // Fetch single patient GET api/v1/patients/:id
-        fetchSingle: async (id) => {
+        fetchById: async (id) => {
             const endpoint = `${API.BACKEND_BASE_API_URI}/patients/${id}`;
             return await API.makeGetRequest(endpoint);
         },
 
-        // Fetch all patients GET api/v1/patients
-        fetchAll: async () => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/patients`;
+        // Fetch patient GET api/v1/patients/visit/:id
+        fetchByVisitId: async (id) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/patients/visit/${id}`;
             return await API.makeGetRequest(endpoint);
         },
 
@@ -116,11 +122,11 @@ export const API = {
             return await API.makeGetRequest(endpoint);
         },
 
-        // Fetch patient GET api/v1/visit/:id/patient
-        fetchPatientByVisitId: async (id) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/visit/${id}/patient`;
-            return await API.makeGetRequest(endpoint);
-        }
+        // // Fetch patient GET api/v1/visit/:id/patient
+        // fetchPatientByVisitId: async (id) => {
+        //     const endpoint = `${API.BACKEND_BASE_API_URI}/visit/${id}/patient`;
+        //     return await API.makeGetRequest(endpoint);
+        // }
     },
 
 
@@ -163,24 +169,8 @@ export const API = {
         },
 
         // Fetch all tests GET api/v1/tests
-        fetchAll: async () => {
+        fetch: async () => {
             const endpoint = `${API.BACKEND_BASE_API_URI}/tests`;
-            return await API.makeGetRequest(endpoint);
-        }
-    },
-
-
-    // Diagnoses 
-    diagnoses: {
-        // Add to diagnoses POST api/v1/diagnoses
-        create: async (diagnosis, fromFormData) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/diagnoses`;
-            return await API.makePostRequest(endpoint, diagnosis, fromFormData);
-        },
-
-        // Fetch all bills GET api/v1/diagnoses-bills/:visitId
-        fetchAllBills: async (visitId) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/diagnoses/bill/${visitId}`;
             return await API.makeGetRequest(endpoint);
         }
     },
@@ -193,27 +183,47 @@ export const API = {
             const endpoint = `${API.BACKEND_BASE_API_URI}/requests`;
             return await API.makePostRequest(endpoint, request, fromFormData);
         },
+    },
 
-        // Fetch all bills GET api/v1/requests/bill/:visitId
-        fetchAllBills: async (visitId) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/requests/bill/${visitId}`;
+
+    // Bills
+    bills: {
+        // Fetch all bills GET api/v1/bills/:visitId
+        fetch: async (visitId) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/bills/${visitId}`;
             return await API.makeGetRequest(endpoint);
         }
     },
 
 
-    // Diagnosis reports 
-    reports: {
-        // Add to diagnosis-reports POST api/v1/reports
-        create: async (report, fromFormData) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/reports/complete-blood-count`;
-            return await API.makePostRequest(endpoint, report, fromFormData);
-        },
+    // Lab results
+    results: {
+        // CBC
+        completeBloodCount: {
+            // Add to results POST api/v1/results/complete-blood-count
+            create: async (report, fromFormData) => {
+                const endpoint = `${API.BACKEND_BASE_API_URI}/reports/complete-blood-count`;
+                return await API.makePostRequest(endpoint, report, fromFormData);
+            },
 
-        // Fetch single report GET api/v1/reports/:id
-        fetchByDiagnosisId: async (id) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/reports/${id}`;
-            return await API.makeGetRequest(endpoint);
+            // Get CBC results GET api/v1/results/complete-blood-count/:id
+            fetchByRequestId: async (id) => {
+                const endpoint = `${API.BACKEND_BASE_API_URI}/results/complete-blood-count/${id}`;
+                return await API.makeGetRequest(endpoint);
+            },
         },
+    },
+
+
+    // Reports 
+    reports: {
+        // CBC
+        completeBloodCount: {
+            // Fetch single report GET api/v1/reports/:id
+            fetchByDiagnosisId: async (id) => {
+                const endpoint = `${API.BACKEND_BASE_API_URI}/reports/${id}`;
+                return await API.makeGetRequest(endpoint);
+            },
+        }
     },
 }

@@ -1,6 +1,6 @@
-import { UI } from "./ui.js";
-import { UTILS } from "./utils.js";
-import { API } from "./requests.js";
+import { UI } from "../core/ui.js";
+import { UTILS } from "../core/utils.js";
+import { API } from "../core/api.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     // Init UI
@@ -26,6 +26,7 @@ async function loadAllPatientsOnQueue() {
         searching: true,
         filter:true,
         destroy: true,
+
         ajax: {
             url: apiEndpoint,
             dataSrc: "data",
@@ -55,7 +56,6 @@ async function loadAllPatientsOnQueue() {
             UTILS.sectionToggler(viewMoreCta, "section", () => {
                 displaySelectedPatientDetails("patient-info-section_01", rowData, () => {
                     loadSinglePatientVisits(data.patientId);
-                    // displaySelectedPatientDiagnosesBills("ongoing-services-01");
                 });
             });
         },
@@ -184,8 +184,7 @@ async function loadSinglePatientVisits(patientId) {
             UTILS.sectionToggler(workOnPatientCta, "section", () => {
                 displaySelectedPatientDetails("patient-info-section_02", rowDataString, () => {
                     loadSinglePatientVisitLabRequests(data.visitId);
-                    displaySelectedPatientDiagnosesBills("ongoing-services-02");
-
+                    displaySelectedPatientBills("ongoing-services-02");
                 });
             });
         },
@@ -354,7 +353,6 @@ async function loadSinglePatientVisitLabRequests(visitId) {
 
 }
 
-
 // Function to display selected patient details
 async function displaySelectedPatientDetails(divID, data, callback) {
     // Get Id of selected patient
@@ -364,7 +362,7 @@ async function displaySelectedPatientDetails(divID, data, callback) {
     UTILS.setSelectedPatientId(patientId);
 
     // Fetch and display the details of the selected patient
-    const response = await API.patients.fetchSingle(patientId);
+    const response = await API.patients.fetchById(patientId);
     const selectedPatient = await response.data;
 
     // You can populate the patient details section with the fetched data
@@ -387,14 +385,13 @@ async function displaySelectedPatientDetails(divID, data, callback) {
     callback(patientId);
 }
 
-
 // Function to display diagnoses bills
-async function displaySelectedPatientDiagnosesBills(divId) {
+async function displaySelectedPatientBills(divId) {
     // Get Id of selected visit
     const selectedVisitId = UTILS.getSelectedVisitId();
 
     // Fetch and display the bills of the selected visit
-    const response = await API.requests.fetchAllBills(selectedVisitId);
+    const response = await API.bills.fetch(selectedVisitId);
     const selectedBills = await response.data;
 
     // Populate the patient details section with the fetched data
@@ -427,7 +424,6 @@ async function displaySelectedPatientDiagnosesBills(divId) {
         });
     }
 }
-
 
 // Handle complete blood count results form
 async function handleCompleteBloodCountResultsForm() {
@@ -488,7 +484,3 @@ async function handleCompleteBloodCountResultsForm() {
         });
     });
 }
-
-
-
-

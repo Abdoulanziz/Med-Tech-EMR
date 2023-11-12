@@ -1,6 +1,6 @@
-import { UI } from "./ui.js";
-import { UTILS } from "./utils.js";
-import { API } from "./requests.js";
+import { UI } from "../core/ui.js";
+import { UTILS } from "../core/utils.js";
+import { API } from "../core/api.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     // Init UI
@@ -23,6 +23,7 @@ async function loadAllVisits() {
         searching: true,
         filter:true,
         destroy: true,
+
         ajax: {
             url: apiEndpoint,
             dataSrc: "data",

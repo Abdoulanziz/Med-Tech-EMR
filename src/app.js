@@ -8,7 +8,7 @@ const session = require("express-session");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const sequelize = require('../config/database');
 
-const initializeAdmin = require('../middlewears/initializeAdmin');
+const initializeAdmin = require('../middlewares/initializeAdmin');
 
 const app = express();
 

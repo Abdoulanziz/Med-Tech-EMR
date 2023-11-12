@@ -14,11 +14,11 @@
     <link rel="stylesheet" href="/assets/css/table.min.css">
     <link rel="stylesheet" href="/assets/icons/themify-icons.css">
 
-    <script src="/js/jquery-3.5.1.js"></script>
-    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/libraries/jquery-3.5.1.js"></script>
+    <script src="/js/libraries/jquery.dataTables.min.js"></script>
 
-    <script src="/js/chart.js"></script>
-    <script src="/js/jspdf.min.js"></script>
+    <script src="/js/libraries/chart.js"></script>
+    <script src="/js/libraries/jspdf.min.js"></script>
 
 </head>
 <body>
@@ -542,45 +542,10 @@
         </div>
     </div>
 
-    <script src="/js/moment.min.js"></script>
+    <script src="/js/libraries/moment.min.js"></script>
 
     <!-- Load modules -->
-    <script type="module" src="/js/ui.js"></script>
-    <script type="module" src="/js/visits.js"></script>
-
-    <script>
-        // // FILE UPLOAD FUNCTIONALITY
-        // // Display the selected file name when a file is chosen
-        // function displayFileName() {
-        //     const fileInput = document.querySelector('#file-input');
-        //     const selectedFile = document.querySelector('#selected-file');
-
-        //     if (fileInput.files.length > 0) {
-        //         selectedFile.textContent = 'Selected File: ' + fileInput.files[0].name;
-        //     } else {
-        //         selectedFile.textContent = '';
-        //     }
-        // }
-
-        // // Enable drag and drop functionality
-        // const fileDropArea = document.querySelector('#file-drop-area');
-        // fileDropArea.addEventListener('dragover', (e) => {
-        //     e.preventDefault();
-        //     fileDropArea.classList.add('file-upload-container-active');
-        // });
-
-        // fileDropArea.addEventListener('dragleave', () => {
-        //     fileDropArea.classList.remove('file-upload-container-active');
-        // });
-
-        // fileDropArea.addEventListener('drop', (e) => {
-        //     e.preventDefault();
-        //     fileDropArea.classList.remove('file-upload-container-active');
-        //     const fileInput = document.querySelector('#file-input');
-        //     fileInput.files = e.dataTransfer.files;
-        //     displayFileName();
-        // });
-        // // FILE UPLOAD FUNCTIONALITY
-    </script>
+    <script type="module" src="/js/core/ui.js"></script>
+    <script type="module" src="/js/modules/visits.js"></script>
 </body>
 </html>
