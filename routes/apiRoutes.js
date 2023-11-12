@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { checkAPIStatus, createUser, createPatient, /*createDoctor, createAppointment,*/ fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, fetchPatientByVisitId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchLabRequestsByVisitId, fetchMedicalHistoryByVisitId, createDiagnoses, fetchAllDiagnosisBillsByVisitId, createReportForCompleteBloodCountTest, fetchDiagnosisReportByDiagnosisId, fetchTests, createLabRequest } = require("../controllers/apiController");
+const { checkAPIStatus, createUser, createPatient, /*createDoctor, createAppointment,*/ fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, fetchPatientByVisitId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchLabRequestsByVisitId, fetchMedicalHistoryByVisitId, createDiagnoses, fetchAllDiagnosisBillsByVisitId, createResultsForCompleteBloodCountTest, fetchDiagnosisReportByDiagnosisId, fetchTests, createLabRequest } = require("../controllers/apiController");
 
 router.get("/status", checkAPIStatus);
 
@@ -35,7 +35,7 @@ router.get("/requests/bill/:visitId", fetchAllDiagnosisBillsByVisitId);
 
 router.get("/history/:visitId", fetchMedicalHistoryByVisitId);
 
-router.post("/reports/complete-blood-count", createReportForCompleteBloodCountTest);
+router.post("/reports/complete-blood-count", createResultsForCompleteBloodCountTest);
 router.get("/reports/:diagnosisId", fetchDiagnosisReportByDiagnosisId);
 
 router.get("/tests", fetchTests);

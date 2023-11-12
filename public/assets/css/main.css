@@ -806,7 +806,7 @@
 }
 
 .cbc-table input[type="text"] {
-  width: 50%;
+  width: 100%;
   padding: 0;
   border: none;
   border-radius: 3px;

@@ -50,6 +50,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       field: 'clinical_notes',
     },
+    requestStatus: {
+      type: DataTypes.ENUM('pending', 'complete', 'canceled'),
+      defaultValue: 'pending',
+      allowNull: false,
+      field: 'request_status',
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,

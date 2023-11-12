@@ -43,6 +43,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      request_status: {
+        type: Sequelize.ENUM('pending', 'complete', 'canceled'),
+        defaultValue: 'pending',
+        allowNull: false,
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE

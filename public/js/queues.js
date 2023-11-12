@@ -289,13 +289,14 @@ async function loadSinglePatientVisitHistory(visitId) {
             { data : null },
             { data : null },
             { data : null },
+            { data : null },
             { data : null }
         ],
         rowCallback: function(row, data, index) {
             const rowDataObject = data;
 
             // Common to all test requests
-            const viewResultsCta = row.cells[3].querySelectorAll("button")[0];
+            const viewResultsCta = row.cells[4].querySelectorAll("button")[0];
             viewResultsCta.style.cursor = "pointer";
             viewResultsCta.classList.add("modal-trigger");
             viewResultsCta.dataset.modal = "edit-patient-diagnosis-modal";
@@ -314,7 +315,7 @@ async function loadSinglePatientVisitHistory(visitId) {
 
             // Specific to test request
             if(rowDataObject.testName === "Complete Blood Count Test"){
-                const viewReportCta = row.cells[3].querySelectorAll("button")[1];
+                const viewReportCta = row.cells[4].querySelectorAll("button")[1];
                 viewReportCta.style.cursor = "pointer";
                 viewReportCta.classList.add("modal-trigger");
                 viewReportCta.dataset.modal = "view-patient-lab-report-modal";
@@ -397,6 +398,23 @@ async function loadSinglePatientVisitHistory(visitId) {
             },
             {
                 targets: 3,
+                render: function(data, type, row, meta) {
+                    const status = data.requestStatus.toLowerCase();
+                    let backgroundColor;
+
+                    if (status === 'pending') {
+                        backgroundColor = 'grey';
+                    } else if (status === 'complete') {
+                        backgroundColor = 'yellowgreen';
+                    } else {
+                        backgroundColor = 'orange';
+                    }
+
+                    return '<span style="font-size: 10px;display: block;inline-size: 50%;border-radius:6px;padding: .4rem .6rem;color: #fff;background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
+                }
+            },
+            {
+                targets: 4,
                 render: function (data, type, row, meta) {
                     return `
                     <td>
@@ -407,7 +425,7 @@ async function loadSinglePatientVisitHistory(visitId) {
                 },
             },
             {
-                targets: 4,
+                targets: 5,
                 render: function(data, type, row, meta) {
                     const originalDate = data.requestCreatedAt;
                     const dateObj = new Date(originalDate);

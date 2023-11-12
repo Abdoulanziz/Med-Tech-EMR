@@ -18,6 +18,7 @@ module.exports = {
       request_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        unique: true,
       },
       white_blood_cell_count: {
         type: Sequelize.STRING,
@@ -97,6 +98,10 @@ module.exports = {
       },
       erythrocyte_sedimentation_rate: {
         type: Sequelize.STRING,
+        allowNull: true,
+      },
+      comment: {
+        type: Sequelize.TEXT,
         allowNull: true,
       },
       created_at: {

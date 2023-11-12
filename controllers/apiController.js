@@ -690,6 +690,7 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
       // Extract fields from the 'LabTest' model
       testName: request.LabTest.testName,
       testFees: request.LabTest.testFees,
+      requestStatus: request.requestStatus,
       requestCreatedAt: request.createdAt,
     }));
 
@@ -828,8 +829,8 @@ const createDiagnoses = async (req, res) => {
   }
 };
 
-// Create new lab report
-const createReportForCompleteBloodCountTest = async (req, res) => {
+// Create new lab results
+const createResultsForCompleteBloodCountTest = async (req, res) => {
   try {
     // Convert empty strings to null for nullable fields
     const {
@@ -854,6 +855,7 @@ const createReportForCompleteBloodCountTest = async (req, res) => {
       pct,
       erythrocyteSedimentationRate,
       requestId,
+      comment,
     } = req.body;
 
     const newCBCReport = await LabResultForCompleteBloodCount.create({
@@ -878,9 +880,14 @@ const createReportForCompleteBloodCountTest = async (req, res) => {
       pct,
       erythrocyteSedimentationRate,
       requestId,
+      comment,
     });
 
-    console.log(newCBCReport)
+    // Update request status on lab requests
+    await LabRequest.update(
+      { requestStatus: 'complete' },
+      { where: { requestId: requestId } }
+    );
 
     return res.status(201).json({ status: 'success', message: 'CBC report created successfully', data: newCBCReport });
   } catch (error) {
@@ -1089,6 +1096,7 @@ const fetchLabRequestsByVisitId = async (req, res) => {
       testName: request.LabTest.testName,
       testFees: request.LabTest.testFees,
       requestId: request.requestId,
+      requestStatus: request.requestStatus,
       requestCreatedAt: request.createdAt,
     }));
 
@@ -1109,4 +1117,4 @@ const fetchLabRequestsByVisitId = async (req, res) => {
 
 
 
-module.exports = { checkAPIStatus, createUser, createPatient, fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, fetchPatientByVisitId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchLabRequestsByVisitId, fetchMedicalHistoryByVisitId, createDiagnoses, fetchAllDiagnosisBillsByVisitId, createReportForCompleteBloodCountTest, fetchDiagnosisReportByDiagnosisId, fetchTests, createLabRequest };
+module.exports = { checkAPIStatus, createUser, createPatient, fetchPatients, fetchPatient, createVisit, fetchVisits, fetchVisitsByPatientId, fetchPatientByVisitId, addPatientToQueue, fetchAllPatientsOnQueue, createTriage, createAllergy, fetchLabRequestsByVisitId, fetchMedicalHistoryByVisitId, createDiagnoses, fetchAllDiagnosisBillsByVisitId, createResultsForCompleteBloodCountTest, fetchDiagnosisReportByDiagnosisId, fetchTests, createLabRequest };

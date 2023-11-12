@@ -32,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
     requestId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      unique: true,
       field: 'request_id',
     },
     whiteBloodCellCount: {
@@ -133,6 +134,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
       field: 'erythrocyte_sedimentation_rate',
+    },
+    comment: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      field: 'comment',
     },
     createdAt: {
       type: DataTypes.DATE,

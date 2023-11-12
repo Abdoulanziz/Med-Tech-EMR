@@ -316,7 +316,18 @@ async function loadSinglePatientVisitLabRequests(visitId) {
             {
                 targets: 3,
                 render: function(data, type, row, meta) {
-                    return '<span>' + "Pending" + '</span>';
+                    const status = data.requestStatus.toLowerCase();
+                    let backgroundColor;
+
+                    if (status === 'pending') {
+                        backgroundColor = 'grey';
+                    } else if (status === 'complete') {
+                        backgroundColor = 'yellowgreen';
+                    } else {
+                        backgroundColor = 'orange';
+                    }
+
+                    return '<span style="font-size: 10px;display: block;inline-size: 50%;border-radius:6px;padding: .4rem .6rem;color: #fff;background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
                 }
             },
             {
@@ -424,7 +435,7 @@ async function handleCompleteBloodCountResultsForm() {
     completeBloodCountResultsForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
-        const requestComment = tinymce.get('complete-blood-count-results-comment-editor').getContent();
+        const comment = tinymce.get('complete-blood-count-results-comment-editor').getContent();
 
         // Get Id of selected request
         const selectedRequestId = completeBloodCountResultsForm.dataset.requestId;
@@ -436,7 +447,7 @@ async function handleCompleteBloodCountResultsForm() {
         // Collect form data
         const formData = new FormData(completeBloodCountResultsForm);
         formData.append('requestId', selectedRequestId);
-        formData.append('requestComment', requestComment);
+        formData.append('comment', comment);
 
         // URL encoded data
         const URLEncodedData = new URLSearchParams(formData).toString();
