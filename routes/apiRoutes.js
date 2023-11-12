@@ -51,8 +51,8 @@ router.get("/bills/:visitId", fetchBillsByVisitId);
 
 router.get("/history/:visitId", fetchMedicalHistoryByVisitId);
 
-router.post("/reports/complete-blood-count", createResultsForCompleteBloodCountTest);
-router.get("/reports/complete-blood-count", fetchResultsForCompleteBloodCountTestByRequestId);
+router.post("/results/complete-blood-count", createResultsForCompleteBloodCountTest);
+router.get("/results/complete-blood-count", fetchResultsForCompleteBloodCountTestByRequestId);
 
 router.get("/tests", fetchTests);
 

@@ -452,13 +452,10 @@ async function handleCompleteBloodCountResultsForm() {
         UTILS.showConfirmationModal(completeBloodCountResultsForm, "Are you sure you want to save this record?", async () => {
             try {
                 // Make an API POST request to create a triage record
-                const response = await API.reports.create(URLEncodedData, true);
+                const response = await API.results.completeBloodCount.create(URLEncodedData, true);
     
                 // Check if the request was successful
                 if (response.status === 'success') {
-                    // Alert user
-                    // alert('Patient record created successfully!');
-                    // TODO: Create a banner to show triage saved
     
                     // Reset the form
                     completeBloodCountResultsForm.reset();

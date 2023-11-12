@@ -202,7 +202,7 @@ export const API = {
         completeBloodCount: {
             // Add to results POST api/v1/results/complete-blood-count
             create: async (report, fromFormData) => {
-                const endpoint = `${API.BACKEND_BASE_API_URI}/reports/complete-blood-count`;
+                const endpoint = `${API.BACKEND_BASE_API_URI}/results/complete-blood-count`;
                 return await API.makePostRequest(endpoint, report, fromFormData);
             },
 
