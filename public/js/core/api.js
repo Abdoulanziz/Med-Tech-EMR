@@ -213,17 +213,4 @@ export const API = {
             },
         },
     },
-
-
-    // Reports 
-    reports: {
-        // CBC
-        completeBloodCount: {
-            // Fetch single report GET api/v1/reports/:id
-            fetchByDiagnosisId: async (id) => {
-                const endpoint = `${API.BACKEND_BASE_API_URI}/reports/${id}`;
-                return await API.makeGetRequest(endpoint);
-            },
-        }
-    },
 }

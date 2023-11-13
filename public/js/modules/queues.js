@@ -114,7 +114,7 @@ async function loadAllPatientsOnQueue() {
                 targets: 6,
                 render: function (data, type, row, meta) {
                     return `
-                    <td>
+                    <td style="border: 1px solid #ddd;">
                         <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">View More </button>
                     </td>
                     `;
@@ -232,7 +232,7 @@ async function loadSinglePatientVisits(patientId) {
                 targets: 4,
                 render: function (data, type, row, meta) {
                     return `
-                    <td>
+                    <td style="border: 1px solid #ddd;">
                         <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Work on Patient  <i class="ti-arrow-right"></i> </button>
                     </td>
                     `;
@@ -316,17 +316,17 @@ async function loadSinglePatientVisitHistory(visitId) {
                 viewReportCta.dataset.modal = "view-patient-lab-report-modal";
 
                 UTILS.triggerModal(viewReportCta, "modal", async () => {
-                    document.querySelector("#view-patient-lab-report-form").dataset.diagnosisId = data.diagnosisId;
+                    document.querySelector("#view-patient-lab-report-form").dataset.requestId = data.requestId;
 
                     // Populate the form with the server data
-                    populateFormWithDataFromServer("view-patient-lab-report-form", data.diagnosisId);
+                    generateLabReportForCompleteBloodTest("view-patient-lab-report-form", data.requestId);
 
                     // Get patient id from visit id
-                    const patient = await API.visits.fetchPatientByVisitId(selectedVisitId);
+                    const patient = await API.patients.fetchByVisitId(selectedVisitId);
                     const patientData = patient.data;
 
                     // Trigger print lab report
-                    triggerPrintLabReport(patientData);
+                    printLabReportForCompleteBloodTest(patientData);
                     
                 });
             }
@@ -412,7 +412,7 @@ async function loadSinglePatientVisitHistory(visitId) {
                 targets: 4,
                 render: function (data, type, row, meta) {
                     return `
-                    <td>
+                    <td style="border: 1px solid #ddd;">
                         <button class="btn view-request" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Edit Request  <i class="ti-arrow-right"></i> </button>
                         <button class="btn view-results" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">View Results  <i class="ti-arrow-right"></i> </button>
                     </td>
@@ -628,35 +628,254 @@ function populateFormWithData(formId, data, formFieldsNamesArray) {
     });
 }
 
-// Populate form with data from server (pre-fill the form)
-async function populateFormWithDataFromServer(formId, diagnosisId) {
+// Generate CBC lab report
+async function generateLabReportForCompleteBloodTest(formId, labRequestId) {
     try {
-        // Parse the form id
-        const form = document.querySelector(`#${formId}`);
+        // Get id of selected visit
+        const selectedVisitId = UTILS.getSelectedVisitId();
 
-        // Make an API POST request to create a triage record
-        const response = await API.reports.fetchByDiagnosisId(diagnosisId);
+        // Get patient id from visit id
+        const fetchPatientRequest = await API.patients.fetchByVisitId(selectedVisitId);
+        const patientData = fetchPatientRequest.data;
 
-        // Check if the request was successful
-        const editor = tinymce.get("lab-report");
-        if (response.status === 'success') {
-            // Alert user
-            // alert('Patient record fetched successfully!');
-            // TODO: Create a banner to show data fetched
+        if (fetchPatientRequest.status === 'success') {
+            // Make an API POST request to create a triage record
+            const fetchCbcResultsRequest = await API.results.completeBloodCount.fetchByRequestId(labRequestId);
 
-            editor.setContent(response.data.diagnosisReport);
+            // Sample CBC Test Report
+            // Hospital Details
+            const hospitalName = "Med Tech Hospital";
+            const hospitalAddress = "Rwenzori Street, Kampala";
+            const hospitalContact = "Phone: +256 782 615 136";
 
+            // Patient Details
+            const patientName = `${patientData.firstName} ${patientData.lastName}`;
+            const patientDOB = patientData.dateOfBirth;
+            const patientAge = new Date().getFullYear() - new Date(patientData.dateOfBirth).getFullYear();
+            const patientGender = patientData.gender.charAt(0).toUpperCase() + patientData.gender.slice(1);
+
+            const {
+                comment,
+                createdAt,
+                erythrocyteSedimentationRate,
+                gran,
+                granPercentage,
+                haemoglobin,
+                lymphocyteAbsolute,
+                lymphocytePercentage,
+                mchc,
+                meanCellHaemoglobin,
+                meanCellVolume,
+                mid,
+                midPercentage,
+                mpv,
+                packedCellVolume,
+                pct,
+                plateleteCount,
+                pwd,
+                rdwCv,
+                rdwSd,
+                redBloodCellCount,
+                requestId,
+                resultId,
+                resultUuid,
+                updatedAt,
+                whiteBloodCellCount
+            } = fetchCbcResultsRequest.data;
+
+            // Report editor
+            const editor = tinymce.get("cbc-lab-report");
+
+            const reportHTML = `
+                <div style="background-color: #ffffff; border-radius: 0; padding-block: 30px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <div style="display: flex; align-items: center;">
+                        <img src="../../assets/svg/512x512.png" style="inline-size: 60px; block-size: 60px;" />
+                        <h2 style="color: #004080; font-weight: 600; margin-left: 20px;">${hospitalName}</h2>
+                        </div>
+                        <div style="text-align: right;">
+                        <p style="color: #666; margin-bottom: 5px;">${hospitalAddress}</p>
+                        <p style="color: #666; margin-bottom: 5px;">${hospitalContact}</p>
+                        </div>
+                    </div>
+                    <hr style="border-top: 1px solid #ccc; margin-top: 20px; margin-bottom: 20px;">
+                </div>
+
+                <div style="background-color: #ffffff; padding: 15px; border-radius: 0;">
+                    <h3 style="color: #004080; font-weight: 600; margin-bottom: 10px;">Patient Information</h3>
+                    <ul style="list-style-type: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Patient Name:</span> ${patientName}</li>
+                        <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Date of Birth:</span> ${patientDOB}</li>
+                        <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Age:</span> ${patientAge}</li>
+                        <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Gender:</span> ${patientGender}</li>
+                    </ul>
+                </div>  
+                            
+                <div style="background-color: #ffffff; padding: 15px; border-radius: 0;">
+                    <h3 style="color: #004080; margin-bottom: 10px;">CBC Test Results</h3>
+                    <p style="margin-bottom: 20px;">This report provides a detailed analysis of the Complete Blood Count (CBC) test conducted at ${hospitalName}. The CBC is a crucial diagnostic tool that assesses various components of the blood, offering valuable insights into the patient's hematological health.</p>
+                    <br/>
+
+                    <table class="cbc-table" id="cbc-table" style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                        <thead>
+                            <tr>
+                                <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;">Test</th>
+                                <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;">Result</th>
+                                <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;">Units</th>
+                                <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;">Ref Range</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">WHITE BLOOD CELL COUNT</td>
+                                <td style="border: 1px solid #ddd;">${whiteBloodCellCount}</td>
+                                <td style="border: 1px solid #ddd;">L</td>
+                                <td style="border: 1px solid #ddd;">4.0 - 12.0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">LYMPHOCYTE ABSOLUTE #</td>
+                                <td style="border: 1px solid #ddd;">${lymphocyteAbsolute}</td>
+                                <td style="border: 1px solid #ddd;">L</td>
+                                <td style="border: 1px solid #ddd;">0.8 - 7.0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">MID #</td>
+                                <td style="border: 1px solid #ddd;">${mid}</td>
+                                <td style="border: 1px solid #ddd;">L</td>
+                                <td style="border: 1px solid #ddd;">0.1 - 1.2</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">GRAN #</td>
+                                <td style="border: 1px solid #ddd;">${gran}</td>
+                                <td style="border: 1px solid #ddd;">L</td>
+                                <td style="border: 1px solid #ddd;">2.0 - 8.0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">LYMPHOCYTE %</td>
+                                <td style="border: 1px solid #ddd;">${lymphocytePercentage}</td>
+                                <td style="border: 1px solid #ddd;">%</td>
+                                <td style="border: 1px solid #ddd;">20.0 - 60.0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">MID %</td>
+                                <td style="border: 1px solid #ddd;">${midPercentage}</td>
+                                <td style="border: 1px solid #ddd;">%</td>
+                                <td style="border: 1px solid #ddd;">3.0 - 14.0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">GRAN %</td>
+                                <td style="border: 1px solid #ddd;">${granPercentage}</td>
+                                <td style="border: 1px solid #ddd;">%</td>
+                                <td style="border: 1px solid #ddd;">50.0 - 70.0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">HAEMOGLOBIN (HB)</td>
+                                <td style="border: 1px solid #ddd;">${haemoglobin}</td>
+                                <td style="border: 1px solid #ddd;">g/dL</td>
+                                <td style="border: 1px solid #ddd;">11.0 - 19.0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">RED CELL COUNT</td>
+                                <td style="border: 1px solid #ddd;">${redBloodCellCount}</td>
+                                <td style="border: 1px solid #ddd;">L</td>
+                                <td style="border: 1px solid #ddd;">3.50 - 6.0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">HEMATOCRIT/PACKED CELL VOL (PCV)</td>
+                                <td style="border: 1px solid #ddd;">${packedCellVolume}</td>
+                                <td style="border: 1px solid #ddd;">%</td>
+                                <td style="border: 1px solid #ddd;">33.0 - 49.0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">MEAN CELL VOLUME (MCV)</td>
+                                <td style="border: 1px solid #ddd;">${meanCellVolume}</td>
+                                <td style="border: 1px solid #ddd;">fl</td>
+                                <td style="border: 1px solid #ddd;">76.0 - 96.0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">MEAN CELL HAEMOGLOBIN</td>
+                                <td style="border: 1px solid #ddd;">${meanCellHaemoglobin}</td>
+                                <td style="border: 1px solid #ddd;">pg</td>
+                                <td style="border: 1px solid #ddd;">27.0 - 40.0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">MCHC</td>
+                                <td style="border: 1px solid #ddd;">${mchc}</td>
+                                <td style="border: 1px solid #ddd;">g/dL</td>
+                                <td style="border: 1px solid #ddd;">31.0 - 38.0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">RDW-CV</td>
+                                <td style="border: 1px solid #ddd;">${rdwCv}</td>
+                                <td style="border: 1px solid #ddd;">%</td>
+                                <td style="border: 1px solid #ddd;">11.0 - 16.0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">RDW-SD</td>
+                                <td style="border: 1px solid #ddd;">${rdwSd}</td>
+                                <td style="border: 1px solid #ddd;">fl</td>
+                                <td style="border: 1px solid #ddd;">35.0 - 56.0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">PLATELETE COUNT</td>
+                                <td style="border: 1px solid #ddd;">${plateleteCount}</td>
+                                <td style="border: 1px solid #ddd;">L</td>
+                                <td style="border: 1px solid #ddd;">150 - 540</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">MPV</td>
+                                <td style="border: 1px solid #ddd;">${mpv}</td>
+                                <td style="border: 1px solid #ddd;">fl</td>
+                                <td style="border: 1px solid #ddd;">6.50 - 12.0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">PDW</td>
+                                <td style="border: 1px solid #ddd;">${pwd}</td>
+                                <td style="border: 1px solid #ddd;"></td>
+                                <td style="border: 1px solid #ddd;">9.0 - 17.0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">PCT</td>
+                                <td style="border: 1px solid #ddd;">${pct}</td>
+                                <td style="border: 1px solid #ddd;">%</td>
+                                <td style="border: 1px solid #ddd;">0.108 - 0.282</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd;">ERYTHROCYTE SEDIMENTATION RATE (ECR)</td>
+                                <td style="border: 1px solid #ddd;">${erythrocyteSedimentationRate}</td>
+                                <td style="border: 1px solid #ddd;"></td>
+                                <td style="border: 1px solid #ddd;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div>
+                        <br/>
+                        <p>Interpretation of the CBC results should be conducted in consultation with a healthcare professional. The reference ranges provided in the report are essential for assessing whether the patient's blood parameters fall within the expected values.</p>
+                        <br/>
+                        <p>Further clinical evaluation and follow-up may be required based on these findings. Please do not hesitate to contact our medical team at ${hospitalContact} for any additional information or to schedule a consultation.</p>
+                    </div>
+                </div>
+            `;
+
+            // Check if the request was successful
+            if (fetchCbcResultsRequest.status === 'success') {
+                editor.setContent(reportHTML);
+
+            } else {
+                editor.setContent("");
+            }
         } else {
-            // alert('Failed to fetch diagnosis report.');
-            editor.setContent("");
+            console.error(error);
+            alert('An error occurred while fetching the patient info.');
         }
     } catch (error) {
         console.error(error);
-        alert('An error occurred while fetching the diagnosis report.');
+        alert('An error occurred while generating the cbc lab report.');
     }
 }
 
-// Handle diagnosis create form
+// Handle lab request create form
 async function handleLabRequest() {
     const patientDiagnosisForm = document.querySelector('#create-patient-diagnosis-form');
     patientDiagnosisForm.addEventListener('submit', async (event) => {
@@ -902,21 +1121,21 @@ async function populateDropdownList() {
 
 function setupLabReportTinymce() {
     tinymce.init({
-        selector: "#lab-report",
+        selector: "#cbc-lab-report",
         width: "100%",
-        height: 400,
+        height: "100%",
         setup: function (editor) {
             // TODO: something();
         }
     });
 }
 
-async function triggerPrintLabReport(patient) {
+async function printLabReportForCompleteBloodTest(patient) {
     // Print lab report
     const printLabReportBtn = document.querySelector("#print-lab-report-btn");
-    printLabReportBtn.addEventListener("click", event => {
+    printLabReportBtn?.addEventListener("click", event => {
         event.preventDefault();
-        printReport("lab-report", "Lab Report", patient);
+        printReport("cbc-lab-report", "CBC Lab Report", patient);
     });
 }
 
@@ -932,10 +1151,10 @@ function printReport(editorId, title, patient){
     printWindow.document.write('</head><body>');
 
     // Include the patient's details
-    printWindow.document.write('<h2>Patient Details</h2>');
-    printWindow.document.write('<p><strong>Name:</strong> ' + patient.firstName + " " + patient.lastName + '</p>');
-    printWindow.document.write('<p><strong>Age:</strong> ' + patientAge + '</p>');
-    printWindow.document.write('<p><strong>Gender:</strong> ' + patient.gender.charAt(0).toUpperCase() + patient.gender.slice(1) + '</p>');
+    // printWindow.document.write('<h2>Patient Details</h2>');
+    // printWindow.document.write('<p><strong>Name:</strong> ' + patient.firstName + " " + patient.lastName + '</p>');
+    // printWindow.document.write('<p><strong>Age:</strong> ' + patientAge + '</p>');
+    // printWindow.document.write('<p><strong>Gender:</strong> ' + patient.gender.charAt(0).toUpperCase() + patient.gender.slice(1) + '</p>');
 
     printWindow.document.write('<div id="editor-container">' + editorContent + '</div>');
     printWindow.document.write('</body></html>');

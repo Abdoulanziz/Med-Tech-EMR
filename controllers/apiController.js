@@ -184,7 +184,7 @@ const fetchPatientById = async (req, res) => {
 
 // Fetch patient by visit id
 const fetchPatientByVisitId = async (req, res) => {
-  const visitId = req.params.id;
+  const visitId = req.params.visitId;
 
   try {
 
@@ -205,9 +205,19 @@ const fetchPatientByVisitId = async (req, res) => {
 
     const result = await Visit.findOne(queryOptions);
 
-    return res.status(200).json({
-      data: result.Patient,
-    });
+    if (result) {
+      // Result found
+      return res.status(200).json({
+        status: 'success',
+        data: result.Patient,
+      });
+    } else {
+      // No result found
+      return res.status(404).json({
+        status: 'failure',
+        message: 'Patient result not found',
+      });
+    }
   } catch (error) {
     console.error('Error fetching visits:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
@@ -688,6 +698,7 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
       // Extract fields from the 'LabTest' model
       testName: request.LabTest.testName,
       testFees: request.LabTest.testFees,
+      requestId: request.requestId,
       requestStatus: request.requestStatus,
       requestCreatedAt: request.createdAt,
     }));

@@ -52,7 +52,7 @@ router.get("/bills/:visitId", fetchBillsByVisitId);
 router.get("/history/:visitId", fetchMedicalHistoryByVisitId);
 
 router.post("/results/complete-blood-count", createResultsForCompleteBloodCountTest);
-router.get("/results/complete-blood-count", fetchResultsForCompleteBloodCountTestByRequestId);
+router.get("/results/complete-blood-count/:resultId", fetchResultsForCompleteBloodCountTestByRequestId);
 
 router.get("/tests", fetchTests);
 

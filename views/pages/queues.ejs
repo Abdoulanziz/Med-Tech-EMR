@@ -709,28 +709,24 @@
 
             <!-- View patient lab report modal -->
             <div id="view-patient-lab-report-modal" class="form-modal">
-                <div class="form-modal-content">
+                <div class="form-modal-content" style="inline-size: 40%;">
                     <form class="modal-form" id="view-patient-lab-report-form">
                         <div class="form-modal-header flex">
                             <div class="form-modal-header-left flex">
                                 <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">View Lab Report</h2>
+                                <h2 class="title">CBC Lab Report</h2>
                             </div>
                             <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
                         </div>
 
-                        <div class="modal-form-body" id="view-patient-lab-report-form-body">
-                            <div class="form-section">
-                                <label for="lab-report">Lab Report</label>
-                                <textarea id="lab-report" name="labReport" style="border-radius: 0 !important;"></textarea>
-                            </div>
-
-                            <button class="btn btn-primary" type="button" id="print-lab-report-btn"> <i class="ti-printer"></i> Print Report</button>
+                        <div class="modal-form-body" id="view-patient-lab-report-form-body" style="padding: 0;">
+                            <textarea id="cbc-lab-report" name="labReport" style="border-radius: 0 !important;"></textarea>
                         </div>
             
                         <div class="form-modal-footer flex">
-                            <!-- <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save" type="submit">Save</button> -->
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="button" id="print-lab-report-btn"> <i class="ti-printer"></i> Print</button>
+                            <!-- <button class="btn btn-primary btn-save" type="submit">Save</button> -->
                         </div>
                     </form>
                 </div>

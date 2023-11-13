@@ -830,6 +830,11 @@
   width: auto;
 }
 
+#cbc-lab-report + .tox-tinymce {
+  border: none !important;
+  border-radius: 0 !important;
+}
+
 
 
 
