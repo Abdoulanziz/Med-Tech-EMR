@@ -16,6 +16,7 @@ const {
     createTriage, 
     createAllergy, 
     fetchLabRequestsByVisitId, 
+    updateLabRequestPaymentStatus,
     fetchMedicalHistoryByVisitId, 
     createResultsForCompleteBloodCountTest, 
     fetchResultsForCompleteBloodCountTestByRequestId, 
@@ -24,6 +25,7 @@ const {
     fetchTests, 
     createLabRequest,
     fetchBillsByVisitId, 
+    fetchUnpaidBillsByVisitId,
 } = require("../controllers/apiController");
 
 router.get("/status", checkAPIStatus);
@@ -48,8 +50,10 @@ router.post("/allergy", createAllergy);
 
 router.post("/requests", createLabRequest);
 router.get("/requests/:visitId", fetchLabRequestsByVisitId);
+router.patch("/requests/:requestId/payment-status/:status", updateLabRequestPaymentStatus);
 
 router.get("/bills/:visitId", fetchBillsByVisitId);
+router.get("/bills/:visitId/unpaid", fetchUnpaidBillsByVisitId);
 
 router.get("/history/:visitId", fetchMedicalHistoryByVisitId);
 

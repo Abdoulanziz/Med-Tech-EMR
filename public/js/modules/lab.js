@@ -468,24 +468,130 @@ async function displaySelectedPatientBills(divId) {
         }
 
         billItems.forEach((billItem, index) => {
+            console.log(billItem)
             // Create a template for each bill item
             const template = `
-            <div class="service ${index === 0 || index === 1 ? 'paid' : 'unpaid'}">
+            <div class="service ${billItem.paymentStatus === "paid" ? 'paid' : 'unpaid'}">
                 <div class="service-content flex">
                     <h3>${billItem.testName} (UGX ${billItem.testFees})</h3>
-                    ${index === 0 || index === 1 ? '<img src="/assets/svg/check.png" alt="remove service icon">' : ''}
+                    ${billItem.paymentStatus === "paid" ? '<img src="/assets/svg/check.png" alt="remove service icon">' : ''}
                 </div>
             </div>
             `;
-
+            
             // Temporary container element to hold the template
             const tempContainer = document.createElement("div");
             tempContainer.innerHTML = template;
 
+            // Trigger receive services payment modal
+            const serviceElement = tempContainer.firstElementChild;
+            serviceElement.addEventListener("click", (event) => displaySelectedPatientBillsPaymentModal(event));
+
             // Append the template to the billContainer
-            billContainer.appendChild(tempContainer.firstElementChild);
+            billContainer.appendChild(serviceElement);
         });
     }
+}
+
+// Display receive services payment modal
+function displaySelectedPatientBillsPaymentModal(event) {
+    const trigger = document.querySelector("#ongoing-services-02");
+    
+    UTILS.triggerModal(trigger, "modal", () => {
+        const tableBody = document.querySelector('.services-payment-table-body');
+        const selectAllCheckbox = document.querySelector('#select-all');
+        let serviceCheckboxes = document.querySelectorAll('.service-checkbox');
+        const totalElement = document.querySelector('.total-value');
+
+        (async () => {
+            const selectedVisitId = UTILS.getSelectedVisitId();
+
+            // Fetch the data from the API
+            const response = await API.bills.fetchByStatusUnpaid(selectedVisitId);
+            const data = await response.data;
+
+            // Process the data and create HTML for each row
+            const rows = data.map(item => {
+                return `
+                    <tr>
+                        <td><input type="checkbox" class="service-checkbox" data-id="${item.requestId}"></td>
+                        <td>${item.testName}</td>
+                        <td>${item.testFees}</td>
+                    </tr>
+                `;
+            });
+
+            // Add the rows to the table body
+            tableBody.innerHTML = rows.join('');
+
+            // Update the service checkboxes
+            serviceCheckboxes = document.querySelectorAll('.service-checkbox');
+
+            // Update the select all checkbox event listener
+            selectAllCheckbox.addEventListener('click', () => {
+                if (selectAllCheckbox.checked) {
+                    serviceCheckboxes.forEach(checkbox => checkbox.checked = true);
+                } else {
+                    serviceCheckboxes.forEach(checkbox => checkbox.checked = false);
+                }
+
+                updateTotal();
+            });
+
+            // Update the individual service checkbox event listeners
+            serviceCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('click', updateTotal);
+            });
+
+            // Update the initial total
+            updateTotal();
+
+            // Pay
+            const updateServicesPaymentStatusBtn = document.querySelector("#update-services-payment-status-btn");
+            updateServicesPaymentStatusBtn.addEventListener("click", async (event) => {
+                event.preventDefault();
+                const checkedCheckboxes = document.querySelectorAll('.service-checkbox:checked');
+
+                const updatePaymentStatusPromises = [];
+
+                for (const checkbox of checkedCheckboxes) {
+                    const requestId = checkbox.dataset.id;
+                    updatePaymentStatusPromises.push(API.requests.updatePaymentStatus(requestId, "paid"));
+                }
+
+                try {
+                    const responses = await Promise.all(updatePaymentStatusPromises);
+
+                    // Extract the data from each response
+                    const data = responses.map(response => response.data);
+
+                    // Remove modal
+                    document.querySelector("#services-payment-modal").classList.remove("inview");
+
+                    // Fetch the bills
+                    displaySelectedPatientBills("ongoing-services-02");
+                } catch (error) {
+                    console.error('Error updating payment status:', error);
+                }
+
+                
+            });
+        })();
+
+        function updateTotal() {
+            let total = 0;
+
+            serviceCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    // Assuming `item.testFees` represents the price of the service
+                    const price = parseInt(checkbox.parentNode.parentNode.querySelector('td:nth-child(3)').textContent);
+                    total += price;
+                }
+            });
+
+            totalElement.textContent = `${total}`;
+        }
+    });
 }
 
 // Handle complete blood count results form
@@ -599,9 +705,6 @@ async function generateLabReportForCompleteBloodTest(formId, labRequestId) {
                 updatedAt,
                 whiteBloodCellCount
             } = fetchCbcResultsRequest.data;
-
-            // console.log(fetchCbcResultsRequest.data)
-            // return;
 
             // Report editor
             const editor = tinymce.get("complete-blood-count-lab-report");

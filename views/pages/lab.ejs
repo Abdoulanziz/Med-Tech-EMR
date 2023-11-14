@@ -379,7 +379,7 @@
                             
                             <div class="info-wrapper">
                                 <h2 class="special-heading">Billing Services</h2>
-                                <div class="ongoing-services" id="ongoing-services-02">
+                                <div class="ongoing-services" id="ongoing-services-02" data-modal="services-payment-modal">
                                     <!-- <div class="service paid">
                                       <div class="service-content flex">
                                         <h3>Consultation (UGX 40,000)</h3>
@@ -814,6 +814,85 @@
                         <div class="form-modal-footer flex">
                             <button class="btn btn-primary" type="button">Cancel</button>
                             <button class="btn btn-primary btn-save" type="button" id="print-lab-report-btn"> <i class="ti-printer"></i> Print</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Services payment modal -->
+            <div id="services-payment-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="services-payment-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Receive Payment</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="services-payment-form-body">
+                            <style>
+                                .container {
+                                    width: 80%;
+                                    margin: 0 auto;
+                                }
+
+                                .table {
+                                    width: 100%;
+                                    border-collapse: collapse;
+                                }
+
+                                .table th,
+                                .table td {
+                                    padding: 5px;
+                                    border: 1px solid #ccc;
+                                    text-align: left;
+                                }
+
+                                .table th {
+                                    background-color: #eee;
+                                }
+
+                                .total {
+                                    text-align: right;
+                                    font-weight: bold;
+                                }
+
+                                .checkout-button {
+                                    background-color: #007bff;
+                                    color: white;
+                                    padding: 10px 20px;
+                                    border: none;
+                                    cursor: pointer;
+                                }
+
+                                #select-all {
+                                    cursor: pointer;
+                                }
+                            </style>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="select-all"></th>
+                                        <th>Service Name</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="services-payment-table-body">
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2" class="total">Total</td>
+                                        <td class="total-value">0</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="submit" id="update-services-payment-status-btn"> Process</button>
                         </div>
                     </form>
                 </div>

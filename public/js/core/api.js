@@ -183,6 +183,12 @@ export const API = {
             const endpoint = `${API.BACKEND_BASE_API_URI}/requests`;
             return await API.makePostRequest(endpoint, request, fromFormData);
         },
+        
+        // Update request POST api/v1/requests/:requestId
+        updatePaymentStatus: async (requestId, status) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/requests/${requestId}/payment-status/${status}`;
+            return await API.makePatchRequest(endpoint, {requestId});
+        },
     },
 
 
@@ -192,7 +198,13 @@ export const API = {
         fetch: async (visitId) => {
             const endpoint = `${API.BACKEND_BASE_API_URI}/bills/${visitId}`;
             return await API.makeGetRequest(endpoint);
-        }
+        },
+
+        // Fetch unpaid bills GET api/v1/bills/:visitId
+        fetchByStatusUnpaid: async (visitId) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/bills/${visitId}/unpaid`;
+            return await API.makeGetRequest(endpoint);
+        },
     },
 
 

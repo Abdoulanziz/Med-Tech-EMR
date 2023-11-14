@@ -945,6 +945,56 @@ const fetchBillsByVisitId = async (req, res) => {
     // Access the lab test's fields in each request result
     const requestsWithTestResults = result.rows.map((request) => ({
       // Extract fields from the 'LabTest' model
+      requestId: request.requestId,
+      paymentStatus: request.paymentStatus,
+      testName: request.LabTest.testName,
+      testFees: request.LabTest.testFees,
+    }));
+
+    
+
+    if (result) {
+      // Results found
+      return res.status(200).json({
+        status: 'success',
+        data: requestsWithTestResults,
+      });
+    } else {
+      // No result found
+      return res.status(404).json({
+        status: 'failure',
+        message: 'Diagnosis bill not found',
+      });
+    }
+
+  } catch (error) {
+    console.error('Error fetching bills:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+const fetchUnpaidBillsByVisitId = async (req, res) => {
+  try {
+
+    const visitId = req.params.visitId;
+
+    // Construct the Sequelize query
+    const queryOptions = {
+      where: { visit_id: visitId, payment_status: "unpaid" },
+      include: [
+        {
+          model: models.LabTest,
+          attributes: ['testName', 'testFees'],
+        },
+      ],
+    };
+
+    const result = await LabRequest.findAndCountAll(queryOptions);
+
+    // Access the lab test's fields in each request result
+    const requestsWithTestResults = result.rows.map((request) => ({
+      // Extract fields from the 'LabTest' model
+      requestId: request.requestId,
       testName: request.LabTest.testName,
       testFees: request.LabTest.testFees,
     }));
@@ -1104,6 +1154,36 @@ const fetchLabRequestsByVisitId = async (req, res) => {
   }
 };
 
+// Update lab request payment status
+const updateLabRequestPaymentStatus = async (req, res) => {
+  try {
+    const requestId = req.params.requestId;
+    const paymentStatus = req.params.status;
+
+    const [updatedCount] = await LabRequest.update(
+      { paymentStatus: paymentStatus },
+      { where: { requestId: requestId } }
+    );
+
+    if (updatedCount > 0) {
+      // Lab request payment status updated successfully
+      return res.status(200).json({
+        status: 'success',
+        message: 'Lab request payment status updated',
+      });
+    } else {
+      // No lab request found with the given ID
+      return res.status(404).json({
+        status: 'failure',
+        message: 'Lab request not found',
+      });
+    }
+  } catch (error) {
+    console.error('Error updating lab request payment status:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 
 
 
@@ -1123,6 +1203,7 @@ module.exports = {
   createTriage, 
   createAllergy, 
   fetchLabRequestsByVisitId, 
+  updateLabRequestPaymentStatus,
   fetchMedicalHistoryByVisitId, 
   createResultsForCompleteBloodCountTest, 
   fetchResultsForCompleteBloodCountTestByRequestId, 
@@ -1131,4 +1212,5 @@ module.exports = {
   fetchTests, 
   createLabRequest,
   fetchBillsByVisitId, 
+  fetchUnpaidBillsByVisitId,
 };

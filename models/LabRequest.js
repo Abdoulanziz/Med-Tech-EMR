@@ -50,6 +50,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       field: 'clinical_notes',
     },
+    paymentStatus: {
+      type: DataTypes.ENUM('unpaid', 'paid'),
+      defaultValue: 'unpaid',
+      allowNull: false,
+      field: 'payment_status',
+    },
     requestStatus: {
       type: DataTypes.ENUM('pending', 'complete', 'canceled'),
       defaultValue: 'pending',
