@@ -10,7 +10,8 @@ const {
   Allergy,
   LabTest,
   LabRequest,
-  LabResultForCompleteBloodCount
+  LabResultForCompleteBloodCount,
+  LabResultForUrinalysis
 } = require('../models');
 
 
@@ -745,7 +746,7 @@ const createResultsForCompleteBloodCountTest = async (req, res) => {
       comment,
     } = req.body;
 
-    const newCBCReport = await LabResultForCompleteBloodCount.create({
+    const newCompleteBloodCountResults = await LabResultForCompleteBloodCount.create({
       whiteBloodCellCount,
       lymphocyteAbsolute,
       mid,
@@ -776,9 +777,9 @@ const createResultsForCompleteBloodCountTest = async (req, res) => {
       { where: { requestId: requestId } }
     );
 
-    return res.status(201).json({ status: 'success', message: 'CBC report created successfully', data: newCBCReport });
+    return res.status(201).json({ status: 'success', message: 'CBC results created successfully', data: newCompleteBloodCountResults });
   } catch (error) {
-    console.error('Error creating CBC report:', error);
+    console.error('Error creating CBC results:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -786,10 +787,10 @@ const createResultsForCompleteBloodCountTest = async (req, res) => {
 // Fetch CBC results by id
 const fetchResultsForCompleteBloodCountTestByRequestId = async (req, res) => {
   try {
-    const resultId = req.params.resultId;
+    const requestId = req.params.requestId;
     // Sequelize query
     const queryOptions = {
-      where: { result_id: resultId }
+      where: { request_id: requestId }
     };
 
     const result = await LabResultForCompleteBloodCount.findOne(queryOptions);
@@ -813,6 +814,115 @@ const fetchResultsForCompleteBloodCountTestByRequestId = async (req, res) => {
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+// Create new Urinalysis results
+const createResultsForUrinalysisTest = async (req, res) => {
+  try {
+    // Convert empty strings to null for nullable fields
+    const {
+      appearance,
+      glucose,
+      ketone,
+      blood,
+      ph,
+      protein,
+      nitrites,
+      leucocytes,
+      urobilinogen,
+      bilirubin,
+      specificGravity,
+      rbc,
+      pusCells,
+      epithelialCells,
+      cast,
+      wbc,
+      parasite,
+      crystals,
+      tVaginalis,
+      yeastCells,
+      requestId,
+      comment,
+    } = req.body;
+
+    console.log(req.body);
+
+    const newUrinalysisResults = await LabResultForUrinalysis.create({
+      appearance,
+      glucose,
+      ketone,
+      blood,
+      ph,
+      protein,
+      nitrites,
+      leucocytes,
+      urobilinogen,
+      bilirubin,
+      specificGravity,
+      rbc,
+      pusCells,
+      epithelialCells,
+      cast,
+      wbc,
+      parasite,
+      crystals,
+      tVaginalis,
+      yeastCells,
+      requestId,
+      comment,
+    });
+
+    console.log(newUrinalysisResults)
+
+    // Update request status on lab requests
+    await LabRequest.update(
+      { requestStatus: 'complete' },
+      { where: { requestId: requestId } }
+    );
+
+    return res.status(201).json({ status: 'success', message: 'Urinalysis results created successfully', data: newUrinalysisResults });
+  } catch (error) {
+    console.error('Error creating Urinalysis results:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Fetch Urinalysis results by id
+const fetchResultsForUrinalysisTestByRequestId = async (req, res) => {
+  try {
+    const requestId = req.params.requestId;
+
+    // Sequelize query
+    const queryOptions = {
+      where: { request_id: requestId }
+    };
+
+    const result = await LabResultForUrinalysis.findOne(queryOptions);
+
+    if (result) {
+      console.log(result)
+      // Result found
+      return res.status(200).json({
+        status: 'success',
+        data: result,
+      });
+    } else {
+      // No result found
+      return res.status(404).json({
+        status: 'failure',
+        message: 'Urinalysis result not found',
+      });
+    }
+
+  } catch (error) {
+    console.error('Error fetching result:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
+
+
+
 
 const fetchBillsByVisitId = async (req, res) => {
   try {
@@ -1016,6 +1126,8 @@ module.exports = {
   fetchMedicalHistoryByVisitId, 
   createResultsForCompleteBloodCountTest, 
   fetchResultsForCompleteBloodCountTestByRequestId, 
+  createResultsForUrinalysisTest,
+  fetchResultsForUrinalysisTestByRequestId,
   fetchTests, 
   createLabRequest,
   fetchBillsByVisitId, 

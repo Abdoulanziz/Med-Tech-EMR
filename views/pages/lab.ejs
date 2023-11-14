@@ -441,6 +441,7 @@
             </div>
 
             
+            <!-- Lab Results and Reports -->
             <!-- Work on CBC Test modal -->
             <div id="complete-blood-count-results-modal" class="form-modal">
                 <div class="form-modal-content" style="inline-size: 42%;">
@@ -456,13 +457,13 @@
                         <div class="modal-form-body" id="complete-blood-count-results-form-body">
                             <div class="form-section">
                                 <label for="">Complete Blood Count (CBC)</label>
-                                <table class="cbc-table" id="cbc-table">
+                                <table class="lab-table" id="cbc-table">
                                     <thead>
                                         <tr>
                                             <th>Test</th>
-                                            <th>Result</th>
-                                            <th>Units</th>
+                                            <th>Results</th>
                                             <th>Ref Range</th>
+                                            <th>Remarks</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -604,6 +605,220 @@
                 </div>
             </div>
 
+            <!-- Complete blood count report modal -->
+            <div id="complete-blood-count-lab-report-modal" class="form-modal">
+                <div class="form-modal-content" style="inline-size: 40%;">
+                    <form class="modal-form" id="complete-blood-count-lab-report-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">CBC Lab Report</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="complete-blood-count-lab-report-form-body" style="padding: 0;">
+                            <textarea id="complete-blood-count-lab-report" name="labReport" style="border-radius: 0 !important;"></textarea>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="button" id="print-lab-report-btn"> <i class="ti-printer"></i> Print</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Work on Urinalysis Test modal -->
+            <div id="urinalysis-results-modal" class="form-modal">
+                <div class="form-modal-content" style="inline-size: 42%;">
+                    <form class="modal-form" id="urinalysis-results-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Fill Urinalysis Test Results</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="urinalysis-results-form-body">
+                            <div class="form-section">
+                                <label for="">Urinalysis</label>
+                                <table class="lab-table" id="urinalysis-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Test</th>
+                                            <th>Results</th>
+                                            <th>Units</th>
+                                            <th>Ref Range</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td colspan="4" style="font-weight: bold;padding-block: 8px;">URINALYSIS (U/A)</td></tr>
+                                        <tr>
+                                            <td>Appearance</td>
+                                            <td><input type="text" name="appearance"></td>
+                                            <td>Pale Yellow and Clear</td>
+                                            <td>Abnormal</td>
+                                        </tr>
+                                        <tr><td colspan="4" style="font-weight: bold;padding-block: 8px;">BIOCHEMISTRY</td></tr>
+                                        <tr>
+                                            <td>Glucose</td>
+                                            <td><input type="text" name="glucose"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ketone</td>
+                                            <td><input type="text" name="ketone"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Blood</td>
+                                            <td><input type="text" name="blood"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>PH</td>
+                                            <td><input type="text" name="ph"></td>
+                                            <td>4.5 - 8.0</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Protein</td>
+                                            <td><input type="text" name="protein"></td>
+                                            <td>Nil - Trace</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nitrites</td>
+                                            <td><input type="text" name="nitrites"></td>
+                                            <td>Negative</td>
+                                            <td>Abnormal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Leucocytes</td>
+                                            <td><input type="text" name="leucocytes"></td>
+                                            <td>Nil</td>
+                                            <td>Abnormal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Urobilinogen</td>
+                                            <td><input type="text" name="urobilinogen"></td>
+                                            <td>0.1 - 1.8 mg/dl</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Biliribin</td>
+                                            <td><input type="text" name="bilirubin"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Specific Gravity</td>
+                                            <td><input type="text" name="specificGravity"></td>
+                                            <td>1.005 - 1.030</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr><td colspan="4" style="font-weight: bold;padding-block: 8px;">MICROSCOPY</td></tr>
+                                        <tr>
+                                            <td>RBC</td>
+                                            <td><input type="text" name="rbc"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pus Cells</td>
+                                            <td><input type="text" name="pusCells"></td>
+                                            <td>Nil</td>
+                                            <td>Abnormal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Epithelial Cells</td>
+                                            <td><input type="text" name="epithelialCells"></td>
+                                            <td>+</td>
+                                            <td>Abnormal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cast (Type)</td>
+                                            <td><input type="text" name="cast"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>WBC</td>
+                                            <td><input type="text" name="wbc"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Parasite</td>
+                                            <td><input type="text" name="parasite"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Crystals</td>
+                                            <td><input type="text" name="crystals"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>T.vaginalis</td>
+                                            <td><input type="text" name="tVaginalis"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Yeast Cells</td>
+                                            <td><input type="text" name="yeastCells"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="form-section">
+                                <label for="urinalysis-results-comment-editor">Comments</label>
+                                <textarea id="urinalysis-results-comment-editor" style="border-radius: 0 !important;"></textarea>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Urinalysis report modal -->
+            <div id="urinalysis-lab-report-modal" class="form-modal">
+                <div class="form-modal-content" style="inline-size: 40%;">
+                    <form class="modal-form" id="urinalysis-lab-report-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Urinalysis Lab Report</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="urinalysis-lab-report-form-body" style="padding: 0;">
+                            <textarea id="urinalysis-lab-report" name="labReport" style="border-radius: 0 !important;"></textarea>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="button" id="print-lab-report-btn"> <i class="ti-printer"></i> Print</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -619,6 +834,13 @@
     <script>
         tinymce.init({
             selector: "#complete-blood-count-results-comment-editor",
+            width: "100%",
+            height: 300,
+            setup: function (editor) {}
+        });
+
+        tinymce.init({
+            selector: "#urinalysis-results-comment-editor",
             width: "100%",
             height: 300,
             setup: function (editor) {}

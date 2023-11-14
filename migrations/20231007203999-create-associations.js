@@ -142,6 +142,16 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       }),
+
+      queryInterface.changeColumn('lab_results_for_urinalysis', 'request_id', {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'lab_requests',
+          key: 'request_id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      }),
     ]);
   },
 
@@ -161,6 +171,7 @@ module.exports = {
       queryInterface.removeColumn('lab_requests', 'test_id'),
       queryInterface.removeColumn('lab_requests', 'visit_id'),
       queryInterface.removeColumn('lab_results_for_complete_blood_count', 'request_id'),
+      queryInterface.removeColumn('lab_results_for_urinalysis', 'request_id'),
     ]);
   },
 };

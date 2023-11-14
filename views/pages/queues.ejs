@@ -707,10 +707,10 @@
                 </div>
             </div>
 
-            <!-- View patient lab report modal -->
-            <div id="view-patient-lab-report-modal" class="form-modal">
+            <!-- Complete blood count report modal -->
+            <div id="complete-blood-count-lab-report-modal" class="form-modal">
                 <div class="form-modal-content" style="inline-size: 40%;">
-                    <form class="modal-form" id="view-patient-lab-report-form">
+                    <form class="modal-form" id="complete-blood-count-lab-report-form">
                         <div class="form-modal-header flex">
                             <div class="form-modal-header-left flex">
                                 <img src="/assets/actions/patients.png" alt="" class="icon">
@@ -719,14 +719,33 @@
                             <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
                         </div>
 
-                        <div class="modal-form-body" id="view-patient-lab-report-form-body" style="padding: 0;">
-                            <textarea id="cbc-lab-report" name="labReport" style="border-radius: 0 !important;"></textarea>
+                        <div class="modal-form-body" id="complete-blood-count-lab-report-form-body" style="padding: 0;">
+                            <div id="complete-blood-count-lab-report" style="padding: 20px;background-color: #ffffff;"></div>
                         </div>
             
                         <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save" type="button" id="print-lab-report-btn"> <i class="ti-printer"></i> Print</button>
-                            <!-- <button class="btn btn-primary btn-save" type="submit">Save</button> -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Urinalysis report modal -->
+            <div id="urinalysis-report-modal" class="form-modal">
+                <div class="form-modal-content" style="inline-size: 42%;">
+                    <form class="modal-form" id="urinalysis-report-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Urinalysis Lab Report</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="urinalysis-report-form-body" style="padding: 0;">
+                            <div id="urinalysis-lab-report" style="padding: 20px;background-color: #ffffff;"></div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
                         </div>
                     </form>
                 </div>

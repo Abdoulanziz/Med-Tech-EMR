@@ -212,5 +212,20 @@ export const API = {
                 return await API.makeGetRequest(endpoint);
             },
         },
+
+        // Urinalysis
+        urinalysis: {
+            // Add to results POST api/v1/results/urinalysis
+            create: async (report, fromFormData) => {
+                const endpoint = `${API.BACKEND_BASE_API_URI}/results/urinalysis`;
+                return await API.makePostRequest(endpoint, report, fromFormData);
+            },
+
+            // Get CBC results GET api/v1/results/urinalysis/:id
+            fetchByRequestId: async (id) => {
+                const endpoint = `${API.BACKEND_BASE_API_URI}/results/urinalysis/${id}`;
+                return await API.makeGetRequest(endpoint);
+            },
+        },
     },
 }

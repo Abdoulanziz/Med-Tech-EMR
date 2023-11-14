@@ -19,6 +19,8 @@ const {
     fetchMedicalHistoryByVisitId, 
     createResultsForCompleteBloodCountTest, 
     fetchResultsForCompleteBloodCountTestByRequestId, 
+    createResultsForUrinalysisTest,
+    fetchResultsForUrinalysisTestByRequestId,
     fetchTests, 
     createLabRequest,
     fetchBillsByVisitId, 
@@ -52,7 +54,11 @@ router.get("/bills/:visitId", fetchBillsByVisitId);
 router.get("/history/:visitId", fetchMedicalHistoryByVisitId);
 
 router.post("/results/complete-blood-count", createResultsForCompleteBloodCountTest);
-router.get("/results/complete-blood-count/:resultId", fetchResultsForCompleteBloodCountTestByRequestId);
+router.get("/results/complete-blood-count/:requestId", fetchResultsForCompleteBloodCountTestByRequestId);
+
+router.post("/results/urinalysis", createResultsForUrinalysisTest);
+router.get("/results/urinalysis/:requestId", fetchResultsForUrinalysisTestByRequestId);
+
 
 router.get("/tests", fetchTests);
 
