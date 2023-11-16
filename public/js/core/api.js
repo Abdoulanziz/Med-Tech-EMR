@@ -240,4 +240,20 @@ export const API = {
             },
         },
     },
+
+
+    // Medicines 
+    medicines: {
+        // Add to medicines POST api/v1/medicines
+        create: async (medicine, fromFormData) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/medicines`;
+            return await API.makePostRequest(endpoint, medicine, fromFormData);
+        },
+
+        // Fetch all medicines GET api/v1/medicines
+        fetch: async () => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/medicines`;
+            return await API.makeGetRequest(endpoint);
+        }
+    },
 }

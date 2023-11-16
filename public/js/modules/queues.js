@@ -15,11 +15,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // Handle create allergy
     handleCreateAllergyForm();
 
-    // Render diagnostic tests in dropdown
-    populateDropdownList();
+    // Render lab tests in dropdown
+    populateLabTestsDropdown();
 
     // Handle CBC request form
     handleLabRequest();
+
+
+    // Render medicines in dropdown
+    populateMedicinesDropdown();
     
 });
 
@@ -528,6 +532,15 @@ async function displaySelectedPatientBills(divId) {
             // Append the template to the billContainer
             billContainer.appendChild(serviceElement);
         });
+
+        // const ongoingServices02Container = document.querySelector("#ongoing-services-02");
+        // const containerHeight = ongoingServices02Container.offsetHeight;
+        // const contentHeight = ongoingServices02Container.scrollHeight;
+
+        // if(parseInt(contentHeight) > parseInt(containerHeight)) {
+        //     ongoingServices02Container.style.overflow = 'hidden';
+        // }
+
     }
 }
 
@@ -573,16 +586,16 @@ function displaySelectedPatientBillsPaymentModal(event) {
                     serviceCheckboxes.forEach(checkbox => checkbox.checked = false);
                 }
 
-                updateTotal();
+                updateTotalFeesForSelectedLabTests();
             });
 
             // Update the individual service checkbox event listeners
             serviceCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('click', updateTotal);
+                checkbox.addEventListener('click', updateTotalFeesForSelectedLabTests);
             });
 
             // Update the initial total
-            updateTotal();
+            updateTotalFeesForSelectedLabTests();
 
             // Pay
             const updateServicesPaymentStatusBtn = document.querySelector("#update-services-payment-status-btn");
@@ -615,7 +628,7 @@ function displaySelectedPatientBillsPaymentModal(event) {
             });
         })();
 
-        function updateTotal() {
+        function updateTotalFeesForSelectedLabTests() {
             let total = 0;
 
             serviceCheckboxes.forEach(checkbox => {
@@ -792,7 +805,7 @@ async function handleLabRequest() {
                 if (response.status === 'success') {
     
                     // Reset the form
-                    clearSelectedTests();
+                    clearSelectedLabTests();
     
                     // Remove form
                     patientDiagnosisForm.parentElement.parentElement.classList.remove("inview");
@@ -813,23 +826,23 @@ async function handleLabRequest() {
         }, () => {
             // Run when canceled
             // Reset the form (clear selected tests)
-            clearSelectedTests();
+            clearSelectedLabTests();
         });
     });
 }
 
 // Clear selected diagnostic tests from the table
-function clearSelectedTests() {
+function clearSelectedLabTests() {
     const selectedTestsTable = document.getElementById('selected-tests-table').getElementsByTagName('tbody')[0];
     selectedTestsTable.innerHTML = '';
-    updateTotal(); // Update the total fee
+    updateTotalFeesForSelectedLabTests(); // Update the total fee
 }
 
-async function filterDropdown() {
-    const input = document.querySelector(".dropdown-input");
+async function filterLabTestsDropdown() {
+    const input = document.querySelector("#lab-tests-dropdown-input");
     const filter = input.value.toUpperCase();
   
-    const dropdownList = document.getElementById('dropdownList');
+    const dropdownList = document.getElementById("lab-tests-dropdown");
     const results = await fetchLabTests();
   
     if (results) {
@@ -845,7 +858,7 @@ async function filterDropdown() {
           dropdownItem.setAttribute('data-fee', test.testFees);
           dropdownItem.textContent = test.testName;
           dropdownItem.onclick = function () {
-            addItemToTable(this);
+            addLabTestToTable(this);
             input.value = "";
           };
   
@@ -855,8 +868,8 @@ async function filterDropdown() {
     }
 }
   
-function toggleDropdown() {
-    const dropdown = document.getElementById("dropdownList");
+function toggleLabTestsDropdown() {
+    const dropdown = document.getElementById("lab-tests-dropdown");
     if (dropdown.style.display === "none" || dropdown.style.display === "") {
         dropdown.style.display = "block";
     } else {
@@ -864,7 +877,7 @@ function toggleDropdown() {
     }
 }
 
-function addItemToTable(item) {
+function addLabTestToTable(item) {
     const selectedTestsTable = document.getElementById("selected-tests-table").getElementsByTagName('tbody')[0];
     const row = selectedTestsTable.insertRow();
     const cell1 = row.insertCell(0);
@@ -887,16 +900,16 @@ function addItemToTable(item) {
     removeButton.className = "remove-button";
     removeButton.onclick = function() {
         row.remove();
-        updateTotal();
+        updateTotalFeesForSelectedLabTests();
     };
     cell3.appendChild(removeButton);
     
-    updateTotal();
-    document.getElementById("dropdownList").style.display = "none";
+    updateTotalFeesForSelectedLabTests();
+    document.getElementById("lab-tests-dropdown").style.display = "none";
 }
 
-function addItemToForm(selectedTest) {
-    toggleDropdown();
+function addLabTestToForm(selectedTest) {
+    toggleLabTestsDropdown();
 
     const testName = selectedTest.getAttribute('data-test');
   
@@ -921,7 +934,7 @@ function addItemToForm(selectedTest) {
     addButton.classList.add(...["btn", "yes"]);
     addButton.onclick = function () {
       selectedTest.setAttribute('data-notes', testClinicalNotesInput.value);
-      addItemToTable(selectedTest);
+      addLabTestToTable(selectedTest);
       formRow.remove();
     };
 
@@ -938,12 +951,12 @@ function addItemToForm(selectedTest) {
     formRow.appendChild(removeButton);
     formRow.appendChild(addButton);
 
-    const input = document.querySelector(".dropdown-input");
+    const input = document.querySelector("#lab-tests-dropdown-input");
     const inputContainer = input.parentElement;
     inputContainer.appendChild(formRow);
 }
 
-function updateTotal() {
+function updateTotalFeesForSelectedLabTests() {
     const totalFeeCell = document.querySelector(".total-fee");
     const rows = document.querySelectorAll("#selected-tests-table tbody tr");
     let totalFee = 0;
@@ -973,11 +986,11 @@ async function fetchLabTests() {
 }
 
 // Populate the dropdown list
-async function populateDropdownList() {
-    const dropdownInput = document.querySelector('.dropdown-input');
-    const dropdownList = document.getElementById('dropdownList');
-    dropdownInput.addEventListener("click", toggleDropdown);
-    dropdownInput.addEventListener("input", filterDropdown);
+async function populateLabTestsDropdown() {
+    const dropdownInput = document.querySelector('#lab-tests-dropdown-input');
+    const dropdownList = document.getElementById("lab-tests-dropdown");
+    dropdownInput.addEventListener("click", toggleLabTestsDropdown);
+    dropdownInput.addEventListener("input", filterLabTestsDropdown);
 
     const testData = await fetchLabTests();
 
@@ -990,13 +1003,213 @@ async function populateDropdownList() {
             dropdownItem.setAttribute('data-fee', test.testFees);
             dropdownItem.textContent = test.testName;
             dropdownItem.onclick = function () {
-                addItemToForm(dropdownItem);
+                addLabTestToForm(dropdownItem);
             };
 
             dropdownList.appendChild(dropdownItem);
         });
     }
 }
+
+
+
+
+
+// Clear selected medicines from the table
+function clearSelectedMedicines() {
+    const selectedMedicinesTable = document.getElementById('selected-medicines-table').getElementsByTagName('tbody')[0];
+    selectedMedicinesTable.innerHTML = '';
+    
+    
+    //updateTotalFeesForSelectedLabTests(); // Update the total fee
+}
+
+async function filterMedicinesDropdown() {
+    const input = document.querySelector("#medicines-dropdown-input");
+    const filter = input.value.toUpperCase();
+  
+    const dropdownList = document.getElementById("medicines-dropdown");
+    const results = await fetchMedicines();
+  
+    if (results) {
+      dropdownList.innerHTML = '';
+  
+      results.forEach((medicine) => {
+        const medicineName = medicine.medicineName.toUpperCase();
+        if (medicineName.includes(filter)) {
+          const dropdownItem = document.createElement('span');
+          dropdownItem.className = 'dropdown-item';
+          dropdownItem.setAttribute('data-id', medicine.medicineId);
+          dropdownItem.setAttribute('data-medicine', medicine.medicineName);
+          dropdownItem.setAttribute('data-type', medicine.medicineType);
+          dropdownItem.textContent = medicine.medicineName;
+          dropdownItem.onclick = function () {
+            addMedicineToTable(this);
+            input.value = "";
+          };
+  
+          dropdownList.appendChild(dropdownItem);
+        }
+      });
+    }
+}
+  
+function toggleMedicinesDropdown() {
+    const dropdown = document.getElementById("medicines-dropdown");
+    if (dropdown.style.display === "none" || dropdown.style.display === "") {
+        dropdown.style.display = "block";
+    } else {
+        dropdown.style.display = "none";
+    }
+}
+
+function addMedicineToTable(item) {
+    const selectedMedicinesTable = document.getElementById("selected-medicines-table").getElementsByTagName('tbody')[0];
+    const row = selectedMedicinesTable.insertRow();
+    const cell1 = row.insertCell(0);
+    const cell2 = row.insertCell(1);
+    const cell3 = row.insertCell(2);
+
+    row.setAttribute("data-id", item.getAttribute("data-id"));
+    row.setAttribute("data-prescription", item.getAttribute("data-prescription"));
+
+    const medicineName = item.getAttribute("data-medicine");
+    const medicineNameCell = document.createElement("div");
+    medicineNameCell.className = "medicine-name";
+    medicineNameCell.textContent = medicineName;
+
+    cell1.appendChild(medicineNameCell);
+    cell2.innerHTML = item.getAttribute("data-prescription");
+    
+    const removeButton = document.createElement("span");
+    removeButton.innerHTML = "Remove";
+    removeButton.className = "remove-button";
+    removeButton.onclick = function() {
+        row.remove();
+
+
+
+        //updateTotalFeesForSelectedLabTests();
+    };
+    cell3.appendChild(removeButton);
+
+
+
+    
+    // updateTotalFeesForSelectedLabTests();
+
+
+
+
+    document.getElementById("medicines-dropdown").style.display = "none";
+}
+
+function addMedicineToForm(selectedMedicine) {
+    toggleMedicinesDropdown();
+
+    const medicineName = selectedMedicine.getAttribute('data-medicine');
+  
+    const formRow = document.createElement('div');
+    formRow.className = 'form-section';
+  
+    const medicineNameInput = document.createElement('input');
+    medicineNameInput.type = 'text';
+    medicineNameInput.style.marginBlock = '.2rem';
+    medicineNameInput.style.backgroundColor = 'yellowgreen';
+    medicineNameInput.style.color = '#fff';
+    medicineNameInput.value = medicineName;
+    medicineNameInput.readOnly = true;
+  
+    const medicinePrescription = document.createElement('textarea');
+    medicinePrescription.placeholder = 'Enter medicine prescription e.g 1x3';
+    medicinePrescription.style.marginBlock = '.2rem';
+    medicinePrescription.style.fontFamily = 'sans-serif';
+  
+    const addButton = document.createElement('button');
+    addButton.textContent = 'Create';
+    addButton.classList.add(...["btn", "yes"]);
+    addButton.onclick = function () {
+      selectedMedicine.setAttribute('data-prescription', medicinePrescription.value);
+      addMedicineToTable(selectedMedicine);
+      formRow.remove();
+    };
+
+    const removeButton = document.createElement('button');
+    removeButton.textContent = 'Delete';
+    removeButton.style.marginInlineEnd = '.6rem';
+    removeButton.classList.add(...["btn", "no"]);
+    removeButton.onclick = function () {
+      formRow.remove();
+    };
+  
+    formRow.appendChild(medicineNameInput);
+    formRow.appendChild(medicinePrescription);
+    formRow.appendChild(removeButton);
+    formRow.appendChild(addButton);
+
+    const input = document.querySelector("#medicines-dropdown-input");
+    const inputContainer = input.parentElement;
+    inputContainer.appendChild(formRow);
+}
+
+// function updateTotalFeesForSelectedLabTests() {
+//     const totalFeeCell = document.querySelector(".total-fee");
+//     const rows = document.querySelectorAll("#selected-tests-table tbody tr");
+//     let totalFee = 0;
+
+//     rows.forEach(function(row) {
+//         const fee = parseFloat(row.cells[1].textContent.substring(3));
+//         totalFee += fee;
+//     });
+
+//     totalFeeCell.textContent = "UGX " + totalFee;
+//     if (totalFee === 0) {
+//         document.querySelector(".total-row").style.display = "none";
+//     } else {
+//         document.querySelector(".total-row").style.display = "table-row";
+//     }
+// }
+
+
+
+// Fetch medicine data from the API
+async function fetchMedicines() {
+    try {
+        const response = await API.medicines.fetch();
+        const data = await response.data.rows;
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+// Populate the dropdown list
+async function populateMedicinesDropdown() {
+    const dropdownInput = document.querySelector('#medicines-dropdown-input');
+    const dropdownList = document.getElementById("medicines-dropdown");
+    dropdownInput.addEventListener("click", toggleMedicinesDropdown);
+    dropdownInput.addEventListener("input", filterMedicinesDropdown);
+
+    const medicineData = await fetchMedicines();
+
+    if (medicineData) {
+        medicineData.forEach((medicine) => {
+            const dropdownItem = document.createElement('span');
+            dropdownItem.className = 'dropdown-item';
+            dropdownItem.setAttribute('data-id', medicine.medicineId);
+            dropdownItem.setAttribute('data-medicine', medicine.medicineName);
+            dropdownItem.setAttribute('data-type', medicine.medicineType);
+            dropdownItem.textContent = medicine.medicineName;
+            dropdownItem.onclick = function () {
+                addMedicineToForm(dropdownItem);
+            };
+
+            dropdownList.appendChild(dropdownItem);
+        });
+    }
+}
+
+
 
 // Generate CBC lab report
 async function generateLabReportForCompleteBloodCountTest(formId, labRequestId) {

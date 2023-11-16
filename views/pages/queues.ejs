@@ -305,7 +305,8 @@
                                     <ul class="section-dropdown-items">
                                         <li class="section-dropdown-item modal-trigger" data-modal="collect-patient-triage-data-modal"> <i class="ti-plus"></i> <span>Triage</span></li>
                                         <li class="section-dropdown-item modal-trigger" data-modal="collect-patient-allergies-data-modal"> <i class="ti-plus"></i> <span>Allergies</span></li>
-                                        <li class="section-dropdown-item modal-trigger" data-modal="create-patient-diagnoses-modal"> <i class="ti-plus"></i> <span>Diagnosis</span></li>
+                                        <li class="section-dropdown-item modal-trigger" data-modal="create-patient-diagnosis-modal"> <i class="ti-plus"></i> <span>Diagnosis</span></li>
+                                        <li class="section-dropdown-item modal-trigger" data-modal="create-patient-medical-prescription-modal"> <i class="ti-plus"></i> <span>Prescriptions</span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -620,8 +621,57 @@
                 </div>
             </div>
 
-            <!-- Create patient diagnoses modal -->
-            <div id="create-patient-diagnoses-modal" class="form-modal">
+            <!-- Create patient medical prescriptions modal -->
+            <div id="create-patient-medical-prescription-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="create-patient-medical-prescription-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Medical Prescription</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="create-patient-medical-prescription-form-body">
+                            <div class="request-form search-form-in-modal">
+                                <div class="form-section">
+                                    <h2>Search Medicines</h2>
+
+                                    <div class="dropdown">
+                                        <input type="text" id="medicines-dropdown-input" placeholder="Type to filter medicines">
+                                        <div class="dropdown-list" id="medicines-dropdown">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h2>Prescriptions</h2>
+                                    <table id="selected-medicines-table" class="testsTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Drug Name</th>
+                                                <th>Prescription</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Create patient diagnosis modal -->
+            <div id="create-patient-diagnosis-modal" class="form-modal">
                 <div class="form-modal-content">
                     <form class="modal-form" id="create-patient-diagnosis-form">
                         <div class="form-modal-header flex">
@@ -633,13 +683,13 @@
                         </div>
             
                         <div class="modal-form-body" id="create-patient-diagnosis-form-body">
-                            <div class="request-form diagnosis-form">
+                            <div class="request-form search-form-in-modal">
                                 <div class="form-section">
                                     <h2>Search Diagnostic Test</h2>
 
                                     <div class="dropdown">
-                                        <input type="text" class="dropdown-input" placeholder="Type to filter tests">
-                                        <div class="dropdown-list" id="dropdownList">
+                                        <input type="text" id="lab-tests-dropdown-input" placeholder="Type to filter tests">
+                                        <div class="dropdown-list" id="lab-tests-dropdown">
                                         </div>
                                     </div>
                                 </div>
@@ -676,7 +726,7 @@
                 </div>
             </div>
 
-            <!-- Edit patient diagnoses modal -->
+            <!-- Edit patient diagnosis modal -->
             <div id="edit-patient-diagnosis-modal" class="form-modal">
                 <div class="form-modal-content">
                     <form class="modal-form" id="edit-patient-diagnosis-form">

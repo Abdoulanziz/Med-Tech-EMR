@@ -468,7 +468,6 @@ async function displaySelectedPatientBills(divId) {
         }
 
         billItems.forEach((billItem, index) => {
-            console.log(billItem)
             // Create a template for each bill item
             const template = `
             <div class="service ${billItem.paymentStatus === "paid" ? 'paid' : 'unpaid'}">

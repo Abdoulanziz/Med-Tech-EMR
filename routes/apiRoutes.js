@@ -23,6 +23,7 @@ const {
     createResultsForUrinalysisTest,
     fetchResultsForUrinalysisTestByRequestId,
     fetchTests, 
+    fetchMedicines,
     createLabRequest,
     fetchBillsByVisitId, 
     fetchUnpaidBillsByVisitId,
@@ -65,6 +66,7 @@ router.get("/results/urinalysis/:requestId", fetchResultsForUrinalysisTestByRequ
 
 
 router.get("/tests", fetchTests);
+router.get("/medicines", fetchMedicines);
 
 
 module.exports = router;

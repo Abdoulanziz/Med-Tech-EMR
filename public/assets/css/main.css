@@ -633,7 +633,7 @@
 
 .service {
   display: inline-block;
-  padding: 6px 14px;
+  padding: 8px 14px;
   background-color: #fff;
   inline-size: fit-content;
   border-radius: 16px;
@@ -697,24 +697,24 @@
 }
 
 
-.diagnosis-form .request-form {
+.search-form-in-modal .request-form {
   max-inline-size: 500px;
   margin: 0 auto;
 }
 
-.diagnosis-form .dropdown {
+.search-form-in-modal .dropdown {
   position: relative;
   margin-block-end: 20px;
 }
 
-.diagnosis-form .dropdown-input {
+.search-form-in-modal .dropdown-input {
   inline-size: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
-.diagnosis-form .dropdown-list {
+.search-form-in-modal .dropdown-list {
   display: none;
   position: absolute;
   inline-size: 100%;
@@ -726,7 +726,7 @@
   overflow-y: auto;
 }
 
-.diagnosis-form .dropdown-item {
+.search-form-in-modal .dropdown-item {
   display: block;
   padding: 12px 10px;
   cursor: pointer;
@@ -735,34 +735,34 @@
   margin: .2rem .4rem;
 }
 
-.diagnosis-form .dropdown-item:hover {
+.search-form-in-modal .dropdown-item:hover {
   background-color: #f0f0f0;
 }
 
-.diagnosis-form table {
+.search-form-in-modal table {
   inline-size: 100%;
   border-collapse: collapse;
 }
 
-.diagnosis-form th, 
-.diagnosis-form td {
+.search-form-in-modal th, 
+.search-form-in-modal td {
   border: 1px solid #ccc;
   padding: 8px;
   text-align: left;
 }
 
-.diagnosis-form .remove-button {
+.search-form-in-modal .remove-button {
   cursor: pointer;
   color: orange;
 }
 
-.diagnosis-form .test-name {
+.search-form-in-modal .test-name {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.diagnosis-form .total-row {
+.search-form-in-modal .total-row {
   font-weight: bold;
 }
 

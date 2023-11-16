@@ -9,6 +9,7 @@ const {
   Triage,
   Allergy,
   LabTest,
+  Medicine,
   LabRequest,
   LabResultForCompleteBloodCount,
   LabResultForUrinalysis
@@ -1035,6 +1036,20 @@ const fetchTests = async (req, res) => {
   }
 };
 
+// Fetch medicines
+const fetchMedicines = async (req, res) => {
+  try {
+    const result = await Medicine.findAndCountAll();
+
+    return res.status(200).json({
+      data: result,
+    });
+  } catch (error) {
+    console.error('Error fetching medicines:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 // // Create lab request for CBC
 const createLabRequest = async (req, res) => {
   try {
@@ -1210,6 +1225,7 @@ module.exports = {
   createResultsForUrinalysisTest,
   fetchResultsForUrinalysisTestByRequestId,
   fetchTests, 
+  fetchMedicines,
   createLabRequest,
   fetchBillsByVisitId, 
   fetchUnpaidBillsByVisitId,
