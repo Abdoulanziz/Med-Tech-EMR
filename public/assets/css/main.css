@@ -707,11 +707,30 @@
   margin-block-end: 20px;
 }
 
+.prescription-input,
 .search-form-in-modal .dropdown-input {
   inline-size: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+}
+
+.prescription-wrapper {
+  /* inline-size: 100%;
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #ffffff;
+  margin-block: .8rem; */
+}
+
+.prescription-input {
+  text-align: center;
+  margin-block: .2rem;
+}
+
+.prescription-input:focus {
+  outline: none;
 }
 
 .search-form-in-modal .dropdown-list {

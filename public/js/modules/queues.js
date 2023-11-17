@@ -1111,6 +1111,10 @@ function addMedicineToForm(selectedMedicine) {
   
     const formRow = document.createElement('div');
     formRow.className = 'form-section';
+
+    const formRowWrapper = document.createElement('div');
+    formRowWrapper.classList.add(...['flex', 'prescription-wrapper']);
+    formRowWrapper.style.justifyContent = 'space-between';
   
     const medicineNameInput = document.createElement('input');
     medicineNameInput.type = 'text';
@@ -1119,23 +1123,44 @@ function addMedicineToForm(selectedMedicine) {
     medicineNameInput.style.color = '#fff';
     medicineNameInput.value = medicineName;
     medicineNameInput.readOnly = true;
-  
-    const medicinePrescription = document.createElement('textarea');
-    medicinePrescription.placeholder = 'Enter medicine prescription e.g 1x3';
-    medicinePrescription.style.marginBlock = '.2rem';
-    medicinePrescription.style.fontFamily = 'sans-serif';
-  
+
+    const medicinePrescriptionLeft = document.createElement('input');
+    medicinePrescriptionLeft.classList.add('prescription-input');
+    medicinePrescriptionLeft.placeholder = "Quantity";
+
+    const medicinePrescriptionMiddle = document.createElement('label');
+    medicinePrescriptionMiddle.innerHTML = 'X';
+    medicinePrescriptionMiddle.style.fontFamily = 'sans-serif';
+    medicinePrescriptionMiddle.style.marginInline = '.4rem';
+    medicinePrescriptionMiddle.style.paddingInline = '.8rem';
+
+    const medicinePrescriptionRight = document.createElement('input');
+    medicinePrescriptionRight.classList.add('prescription-input');
+    medicinePrescriptionRight.placeholder = "No. of Times";
+
+    const medicinePrescriptionTotalDaysLabel = document.createElement('label');
+    medicinePrescriptionTotalDaysLabel.innerHTML = 'For';
+    medicinePrescriptionTotalDaysLabel.style.fontFamily = 'sans-serif';
+    medicinePrescriptionTotalDaysLabel.style.marginInline = '.4rem';
+    medicinePrescriptionTotalDaysLabel.style.paddingInline = '.8rem';
+
+    const medicinePrescriptionTotalDays = document.createElement('input');
+    medicinePrescriptionTotalDays.classList.add('prescription-input');
+    medicinePrescriptionTotalDays.placeholder = "Total Days";
+
     const addButton = document.createElement('button');
     addButton.textContent = 'Create';
+    addButton.style.marginBlockStart = '.4rem';
     addButton.classList.add(...["btn", "yes"]);
     addButton.onclick = function () {
-      selectedMedicine.setAttribute('data-prescription', medicinePrescription.value);
+      selectedMedicine.setAttribute('data-prescription', `${medicinePrescriptionLeft?.value} X ${medicinePrescriptionRight?.value} for ${medicinePrescriptionTotalDays?.value} days`);
       addMedicineToTable(selectedMedicine);
       formRow.remove();
     };
 
     const removeButton = document.createElement('button');
     removeButton.textContent = 'Delete';
+    removeButton.style.marginBlockStart = '.4rem';
     removeButton.style.marginInlineEnd = '.6rem';
     removeButton.classList.add(...["btn", "no"]);
     removeButton.onclick = function () {
@@ -1143,7 +1168,13 @@ function addMedicineToForm(selectedMedicine) {
     };
   
     formRow.appendChild(medicineNameInput);
-    formRow.appendChild(medicinePrescription);
+    // formRow.appendChild(medicinePrescription);
+    formRowWrapper.appendChild(medicinePrescriptionLeft);
+    formRowWrapper.appendChild(medicinePrescriptionMiddle);
+    formRowWrapper.appendChild(medicinePrescriptionRight);
+    formRowWrapper.appendChild(medicinePrescriptionTotalDaysLabel);
+    formRowWrapper.appendChild(medicinePrescriptionTotalDays);
+    formRow.appendChild(formRowWrapper);
     formRow.appendChild(removeButton);
     formRow.appendChild(addButton);
 
