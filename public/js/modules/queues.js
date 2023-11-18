@@ -1107,7 +1107,7 @@ function addMedicineToTable(item) {
 function addMedicineToForm(selectedMedicine) {
     toggleMedicinesDropdown();
 
-    const medicineName = selectedMedicine.getAttribute('data-medicine');
+    const medicineName = `${selectedMedicine.getAttribute('data-medicine')} (${selectedMedicine.getAttribute('data-dosage')})`;
   
     const formRow = document.createElement('div');
     formRow.className = 'form-section';
@@ -1118,15 +1118,19 @@ function addMedicineToForm(selectedMedicine) {
   
     const medicineNameInput = document.createElement('input');
     medicineNameInput.type = 'text';
-    medicineNameInput.style.marginBlock = '.2rem';
-    medicineNameInput.style.backgroundColor = 'yellowgreen';
-    medicineNameInput.style.color = '#fff';
+    medicineNameInput.style.marginBlockEnd = '.4rem';
+    medicineNameInput.style.padding = '12px 10px';
+    medicineNameInput.style.border = '1px solid #9dd0ff';
+    medicineNameInput.style.backgroundColor = '#cce6fe';
+    medicineNameInput.style.color = '#1da1f2';
+    medicineNameInput.style.borderRadius = '6px';
     medicineNameInput.value = medicineName;
     medicineNameInput.readOnly = true;
 
     const medicinePrescriptionLeft = document.createElement('input');
     medicinePrescriptionLeft.classList.add('prescription-input');
     medicinePrescriptionLeft.placeholder = "Quantity";
+    medicinePrescriptionLeft.style.backgroundColor = "#f9f9f9";
 
     const medicinePrescriptionMiddle = document.createElement('label');
     medicinePrescriptionMiddle.innerHTML = 'X';
@@ -1137,6 +1141,7 @@ function addMedicineToForm(selectedMedicine) {
     const medicinePrescriptionRight = document.createElement('input');
     medicinePrescriptionRight.classList.add('prescription-input');
     medicinePrescriptionRight.placeholder = "No. of Times";
+    medicinePrescriptionRight.style.backgroundColor = "#f9f9f9";
 
     const medicinePrescriptionTotalDaysLabel = document.createElement('label');
     medicinePrescriptionTotalDaysLabel.innerHTML = 'For';
@@ -1147,15 +1152,19 @@ function addMedicineToForm(selectedMedicine) {
     const medicinePrescriptionTotalDays = document.createElement('input');
     medicinePrescriptionTotalDays.classList.add('prescription-input');
     medicinePrescriptionTotalDays.placeholder = "Total Days";
+    medicinePrescriptionTotalDays.style.backgroundColor = "#f9f9f9";
 
     const addButton = document.createElement('button');
     addButton.textContent = 'Create';
     addButton.style.marginBlockStart = '.4rem';
     addButton.classList.add(...["btn", "yes"]);
-    addButton.onclick = function () {
+    addButton.onclick = function (event) {
+      event.preventDefault();
       selectedMedicine.setAttribute('data-prescription', `${medicinePrescriptionLeft?.value} X ${medicinePrescriptionRight?.value} for ${medicinePrescriptionTotalDays?.value} days`);
-      addMedicineToTable(selectedMedicine);
-      formRow.remove();
+      if(medicinePrescriptionLeft.value.trim() !== "" && medicinePrescriptionRight.value.trim() !== "" && medicinePrescriptionTotalDays.value.trim() !== "") {
+        addMedicineToTable(selectedMedicine);
+        formRow.remove();
+      }
     };
 
     const removeButton = document.createElement('button');
@@ -1163,12 +1172,12 @@ function addMedicineToForm(selectedMedicine) {
     removeButton.style.marginBlockStart = '.4rem';
     removeButton.style.marginInlineEnd = '.6rem';
     removeButton.classList.add(...["btn", "no"]);
-    removeButton.onclick = function () {
+    removeButton.onclick = function (event) {
+      event.preventDefault();
       formRow.remove();
     };
   
     formRow.appendChild(medicineNameInput);
-    // formRow.appendChild(medicinePrescription);
     formRowWrapper.appendChild(medicinePrescriptionLeft);
     formRowWrapper.appendChild(medicinePrescriptionMiddle);
     formRowWrapper.appendChild(medicinePrescriptionRight);
@@ -1229,8 +1238,9 @@ async function populateMedicinesDropdown() {
             dropdownItem.className = 'dropdown-item';
             dropdownItem.setAttribute('data-id', medicine.medicineId);
             dropdownItem.setAttribute('data-medicine', medicine.medicineName);
+            dropdownItem.setAttribute('data-dosage', medicine.dosage);
             dropdownItem.setAttribute('data-type', medicine.medicineType);
-            dropdownItem.textContent = medicine.medicineName;
+            dropdownItem.textContent = `${medicine.medicineName} (${medicine.dosage})`;
             dropdownItem.onclick = function () {
                 addMedicineToForm(dropdownItem);
             };

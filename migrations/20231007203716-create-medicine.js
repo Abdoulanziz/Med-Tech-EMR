@@ -23,6 +23,14 @@ module.exports = {
         type: Sequelize.ENUM('tablet', 'syrap', 'cream'),
         allowNull: false,
       },
+      dosage: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      manufacturer: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE

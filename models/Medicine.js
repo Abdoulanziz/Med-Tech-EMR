@@ -38,6 +38,16 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       field: 'medicine_type',
     },
+    dosage: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      field: 'dosage',
+    },
+    manufacturer: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      field: 'manufacturer',
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
