@@ -918,9 +918,12 @@ function addLabTestToForm(selectedTest) {
   
     const testNameInput = document.createElement('input');
     testNameInput.type = 'text';
-    testNameInput.style.marginBlock = '.2rem';
-    testNameInput.style.backgroundColor = 'yellowgreen';
-    testNameInput.style.color = '#fff';
+    testNameInput.style.marginBlockEnd = '.4rem';
+    testNameInput.style.padding = '12px 10px';
+    testNameInput.style.border = '1px solid #9dd0ff';
+    testNameInput.style.backgroundColor = '#cce6fe';
+    testNameInput.style.color = '#1da1f2';
+    testNameInput.style.borderRadius = '6px';
     testNameInput.value = testName;
     testNameInput.readOnly = true;
   
