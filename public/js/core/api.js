@@ -121,12 +121,6 @@ export const API = {
             const endpoint = `${API.BACKEND_BASE_API_URI}/visits/${id}`;
             return await API.makeGetRequest(endpoint);
         },
-
-        // // Fetch patient GET api/v1/visit/:id/patient
-        // fetchPatientByVisitId: async (id) => {
-        //     const endpoint = `${API.BACKEND_BASE_API_URI}/visit/${id}/patient`;
-        //     return await API.makeGetRequest(endpoint);
-        // }
     },
 
 
