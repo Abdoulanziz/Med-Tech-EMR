@@ -250,4 +250,20 @@ export const API = {
             return await API.makeGetRequest(endpoint);
         }
     },
+
+
+    // Prescriptions
+    prescriptions: {
+        // Add to prescriptions POST api/v1/prescriptions
+        create: async (prescription, fromFormData) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/prescriptions`;
+            return await API.makePostRequest(endpoint, prescription, fromFormData);
+        },
+
+        // Get prescriptions GET api/v1/prescriptions/:visitId
+        fetchByVisitId: async (visitId) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/prescriptions/${visitId}`;
+            return await API.makeGetRequest(endpoint);
+        },
+    }
 }

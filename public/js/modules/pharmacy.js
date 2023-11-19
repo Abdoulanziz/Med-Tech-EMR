@@ -9,24 +9,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // Load all patients on queue
     loadAllPatientsOnQueue();
 
-    // Handle create triage
-    handleCreateTriageForm();
+    // Handle CBC test
+    handleCompleteBloodCountResultsForm();
 
-    // Handle create allergy
-    handleCreateAllergyForm();
+    // Set up tinymce
+    setupCompleteBloodCountLabReportTinymce();
 
-    // Render lab tests in dropdown
-    populateLabTestsDropdown();
+    // Handle Urinalysis test
+    handleUrinalysisResultsForm();
 
-    // Handle CBC request form
-    handleLabRequest();
-
-
-    // Render medicines in dropdown
-    populateMedicinesDropdown();
-
-    // Handle medical prescription
-    handleMedicinePrescription();
+    // Set up tinymce
+    setupUrinalysisLabReportTinymce();
     
 });
 
@@ -118,7 +111,7 @@ async function loadAllPatientsOnQueue() {
                 targets: 6,
                 render: function (data, type, row, meta) {
                     return `
-                    <td style="border: 1px solid #ddd;">
+                    <td>
                         <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">View More </button>
                     </td>
                     `;
@@ -199,7 +192,7 @@ async function loadSinglePatientVisits(patientId) {
 
             UTILS.sectionToggler(workOnPatientCta, "section", () => {
                 displaySelectedPatientDetails("patient-info-section_02", rowDataString, () => {
-                    loadSinglePatientVisitHistory(data.visitId);
+                    loadSinglePatientVisitPrescriptions(data.visitId);
                     displaySelectedPatientBills("ongoing-services-02");
                 });
             });
@@ -236,7 +229,7 @@ async function loadSinglePatientVisits(patientId) {
                 targets: 4,
                 render: function (data, type, row, meta) {
                     return `
-                    <td style="border: 1px solid #ddd;">
+                    <td>
                         <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Work on Patient  <i class="ti-arrow-right"></i> </button>
                     </td>
                     `;
@@ -256,8 +249,8 @@ async function loadSinglePatientVisits(patientId) {
 
 }
 
-// Load patient visit requests to DOM
-async function loadSinglePatientVisitHistory(visitId) {
+// Load patient visit prescriptions to DOM
+async function loadSinglePatientVisitPrescriptions(visitId) {
     // Get Id of selected visit
     const selectedVisitId = parseInt(visitId);
 
@@ -265,7 +258,7 @@ async function loadSinglePatientVisitHistory(visitId) {
     UTILS.setSelectedVisitId(selectedVisitId);
 
     let allPatients;
-    const apiEndpoint = `${UI.apiBaseURL}/history/${selectedVisitId}`;
+    const apiEndpoint = `${UI.apiBaseURL}/prescriptions/${selectedVisitId}`;
 
     allPatients = $('#single-patient-visit-records').DataTable({
         processing: true,
@@ -274,7 +267,6 @@ async function loadSinglePatientVisitHistory(visitId) {
         searching: true,
         filter:true,
         destroy: true,
-
         ajax: {
             url: apiEndpoint,
             dataSrc: "data",
@@ -293,110 +285,7 @@ async function loadSinglePatientVisitHistory(visitId) {
         ],
         rowCallback: function(row, data, index) {
             const rowDataObject = data;
-
-            // Common to all test requests
-            const viewResultsCta = row.cells[4].querySelectorAll("button")[0];
-            viewResultsCta.style.cursor = "pointer";
-            viewResultsCta.classList.add("modal-trigger");
-            viewResultsCta.dataset.modal = "edit-patient-diagnosis-modal";
-
-            UTILS.triggerModal(viewResultsCta, "modal", () => {
-                // Populate the form with the rowData
-                populateFormWithData(
-                    "edit-patient-diagnosis-modal",
-                    JSON.stringify(data),
-                    [
-                        "testName",
-                        "testFees"
-                    ]
-                );
-            });
-
-            // Specific to test request
-            if(rowDataObject.testName === "Complete Blood Count Test"){
-                const viewReportCta = row.cells[4].querySelectorAll("button")[1];
-                viewReportCta.style.cursor = "pointer";
-                viewReportCta.classList.add("modal-trigger");
-                viewReportCta.dataset.modal = "complete-blood-count-lab-report-modal";
-
-                UTILS.triggerModal(viewReportCta, "modal", async () => {
-                    document.querySelector("#complete-blood-count-lab-report-form").dataset.requestId = data.requestId;
-
-                    // Populate the form with the server data
-                    generateLabReportForCompleteBloodCountTest("complete-blood-count-lab-report-form", data.requestId);
-
-                    // Get patient id from visit id
-                    const patient = await API.patients.fetchByVisitId(selectedVisitId);
-                    const patientData = patient.data;
-
-                    // Trigger print lab report
-                    printLabReportForCompleteBloodCountTest(patientData);
-                    
-                });
-            }
-
-            // Check the specific request (Urinalysis)
-            if(rowDataObject.testName === "Urinalysis Test") {
-                const workOnReportCta = row.cells[4].querySelectorAll("button")[1];
-                workOnReportCta.style.cursor = "pointer";
-                workOnReportCta.classList.add("modal-trigger");
-                workOnReportCta.dataset.modal = "urinalysis-report-modal";
-
-                UTILS.triggerModal(workOnReportCta, "modal", async () => {
-                    document.querySelector("#urinalysis-report-form").dataset.requestId = data.requestId;
-
-                    // console.log(data)
-
-                    // Populate the form with the server data
-                    generateLabReportForUrinalysisTest("urinalysis-report-form", data.requestId);
-
-                    // Get patient id from visit id
-                    const patient = await API.patients.fetchByVisitId(selectedVisitId);
-                    const patientData = patient.data;
-
-                    // Trigger print lab report
-                    printLabReportForUrinalysisTest(patientData);
-                    
-                });
-            }
-
-            // if("triageUuid" in JSON.parse(rowData)){
-            //     const viewRequestCta = row.cells[3].querySelectorAll("button")[0];
-            //     viewRequestCta.style.cursor = "pointer";
-            //     viewRequestCta.classList.add("modal-trigger");
-            //     viewRequestCta.dataset.modal = "edit-patient-triage-data-modal";
-
-            //     UTILS.triggerModal(viewRequestCta, "modal", () => {
-            //         // Populate the form with the rowData
-            //         populateFormWithData(
-            //             "edit-patient-triage-data-modal",
-            //             rowData,
-            //             [
-            //                 "bloodPressure",
-            //                 "heartRate",
-            //                 "respiratoryRate",
-            //                 "signsAndSymptoms",
-            //                 "injuryDetails"
-            //             ]
-            //         );
-            //     });
-            // }else if("allergyUuid" in JSON.parse(rowData)){
-            //     const viewAlergiesCta = row.cells[3].querySelectorAll("button")[0];
-            //     viewAlergiesCta.style.cursor = "pointer";
-            //     viewAlergiesCta.classList.add("modal-trigger");
-            //     viewAlergiesCta.dataset.modal = "edit-patient-allergies-data-modal";
-
-            //     UTILS.triggerModal(viewAlergiesCta, "modal", () => {
-            //         // Populate the form with the rowData
-            //         populateFormWithData(
-            //             "edit-patient-allergies-data-modal",
-            //             rowData,
-            //             [
-            //                 "allergies"
-            //             ]
-            //         );
-            //     });
-            // }
+            // console.log(rowDataObject);
         },
         columnDefs: [
             {
@@ -408,50 +297,31 @@ async function loadSinglePatientVisitHistory(visitId) {
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return '<span>' + data.testName + '</span>';
+                    return '<span>' + `${data.medicineName} (${data.medicineDosage})` + '</span>';
                 },
             },
             {
                 targets: 2,
                 render: function(data, type, row, meta) {
-                    const originalDate = data.requestCreatedAt;
-                    const dateObj = new Date(originalDate);
-                    const formattedDate = dateObj.toISOString().split('T')[0];
-                    return '<span>' + formattedDate + '</span>';
+                    return '<span>' + data.medicineType.charAt(0).toUpperCase() + data.medicineType.slice(1) + '</span>';
                 }
             },
             {
                 targets: 3,
                 render: function(data, type, row, meta) {
-                    const status = data.requestStatus.toLowerCase();
-                    let backgroundColor;
-
-                    if (status === 'pending') {
-                        backgroundColor = 'grey';
-                    } else if (status === 'complete') {
-                        backgroundColor = 'yellowgreen';
-                    } else {
-                        backgroundColor = 'orange';
-                    }
-
-                    return '<span style="font-size: 10px;display: block;inline-size: 50%;border-radius:6px;padding: .4rem .6rem;color: #fff;background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
+                    return '<span>' + data.manufacturer + '</span>';
                 }
             },
             {
                 targets: 4,
                 render: function (data, type, row, meta) {
-                    return `
-                    <td style="border: 1px solid #ddd;">
-                        <button class="btn view-request" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Edit Request  <i class="ti-arrow-right"></i> </button>
-                        <button class="btn view-results" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">View Report  <i class="ti-arrow-right"></i> </button>
-                    </td>
-                    `;
+                    return '<span>' + `${data.dosage} x ${data.frequency} for ${data.duration} days` + '</span>';
                 },
             },
             {
                 targets: 5,
                 render: function(data, type, row, meta) {
-                    const originalDate = data.requestCreatedAt;
+                    const originalDate = data.prescriptionCreatedAt;
                     const dateObj = new Date(originalDate);
                     const formattedDate = dateObj.toISOString().split('T')[0];
                     return '<span>' + formattedDate + '</span>';
@@ -535,15 +405,6 @@ async function displaySelectedPatientBills(divId) {
             // Append the template to the billContainer
             billContainer.appendChild(serviceElement);
         });
-
-        // const ongoingServices02Container = document.querySelector("#ongoing-services-02");
-        // const containerHeight = ongoingServices02Container.offsetHeight;
-        // const contentHeight = ongoingServices02Container.scrollHeight;
-
-        // if(parseInt(contentHeight) > parseInt(containerHeight)) {
-        //     ongoingServices02Container.style.overflow = 'hidden';
-        // }
-
     }
 }
 
@@ -589,16 +450,16 @@ function displaySelectedPatientBillsPaymentModal(event) {
                     serviceCheckboxes.forEach(checkbox => checkbox.checked = false);
                 }
 
-                updateTotalFeesForSelectedLabTests();
+                updateTotal();
             });
 
             // Update the individual service checkbox event listeners
             serviceCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('click', updateTotalFeesForSelectedLabTests);
+                checkbox.addEventListener('click', updateTotal);
             });
 
             // Update the initial total
-            updateTotalFeesForSelectedLabTests();
+            updateTotal();
 
             // Pay
             const updateServicesPaymentStatusBtn = document.querySelector("#update-services-payment-status-btn");
@@ -628,10 +489,11 @@ function displaySelectedPatientBillsPaymentModal(event) {
                     console.error('Error updating payment status:', error);
                 }
 
+                
             });
         })();
 
-        function updateTotalFeesForSelectedLabTests() {
+        function updateTotal() {
             let total = 0;
 
             serviceCheckboxes.forEach(checkbox => {
@@ -647,657 +509,65 @@ function displaySelectedPatientBillsPaymentModal(event) {
     });
 }
 
-// Handle triage create form
-async function handleCreateTriageForm() {
-    const patientTriageForm = document.querySelector('#patient-triage-form');
-    patientTriageForm.addEventListener('submit', (event) => {
+// Handle complete blood count results form
+async function handleCompleteBloodCountResultsForm() {
+    const completeBloodCountResultsForm = document.querySelector('#complete-blood-count-results-form');
+    completeBloodCountResultsForm.addEventListener('submit', (event) => {
         event.preventDefault();
+
+        const comment = tinymce.get('complete-blood-count-results-comment-editor').getContent();
+
+        // Get Id of selected request
+        const selectedRequestId = completeBloodCountResultsForm.dataset.requestId;
+        if (! selectedRequestId) return;
 
         // Get Id of selected visit
         const selectedVisitId = UTILS.getSelectedVisitId();
-        if (! selectedVisitId) return;
     
         // Collect form data
-        const formData = new FormData(patientTriageForm);
-        formData.append('visitId', selectedVisitId);
+        const formData = new FormData(completeBloodCountResultsForm);
+        formData.append('requestId', selectedRequestId);
+        formData.append('comment', comment);
 
         // URL encoded data
         const URLEncodedData = new URLSearchParams(formData).toString();
     
         // Display a confirmation dialog
-        UTILS.showConfirmationModal(patientTriageForm, "Are you sure you want to save this record?", async () => {
+        UTILS.showConfirmationModal(completeBloodCountResultsForm, "Are you sure you want to save this record?", async () => {
             try {
                 // Make an API POST request to create a triage record
-                const response = await API.triage.create(URLEncodedData, true);
+                const response = await API.results.completeBloodCount.create(URLEncodedData, true);
     
                 // Check if the request was successful
                 if (response.status === 'success') {
-                    // Alert user
-                    // alert('Patient record created successfully!');
-                    // TODO: Create a banner to show triage saved
     
                     // Reset the form
-                    patientTriageForm.reset();
+                    completeBloodCountResultsForm.reset();
     
                     // Remove form
-                    patientTriageForm.parentElement.parentElement.classList.remove("inview");
+                    completeBloodCountResultsForm.parentElement.parentElement.classList.remove("inview");
     
                     // Reload the requests table
-                    loadSinglePatientVisitHistory(selectedVisitId);
+                    loadSinglePatientVisitPrescriptions(selectedVisitId);
     
                 } else {
-                    alert('Failed to create triage record. Please check the form data.');
+                    alert('Failed to create CBC record. Please check the form data.');
                 }
             } catch (error) {
                 console.error(error);
-                alert('An error occurred while creating the triage record.');
+                alert('An error occurred while creating the CBC record.');
             }
         }, () => {
             // TODO: Run when cancelled
 
             // Reset the form
-            patientTriageForm.reset();
+            patientLabReportForm.reset();
         });
     });
 }
-
-// Handle allergy create form
-async function handleCreateAllergyForm() {
-    const patientAllergyForm = document.querySelector('#patient-allergy-form');
-    patientAllergyForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        // Get Id of selected visit
-        const selectedVisitId = UTILS.getSelectedVisitId();
-        if (! selectedVisitId) return;
-    
-        // Collect form data
-        const formData = new FormData(patientAllergyForm);
-        formData.append('visitId', selectedVisitId);
-
-        // URL encoded data
-        const URLEncodedData = new URLSearchParams(formData).toString();
-    
-        // Display a confirmation dialog
-        UTILS.showConfirmationModal(patientAllergyForm, "Are you sure you want to save this record?", async () => {
-            try {
-                // Make an API POST request to create a triage record
-                const response = await API.allergy.create(URLEncodedData, true);
-    
-                // Check if the request was successful
-                if (response.status === 'success') {
-                    // Alert user
-                    // alert('Patient record created successfully!');
-                    // TODO: Create a banner to show triage saved
-    
-                    // Reset the form
-                    patientAllergyForm.reset();
-    
-                    // Remove form
-                    patientAllergyForm.parentElement.parentElement.classList.remove("inview");
-    
-                    // Reload the requests table
-                    loadSinglePatientVisitHistory(selectedVisitId);
-    
-                } else {
-                    alert('Failed to create allergy record. Please check the form data.');
-                }
-            } catch (error) {
-                console.error(error);
-                alert('An error occurred while creating the allergy record.');
-            }
-        }, () => {
-            // TODO: Run when cancelled
-
-            // Reset the form
-            patientAllergyForm.reset();
-        });
-    });
-}
-
-// Populate form with data (pre-fill the form)
-function populateFormWithData(formId, data, formFieldsNamesArray) {
-    // Parse the form id
-    const form = document.querySelector(`#${formId}`);
-    const parsedData = JSON.parse(data);
-
-    // Use the names of the fields not their ids
-    formFieldsNamesArray.forEach(fieldName => {
-        const field = form.querySelector(`[name=${fieldName}]`);
-        if (field) {
-            field.value = parsedData[fieldName] || null;
-        }
-    });
-}
-
-// Handle lab request create form
-async function handleLabRequest() {
-    const patientDiagnosisForm = document.querySelector('#create-patient-diagnosis-form');
-    patientDiagnosisForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        // Get Id of selected visit
-        const selectedVisitId = UTILS.getSelectedVisitId();
-        if (! selectedVisitId) return;
-
-        // Check if there are selected diagnostic tests
-        const selectedTestsTable = document.getElementById('selected-tests-table').getElementsByTagName('tbody')[0];
-        if (selectedTestsTable.rows.length === 0) {
-            alert('Please select at least one diagnostic test.');
-            return;
-        }
-
-        // Collect selected test data from the table
-        const selectedTestRows = selectedTestsTable.rows;
-        const formValuesArrayOfObjects = [];
-
-        for (let i = 0; i < selectedTestRows.length; i++) {
-            const testId = selectedTestRows[i].dataset.id;
-            const fees = parseFloat(selectedTestRows[i].cells[1].textContent.substring(3));
-            const clinicalNotes = selectedTestRows[i].dataset.notes;
-            formValuesArrayOfObjects.push({ testId, clinicalNotes, testFees: fees, visitId: selectedVisitId });
-        }
-
-        // Display a confirmation dialog
-        UTILS.showConfirmationModal(patientDiagnosisForm, 'Are you sure you want to save these diagnostic tests?', async () => {
-            try {
-                // Make an API POST request to create diagnostic records
-                const response = await API.requests.create(formValuesArrayOfObjects, false);
-
-                // Check if the request was successful
-                if (response.status === 'success') {
-    
-                    // Reset the form
-                    clearSelectedLabTests();
-    
-                    // Remove form
-                    patientDiagnosisForm.parentElement.parentElement.classList.remove("inview");
-    
-                    // Fetch the bills
-                    displaySelectedPatientBills("ongoing-services-02");
-
-                    // Reload the requests table
-                    loadSinglePatientVisitHistory(selectedVisitId);
-
-                } else {
-                    alert('Failed to create diagnostic tests. Please check the data.');
-                }
-            } catch (error) {
-                console.error(error);
-                alert('An error occurred while creating the diagnostic tests.');
-            }
-        }, () => {
-            // Run when canceled
-            // Reset the form (clear selected tests)
-            clearSelectedLabTests();
-        });
-    });
-}
-
-// Clear selected diagnostic tests from the table
-function clearSelectedLabTests() {
-    const selectedTestsTable = document.getElementById('selected-tests-table').getElementsByTagName('tbody')[0];
-    selectedTestsTable.innerHTML = '';
-    updateTotalFeesForSelectedLabTests(); // Update the total fee
-}
-
-async function filterLabTestsDropdown() {
-    const input = document.querySelector("#lab-tests-dropdown-input");
-    const filter = input.value.toUpperCase();
-  
-    const dropdownList = document.getElementById("lab-tests-dropdown");
-    const results = await fetchLabTests();
-  
-    if (results) {
-      dropdownList.innerHTML = '';
-  
-      results.forEach((test) => {
-        const testName = test.testName.toUpperCase();
-        if (testName.includes(filter)) {
-          const dropdownItem = document.createElement('span');
-          dropdownItem.className = 'dropdown-item';
-          dropdownItem.setAttribute('data-id', test.testId);
-          dropdownItem.setAttribute('data-test', test.testName);
-          dropdownItem.setAttribute('data-fee', test.testFees);
-          dropdownItem.textContent = test.testName;
-          dropdownItem.onclick = function () {
-            addLabTestToTable(this);
-            input.value = "";
-          };
-  
-          dropdownList.appendChild(dropdownItem);
-        }
-      });
-    }
-}
-  
-function toggleLabTestsDropdown() {
-    const dropdown = document.getElementById("lab-tests-dropdown");
-    if (dropdown.style.display === "none" || dropdown.style.display === "") {
-        dropdown.style.display = "block";
-    } else {
-        dropdown.style.display = "none";
-    }
-}
-
-function addLabTestToTable(item) {
-    const selectedTestsTable = document.getElementById("selected-tests-table").getElementsByTagName('tbody')[0];
-    const row = selectedTestsTable.insertRow();
-    const cell1 = row.insertCell(0);
-    const cell2 = row.insertCell(1);
-    const cell3 = row.insertCell(2);
-
-    row.setAttribute("data-id", item.getAttribute("data-id"));
-    row.setAttribute("data-notes", item.getAttribute("data-notes"));
-
-    const testName = item.getAttribute("data-test");
-    const testNameCell = document.createElement("div");
-    testNameCell.className = "test-name";
-    testNameCell.textContent = testName;
-
-    cell1.appendChild(testNameCell);
-    cell2.innerHTML = "UGX " + item.getAttribute("data-fee");
-    
-    const removeButton = document.createElement("span");
-    removeButton.innerHTML = "Remove";
-    removeButton.className = "remove-button";
-    removeButton.onclick = function() {
-        row.remove();
-        updateTotalFeesForSelectedLabTests();
-    };
-    cell3.appendChild(removeButton);
-    
-    updateTotalFeesForSelectedLabTests();
-    document.getElementById("lab-tests-dropdown").style.display = "none";
-}
-
-function addLabTestToForm(selectedTest) {
-    toggleLabTestsDropdown();
-
-    const testName = selectedTest.getAttribute('data-test');
-  
-    const formRow = document.createElement('div');
-    formRow.className = 'form-section';
-  
-    const testNameInput = document.createElement('input');
-    testNameInput.type = 'text';
-    testNameInput.style.marginBlockEnd = '.4rem';
-    testNameInput.style.padding = '12px 10px';
-    testNameInput.style.border = '1px solid #9dd0ff';
-    testNameInput.style.backgroundColor = '#cce6fe';
-    testNameInput.style.color = '#1da1f2';
-    testNameInput.style.borderRadius = '6px';
-    testNameInput.value = testName;
-    testNameInput.readOnly = true;
-  
-    const testClinicalNotesInput = document.createElement('textarea');
-    testClinicalNotesInput.placeholder = 'Enter clinical notes';
-    testClinicalNotesInput.style.marginBlock = '.2rem';
-    testClinicalNotesInput.style.fontFamily = 'sans-serif';
-  
-    const addButton = document.createElement('button');
-    addButton.textContent = 'Create';
-    addButton.classList.add(...["btn", "yes"]);
-    addButton.onclick = function () {
-      selectedTest.setAttribute('data-notes', testClinicalNotesInput.value);
-      addLabTestToTable(selectedTest);
-      formRow.remove();
-    };
-
-    const removeButton = document.createElement('button');
-    removeButton.textContent = 'Delete';
-    removeButton.style.marginInlineEnd = '.6rem';
-    removeButton.classList.add(...["btn", "no"]);
-    removeButton.onclick = function () {
-      formRow.remove();
-    };
-  
-    formRow.appendChild(testNameInput);
-    formRow.appendChild(testClinicalNotesInput);
-    formRow.appendChild(removeButton);
-    formRow.appendChild(addButton);
-
-    const input = document.querySelector("#lab-tests-dropdown-input");
-    const inputContainer = input.parentElement;
-    inputContainer.appendChild(formRow);
-}
-
-function updateTotalFeesForSelectedLabTests() {
-    const totalFeeCell = document.querySelector(".total-fee");
-    const rows = document.querySelectorAll("#selected-tests-table tbody tr");
-    let totalFee = 0;
-
-    rows.forEach(function(row) {
-        const fee = parseFloat(row.cells[1].textContent.substring(3));
-        totalFee += fee;
-    });
-
-    totalFeeCell.textContent = "UGX " + totalFee;
-    if (totalFee === 0) {
-        document.querySelector(".total-row").style.display = "none";
-    } else {
-        document.querySelector(".total-row").style.display = "table-row";
-    }
-}
-
-// Fetch test data from the API
-async function fetchLabTests() {
-    try {
-        const response = await API.tests.fetch();
-        const data = await response.data.rows;
-        return data;
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    }
-}
-
-// Populate the dropdown list
-async function populateLabTestsDropdown() {
-    const dropdownInput = document.querySelector('#lab-tests-dropdown-input');
-    const dropdownList = document.getElementById("lab-tests-dropdown");
-    dropdownInput.addEventListener("click", toggleLabTestsDropdown);
-    dropdownInput.addEventListener("input", filterLabTestsDropdown);
-
-    const testData = await fetchLabTests();
-
-    if (testData) {
-        testData.forEach((test) => {
-            const dropdownItem = document.createElement('span');
-            dropdownItem.className = 'dropdown-item';
-            dropdownItem.setAttribute('data-id', test.testId);
-            dropdownItem.setAttribute('data-test', test.testName);
-            dropdownItem.setAttribute('data-fee', test.testFees);
-            dropdownItem.textContent = test.testName;
-            dropdownItem.onclick = function () {
-                addLabTestToForm(dropdownItem);
-            };
-
-            dropdownList.appendChild(dropdownItem);
-        });
-    }
-}
-
-
-
-// Handle medicine prescription create form
-async function handleMedicinePrescription() {
-    const patientMedicalPrescriptionForm = document.querySelector('#create-patient-medical-prescription-form');
-    patientMedicalPrescriptionForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        // Get Id of selected visit
-        const selectedVisitId = UTILS.getSelectedVisitId();
-        if (! selectedVisitId) return;
-
-        // Check if there are prescriptions on the table
-        const selectedMedicinesTable = document.getElementById('selected-medicines-table').getElementsByTagName('tbody')[0];
-        if (selectedMedicinesTable.rows.length === 0) {
-            alert('Please provide at least one medical prescription.');
-            return;
-        }
-
-        // Collect selected medicine prescription data from the table
-        const selectedMedicinePrescriptionRows = selectedMedicinesTable.rows;
-        const formValuesArrayOfObjects = [];
-
-        for (let i = 0; i < selectedMedicinePrescriptionRows.length; i++) {
-
-            const medicineId = JSON.parse(selectedMedicinePrescriptionRows[i].dataset.id);
-            const prescription = selectedMedicinePrescriptionRows[i].dataset.prescription;
-            let prescriptionObject = JSON.parse(prescription);
-            prescriptionObject.medicineId = medicineId;
-            prescriptionObject.visitId = selectedVisitId;
-
-            formValuesArrayOfObjects.push(prescriptionObject);
-        }
-
-        // Display a confirmation dialog
-        UTILS.showConfirmationModal(patientMedicalPrescriptionForm, 'Are you sure you want to save these prescriptions?', async () => {
-            try {
-                // Make an API POST request to create prescription records
-                const response = await API.prescriptions.create(formValuesArrayOfObjects, false);
-
-                // Check if the request was successful
-                if (response.status === 'success') {
-    
-                    // Reset the form
-                    clearSelectedMedicines();
-    
-                    // Remove form
-                    patientMedicalPrescriptionForm.parentElement.parentElement.classList.remove("inview");
-    
-                    // Fetch the bills
-                    displaySelectedPatientBills("ongoing-services-02");
-
-                    // Reload the requests table
-                    loadSinglePatientVisitHistory(selectedVisitId);
-
-                } else {
-                    alert('Failed to create prescriptions. Please check the data.');
-                }
-            } catch (error) {
-                console.error(error);
-                alert('An error occurred while creating the prescriptions.');
-            }
-        }, () => {
-            // Run when canceled
-            // Reset the form (clear selected medicines)
-            clearSelectedMedicines();
-        });
-    });
-}
-
-// Clear selected medicines from the table
-function clearSelectedMedicines() {
-    const selectedMedicinesTable = document.getElementById('selected-medicines-table').getElementsByTagName('tbody')[0];
-    selectedMedicinesTable.innerHTML = '';
-    
-    
-    //updateTotalFeesForSelectedLabTests(); // Update the total fee
-}
-
-async function filterMedicinesDropdown() {
-    const input = document.querySelector("#medicines-dropdown-input");
-    const filter = input.value.toUpperCase();
-  
-    const dropdownList = document.getElementById("medicines-dropdown");
-    const results = await fetchMedicines();
-  
-    if (results) {
-      dropdownList.innerHTML = '';
-  
-      results.forEach((medicine) => {
-        const medicineName = medicine.medicineName.toUpperCase();
-        if (medicineName.includes(filter)) {
-          const dropdownItem = document.createElement('span');
-          dropdownItem.className = 'dropdown-item';
-          dropdownItem.setAttribute('data-id', medicine.medicineId);
-          dropdownItem.setAttribute('data-medicine', medicine.medicineName);
-          dropdownItem.setAttribute('data-type', medicine.medicineType);
-          dropdownItem.textContent = medicine.medicineName;
-          dropdownItem.onclick = function () {
-            addMedicineToTable(this);
-            input.value = "";
-          };
-  
-          dropdownList.appendChild(dropdownItem);
-        }
-      });
-    }
-}
-  
-function toggleMedicinesDropdown() {
-    const dropdown = document.getElementById("medicines-dropdown");
-    if (dropdown.style.display === "none" || dropdown.style.display === "") {
-        dropdown.style.display = "block";
-    } else {
-        dropdown.style.display = "none";
-    }
-}
-
-function addMedicineToTable(item) {
-    const selectedMedicinesTable = document.getElementById("selected-medicines-table").getElementsByTagName('tbody')[0];
-    const row = selectedMedicinesTable.insertRow();
-    const cell1 = row.insertCell(0);
-    const cell2 = row.insertCell(1);
-    const cell3 = row.insertCell(2);
-
-    const prescriptionObject = JSON.parse(item.getAttribute("data-prescription"));
-
-    row.setAttribute("data-id", item.getAttribute("data-id"));
-    row.setAttribute("data-prescription", item.getAttribute("data-prescription"));
-
-    const medicineName = item.getAttribute("data-medicine");
-    const medicineNameCell = document.createElement("div");
-    medicineNameCell.className = "medicine-name";
-    medicineNameCell.textContent = medicineName;
-
-    cell1.appendChild(medicineNameCell);
-    cell2.innerHTML = `${prescriptionObject.dosage} x ${prescriptionObject.frequency} for ${prescriptionObject.duration} days`;
-    
-    const removeButton = document.createElement("span");
-    removeButton.innerHTML = "Remove";
-    removeButton.className = "remove-button";
-    removeButton.onclick = function() {
-        row.remove();
-    };
-
-    cell3.appendChild(removeButton);
-    document.getElementById("medicines-dropdown").style.display = "none";
-}
-
-function addMedicineToForm(selectedMedicine) {
-    toggleMedicinesDropdown();
-
-    const medicineName = `${selectedMedicine.getAttribute('data-medicine')} (${selectedMedicine.getAttribute('data-dosage')})`;
-  
-    const formRow = document.createElement('div');
-    formRow.className = 'form-section';
-
-    const formRowWrapper = document.createElement('div');
-    formRowWrapper.classList.add(...['flex', 'prescription-wrapper']);
-    formRowWrapper.style.justifyContent = 'space-between';
-  
-    const medicineNameInput = document.createElement('input');
-    medicineNameInput.type = 'text';
-    medicineNameInput.style.marginBlockEnd = '.4rem';
-    medicineNameInput.style.padding = '12px 10px';
-    medicineNameInput.style.border = '1px solid #9dd0ff';
-    medicineNameInput.style.backgroundColor = '#cce6fe';
-    medicineNameInput.style.color = '#1da1f2';
-    medicineNameInput.style.borderRadius = '6px';
-    medicineNameInput.value = medicineName;
-    medicineNameInput.readOnly = true;
-
-    const medicinePrescriptionLeft = document.createElement('input');
-    medicinePrescriptionLeft.classList.add('prescription-input');
-    medicinePrescriptionLeft.placeholder = "Quantity";
-    medicinePrescriptionLeft.style.backgroundColor = "#f9f9f9";
-
-    const medicinePrescriptionMiddle = document.createElement('label');
-    medicinePrescriptionMiddle.innerHTML = 'X';
-    medicinePrescriptionMiddle.style.fontFamily = 'sans-serif';
-    medicinePrescriptionMiddle.style.marginInline = '.4rem';
-    medicinePrescriptionMiddle.style.paddingInline = '.8rem';
-
-    const medicinePrescriptionRight = document.createElement('input');
-    medicinePrescriptionRight.classList.add('prescription-input');
-    medicinePrescriptionRight.placeholder = "No. of Times";
-    medicinePrescriptionRight.style.backgroundColor = "#f9f9f9";
-
-    const medicinePrescriptionTotalDaysLabel = document.createElement('label');
-    medicinePrescriptionTotalDaysLabel.innerHTML = 'For';
-    medicinePrescriptionTotalDaysLabel.style.fontFamily = 'sans-serif';
-    medicinePrescriptionTotalDaysLabel.style.marginInline = '.4rem';
-    medicinePrescriptionTotalDaysLabel.style.paddingInline = '.8rem';
-
-    const medicinePrescriptionTotalDays = document.createElement('input');
-    medicinePrescriptionTotalDays.classList.add('prescription-input');
-    medicinePrescriptionTotalDays.placeholder = "Total Days";
-    medicinePrescriptionTotalDays.style.backgroundColor = "#f9f9f9";
-
-    const addButton = document.createElement('button');
-    addButton.textContent = 'Create';
-    addButton.style.marginBlockStart = '.4rem';
-    addButton.classList.add(...["btn", "yes"]);
-    addButton.onclick = function (event) {
-      event.preventDefault();
-      selectedMedicine.setAttribute('data-prescription', JSON.stringify({dosage: medicinePrescriptionLeft.value, frequency: medicinePrescriptionRight?.value, duration: medicinePrescriptionTotalDays.value}));
-      if(medicinePrescriptionLeft.value.trim() !== "" && medicinePrescriptionRight.value.trim() !== "" && medicinePrescriptionTotalDays.value.trim() !== "") {
-        addMedicineToTable(selectedMedicine);
-        formRow.remove();
-      }
-    };
-
-    const removeButton = document.createElement('button');
-    removeButton.textContent = 'Delete';
-    removeButton.style.marginBlockStart = '.4rem';
-    removeButton.style.marginInlineEnd = '.6rem';
-    removeButton.classList.add(...["btn", "no"]);
-    removeButton.onclick = function (event) {
-      event.preventDefault();
-      formRow.remove();
-    };
-  
-    formRow.appendChild(medicineNameInput);
-    formRowWrapper.appendChild(medicinePrescriptionLeft);
-    formRowWrapper.appendChild(medicinePrescriptionMiddle);
-    formRowWrapper.appendChild(medicinePrescriptionRight);
-    formRowWrapper.appendChild(medicinePrescriptionTotalDaysLabel);
-    formRowWrapper.appendChild(medicinePrescriptionTotalDays);
-    formRow.appendChild(formRowWrapper);
-    formRow.appendChild(removeButton);
-    formRow.appendChild(addButton);
-
-    const input = document.querySelector("#medicines-dropdown-input");
-    const inputContainer = input.parentElement;
-    inputContainer.appendChild(formRow);
-}
-
-
-
-// Fetch medicine data from the API
-async function fetchMedicines() {
-    try {
-        const response = await API.medicines.fetch();
-        const data = await response.data.rows;
-        return data;
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    }
-}
-
-// Populate the dropdown list
-async function populateMedicinesDropdown() {
-    const dropdownInput = document.querySelector('#medicines-dropdown-input');
-    const dropdownList = document.getElementById("medicines-dropdown");
-    dropdownInput.addEventListener("click", toggleMedicinesDropdown);
-    dropdownInput.addEventListener("input", filterMedicinesDropdown);
-
-    const medicineData = await fetchMedicines();
-
-    if (medicineData) {
-        medicineData.forEach((medicine) => {
-            const dropdownItem = document.createElement('span');
-            dropdownItem.className = 'dropdown-item';
-            dropdownItem.setAttribute('data-id', medicine.medicineId);
-            dropdownItem.setAttribute('data-medicine', medicine.medicineName);
-            dropdownItem.setAttribute('data-dosage', medicine.dosage);
-            dropdownItem.setAttribute('data-type', medicine.medicineType);
-            dropdownItem.textContent = `${medicine.medicineName} (${medicine.dosage})`;
-            dropdownItem.onclick = function () {
-                addMedicineToForm(dropdownItem);
-            };
-
-            dropdownList.appendChild(dropdownItem);
-        });
-    }
-}
-
-
 
 // Generate CBC lab report
-async function generateLabReportForCompleteBloodCountTest(formId, labRequestId) {
+async function generateLabReportForCompleteBloodTest(formId, labRequestId) {
     try {
         // Get id of selected visit
         const selectedVisitId = UTILS.getSelectedVisitId();
@@ -1352,7 +622,7 @@ async function generateLabReportForCompleteBloodCountTest(formId, labRequestId) 
             } = fetchCbcResultsRequest.data;
 
             // Report editor
-            const editor = document.querySelector("#complete-blood-count-lab-report");
+            const editor = tinymce.get("complete-blood-count-lab-report");
 
             const reportHTML = `
                 <div style="background-color: #ffffff; border-radius: 0; padding-block: 30px;">
@@ -1528,10 +798,10 @@ async function generateLabReportForCompleteBloodCountTest(formId, labRequestId) 
 
             // Check if the request was successful
             if (fetchCbcResultsRequest.status === 'success') {
-                editor.innerHTML = reportHTML;
+                editor.setContent(reportHTML);
 
             } else {
-                editor.innerHTML = "";
+                editor.setContent("");
             }
         } else {
             console.error(error);
@@ -1543,16 +813,27 @@ async function generateLabReportForCompleteBloodCountTest(formId, labRequestId) 
     }
 }
 
+function setupCompleteBloodCountLabReportTinymce() {
+    tinymce.init({
+        selector: "#complete-blood-count-lab-report",
+        width: "100%",
+        height: "100%",
+        setup: function (editor) {
+            // TODO: something();
+        }
+    });
+}
+
 async function printLabReportForCompleteBloodCountTest(patient) {
     // Print lab report
     const printLabReportBtn = document.querySelector("#print-lab-report-btn");
     printLabReportBtn?.addEventListener("click", event => {
         event.preventDefault();
-        buildLabReportForCompleteBloodTest("complete-blood-count-lab-report", "CBC Lab Report", patient);
+        buildLabReportForCompleteBloodCountTest("complete-blood-count-lab-report", "CBC Lab Report", patient);
     });
 }
 
-function buildLabReportForCompleteBloodTest(editorId, title, patient){
+function buildLabReportForCompleteBloodCountTest(editorId, title, patient){
     const patientAge = new Date().getFullYear() - new Date(patient.dateOfBirth).getFullYear();
     var editorContent = tinymce.get(editorId).getContent();
     // Create a new window for printing
@@ -1579,7 +860,66 @@ function buildLabReportForCompleteBloodTest(editorId, title, patient){
     printWindow.close();
 }
 
-// Generate Urinalysis lab report
+
+
+// Handle urinalysis results form
+async function handleUrinalysisResultsForm() {
+    const urinalysisResultsForm = document.querySelector('#urinalysis-results-form');
+    urinalysisResultsForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const comment = tinymce.get('urinalysis-results-comment-editor').getContent();
+
+        // Get Id of selected request
+        const selectedRequestId = urinalysisResultsForm.dataset.requestId;
+        if (! selectedRequestId) return;
+
+        // Get Id of selected visit
+        const selectedVisitId = UTILS.getSelectedVisitId();
+    
+        // Collect form data
+        const formData = new FormData(urinalysisResultsForm);
+        formData.append('requestId', selectedRequestId);
+        formData.append('comment', comment);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+    
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(urinalysisResultsForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to create a triage record
+                const response = await API.results.urinalysis.create(URLEncodedData, true);
+    
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    urinalysisResultsForm.reset();
+    
+                    // Remove form
+                    urinalysisResultsForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the requests table
+                    loadSinglePatientVisitPrescriptions(selectedVisitId);
+    
+                } else {
+                    alert('Failed to create Urinalysis record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while creating the Urinalysis record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            patientLabReportForm.reset();
+        });
+    });
+}
+
+// Generate CBC lab report
 async function generateLabReportForUrinalysisTest(formId, labRequestId) {
     try {
         // Get id of selected visit
@@ -1631,7 +971,8 @@ async function generateLabReportForUrinalysisTest(formId, labRequestId) {
             } = fetchUrinalysisResultsRequest.data;
 
             // Report editor
-            const editor = document.querySelector("#urinalysis-lab-report");
+            const editor = tinymce.get("urinalysis-lab-report");
+
 
             const reportHTML = `
                 <div style="background-color: #ffffff; border-radius: 0; padding-block: 30px;">
@@ -1810,10 +1151,10 @@ async function generateLabReportForUrinalysisTest(formId, labRequestId) {
 
             // Check if the request was successful
             if (fetchUrinalysisResultsRequest.status === 'success') {
-                editor.innerHTML = reportHTML;
+                editor.setContent(reportHTML);
 
             } else {
-                editor.innerHTML = "";
+                editor.setContent("");
             }
         } else {
             console.error(error);
@@ -1821,8 +1162,19 @@ async function generateLabReportForUrinalysisTest(formId, labRequestId) {
         }
     } catch (error) {
         console.error(error);
-        alert('An error occurred while generating the urinalysis lab report.');
+        alert('An error occurred while generating the cbc lab report.');
     }
+}
+
+function setupUrinalysisLabReportTinymce() {
+    tinymce.init({
+        selector: "#urinalysis-lab-report",
+        width: "100%",
+        height: "100%",
+        setup: function (editor) {
+            // TODO: something();
+        }
+    });
 }
 
 async function printLabReportForUrinalysisTest(patient) {

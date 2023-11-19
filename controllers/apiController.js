@@ -12,7 +12,8 @@ const {
   Medicine,
   LabRequest,
   LabResultForCompleteBloodCount,
-  LabResultForUrinalysis
+  LabResultForUrinalysis,
+  Prescription,
 } = require('../models');
 
 
@@ -1164,7 +1165,7 @@ const fetchLabRequestsByVisitId = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error fetching visits:', error);
+    console.error('Error fetching lab requests:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -1199,6 +1200,132 @@ const updateLabRequestPaymentStatus = async (req, res) => {
   }
 };
 
+// // Create prescription
+const createPrescription = async (req, res) => {
+  try {
+    // Convert empty strings to null for nullable fields
+    const medicalPrescription = req.body;
+
+    // Empty array to store the new prescription
+    const newMedicalPrescriptions = [];
+
+    // Iterate over the prescriptions array and insert each object as a separate record
+    for (const prescription of medicalPrescription) {
+      const newPrescription = await Prescription.create({
+        visitId: prescription.visitId,
+        medicineId: prescription.medicineId,
+        dosage: prescription.dosage,
+        frequency: prescription.frequency,
+        duration: prescription.duration,
+      });
+
+      // Add the new request to the newMedicalPrescriptions array.
+      newMedicalPrescriptions.push(newPrescription);
+    }
+    return res.status(201).json({ status: 'success', message: 'Prescription records created successfully', data: newMedicalPrescriptions });
+  } catch (error) {
+    console.error('Error creating prescription:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Fetch prescriptions by visit id
+const fetchPrescriptionsByVisitId = async (req, res) => {
+  const visitId = req.params.visitId;
+
+  try {
+    const draw = req.query.draw;
+    const start = parseInt(req.query.start);
+    const length = parseInt(req.query.length);
+    const searchValue = req.query.search.value;
+    const orderColumnIndex = req.query.order[0].column;
+    const orderDirection = req.query.order[0].dir;
+    const minDate = req.query.minDate;
+    const maxDate = req.query.maxDate;
+
+
+
+    const filter = {
+      visit_id: visitId,
+    };
+
+    const sort = [];
+
+    // if (searchValue) {
+    //   filter[Op.or] = [
+    //     { patientId: { [Op.iLike]: `%${searchValue}%` } },
+    //     // { lastName: { [Op.iLike]: `%${searchValue}%` } },
+    //     // Add more columns to search here as needed
+    //   ];
+    // }
+
+    if (minDate && maxDate) {
+      filter.createdAt = {
+        [Op.between]: [new Date(minDate), new Date(maxDate)],
+      };
+    }
+
+    // Define the column mappings for sorting
+    const columnMappings = {
+      // 0: 'patient_id', // Map column 0 to the 'id' column
+      // Add mappings for other columns as needed
+    };
+
+    // Check if the column index is valid and get the column name
+    const columnData = columnMappings[orderColumnIndex];
+    if (columnData) {
+      sort.push([columnData, orderDirection]);
+    }
+
+    // // Add sorting by createdAt in descending order (latest first)
+    // sort.push(['id', 'desc']); // This line will sort by createdAt in descending order
+
+
+     // Construct the Sequelize query
+    const queryOptions = {
+      where: filter,
+      offset: start,
+      limit: length,
+      order: sort,
+      include: [
+        {
+          model: models.Medicine,
+          attributes: ['medicineName', 'medicineType', 'dosage', 'manufacturer'],
+        },
+        {
+          model: models.Visit,
+        },
+      ],
+    };
+
+    const result = await Prescription.findAndCountAll(queryOptions);
+
+    // Access the medicine's fields in each prescription result
+    const prescriptionWithMedicineResults = result.rows.map((prescription) => ({
+      // Extract fields from the 'Medicine' model
+      medicineName: prescription.Medicine.medicineName,
+      medicineType: prescription.Medicine.medicineType,
+      medicineDosage: prescription.Medicine.dosage,
+      manufacturer: prescription.Medicine.manufacturer,
+      dosage: prescription.dosage,
+      frequency: prescription.frequency,
+      duration: prescription.duration,
+      prescriptionCreatedAt: prescription.createdAt,
+    }));
+
+    return res.status(200).json({
+      draw: draw,
+      recordsTotal: result.count,
+      recordsFiltered: result.count,
+      data: prescriptionWithMedicineResults,
+    });
+
+  } catch (error) {
+    console.error('Error fetching prescriptions:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 
 
 
@@ -1229,4 +1356,6 @@ module.exports = {
   createLabRequest,
   fetchBillsByVisitId, 
   fetchUnpaidBillsByVisitId,
+  createPrescription,
+  fetchPrescriptionsByVisitId,
 };

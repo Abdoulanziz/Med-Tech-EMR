@@ -27,6 +27,8 @@ const {
     createLabRequest,
     fetchBillsByVisitId, 
     fetchUnpaidBillsByVisitId,
+    createPrescription,
+    fetchPrescriptionsByVisitId,
 } = require("../controllers/apiController");
 
 router.get("/status", checkAPIStatus);
@@ -63,6 +65,9 @@ router.get("/results/complete-blood-count/:requestId", fetchResultsForCompleteBl
 
 router.post("/results/urinalysis", createResultsForUrinalysisTest);
 router.get("/results/urinalysis/:requestId", fetchResultsForUrinalysisTestByRequestId);
+
+router.post("/prescriptions", createPrescription);
+router.get("/prescriptions/:visitId", fetchPrescriptionsByVisitId);
 
 
 router.get("/tests", fetchTests);
