@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Med Tech - EMR</title>
+
+
+    <link rel="shortcut icon" href="/assets/svg/favicon.ico" type="image/x-icon"/>
+
+    <link rel="stylesheet" href="/assets/css/utils.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/table.min.css">
+    <link rel="stylesheet" href="/assets/icons/themify-icons.css">
+
+    <script src="/js/libraries/jquery-3.5.1.js"></script>
+    <script src="/js/libraries/jquery.dataTables.min.js"></script>
+
+    <script src="/js/libraries/chart.js"></script>
+    <script src="/js/libraries/jspdf.min.js"></script>
+
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main">
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-logo">
+                    <img src="/assets/svg/512x512.png" alt="" class="app-logo">
+                    <span style="margin-inline-start: .6rem;color: #fff;font-family: 'Tilt Neon';font-weight: bolder;font-size: 27px;"><span style="color: rgb(0, 208, 255);">Med</span> <span style="color: yellowgreen;">Tech</span></span>
+                </div>
+                <ul class="sidebar-menu">
+                    <li class="menu-item active">
+                        <a href="/admin/dashboard">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions-admin/dashboard.png" alt="" class="icon"><span class="text">Dashboard</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/admin/dashboard">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions-admin/user.png" alt="" class="icon"><span class="text">Accounts</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/admin/dashboard">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions-admin/inventory.png" alt="" class="icon"><span class="text">Inventory</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/admin/dashboard">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions-admin/reports.png" alt="" class="icon"><span class="text">Reports</span></span>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main section -->
+            <div class="content">
+
+                <!-- Navbar -->
+                <div class="navbar">
+                    <nav>
+                        <ul class="nav-links flex">
+                            <img src="/assets/svg/cancel.png" alt="" id="sidebar-toggler" class="sidebar-toggler" style="block-size: 32px;inline-size: 32px;">
+                            <div class="dropdown">
+                                <div class="flex">
+                                    <img src="/assets/img/profiledefault.png" alt="" class="dropdown-avatar" id="toggle-dropdown">
+                                    <img src="/assets/svg/bell.png" alt="" class="">
+                                </div>
+                                <div class="dropdown-menu" id="dropdown-menu">
+                                    <ul class="dropdown-items">
+                                        <li class="dropdown-item header">
+                                            <span id="user-fullname-label"><%= data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1) %></span>
+                                            <br>
+                                            <small id="user-email-label">admin@coire.live</small>
+                                        </li>
+                                        <li class="dropdown-item"><i class="ti-settings"></i> <a href="#">Settings</a></li>
+                                        <li class="dropdown-item"><i class="ti-user"></i> <a href="#">My Profile</a></li>
+                                        <li class="dropdown-item"><i class="ti-info-alt"></i> <a href="#">About</a></li>
+                                        <li class="dropdown-item footer" id="signout-cta"><span>Sign Out</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </ul>
+                    </nav>
+                </div>
+
+                <!-- Section 00 -->
+                <div class="sections br-0 inview" id="section_00">
+                    <div class="section-header flex"></div>
+                    <div class="section-body" style="padding-block-start: .8rem;"></div>
+                </div>
+
+                <!-- Section 01 -->
+                <div class="sections br-0" id="section_01">
+                    <div class="section-header flex"></div>
+                    <div class="section-body" style="padding-block-start: .8rem;"></div>
+                </div>
+
+                <!-- Section 02 -->
+                <div class="sections br-0" id="section_02">
+                    <div class="section-header flex"></div>
+                    <div class="section-body" style="padding-block-start: .8rem;"></div>
+                </div>
+
+                <!-- Bottom banner -->
+                <div class="bottom-banner">
+                    <div class="banner-content">
+                        <div class="banner-content-left">
+                            <span class="logged-in-as-label">Logged in as: <span class="logged-in-as-value"> <%= data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1) %> </span></span>
+                        </div>
+                        <div class="banner-content-right">
+                            <span class="system-version-label">System version: <span class="system-version-value"> 1.0.0 </span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collect patient triage modal -->
+            <div id="collect-patient-triage-data-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="patient-triage-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Record Patient Triage</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="">
+                            <div class="form-section">
+                                <h2>Vitals</h2>
+    
+                                <div class="form-group">
+                                    <label for="blood-pressure">Blood pressure:</label>
+                                    <input type="text" class="form-control" id="blood-pressure" name="bloodPressure">
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="heart-rate">Heart rate:</label>
+                                    <input type="text" class="form-control" id="heart-rate" name="heartRate">
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="respiratory-rate">Respiratory rate:</label>
+                                    <input type="text" class="form-control" id="respiratory-rate" name="respiratoryRate">
+                                </div>
+                            </div>
+    
+                            <div class="form-section">
+                                <h2>Signs & symptoms</h2>
+    
+                                <div class="form-group">
+                                    <label for="signs-and-symptoms">Fill the signs and symptoms from the patient:</label>
+                                    <textarea id="signs-and-symptoms" name="signsAndSymptoms" class="form-control"></textarea>
+                                </div>
+                            </div>
+    
+                            <div class="form-section">
+                                <h2>Injury details</h2>
+    
+                                <div class="form-group">
+                                    <label for="injury-details">Fill the type, location and severity of the injury:</label>
+                                    <textarea id="injury-details" name="injuryDetails" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Edit patient triage modal -->
+            <div id="edit-patient-triage-data-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="patient-triage-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Edit Patient Triage</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="">
+                            <div class="form-section">
+                                <h2>Vitals</h2>
+    
+                                <div class="form-group">
+                                    <label for="blood-pressure">Blood pressure:</label>
+                                    <input type="text" class="form-control" id="blood-pressure" name="bloodPressure">
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="heart-rate">Heart rate:</label>
+                                    <input type="text" class="form-control" id="heart-rate" name="heartRate">
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="respiratory-rate">Respiratory rate:</label>
+                                    <input type="text" class="form-control" id="respiratory-rate" name="respiratoryRate">
+                                </div>
+                            </div>
+    
+                            <div class="form-section">
+                                <h2>Signs & symptoms</h2>
+    
+                                <div class="form-group">
+                                    <label for="signs-and-symptoms">Fill the signs and symptoms from the patient:</label>
+                                    <textarea id="signs-and-symptoms" name="signsAndSymptoms" class="form-control"></textarea>
+                                </div>
+                            </div>
+    
+                            <div class="form-section">
+                                <h2>Injury details</h2>
+    
+                                <div class="form-group">
+                                    <label for="injury-details">Fill the type, location and severity of the injury:</label>
+                                    <textarea id="injury-details" name="injuryDetails" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Collect patient allergies modal -->
+            <div id="collect-patient-allergies-data-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="patient-allergy-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Record Patient Allergies</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="">
+                            <div class="form-section">
+                                <h2>Allergies</h2>
+    
+                                <div class="form-group">
+                                    <label for="allergies">Fill the allergies from the patient:</label>
+                                    <textarea class="form-control" name="allergies" id="allergies" cols="30" rows="10"></textarea>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Edit patient allergies modal -->
+            <div id="edit-patient-allergies-data-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="patient-allergy-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Edit Patient Allergies</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="">
+                            <div class="form-section">
+                                <h2>Allergies</h2>
+    
+                                <div class="form-group">
+                                    <label for="allergies">Fill the allergies from the patient:</label>
+                                    <textarea class="form-control" name="allergies" id="allergies" cols="30" rows="10"></textarea>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Create patient medical prescriptions modal -->
+            <div id="create-patient-medical-prescription-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="create-patient-medical-prescription-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Medical Prescription</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="create-patient-medical-prescription-form-body">
+                            <div class="request-form search-form-in-modal">
+                                <div class="form-section">
+                                    <h2>Search Medicines</h2>
+
+                                    <div class="dropdown">
+                                        <input type="text" id="medicines-dropdown-input" placeholder="Type to filter medicines">
+                                        <div class="dropdown-list" id="medicines-dropdown">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h2>Prescriptions</h2>
+                                    <table id="selected-medicines-table" class="testsTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Drug Name</th>
+                                                <th>Prescription</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Create patient diagnosis modal -->
+            <div id="create-patient-diagnosis-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="create-patient-diagnosis-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Medical Diagnoses</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="create-patient-diagnosis-form-body">
+                            <div class="request-form search-form-in-modal">
+                                <div class="form-section">
+                                    <h2>Search Diagnostic Test</h2>
+
+                                    <div class="dropdown">
+                                        <input type="text" id="lab-tests-dropdown-input" placeholder="Type to filter tests">
+                                        <div class="dropdown-list" id="lab-tests-dropdown">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h2>Test Requests</h2>
+                                    <table id="selected-tests-table" class="testsTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Test Name</th>
+                                                <th>Fee</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="total-row">
+                                                <td>Total</td>
+                                                <td class="total-fee"></td>
+                                                <td></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Edit patient diagnosis modal -->
+            <div id="edit-patient-diagnosis-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="edit-patient-diagnosis-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Edit Medical Diagnosis</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="edit-patient-diagnosis-form-body">
+
+ 
+                            <div class="form-section">
+                                <label for="testName">Diagnosis Test</label>
+                                <input type="text" name="testName">
+                                <label for="fees">Fees ($)</label>
+                                <input type="number" name="testFees">
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Complete blood count report modal -->
+            <div id="complete-blood-count-lab-report-modal" class="form-modal">
+                <div class="form-modal-content" style="inline-size: 40%;">
+                    <form class="modal-form" id="complete-blood-count-lab-report-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">CBC Lab Report</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="complete-blood-count-lab-report-form-body" style="padding: 0;">
+                            <div id="complete-blood-count-lab-report" style="padding: 20px;background-color: #ffffff;"></div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Urinalysis report modal -->
+            <div id="urinalysis-report-modal" class="form-modal">
+                <div class="form-modal-content" style="inline-size: 42%;">
+                    <form class="modal-form" id="urinalysis-report-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Urinalysis Lab Report</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="urinalysis-report-form-body" style="padding: 0;">
+                            <div id="urinalysis-lab-report" style="padding: 20px;background-color: #ffffff;"></div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+                        <!-- Services payment modal -->
+            <div id="services-payment-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="services-payment-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Receive Payment</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="services-payment-form-body">
+                            <style>
+                                .container {
+                                    width: 80%;
+                                    margin: 0 auto;
+                                }
+
+                                .table {
+                                    width: 100%;
+                                    border-collapse: collapse;
+                                }
+
+                                .table th,
+                                .table td {
+                                    padding: 5px;
+                                    border: 1px solid #ccc;
+                                    text-align: left;
+                                }
+
+                                .table th {
+                                    background-color: #eee;
+                                }
+
+                                .total {
+                                    text-align: right;
+                                    font-weight: bold;
+                                }
+
+                                .checkout-button {
+                                    background-color: #007bff;
+                                    color: white;
+                                    padding: 10px 20px;
+                                    border: none;
+                                    cursor: pointer;
+                                }
+
+                                #select-all {
+                                    cursor: pointer;
+                                }
+                            </style>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="select-all"></th>
+                                        <th>Service Name</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="services-payment-table-body">
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2" class="total">Total</td>
+                                        <td class="total-value">0</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="submit" id="update-services-payment-status-btn"> Process</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+            <!-- Send patient to eye clinic modal -->
+            <div id="send-patient-to-eye-clinic-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Send Patient to Eye Clinic</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="">
+                            <div class="form-section">
+                                <h2>Eye Information</h2>
+                                <div class="form-group">
+                                    <label for="specific-eye">Specific Eye:</label>
+                                    <select id="specific-eye" class="form-control" name="specificEye" required>
+                                        <option value="right">Right eye</option>
+                                        <option value="left">Left eye</option>
+                                    </select>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="diagnosis">Diagnosis:</label>
+                                    <select id="diagnosis" class="form-control" name="diagnosis" required>
+                                        <option value="vision-test">Vision Test</option>
+                                        <option value="eye-pressure-test">Eye Pressure Test</option>
+                                    </select>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="service-fee">Service Fee:</label>
+                                    <input type="text" class="form-control" id="service-fee" name="serviceFee" required>
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="observation-notes">Observation Notes:</label>
+                                    <input type="text" class="form-control" id="observation-notes" name="observationNotes" required>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="description-notes">Description Notes:</label>
+                                    <input type="text" class="form-control" id="description-notes" name="descriptionNotes" required>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Send patient to dental clinic modal -->
+            <div id="send-patient-to-dental-clinic-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="create-patient-dental-request-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Send Patient to Dental Clinic</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="create-patient-dental-request-form-body">
+                            <div class="form-section">
+                                <label for="toothName">Tooth Name</label>
+                                <input type="text" name="toothName[]">
+                                <label for="testName">Diagnosis Test</label>
+                                <input type="text" name="testName[]">
+                                <label for="procedure">Procedure</label>
+                                <input type="text" name="procedure[]">
+                                <label for="fees">Fees ($)</label>
+                                <input type="number" name="fees[]">
+                                <button type="button" class="btn remove-test"> <i class="ti-trash"></i> Remove</button>
+                            </div>
+                            <div class="flex" style="block-size: fit-content;justify-content: space-between;">
+                                <button type="button" id="addTest" class="btn"> <i class="ti-plus"></i> Add Test</button>
+                                <div class="total-fees">Total Fees: $0.00</div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Send patient to cardiolody clinic modal -->
+            <div id="send-patient-to-cardiology-clinic-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Send Patient to Cardiology Clinic</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="">
+                            <div class="form-section">
+                                <h2>Medical Information</h2>
+                                <div class="form-group">
+                                    <label for="reason-for-referral">Reason for Referral:</label>
+                                    <select id="reason-for-referral" class="form-control" name="reasonForReferral" required>
+                                        <option value="">Chest Pain</option>
+                                        <option value="">Shortness of Breath</option>
+                                        <option value="">Palpitations</option>
+                                        <option value="">Hypertension</option>
+                                        <option value="">Heart Murmur</option>
+                                        <option value="">Other</option>
+                                    </select>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="current-medications">Current Medications:</label>
+                                    <textarea id="current-medications" name="currentMedications" class="form-control"></textarea>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="service-fee">Service Fee:</label>
+                                    <input type="text" class="form-control" id="service-fee" name="serviceFee" required>
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="observation-notes">Observation Notes:</label>
+                                    <textarea id="observation-notes" name="observationNotes" class="form-control"></textarea>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="additional-notes">Additional Notes:</label>
+                                    <textarea id="additional-notes" name="additionalNotes" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Send patient to radiology clinic modal -->
+            <div id="send-patient-to-cardiology-clinic-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Send Patient to Radiology Clinic</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="">
+                            <div class="form-section">
+                                <h2>Medical Information</h2>
+                                <div class="form-group">
+                                    <label for="reason-for-referral">Reason for Referral:</label>
+                                    <select id="reason-for-referral" class="form-control" name="reasonForReferral" required>
+                                        <option value="">Chest Pain</option>
+                                        <option value="">Shortness of Breath</option>
+                                        <option value="">Palpitations</option>
+                                        <option value="">Hypertension</option>
+                                        <option value="">Heart Murmur</option>
+                                        <option value="">Other</option>
+                                    </select>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="current-medications">Current Medications:</label>
+                                    <textarea id="current-medications" name="currentMedications" class="form-control"></textarea>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="service-fee">Service Fee:</label>
+                                    <input type="text" class="form-control" id="service-fee" name="serviceFee" required>
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="observation-notes">Observation Notes:</label>
+                                    <textarea id="observation-notes" name="observationNotes" class="form-control"></textarea>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="additional-notes">Additional Notes:</label>
+                                    <textarea id="additional-notes" name="additionalNotes" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Send patient to radiology clinic modal -->
+            <div id="send-patient-to-radiology-clinic-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Send Patient to Radiology Clinic</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="">
+                            <div class="form-section">
+                                <h2>Medical Information</h2>
+                                <div class="form-group">
+                                    <label for="reason-for-referral">Reason for Referral:</label>
+                                    <select id="reason-for-referral" class="form-control" name="reasonForReferral" required>
+                                        <option value="">Chest Pain</option>
+                                        <option value="">Shortness of Breath</option>
+                                        <option value="">Palpitations</option>
+                                        <option value="">Hypertension</option>
+                                        <option value="">Heart Murmur</option>
+                                        <option value="">Other</option>
+                                    </select>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="current-medications">Current Medications:</label>
+                                    <textarea id="current-medications" name="currentMedications" class="form-control"></textarea>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="service-fee">Service Fee:</label>
+                                    <input type="text" class="form-control" id="service-fee" name="serviceFee" required>
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="observation-notes">Observation Notes:</label>
+                                    <textarea id="observation-notes" name="observationNotes" class="form-control"></textarea>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="additional-notes">Additional Notes:</label>
+                                    <textarea id="additional-notes" name="additionalNotes" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Send patient to theatre clinic modal -->
+            <div id="send-patient-to-theatre-clinic-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Send Patient to Theatre</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="">
+                            <div class="form-section">
+                                <h2>Medical Information</h2>
+                                <div class="form-group">
+                                    <label for="reason-for-referral">Reason for Referral:</label>
+                                    <select id="reason-for-referral" class="form-control" name="reasonForReferral" required>
+                                        <option value="">Chest Pain</option>
+                                        <option value="">Shortness of Breath</option>
+                                        <option value="">Palpitations</option>
+                                        <option value="">Hypertension</option>
+                                        <option value="">Heart Murmur</option>
+                                        <option value="">Other</option>
+                                    </select>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="current-medications">Current Medications:</label>
+                                    <textarea id="current-medications" name="currentMedications" class="form-control"></textarea>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="service-fee">Service Fee:</label>
+                                    <input type="text" class="form-control" id="service-fee" name="serviceFee" required>
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="observation-notes">Observation Notes:</label>
+                                    <textarea id="observation-notes" name="observationNotes" class="form-control"></textarea>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="additional-notes">Additional Notes:</label>
+                                    <textarea id="additional-notes" name="additionalNotes" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Send patient to dental clinic modal
+            <div id="send-patient-to-dental-clinic-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="create-patient-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Send Patient to Dental Clinic</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="medical-diagnosis-form-body">
+                            <div class="form-section">
+                                <h2>Referring Doctor</h2>
+                                <div class="form-group">
+                                    <label for="doctorName">Referring Doctor:</label>
+                                    <input type="text" id="doctorName" name="doctorName" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="department">Department:</label>
+                                    <input type="text" id="department" name="department" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="date">Date:</label>
+                                    <input type="date" id="date" name="date" class="form-control" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-section">
+                                <h2>Patient Information</h2>
+                                <div class="form-group">
+                                    <label for="patientName">Patient Name:</label>
+                                    <input type="text" id="patientName" name="patientName" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="patientID">Patient ID:</label>
+                                    <input type="text" id="patientID" name="patientID" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dob">DOB:</label>
+                                    <input type="date" id="dob" name="dob" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="gender">Gender:</label>
+                                    <input type="text" id="gender" name="gender" class="form-control" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-section">
+                                <h2>Referral Information</h2>
+                                <div class="form-group">
+                                    <label for="reasonForReferral">Reason for Referral:</label>
+                                    <textarea id="reasonForReferral" name="reasonForReferral" class="form-control" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="attachments">Radiographs/Attachments:</label>
+                                    <input type="file" id="attachments" name="attachments" class="form-control" multiple>
+                                </div>
+                                <div class="form-group">
+                                    <label for="treatmentPlan">Treatment Plan:</label>
+                                    <textarea id="treatmentPlan" name="treatmentPlan" class="form-control" required></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="form-section">
+                                <h2>Dental Lab Instructions</h2>
+                                <div class="form-group">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="evaluate" name="instructions" value="Evaluate" class="form-control">
+                                        <label for="evaluate">Please evaluate the case and provide a cost estimate.</label>
+                                    </div>
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="proceed" name="instructions" value="Proceed" class="form-control">
+                                        <label for="proceed">Proceed with the following treatment:</label>
+                                        <textarea id="proceedTreatmentPlan" name="proceedTreatmentPlan" class="form-control"></textarea>
+                                    </div>
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="urgent" name="urgency" value="Urgent" class="form-control">
+                                        <label for="urgent">Urgent Case</label>
+                                    </div>
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="routine" name="urgency" value="Routine" class="form-control">
+                                        <label for="routine">Routine Case</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="deadline">Specific Deadline:</label>
+                                        <input type="date" id="deadline" name="deadline" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="specialInstructions">Special Instructions:</label>
+                                        <textarea id="specialInstructions" name="specialInstructions" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="form-section">
+                                <h2>Lab Use Only</h2>
+                                <div class="form-group">
+                                    <label for="receivedBy">Received by:</label>
+                                    <input type="text" id="receivedBy" name="receivedBy" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="dateReceived">Date Received:</label>
+                                    <input type="date" id="dateReceived" name="dateReceived" class="form-control">
+                                </div>
+                            </div>
+                                    
+                            <div class="form-section">   
+                                <h3>Lab Work Details</h3>
+                                <div class="form-group">
+                                    <label for="completionDate">Estimated Completion Date:</label>
+                                    <input type="date" id="completionDate" name="completionDate" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="materialsRequired">Materials/Components Required:</label>
+                                    <textarea id="materialsRequired" name="materialsRequired" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="costEstimate">Cost Estimate: $</label>
+                                    <input type="text" id="costEstimate" name="costEstimate" class="form-control">
+                                </div>
+                            </div>
+                                    
+                            <div class="form-section">    
+                                <h3>Lab Technician's Notes</h3>
+                                <div class="form-group">
+                                    <textarea id="labTechnicianNotes" name="labTechnicianNotes" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="submit">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div> -->
+        </div>
+    </div>
+
+    <script src="/js/libraries/moment.min.js"></script>
+    <script src="/js/tinymce/js/tinymce/tinymce.min.js"></script>
+
+    <!-- Load modules -->
+    <script type="module" src="/js/core/ui.js"></script>
+    <script type="module" src="/js/modules/dashboard.js"></script>
+    
+
+
+    <script>
+
+        // Set up dental with dynamic test items and total fees calculation
+        function createDentalForm(formId, formBodyId) {
+            const form = document.getElementById(formId);
+            const formBody = form.querySelector(`#${formBodyId}`);
+            const totalFeesDisplay = formBody.querySelector(".total-fees");
+
+            function addTestItem() {
+                const testItem = document.createElement("div");
+                testItem.classList.add("form-section");
+                testItem.innerHTML = `
+                    <label for="toothName">Tooth Name</label>
+                    <input type="text" name="toothName[]">
+                    <label for="testName">Diagnosis Test</label>
+                    <input type="text" name="testName[]">
+                    <label for="procedure">Procedure</label>
+                    <input type="text" name="procedure[]">
+                    <label for="fees">Fees ($)</label>
+                    <input type="number" name="fees[]">
+                    <button type="button" class="btn remove-test"> <i class="ti-trash"></i> Remove</button>
+                `;
+
+                formBody.insertBefore(testItem, formBody.lastElementChild);
+
+                const removeTestButton = testItem.querySelector(".remove-test");
+                removeTestButton.addEventListener("click", () => {
+                    formBody.removeChild(testItem);
+                    recalculateTotalFees();
+                });
+            }
+
+            function recalculateTotalFees() {
+                const feeInputs = Array.from(formBody.querySelectorAll("input[name='fees[]']"));
+                const totalFees = feeInputs.reduce((total, input) => {
+                    const fee = parseFloat(input.value) || 0;
+                    return total + fee;
+                }, 0).toFixed(2);
+                totalFeesDisplay.textContent = `Total Fees: $${totalFees}`;
+            }
+
+            const addTestButton = form.querySelector("#addTest");
+            addTestButton.addEventListener("click", addTestItem);
+            formBody.addEventListener("input", recalculateTotalFees);
+        }
+
+
+        function getDentalFormValues(formId) {
+            const form = document.getElementById(formId);
+            const testItems = form.querySelectorAll(".form-section");
+            const values = [];
+
+            testItems.forEach(testItem => {
+                const toothNameInput = testItem.querySelector("input[name='toothName[]']");
+                const testNameInput = testItem.querySelector("input[name='testName[]']");
+                const procedureInput = testItem.querySelector("input[name='procedure[]']");
+                const feeInput = testItem.querySelector("input[name='fees[]']");
+                
+                const toothName = toothNameInput.value;
+                const testName = testNameInput.value;
+                const procedure = procedureInput.value;
+                const fee = parseFloat(feeInput.value) || 0;
+
+                values.push({ toothName, testName, procedure, fee });
+            });
+
+            return values;
+        }
+
+
+        // Create dental form
+        createDentalForm("create-patient-dental-request-form", "create-patient-dental-request-form-body");
+
+
+        // Handle dental create form
+        async function handleCreateDentalForm() {
+            const patientDiagnosisForm = document.querySelector('#create-patient-dental-request-form');
+            patientDiagnosisForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                // Call the getDentalFormValues function to retrieve the values
+                const formId = "create-patient-dental-request-form";
+                const formValues = getDentalFormValues(formId);
+
+                console.log(formValues);
+
+            });
+        }
+        handleCreateDentalForm();
+
+
+
+
+
+
+
+        
+
+
+        // Display the selected file name when a file is chosen
+        function displayFileName() {
+            const fileInput = document.querySelector('#file-input');
+            const selectedFile = document.querySelector('#selected-file');
+
+            if (fileInput.files.length > 0) {
+                selectedFile.textContent = 'Selected File: ' + fileInput.files[0].name;
+            } else {
+                selectedFile.textContent = '';
+            }
+        }
+
+
+        // Enable drag and drop functionality
+        const fileDropArea = document.querySelector('#file-drop-area');
+        fileDropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.add('file-upload-container-active');
+        });
+
+
+        fileDropArea.addEventListener('dragleave', () => {
+            fileDropArea.classList.remove('file-upload-container-active');
+        });
+
+
+        fileDropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.remove('file-upload-container-active');
+            const fileInput = document.querySelector('#file-input');
+            fileInput.files = e.dataTransfer.files;
+            displayFileName();
+        });
+
+    </script>
+
+</body>
+</html>

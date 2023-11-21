@@ -18,7 +18,7 @@ const handleSignin = async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    const user = await User.findOne({ where: { username } });
+    const user = await User.findOne({ where: { username }});
 
     if (!user) {
       res.redirect("/auth/signin");
@@ -28,8 +28,13 @@ const handleSignin = async (req, res) => {
     const isValid = await bcrypt.compare(password, user.password);
 
     if (isValid) {
-      req.session.user = user;
-      res.redirect("/page/patients");
+      req.session.user = user.dataValues;
+
+      // Modify the session data
+      req.session.lastLogin = new Date();
+
+      user.roleId === 1 ? res.redirect("/admin/dashboard") : res.redirect("/page/patients");
+
     } else {
       res.redirect("/auth/signin");
     }

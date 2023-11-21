@@ -31,7 +31,7 @@ app.use(
   session({
     secret: SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     store: sessionStore,
     name: 'mis.connect.sid',
     cookie: {
@@ -64,6 +64,7 @@ sequelize
 
 app.use("/", require("../routes/authRoutes"));
 app.use("/auth", require("../routes/authRoutes"));
+app.use("/admin", require("../routes/adminRoutes"));
 app.use("/page", require("../routes/pageRoutes"));
 app.use("/api/v1/", require("../routes/apiRoutes"));
 app.use("*", (req, res) => res.redirect("/"));
