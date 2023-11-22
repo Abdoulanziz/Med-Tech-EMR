@@ -40,7 +40,7 @@
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="/admin/dashboard">
+                        <a href="/admin/accounts">
                             <span class="flex">
                                 <span class="flex"><img src="/assets/actions-admin/user.png" alt="" class="icon"><span class="text">Accounts</span></span>
                             </span>
@@ -64,7 +64,7 @@
             </div>
 
             <!-- Main section -->
-            <div class="content">
+            <div class="content admin">
 
                 <!-- Navbar -->
                 <div class="navbar">
@@ -74,7 +74,7 @@
                             <div class="dropdown">
                                 <div class="flex">
                                     <img src="/assets/img/profiledefault.png" alt="" class="dropdown-avatar" id="toggle-dropdown">
-                                    <img src="/assets/svg/bell.png" alt="" class="">
+                                    <img src="/assets/svg/bell.png" alt="">
                                 </div>
                                 <div class="dropdown-menu" id="dropdown-menu">
                                     <ul class="dropdown-items">
@@ -96,19 +96,87 @@
 
                 <!-- Section 00 -->
                 <div class="sections br-0 inview" id="section_00">
-                    <div class="section-header flex"></div>
-                    <div class="section-body" style="padding-block-start: .8rem;"></div>
+                    <!-- <div class="section-header flex" style="border-block-end: 0;"></div> -->
+                    <div class="section-body" style="padding-block-start: .8rem;">
+                        <div class="top-cards">
+                            <div class="top-card card flex">
+                                <div class="card-content card-content-left">
+                                    <span><i class="ti ti-money"></i></span>
+                                </div>
+                                <div class="card-content card-content-right">
+                                    <h4>Requests</h4>
+                                    <h6 id="requests">12</h6>
+                                </div>
+                            </div>
+                            <div class="top-card card flex">
+                                <div class="card-content card-content-left">
+                                    <span><i class="ti ti-credit-card"></i></span>
+                                </div>
+                                <div class="card-content card-content-right">
+                                    <h4>Pending</h4>
+                                    <h6 id="pending">00</h6>
+                                </div>
+                            </div>
+                            <div class="top-card card flex">
+                                <div class="card-content card-content-left">
+                                    <span><i class="ti ti-credit-card"></i></span>
+                                </div>
+                                <div class="card-content card-content-right">
+                                    <h4>Income</h4>
+                                    <h6 id="income">UGX 7,850,000</h6>
+                                </div>
+                            </div>
+                            <div class="top-card card flex">
+                                <div class="card-content card-content-left">
+                                    <span><i class="ti ti-credit-card"></i></span>
+                                </div>
+                                <div class="card-content card-content-right">
+                                    <h4>Expenses</h4>
+                                    <h6 id="expenses">UGX 50,000</h6>
+                                </div>
+                            </div>
+                            <div class="top-card card flex">
+                                <div class="card-content card-content-left">
+                                    <span><i class="ti ti-credit-card"></i></span>
+                                </div>
+                                <div class="card-content card-content-right">
+                                    <h4>Pending</h4>
+                                    <h6 id="pending">00</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="data-charts flex">
+                            <div class="filters flex">
+                                <div>
+                                    <button class="btn act-btn active br-0 m-0 day" id="day">Today</button>
+                                    <button class="btn act-btn br-0 m-0 week" id="week">Week</button>
+                                    <button class="btn act-btn br-0 m-0 month" id="month">Month</button>
+                                    <button class="btn act-btn br-0 m-0 year" id="year">Year</button>
+                                </div>
+                            </div>
+                            <div class="data-chart card br-0">
+                                <h3 id="chart-1-title">Services</h3>
+                                <button id="print-data-graph" class="btn">Print <i class="ti-printer"></i> </button>
+                                <canvas class="sales" id="chart-1"></canvas>
+                            </div>
+                            <div class="data-chart card br-0">
+                                <h3 id="chart-2-title">Income</h3>
+                                <button id="print-data-graph" class="btn">Print <i class="ti-printer"></i> </button>
+                                <canvas class="income" id="chart-2"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Section 01 -->
                 <div class="sections br-0" id="section_01">
-                    <div class="section-header flex"></div>
+                    <div class="section-header flex" style="border-block-end: 0;"></div>
                     <div class="section-body" style="padding-block-start: .8rem;"></div>
                 </div>
 
                 <!-- Section 02 -->
                 <div class="sections br-0" id="section_02">
-                    <div class="section-header flex"></div>
+                    <div class="section-header flex" style="border-block-end: 0;"></div>
                     <div class="section-body" style="padding-block-start: .8rem;"></div>
                 </div>
 
@@ -1129,50 +1197,200 @@
             });
         }
         handleCreateDentalForm();
+    </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', ()=>{
+            let totalServices = document.querySelector('#requests');
+            let totalIncome = document.querySelector('#pending');
+            totalServices.textContent = "300";
+            totalIncome.textContent = "17,850,000";
+
+            let chartTitle1 = document.querySelector('#chart-1-title');
+            let chartTitle2 = document.querySelector('#chart-2-title');
+            chartTitle1.textContent = "Day's Services";
+            chartTitle2.textContent = "Day's Income";
+
+            let mChart1 = createChart('Durations',
+            'bar',
+            ['Morning', 'Afternoon', 'Eevening'],
+            [80, 100, 46],
+            'chart-1'
+            );
+
+            let mChart2 = createChart('Durations',
+            'line',
+            ['Morning', 'Afternoon', 'Eevening'],
+            [80000, 1000000, 460000],
+            'chart-2'
+            );
+            
+            
+            const actionBtns = document.querySelectorAll('.act-btn');
+            for(let i=0; i<actionBtns.length; i++){
+                actionBtns[i].addEventListener('click', e =>{
+                    actionBtns.forEach(btn => {
+                        if(btn.classList.contains('active')) btn.classList.remove('active');
+                    });
+
+                    actionBtns[i].classList.add('active');
+
+                    if(actionBtns[i].getAttribute('id') === "day"){
+                        totalServices.textContent = "300";
+                        totalIncome.textContent = "17,850,000";
+
+                        chartTitle1.textContent = "Day's Services";
+                        chartTitle2.textContent = "Day's Income";
+
+                        mChart1.destroy();
+                        mChart2.destroy();
+                        mChart1 = createChart('Durations',
+                        'bar',
+                        ['Morning', 'Afternoon', 'Eevening'],
+                        [80, 100, 46],
+                        'chart-1'
+                        );
+
+                        mChart2 = createChart('Durations',
+                        'line',
+                        ['Morning', 'Afternoon', 'Eevening'],
+                        [80000, 1000000, 460000],
+                        'chart-2'
+                        );
+                        
+                    }else if(actionBtns[i].getAttribute('id') === "week"){
+                        totalServices.textContent = "1000";
+                        totalIncome.textContent = "54,850,000";
+
+                        chartTitle1.textContent = "Week's Services";
+                        chartTitle2.textContent = "Week's Income";
+
+                        mChart1.destroy();
+                        mChart2.destroy();
+                        mChart1 = createChart('Days',
+                        'bar',
+                        ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        [80, 100, 46, 39, 57, 25, 66],
+                        'chart-1'
+                        );
+
+                        mChart2 = createChart('Days',
+                        'line',
+                        ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        [80000, 1000000, 460000, 0, 5700000, 0, 0],
+                        'chart-2'
+                        );
+
+                    }else if(actionBtns[i].getAttribute('id') === "month"){
+                        totalServices.textContent = "17000";
+                        totalIncome.textContent = "456,850,000";
+
+                        chartTitle1.textContent = "Month's Services";
+                        chartTitle2.textContent = "Month's Income";
+
+                        mChart1.destroy();
+                        mChart2.destroy();
+                        mChart1 = createChart('Weeks',
+                        'bar',
+                        ['Week1', 'Week2', 'Week3','Week4'],
+                        [80, 100, 46, 39],
+                        'chart-1'
+                        );
+
+                        mChart2 = createChart('Weeks',
+                        'line',
+                        ['Week1', 'Week2', 'Week3','Week4'],
+                        [80000, 1000000, 460000, 5700000],
+                        'chart-2'
+                        );
+
+                    }else if(actionBtns[i].getAttribute('id') === "year"){
+                        totalServices.textContent = "10000";
+                        totalIncome.textContent = "1,307,850,000";
+
+                        chartTitle1.textContent = "Year's Services";
+                        chartTitle2.textContent = "Year's Income";
+
+                        mChart1.destroy();
+                        mChart2.destroy();
+                        mChart1 = createChart('Months',
+                        'bar',
+                        ['Quarter1', 'Quarter2', 'Quarter3'],
+                        [80, 46, 39],
+                        'chart-1'
+                        );
+
+                        mChart2 = createChart('Months',
+                        'line',
+                        ['Quarter1', 'Quarter2', 'Quarter3'],
+                        [80000, 1000000, 5700000],
+                        'chart-2'
+                        );
+                    }else{
+                        console.log("");
+                    }
+                });
+            }
 
 
 
+        });
 
 
 
+        // Charts
+        function createChart(title='', type='bar', labels=[], mdata=[], canvasId){
+            if(labels.length == 0 && mdata.length == 0) return;
+            
+            const data = {
+            labels: labels,
+            datasets: [{
+                label: title,
+                backgroundColor: '#b297f1',
+                borderColor: '#b297f1',
+                data: mdata,
+            }]
+            };
+
+            const config = {
+            type: type,
+            data: data,
+            options: {
+                scales: {
+                    y: {
+                        startAtZero: true
+                    }
+                }
+            }
+            };
+
+            // Render chart
+            const myChart = new Chart(
+                document.getElementById(canvasId),
+                config
+            );
+            return myChart;
+        }
 
         
 
-
-        // Display the selected file name when a file is chosen
-        function displayFileName() {
-            const fileInput = document.querySelector('#file-input');
-            const selectedFile = document.querySelector('#selected-file');
-
-            if (fileInput.files.length > 0) {
-                selectedFile.textContent = 'Selected File: ' + fileInput.files[0].name;
-            } else {
-                selectedFile.textContent = '';
-            }
+        function printDataGraph() {
+            var canvas = document.querySelector("#chart-1");
+            var canvas_img = canvas.toDataURL("image/png",1.0);
+            var pdf = new jsPDF('landscape','in', 'letter');
+            pdf.addImage(canvas_img, 'png', .5, 1.75, 10, 5);
+            pdf.autoPrint();
+            var blob = pdf.output("bloburl");
+            window.open(blob);
         }
 
-
-        // Enable drag and drop functionality
-        const fileDropArea = document.querySelector('#file-drop-area');
-        fileDropArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            fileDropArea.classList.add('file-upload-container-active');
+        document.querySelector("#print-data-graph").addEventListener('click', ()=> {
+            printDataGraph();
         });
 
 
-        fileDropArea.addEventListener('dragleave', () => {
-            fileDropArea.classList.remove('file-upload-container-active');
-        });
-
-
-        fileDropArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            fileDropArea.classList.remove('file-upload-container-active');
-            const fileInput = document.querySelector('#file-input');
-            fileInput.files = e.dataTransfer.files;
-            displayFileName();
-        });
-
+        
     </script>
 
 </body>

@@ -265,5 +265,40 @@ export const API = {
             const endpoint = `${API.BACKEND_BASE_API_URI}/prescriptions/${visitId}`;
             return await API.makeGetRequest(endpoint);
         },
-    }
+    },
+
+
+    // Admin API
+    // Users
+    users: {
+        // Create user POST api/v1/users
+        create: async (user, fromFormData) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/users`;
+            return await API.makePostRequest(endpoint, user, fromFormData);
+        },
+
+        // Fetch all users GET api/v1/users
+        fetch: async () => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/users`;
+            return await API.makeGetRequest(endpoint);
+        },
+
+        // Fetch single user GET api/v1/users/:id
+        fetchById: async (id) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/users/${id}`;
+            return await API.makeGetRequest(endpoint);
+        },
+
+        // Update user POST api/v1/users/:id
+        update: async (id) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/users/${id}`;
+            return await API.makePatchRequest(endpoint, id);
+        },
+
+        // Delete user POST api/v1/users/:id
+        delete: async (id) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/users/${id}`;
+            return await API.makePostRequest(endpoint, id);
+        },
+    },
 }

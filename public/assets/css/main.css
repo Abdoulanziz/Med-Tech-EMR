@@ -74,6 +74,62 @@
   gap: .2rem;
 }
 
+.top-cards {
+  display: flex;
+  gap: 1.2rem;
+  inline-size: 100%;
+  padding-block: 1.4rem;
+  background-color: inherit;
+}
+
+.top-card {
+  justify-content: flex-start;
+  gap: 1.2rem;
+  box-shadow: none;
+  padding-block: 2rem;
+  margin: 0;
+  background-color: #cce6fe;
+  border: 1px solid #9dd0ff;
+  color: var(--primary-color);
+  font-family: var(--font-tilt-neon);
+}
+
+.card-content-left {
+  background-color: var(--accent-color);
+  color: #f3f3f3;
+  padding: .6rem .8rem;
+  border-radius: 9px;
+}
+
+.card-content-left i {
+  font-size: 22px;
+}
+
+.filters.flex {
+  block-size: fit-content;
+  margin: 0;
+  background-color: inherit;
+  padding-block: .4rem;
+}
+
+.filters button {
+  inline-size: 120px;
+  font-size: 12px;
+}
+
+.data-charts.flex {
+  block-size: fit-content;
+  border: 1px solid #9dd0ff;
+  background-color: #cce6fe;
+  border-radius: 10px;
+  min-block-size: 600px;
+}
+
+.data-chart.card {
+  margin: 0;
+  box-shadow: none;
+}
+
 .sidebar-logo {
   display: flex;
   justify-content: center;
@@ -197,6 +253,13 @@
   inline-size: 34px;
   border-radius: 6px;
 }
+
+.navbar .dropdown .flex img:nth-child(2) {
+  background-color: var(--accent-color);
+  color: #f3f3f3;
+  padding: .2rem .2rem;
+  border-radius: 9px;
+}
   
 .navbar nav div {
   margin-right: 0 !important;
@@ -207,6 +270,12 @@
   background-color: #dbebfa;
   inline-size: 100%;
   position: relative;
+}
+
+
+
+.content.admin {
+  background-color: #dbebfa;
 }
 
 .bottom-banner {
@@ -270,7 +339,6 @@
 }
 
 .section-wrapper {
-  border: 1px solid #9d9c9c;
   border: 1px solid #ffffff;
   border-radius: 0;
   padding: 20px 20px;

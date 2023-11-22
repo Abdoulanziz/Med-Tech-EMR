@@ -41,6 +41,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         field: 'role_id',
       },
+      accountStatus: {
+        type: DataTypes.ENUM('active', 'suspended'),
+        defaultValue: 'suspended',
+        allowNull: false,
+        field: 'account_status',
+      },
       createdAt: {
         type: DataTypes.DATE,
         field: 'created_at',

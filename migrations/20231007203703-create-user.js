@@ -28,6 +28,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
+      account_status: {
+        type: Sequelize.ENUM('active', 'suspended'),
+        defaultValue: 'suspended',
+        allowNull: false,
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE

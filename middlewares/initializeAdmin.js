@@ -24,6 +24,7 @@ async function initializeAdmin() {
       username: adminUsername,
       password: hashedPassword,
       roleId: 1,
+      accountStatus: "active"
     });
 
     console.log('Admin account created successfully.');
