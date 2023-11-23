@@ -2,6 +2,7 @@ import { UI } from "../core/ui.js";
 import { UTILS } from "../core/utils.js";
 import { API } from "../core/api.js";
 
+
 document.addEventListener("DOMContentLoaded", () => {
     // Init UI
     UI.init();
@@ -14,6 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle visit creation from
     handleCreateVisitForm();
+
+    // Fetch tests through worker thread
+    fetchTestsThroughWorkerThread();
+
+
+
+    
     
 });
 
@@ -412,6 +420,23 @@ function populateFormWithData(formId, data, formFieldsNamesArray) {
         const field = form.querySelector(`[name=${fieldName}]`);
         if (field) {
             field.value = parsedData[fieldName] || null;
+        }
+    });
+}
+
+function fetchTestsThroughWorkerThread(){
+    // Define worker instance
+    const worker = UTILS.getWorkerInstance();
+
+    // Send data to worker thread for processing
+    worker.postMessage({code: 1, data: "Fetch tests"});
+
+    // Listen for feedback
+    worker.addEventListener("message", event => {
+        // Return the feedback
+        if(event.data.code === 1){
+            // Consume the data
+            console.log(event.data);
         }
     });
 }

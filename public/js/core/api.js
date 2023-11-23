@@ -1,6 +1,14 @@
 export const API = {
     // Backend URI
-    BACKEND_BASE_API_URI: (window.location.hostname === 'localhost') ? "http://localhost:5000/api/v1" : "https://med-tech-demo.onrender.com/api/v1",
+    // BACKEND_BASE_API_URI: (window.location.hostname === 'localhost') ? "http://localhost:5000/api/v1" : "https://med-tech-demo.onrender.com/api/v1",
+
+
+    BACKEND_BASE_API_URI: (typeof self !== 'undefined' && self.constructor && self.constructor.name === 'DedicatedWorkerGlobalScope')
+        ? (((typeof self !== 'undefined' && self.constructor && self.constructor.name === 'DedicatedWorkerGlobalScope') ? false : window.location.hostname === 'localhost') ? "http://localhost:5000/api/v1" : "https://med-tech-demo.onrender.com/api/v1")
+        : (((typeof self !== 'undefined' && self.constructor && self.constructor.name === 'DedicatedWorkerGlobalScope') ? false : window.location.hostname === 'localhost') ? "http://localhost:5000/api/v1" : "https://med-tech-demo.onrender.com/api/v1"),
+
+
+
 
 
     // Get requests

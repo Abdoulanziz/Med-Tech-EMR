@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 const { requireLogin, checkUserRoleId } = require("../middlewares/auth");
-const { renderDashboard, renderAccounts } = require("../controllers/adminController");
+const { renderDashboard, renderAccounts, renderActivities } = require("../controllers/adminController");
 
 // TODO: moveRoleId to .env
 router.get("/dashboard", requireLogin, checkUserRoleId(1), renderDashboard);
 router.get("/accounts", requireLogin, checkUserRoleId(1), renderAccounts);
+router.get("/activities", requireLogin, checkUserRoleId(1), renderActivities);
 
 module.exports = router;

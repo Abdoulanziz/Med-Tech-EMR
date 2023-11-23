@@ -1,3 +1,5 @@
+import workerInstance from '../workers/worker-instance.js';
+
 export const UTILS = {
     // Section togglers
     sectionToggler: (trigger, dataAttrName, callback=null) => {
@@ -207,6 +209,11 @@ export const UTILS = {
     getSelectedVisitId: () => {
         const selectedVisitId = window.medtech.selectedVisitId;
         return selectedVisitId;
+    },
+
+    // Get worker instance
+    getWorkerInstance: () => {
+        return workerInstance;
     },
 
     APIStatus: {

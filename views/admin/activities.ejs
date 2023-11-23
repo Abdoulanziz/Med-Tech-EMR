@@ -32,7 +32,7 @@
                     <span style="margin-inline-start: .6rem;color: #fff;font-family: 'Tilt Neon';font-weight: bolder;font-size: 27px;"><span style="color: rgb(0, 208, 255);">Med</span> <span style="color: yellowgreen;">Tech</span></span>
                 </div>
                 <ul class="sidebar-menu">
-                    <li class="menu-item active">
+                    <li class="menu-item">
                         <a href="/admin/dashboard">
                             <span class="flex">
                                 <span class="flex"><img src="/assets/actions-admin/dashboard.png" alt="" class="icon"><span class="text">Dashboard</span></span>
@@ -60,7 +60,7 @@
                             </span>
                         </a>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item active">
                         <a href="/admin/activities">
                             <span class="flex">
                                 <span class="flex"><img src="/assets/actions-admin/reports.png" alt="" class="icon"><span class="text">Activities</span></span>
@@ -105,73 +105,7 @@
                 <div class="sections br-0 inview" id="section_00">
                     <!-- <div class="section-header flex" style="border-block-end: 0;"></div> -->
                     <div class="section-body" style="padding-block-start: .8rem;">
-                        <div class="top-cards">
-                            <div class="top-card card flex">
-                                <div class="card-content card-content-left">
-                                    <span><i class="ti ti-money"></i></span>
-                                </div>
-                                <div class="card-content card-content-right">
-                                    <h4>Requests</h4>
-                                    <h6 id="requests">12</h6>
-                                </div>
-                            </div>
-                            <div class="top-card card flex">
-                                <div class="card-content card-content-left">
-                                    <span><i class="ti ti-credit-card"></i></span>
-                                </div>
-                                <div class="card-content card-content-right">
-                                    <h4>Pending</h4>
-                                    <h6 id="pending">00</h6>
-                                </div>
-                            </div>
-                            <div class="top-card card flex">
-                                <div class="card-content card-content-left">
-                                    <span><i class="ti ti-credit-card"></i></span>
-                                </div>
-                                <div class="card-content card-content-right">
-                                    <h4>Income</h4>
-                                    <h6 id="income">UGX 7,850,000</h6>
-                                </div>
-                            </div>
-                            <div class="top-card card flex">
-                                <div class="card-content card-content-left">
-                                    <span><i class="ti ti-credit-card"></i></span>
-                                </div>
-                                <div class="card-content card-content-right">
-                                    <h4>Expenses</h4>
-                                    <h6 id="expenses">UGX 50,000</h6>
-                                </div>
-                            </div>
-                            <div class="top-card card flex">
-                                <div class="card-content card-content-left">
-                                    <span><i class="ti ti-credit-card"></i></span>
-                                </div>
-                                <div class="card-content card-content-right">
-                                    <h4>Pending</h4>
-                                    <h6 id="pending">00</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="data-charts flex">
-                            <div class="filters flex">
-                                <div>
-                                    <button class="btn act-btn active br-0 m-0 day" id="day">Today</button>
-                                    <button class="btn act-btn br-0 m-0 week" id="week">Week</button>
-                                    <button class="btn act-btn br-0 m-0 month" id="month">Month</button>
-                                    <button class="btn act-btn br-0 m-0 year" id="year">Year</button>
-                                </div>
-                            </div>
-                            <div class="data-chart card br-0">
-                                <h3 id="chart-1-title">Services</h3>
-                                <button id="print-data-graph" class="btn">Print <i class="ti-printer"></i> </button>
-                                <canvas class="sales" id="chart-1"></canvas>
-                            </div>
-                            <div class="data-chart card br-0">
-                                <h3 id="chart-2-title">Income</h3>
-                                <button id="print-data-graph" class="btn">Print <i class="ti-printer"></i> </button>
-                                <canvas class="income" id="chart-2"></canvas>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
 
@@ -1395,7 +1329,6 @@
         document.querySelector("#print-data-graph").addEventListener('click', ()=> {
             printDataGraph();
         });
-
 
 
         

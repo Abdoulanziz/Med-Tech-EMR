@@ -2,7 +2,7 @@ import { UTILS } from "./utils.js";
 
 export const UI = {
   apiBaseURL: (window.location.hostname === 'localhost') ? "http://localhost:5000/api/v1" : "https://med-tech-demo.onrender.com/api/v1",
-
+  
   init: () => {
     // Set up sidebar
     UI.renderSideBar();
@@ -21,6 +21,7 @@ export const UI = {
 
     // Check API health status
     // UI.checkAPIStatus();
+
 
   },
 
@@ -153,7 +154,7 @@ export const UI = {
   checkAPIStatus: () => {
     UTILS.APIStatus.checkApiStatus();
     setInterval(UTILS.APIStatus.checkApiStatus, 1000);
-  }
+  },
 
 
 }
