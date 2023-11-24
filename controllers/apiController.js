@@ -182,6 +182,9 @@ const createPatient = async (req, res) => {
       billingMethodId,
     });
 
+    // Create an audit log
+    await createAuditLog('Patient', newPatient.patientId, 'CREATE', {}, newPatient.dataValues, req.session.user.userId);
+
     return res.status(201).json({ status: 'success', message: 'Patient record created successfully', data: newPatient });
   } catch (error) {
     console.error('Error creating patient:', error);
@@ -341,6 +344,9 @@ const createVisit = async (req, res) => {
       doctorId,
       // doctorSpecialityId
     });
+
+    // Create an audit log
+    await createAuditLog('Visit', newVisit.visitId, 'CREATE', {}, newVisit.dataValues, req.session.user.userId);
 
     return res.status(201).json({ status: 'success', message: 'Visit record created successfully', data: newVisit });
   } catch (error) {
@@ -558,6 +564,9 @@ const addPatientToQueue = async (req, res) => {
       doctorId,
       visitId
     });
+
+    // Create an audit log
+    await createAuditLog('Queue', newPatientToQueue.patientId, 'CREATE', {}, newPatientToQueue.dataValues, req.session.user.userId);
 
     return res.status(201).json({ status: 'success', message: 'Patient added to queue successfully', data: newPatientToQueue });
   } catch (error) {
@@ -870,6 +879,9 @@ const createResultsForCompleteBloodCountTest = async (req, res) => {
       { where: { requestId: requestId } }
     );
 
+    // Create an audit log
+    await createAuditLog('LabResultForCompleteBloodCount', newCompleteBloodCountResults.resultId, 'CREATE', {}, newCompleteBloodCountResults.dataValues, req.session.user.userId);
+
     return res.status(201).json({ status: 'success', message: 'CBC results created successfully', data: newCompleteBloodCountResults });
   } catch (error) {
     console.error('Error creating CBC results:', error);
@@ -937,8 +949,6 @@ const createResultsForUrinalysisTest = async (req, res) => {
       comment,
     } = req.body;
 
-    console.log(req.body);
-
     const newUrinalysisResults = await LabResultForUrinalysis.create({
       appearance,
       glucose,
@@ -964,13 +974,14 @@ const createResultsForUrinalysisTest = async (req, res) => {
       comment,
     });
 
-    console.log(newUrinalysisResults)
-
     // Update request status on lab requests
     await LabRequest.update(
       { requestStatus: 'complete' },
       { where: { requestId: requestId } }
     );
+
+    // Create an audit log
+    await createAuditLog('LabResultForUrinalysis', newUrinalysisResults.resultId, 'CREATE', {}, newUrinalysisResults.dataValues, req.session.user.userId);
 
     return res.status(201).json({ status: 'success', message: 'Urinalysis results created successfully', data: newUrinalysisResults });
   } catch (error) {
@@ -1163,6 +1174,7 @@ const createLabRequest = async (req, res) => {
       // Add the new request to the newLabRequests array.
       newLabRequests.push(newRequest);
     }
+
     return res.status(201).json({ status: 'success', message: 'CBC request records created successfully', data: newLabRequests });
   } catch (error) {
     console.error('Error creating CBC request:', error);
@@ -1271,6 +1283,9 @@ const updateLabRequestPaymentStatus = async (req, res) => {
       { paymentStatus: paymentStatus },
       { where: { requestId: requestId } }
     );
+
+    // Create an audit log
+    await createAuditLog('LabRequest', requestId, 'UPDATE', {}, {paymentStatus}, req.session.user.userId);
 
     if (updatedCount > 0) {
       // Lab request payment status updated successfully
