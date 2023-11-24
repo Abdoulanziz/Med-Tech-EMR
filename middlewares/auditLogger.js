@@ -11,12 +11,8 @@ async function createAuditLog(entityName, entityId, action, oldValue, newValue, 
       userId,
     };
 
-    console.log(auditLogData)
-
-    const data = await AuditLog.create(auditLogData);
-    console.log("------->>>>>>>>>>", data)
-
-    console.log('Audit log created successfully:', auditLogData);
+    await AuditLog.create(auditLogData);
+    
   } catch (error) {
     console.error('Error creating audit log:', error.message);
   }
