@@ -1,7 +1,11 @@
 const {AuditLog} = require('../models');
 
-async function createAuditLog(entityName, entityId, action, oldValue, newValue, userId) {
+async function createAuditLog(entityName, entityId, action, oldValue, newValue, userId, shouldRecordLog = true) {
   try {
+    if (!shouldRecordLog) {
+      return;
+    }
+
     const auditLogData = {
       entityName,
       entityId,
