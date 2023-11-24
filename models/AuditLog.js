@@ -2,51 +2,58 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
+  class AuditLog extends Model {
     static associate(models) {
       // define association here
-      User.belongsTo(models.Role, { foreignKey: 'roleId' });
-      User.hasMany(models.AuditLog, { foreignKey: 'userId' });
+      AuditLog.belongsTo(models.User, { foreignKey: 'userId'});
     }
   }
 
-  User.init(
+  AuditLog.init(
     {
-      userId: {
+      auditLogId: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
-        field: 'user_id',
+        field: 'audit_log_id',
       },
-      userUuid: {
+      auditLogUuid: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
         unique: true,
-        field: 'user_uuid',
+        field: 'audit_log_uuid',
       },
-      username: {
+      entityName: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
-        field: 'username',
+        field: 'entity_name',
       },
-      password: {
+      entityId: {
         type: DataTypes.STRING,
         allowNull: false,
-        field: 'password',
+        field: 'entity_id',
       },
-      roleId: {
+      action: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        field: 'action',
+      },
+      oldValue: {
+        type: DataTypes.JSON,
+        allowNull: true,
+        field: 'old_value',
+      },
+      newValue: {
+        type: DataTypes.JSON,
+        allowNull: true,
+        field: 'new_value',
+      },
+      userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        field: 'role_id',
-      },
-      accountStatus: {
-        type: DataTypes.ENUM('active', 'suspended'),
-        defaultValue: 'suspended',
-        allowNull: false,
-        field: 'account_status',
+        field: 'user_id',
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -59,10 +66,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'User',
-      tableName: 'users',
+      modelName: 'AuditLog',
+      tableName: 'audit_logs',
     }
   );
 
-  return User;
+  return AuditLog;
 };

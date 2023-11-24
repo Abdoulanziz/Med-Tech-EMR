@@ -19,6 +19,7 @@ const {
 
 
 const Op = Sequelize.Op;
+const createAuditLog = require('../middlewares/auditLogger');
 
 // Check API status
 const checkAPIStatus = (req, res) => {
@@ -42,6 +43,9 @@ const createUser = async (req, res) => {
 
     // Create a new user record in the database
     const newUser = await User.create({ username, password: hashedPassword, roleId });
+
+    // Create an audit log
+    await createAuditLog('User', newUser.userId, 'CREATE', {}, newUser.dataValues, req.session.user.userId);
 
     // Respond with the newly created user object
     return res.status(201).json({ status: 'success', message: 'User record created successfully', data: newUser });
