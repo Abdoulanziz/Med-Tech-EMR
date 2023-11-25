@@ -615,6 +615,71 @@ const fetchVisits = async (req, res) => {
 };
 
 // Fetch visit
+const fetchVisitById = async (req, res) => {
+  try {
+    const visitId = req.params.id;
+
+    if (visitId) {
+      // If visitId is provided, fetch the specific visit by ID
+      const visit = await Visit.findByPk(visitId);
+
+      if (!visit) {
+        return res.status(404).json({ message: 'Visit not found' });
+      }
+      return res.status(200).json({data: visit});
+    }
+
+  } catch (error) {
+    console.error('Error fetching visit:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Update a visit
+const updateVisitById = async (req, res) => {
+  try {
+    // Extract visit data from the request body
+
+    const visitDate = req.body.visitDate || null;
+    const visitCategoryId = req.body.visitCategoryId || null;
+    const patientId = req.body.patientId || null;
+    const doctorId = req.body.doctorId || null;
+
+
+    const visitId = req.params.id;
+
+
+    // Check if the visit already exists in the database
+    const existingVisit = await Visit.findOne({ where: { visitId } });
+
+    if (!existingVisit) {
+      return res.status(400).json({ message: 'Visit does not exist' });
+    }
+
+    // Update the visit record in the database
+    const updatedVisit = await existingVisit.update({
+      visitDate,
+      visitCategoryId,
+      patientId,
+      doctorId
+    });
+
+    // Create an audit log
+    await createAuditLog('Visit', visitId, 'UPDATE', existingVisit.dataValues, updatedVisit.dataValues, req.session.user.userId);
+
+    // Respond with the updated visit object
+    return res.status(200).json({ status: 'success', message: 'Visit record updated successfully', data: updatedVisit });
+
+  } catch (error) {
+    // Log out the error to the console
+    console.error('Error updating visit:', error);
+
+    // Respond with the error to the client
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Fetch visit
 const fetchVisitsByPatientId = async (req, res) => {
   const patientId = req.params.id;
 
@@ -1614,6 +1679,8 @@ module.exports = {
   fetchPatientByVisitId, 
   createVisit, 
   fetchVisits, 
+  fetchVisitById,
+  updateVisitById,
   fetchVisitsByPatientId, 
   addPatientToQueue, 
   fetchAllPatientsOnQueue, 

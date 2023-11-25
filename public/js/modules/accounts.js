@@ -62,7 +62,7 @@ async function loadAllUsers() {
                         handleCreateDoctorProfileForm(userId);
                     });
                 }
-                
+
                 // Trigger update modal
                 if(data.userProfileCompletionStatus === "complete"){
                     const updateDoctorProfileCta = row.cells[4].querySelectorAll("button")[0];
@@ -327,7 +327,7 @@ async function handleUpdateDoctorProfileForm(userId) {
         // Display a confirmation dialog
         UTILS.showConfirmationModal(updateDoctorProfileForm, "Are you sure you want to save this record?", async () => {
             try {
-                // Make an API POST request to update a doctor record
+                // Make an API PUT request to update a doctor record
                 const response = await API.doctors.update(userId, URLEncodedData, true);
     
                 // Check if the request was successful

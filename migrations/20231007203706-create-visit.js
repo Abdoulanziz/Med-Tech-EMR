@@ -16,7 +16,7 @@ module.exports = {
         unique: true,
       },
       visit_date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
         allowNull: false,
       },
       visit_category_id: {

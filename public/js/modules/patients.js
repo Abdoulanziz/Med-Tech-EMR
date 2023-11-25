@@ -68,6 +68,7 @@ async function loadAllPatients() {
         rowCallback: function(row, data, index) {
             const rowDataString = JSON.stringify(data);
 
+
             // Update Patient
             const updatePatientCta = row.cells[5].querySelectorAll("button")[0];
 
@@ -77,16 +78,20 @@ async function loadAllPatients() {
             updatePatientCta.dataset.modal = "update-patient-modal";
 
             UTILS.triggerModal(updatePatientCta, "modal", async () => {
-                // TODO: Pre Fetch Using WORKER THREAD
-                // Fetch patient data
-                const response = await API.patients.fetchById(data.patientId);
-                const fetchedPatient = await response.data;
+
+                // Fetch patient data (from API)
+                // const response = await API.patients.fetchById(data.patientId);
+                // const fetchedPatient = await response.data;
 
 
                 // Populate the form with the data
                 populateFormWithData(
                     "update-patient-modal",
-                    JSON.stringify(fetchedPatient),
+                    // Local
+                    rowDataString,
+
+                    // API
+                    // JSON.stringify(fetchedPatient),
                     [
                         "firstName",
                         "lastName",
@@ -279,7 +284,9 @@ async function loadSinglePatientVists(patientId) {
         ],
         rowCallback: function(row, data, index) {
             const rowDataString = JSON.stringify(data);
+
             const editVisitCta = row.cells[3].querySelectorAll("button")[0];
+
             const viewVisitCta = row.cells[3].querySelectorAll("button")[1];
             const deleteVisitCta = row.cells[3].querySelectorAll("button")[2];
 
@@ -288,17 +295,30 @@ async function loadSinglePatientVists(patientId) {
             editVisitCta.classList.add("modal-trigger");
             editVisitCta.dataset.modal = "edit-visit-modal";
 
-            UTILS.triggerModal(editVisitCta, "modal", () => {
+            UTILS.triggerModal(editVisitCta, "modal", async() => {
+
+                // Fetch patient data (from API)
+                // const response = await API.visits.fetchById(data.visitId);
+                // const fetchedVisit = await response.data;
+
+
                 // Populate the form with the rowData
                 populateFormWithData(
                     "edit-visit-modal",
+                    // Local
                     rowDataString,
+
+                    // API
+                    // JSON.stringify(fetchedVisit),
                     [
                         "visitCategoryId",
                         "doctorFullName",
                         "visitDate"
                     ]
                 );
+
+                // Callback to handle visit update form
+                handleUpdateVisitForm(data.visitId);
             });
          },
         columnDefs: [
@@ -480,7 +500,7 @@ async function handleUpdatePatientForm(patientId) {
         // Display a confirmation dialog
         UTILS.showConfirmationModal(updatePatientForm, "Are you sure you want to save this record?", async () => {
             try {
-                // Make an API POST request to update a patient record
+                // Make an API PUT request to update a patient record
                 const response = await API.patients.update(patientId, URLEncodedData, true);
     
                 // Check if the request was successful
@@ -507,6 +527,57 @@ async function handleUpdatePatientForm(patientId) {
 
             // Reset the form
             updatePatientForm.reset();
+        });
+    });
+}
+
+// Handle visit update form
+async function handleUpdateVisitForm(visitId) {
+    const updateVisitForm = document.querySelector('#edit-visit-form');
+    updateVisitForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        // Get Id of selected patient
+        const selectedPatientId = UTILS.getSelectedPatientId();
+        if (! selectedPatientId) return;
+
+        // Collect form data
+        const formData = new FormData(updateVisitForm);
+        formData.append('patientId', selectedPatientId);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+    
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(updateVisitForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to update a visit record
+                const response = await API.visits.update(visitId, URLEncodedData, true);
+    
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    updateVisitForm.reset();
+    
+                    // Remove form
+                    updateVisitForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the visits table
+                    loadSinglePatientVists(selectedPatientId);
+    
+                } else {
+                    alert('Failed to update visit record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while updating the visit record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            updateVisitForm.reset();
         });
     });
 }

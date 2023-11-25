@@ -15,6 +15,8 @@ const {
     fetchPatientByVisitId, 
     createVisit, 
     fetchVisits, 
+    fetchVisitById,
+    updateVisitById,
     fetchVisitsByPatientId, 
     addPatientToQueue, 
     fetchAllPatientsOnQueue, 
@@ -53,6 +55,8 @@ router.get("/patients/visit/:visitId", fetchPatientByVisitId);
 
 router.post("/visits", createVisit);
 router.get("/visits", fetchVisits);
+router.get("/visit/:id", fetchVisitById);
+router.put("/visits/:id", updateVisitById);
 router.get("/visits/:id", fetchVisitsByPatientId);
 
 

@@ -152,10 +152,22 @@ export const API = {
             return await API.makePostRequest(endpoint, visit, fromFormData);
         },
 
-        // Fetch single patient GET api/v1/visits/:id
+        // Fetch single visit GET api/v1/visit/:id
+        fetchById: async (id) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/visit/${id}`;
+            return await API.makeGetRequest(endpoint);
+        },
+
+        // Fetch single patient's visits GET api/v1/visits/:id
         fetchByPatientId: async (id) => {
             const endpoint = `${API.BACKEND_BASE_API_URI}/visits/${id}`;
             return await API.makeGetRequest(endpoint);
+        },
+
+        // Update visit PUT api/v1/visits/:id
+        update: async (id, data, fromFormData) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/visits/${id}`;
+            return await API.makePutRequest(endpoint, data, fromFormData);
         },
     },
 
