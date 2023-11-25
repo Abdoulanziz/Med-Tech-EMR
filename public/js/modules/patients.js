@@ -320,7 +320,7 @@ async function loadSinglePatientVists(patientId) {
                 // Callback to handle visit update form
                 handleUpdateVisitForm(data.visitId);
             });
-         },
+        },
         columnDefs: [
             {
                 targets: 0,
