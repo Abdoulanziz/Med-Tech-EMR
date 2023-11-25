@@ -93,15 +93,32 @@ const createDoctor = async (req, res) => {
   }
 };
 
+// Fetch doctor
+const fetchDoctorByUserId = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    if (userId) {
+      // If userId is provided, fetch the specific doctor by ID
+      const doctor = await Doctor.findOne({where: {userId}});
+
+      if (!doctor) {
+        return res.status(404).json({ message: 'Doctor not found' });
+      }
+      return res.status(200).json({data: doctor});
+    }
+
+  } catch (error) {
+    console.error('Error fetching doctor:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 // Update a doctor
 const updateDoctor = async (req, res) => {
-  console.log(req.body)
-  console.log(req.params.id)
-
   try {
     // Extract doctor data from the request body
     const { firstName, lastName, dateOfBirth, gender, email, contactNumber } = req.body;
-
     const userId = req.params.id;
 
 
@@ -121,9 +138,6 @@ const updateDoctor = async (req, res) => {
       email,
       contactNumber,
     });
-
-    // Update profile completion status
-    await User.update({ profileCompletionStatus: "complete" }, { where: { userId } });
 
     // Create an audit log
     await createAuditLog('Doctor', userId, 'UPDATE', existingDoctor.dataValues, updatedDoctor.dataValues, req.session.user.userId);
@@ -356,7 +370,7 @@ const fetchPatientById = async (req, res) => {
     }
 
   } catch (error) {
-    console.error('Error fetching patients:', error);
+    console.error('Error fetching patient:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -1522,6 +1536,7 @@ module.exports = {
   checkAPIStatus, 
   createUser, 
   createDoctor, 
+  fetchDoctorByUserId,
   updateDoctor,
   fetchUsers,
   createPatient, 

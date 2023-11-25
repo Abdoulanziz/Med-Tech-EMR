@@ -5,6 +5,7 @@ const {
     checkAPIStatus,
     createUser,
     createDoctor, 
+    fetchDoctorByUserId,
     updateDoctor,
     fetchUsers,
     createPatient, 
@@ -40,6 +41,7 @@ router.post("/users", createUser);
 router.get("/users", fetchUsers);
 
 router.post("/doctors", createDoctor);
+router.get("/doctors/:id", fetchDoctorByUserId);
 router.put("/doctors/:id", updateDoctor);
 
 router.post("/patients", createPatient);

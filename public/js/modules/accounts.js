@@ -62,16 +62,40 @@ async function loadAllUsers() {
                         handleCreateDoctorProfileForm(userId);
                     });
                 }
+                
                 // Trigger update modal
-                else {
+                if(data.userProfileCompletionStatus === "complete"){
                     const updateDoctorProfileCta = row.cells[4].querySelectorAll("button")[0];
                     updateDoctorProfileCta.style.cursor = "pointer";
                     updateDoctorProfileCta.classList.add("modal-trigger");
                     updateDoctorProfileCta.dataset.modal = "update-doctor-profile-modal";
 
                     UTILS.triggerModal(updateDoctorProfileCta, "modal", async () => {
+
+                        
+                        // TODO: Pre Fetch Using WORKER THREAD
+                        // Fetch doctor data
+                        const response = await API.doctors.fetchById(userId);
+                        const selectedDoctor = await response.data;
+
+
+                        // Populate the form with the data
+                        populateFormWithData(
+                            "update-doctor-profile-modal",
+                            JSON.stringify(selectedDoctor),
+                            [
+                                "firstName",
+                                "lastName",
+                                "dateOfBirth",
+                                "gender",
+                                "contactNumber",
+                                "email"
+                            ]
+                        );
+
                         // Callback to handle doctor update form
                         handleUpdateDoctorProfileForm(userId);
+
                     });
                 }
             }
@@ -331,5 +355,20 @@ async function handleUpdateDoctorProfileForm(userId) {
             // Reset the form
             updateDoctorProfileForm.reset();
         });
+    });
+}
+
+// Populate form with data (pre-fill the form)
+function populateFormWithData(formId, data, formFieldsNamesArray) {
+    // Parse the form id
+    const form = document.querySelector(`#${formId}`);
+    const parsedData = JSON.parse(data);
+
+    // Use the names of the fields not their ids
+    formFieldsNamesArray.forEach(fieldName => {
+        const field = form.querySelector(`[name=${fieldName}]`);
+        if (field) {
+            field.value = parsedData[fieldName] || null;
+        }
     });
 }
