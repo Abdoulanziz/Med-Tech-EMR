@@ -45,18 +45,35 @@ async function loadAllUsers() {
             { data : null }
         ],
         rowCallback: function(row, data, index) {
-            const rowData = JSON.stringify(data);
+            const userId = data.userId;
 
             // Doctor
             if(data.userRole === "doctor"){
-                const createDoctorProfileCta = row.cells[4].querySelectorAll("button")[0];
-                createDoctorProfileCta.style.cursor = "pointer";
-                createDoctorProfileCta.classList.add("modal-trigger");
-                createDoctorProfileCta.dataset.modal = "create-doctor-profile-modal";
 
-                UTILS.triggerModal(createDoctorProfileCta, "modal", async () => {
-                    // TODO: handleCreateDoctorProfile()
-                });
+                // Trigger create modal
+                if(data.userProfileCompletionStatus === "incomplete"){
+                    const createDoctorProfileCta = row.cells[4].querySelectorAll("button")[0];
+                    createDoctorProfileCta.style.cursor = "pointer";
+                    createDoctorProfileCta.classList.add("modal-trigger");
+                    createDoctorProfileCta.dataset.modal = "create-doctor-profile-modal";
+
+                    UTILS.triggerModal(createDoctorProfileCta, "modal", async () => {
+                        // Callback to handle doctor create form
+                        handleCreateDoctorProfileForm(userId);
+                    });
+                }
+                // Trigger update modal
+                else {
+                    const updateDoctorProfileCta = row.cells[4].querySelectorAll("button")[0];
+                    updateDoctorProfileCta.style.cursor = "pointer";
+                    updateDoctorProfileCta.classList.add("modal-trigger");
+                    updateDoctorProfileCta.dataset.modal = "update-doctor-profile-modal";
+
+                    UTILS.triggerModal(updateDoctorProfileCta, "modal", async () => {
+                        // Callback to handle doctor update form
+                        handleUpdateDoctorProfileForm(userId);
+                    });
+                }
             }
 
             // Nurse
@@ -108,12 +125,25 @@ async function loadAllUsers() {
             {
                 targets: 4,
                 render: function (data, type, row, meta) {
+                    let ctas = "";
+                    if(data.userProfileCompletionStatus === "incomplete"){
+                        ctas += `
+                        <button class="btn" style="background-color: #ffffff;color: #8e8d8d;border: 1px solid #f2f2f2;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Create Profile </button>
+                        `;
+                    }else {
+                        ctas += `
+                        <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Update Profile </button>
+                        `;
+                    }
+
+                    ctas += `
+                        <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Update Roles </button>
+                        `;
+
                     return `
-                    <td style="border: 1px solid #ddd;">
-                        <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Create Profile </button>
-                        <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">View More </button>
-                        <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">View More </button>
-                    </td>
+                        <td style="border: 1px solid #ddd;">
+                            ${ctas}
+                        </td>
                     `;
                 }
             },
@@ -205,6 +235,101 @@ async function handleCreateUserForm() {
 
             // Reset the form
             createUserForm.reset();
+        });
+    });
+}
+
+// Handle doctor create form
+async function handleCreateDoctorProfileForm(userId) {
+    const createDoctorProfileForm = document.querySelector('#create-doctor-profile-form');
+    createDoctorProfileForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+    
+        // Collect form data
+        const formData = new FormData(createDoctorProfileForm);
+        formData.append("userId", userId);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+    
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(createDoctorProfileForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to create a doctor record
+                const response = await API.doctors.create(URLEncodedData, true);
+    
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    createDoctorProfileForm.reset();
+    
+                    // Remove form
+                    createDoctorProfileForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the users table
+                    loadAllUsers();
+    
+                } else {
+                    alert('Failed to create user record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while creating the user record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            createDoctorProfileForm.reset();
+        });
+    });
+}
+
+// Handle doctor update form
+async function handleUpdateDoctorProfileForm(userId) {
+    const updateDoctorProfileForm = document.querySelector('#update-doctor-profile-form');
+    updateDoctorProfileForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+    
+        // Collect form data
+        const formData = new FormData(updateDoctorProfileForm);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+
+        console.log(URLEncodedData);
+    
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(updateDoctorProfileForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to update a doctor record
+                const response = await API.doctors.update(userId, URLEncodedData, true);
+    
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    updateDoctorProfileForm.reset();
+    
+                    // Remove form
+                    updateDoctorProfileForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the users table
+                    loadAllUsers();
+    
+                } else {
+                    alert('Failed to update user record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while updating the user record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            updateDoctorProfileForm.reset();
         });
     });
 }

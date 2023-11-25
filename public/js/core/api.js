@@ -75,6 +75,34 @@ export const API = {
         }
     },
 
+    // Put requests
+    makePutRequest: async (endpoint, data, fromFormData=false) => {
+        try {
+            let response;
+            if(fromFormData){
+                response = await fetch(endpoint, {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: data
+                });
+            }else{
+                response = await fetch(endpoint, {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+            }
+            return await response.json();
+        } catch (error) {
+            console.log(error);
+            throw new Error("Failed to make the PUT request.");
+        }
+    },
+
 
     // Patients 
     patients: {
@@ -306,6 +334,39 @@ export const API = {
         // Delete user POST api/v1/users/:id
         delete: async (id) => {
             const endpoint = `${API.BACKEND_BASE_API_URI}/users/${id}`;
+            return await API.makePostRequest(endpoint, id);
+        },
+    },
+
+    // Doctors
+    doctors: {
+        // Create doctor POST api/v1/doctors
+        create: async (doctor, fromFormData) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/doctors`;
+            return await API.makePostRequest(endpoint, doctor, fromFormData);
+        },
+
+        // Fetch all doctors GET api/v1/doctors
+        fetch: async () => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/doctors`;
+            return await API.makeGetRequest(endpoint);
+        },
+
+        // Fetch single doctor GET api/v1/doctors/:id
+        fetchById: async (id) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/doctors/${id}`;
+            return await API.makeGetRequest(endpoint);
+        },
+
+        // Update doctor POST api/v1/doctors/:id
+        update: async (id, data, fromFormData) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/doctors/${id}`;
+            return await API.makePutRequest(endpoint, data, fromFormData);
+        },
+
+        // Delete doctor POST api/v1/doctors/:id
+        delete: async (id) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/doctors/${id}`;
             return await API.makePostRequest(endpoint, id);
         },
     },

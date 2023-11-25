@@ -5,6 +5,8 @@ const bcrypt = require("bcrypt");
 const { User } = require('../models');
 const { Role } = require('../models');
 
+const createAuditLog = require('../middlewares/auditLogger');
+
 
 const renderIndex = (req, res) => {
   res.render("pages/index");
@@ -33,9 +35,13 @@ const handleSignin = async (req, res) => {
       // Modify the session data
       req.session.lastLogin = new Date();
 
+      // Create an audit log
+      await createAuditLog('User', user.dataValues.userId, 'SIGNIN SUCCESSFUL', {}, user.dataValues, req.session.user.userId);
+
       user.roleId === 1 ? res.redirect("/admin/dashboard") : res.redirect("/page/patients");
 
     } else {
+
       res.redirect("/auth/signin");
     }
   } catch (error) {

@@ -5,6 +5,7 @@ const models = require('../models');
 const { 
   User,
   Patient,
+  Doctor,
   Visit,
   Queue,
   Triage,
@@ -53,6 +54,86 @@ const createUser = async (req, res) => {
   } catch (error) {
     // Log out the error to the console
     console.error('Error creating user:', error);
+
+    // Respond with the error to the client
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Create a new doctor
+const createDoctor = async (req, res) => {
+  try {
+    // Extract doctor data from the request body
+    const { userId, firstName, lastName, dateOfBirth, gender, email, contactNumber } = req.body;
+
+    // Check if the email already exists in the database
+    const existingDoctor = await Doctor.findOne({ where: { email } });
+    if (existingDoctor) {
+      return res.status(400).json({ message: 'Doctor already exists' });
+    }
+
+    // Create a new doctor record in the database
+    const newDoctor = await Doctor.create({ userId, firstName, lastName, dateOfBirth, gender, email, contactNumber });
+
+    // Update profile completion status
+    await User.update( { profileCompletionStatus: "complete" }, { where: { userId: userId } });
+
+    // Create an audit log
+    await createAuditLog('Doctor', newDoctor.userId, 'CREATE', {}, newDoctor.dataValues, req.session.user.userId);
+
+    // Respond with the newly created doctor object
+    return res.status(201).json({ status: 'success', message: 'Doctor record created successfully', data: newDoctor });
+
+  } catch (error) {
+    // Log out the error to the console
+    console.error('Error creating doctor:', error);
+
+    // Respond with the error to the client
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Update a doctor
+const updateDoctor = async (req, res) => {
+  console.log(req.body)
+  console.log(req.params.id)
+
+  try {
+    // Extract doctor data from the request body
+    const { firstName, lastName, dateOfBirth, gender, email, contactNumber } = req.body;
+
+    const userId = req.params.id;
+
+
+    // Check if the doctor already exists in the database
+    const existingDoctor = await Doctor.findOne({ where: { userId } });
+
+    if (!existingDoctor) {
+      return res.status(400).json({ message: 'Doctor does not exist' });
+    }
+
+    // Update the doctor record in the database
+    const updatedDoctor = await existingDoctor.update({
+      firstName,
+      lastName,
+      dateOfBirth,
+      gender,
+      email,
+      contactNumber,
+    });
+
+    // Update profile completion status
+    await User.update({ profileCompletionStatus: "complete" }, { where: { userId } });
+
+    // Create an audit log
+    await createAuditLog('Doctor', userId, 'UPDATE', existingDoctor.dataValues, updatedDoctor.dataValues, req.session.user.userId);
+
+    // Respond with the updated doctor object
+    return res.status(200).json({ status: 'success', message: 'Doctor record updated successfully', data: updatedDoctor });
+
+  } catch (error) {
+    // Log out the error to the console
+    console.error('Error updating doctor:', error);
 
     // Respond with the error to the client
     return res.status(500).json({ message: 'Internal Server Error' });
@@ -126,6 +207,7 @@ const fetchUsers = async (req, res) => {
       userRole: user.Role.roleName,
       userId: user.userId,
       userAccountStatus: user.accountStatus,
+      userProfileCompletionStatus: user.profileCompletionStatus,
       username: user.username,
       createdAt: user.createdAt,
     }));
@@ -1439,6 +1521,8 @@ const fetchPrescriptionsByVisitId = async (req, res) => {
 module.exports = { 
   checkAPIStatus, 
   createUser, 
+  createDoctor, 
+  updateDoctor,
   fetchUsers,
   createPatient, 
   fetchPatients, 

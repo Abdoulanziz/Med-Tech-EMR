@@ -28,6 +28,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
+      profile_completion_status: {
+        type: Sequelize.ENUM('complete', 'incomplete'),
+        defaultValue: 'incomplete',
+        allowNull: false,
+      },
       account_status: {
         type: Sequelize.ENUM('active', 'suspended'),
         defaultValue: 'suspended',

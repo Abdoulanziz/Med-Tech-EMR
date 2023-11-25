@@ -3,7 +3,9 @@ const router = express.Router();
 
 const { 
     checkAPIStatus,
-    createUser, 
+    createUser,
+    createDoctor, 
+    updateDoctor,
     fetchUsers,
     createPatient, 
     fetchPatients, 
@@ -36,6 +38,9 @@ router.get("/status", checkAPIStatus);
 
 router.post("/users", createUser);
 router.get("/users", fetchUsers);
+
+router.post("/doctors", createDoctor);
+router.put("/doctors/:id", updateDoctor);
 
 router.post("/patients", createPatient);
 router.get("/patients", fetchPatients);
