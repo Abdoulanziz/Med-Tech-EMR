@@ -130,10 +130,10 @@ export const API = {
             return await API.makeGetRequest(endpoint);
         },
 
-        // Update patient POST api/v1/patients/:id
-        update: async (id) => {
+        // Update patient PUT api/v1/patients/:id
+        update: async (id, data, fromFormData) => {
             const endpoint = `${API.BACKEND_BASE_API_URI}/patients/${id}`;
-            return await API.makePatchRequest(endpoint, id);
+            return await API.makePutRequest(endpoint, data, fromFormData);
         },
 
         // Delete patient POST api/v1/patients/:id
@@ -358,7 +358,7 @@ export const API = {
             return await API.makeGetRequest(endpoint);
         },
 
-        // Update doctor POST api/v1/doctors/:id
+        // Update doctor PUT api/v1/doctors/:id
         update: async (id, data, fromFormData) => {
             const endpoint = `${API.BACKEND_BASE_API_URI}/doctors/${id}`;
             return await API.makePutRequest(endpoint, data, fromFormData);

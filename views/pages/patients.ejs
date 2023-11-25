@@ -445,6 +445,139 @@
                 </div>
             </div>
 
+
+            <!-- Update patient modal -->
+            <div id="update-patient-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="update-patient-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Update Patient</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="modal-form-body">
+                            <div class="form-section">
+                                <h2>Patient Information</h2>
+                                <div class="form-group">
+                                    <label for="first-name">First Name:</label>
+                                    <input type="text" class="form-control" id="first-name" name="firstName" required>
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="last-name">Last Name:</label>
+                                    <input type="text" class="form-control" id="last-name" name="lastName" required>
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="nin">National ID:</label>
+                                    <input type="text" class="form-control" id="nin" name="nationalIDNumber">
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="dob">Date of Birth:</label>
+                                    <input type="date" class="form-control" id="dob" name="dateOfBirth" required>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="age">Age:</label>
+                                    <input type="text" class="form-control" id="age" name="age">
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="gender">Gender:</label>
+                                    <select id="gender" class="form-control" name="gender" required>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-section">
+                                <h2>Patient Contact</h2>
+                                <div class="form-group">
+                                    <label for="contact-number">Contact Number:</label>
+                                    <input type="text" class="form-control" id="contact-number" name="contactNumber" required>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="alternative-number">Alternative Number:</label>
+                                    <input type="text" class="form-control" id="alternative-number" name="alternativeContactNumber">
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="home-address">Home Address:</label>
+                                    <input type="text" class="form-control" id="home-address" name="homeAddress" required>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="email-address">Email Address:</label>
+                                    <input type="text" class="form-control" id="email-address" name="emailAddress">
+                                </div>
+                            </div>
+                          
+                            <div class="form-section">
+                                <h2>Next of Kin Information</h2>
+                                <div class="form-group">
+                                    <label for="nok-first-name">NOK First Name:</label>
+                                    <input type="text" class="form-control" id="nok-first-name" name="nokFirstName">
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="nok-last-name">NOK Last Name:</label>
+                                    <input type="text" class="form-control" id="nok-last-name" name="nokLastName">
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="nok-relationship">NOK Relationship:</label>
+                                    <select id="nok-relationship" class="form-control" name="nokRelationship">
+                                        <option value="brother">Brother</option>
+                                        <option value="sister">Sister</option>
+                                        <option value="husband">Husband</option>
+                                        <option value="wife">Wife</option>
+                                        <option value="father">Father</option>
+                                        <option value="mother">Mother</option>
+                                        <option value="son">Son</option>
+                                        <option value="daughter">Daughter</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="nok-contact-number">NOK Contact Number:</label>
+                                    <input type="text" class="form-control" id="nok-contact-number" name="nokContactNumber">
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="nok-home-address">NOK Home Address:</label>
+                                    <input type="text" class="form-control" id="nok-home-address" name="nokHomeAddress">
+                                </div>
+                            </div>
+                          
+                            <div class="form-section">
+                                <h2>Billing Information</h2>
+                                <div class="form-group">
+                                    <label for="billing-method">Billing Method:</label>
+                                    <select id="billing-method" class="form-control" name="billingMethodId">
+                                        <option value="1">Cash</option>
+                                        <option value="2">Account</option>
+                                        <option value="3">Insurance</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <!-- Create visit modal -->
             <div id="create-visit-modal" class="form-modal">
                 <div class="form-modal-content">

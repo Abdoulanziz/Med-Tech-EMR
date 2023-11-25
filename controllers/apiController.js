@@ -247,6 +247,7 @@ const createPatient = async (req, res) => {
     const nationalIDNumber = req.body.nationalIDNumber || null;
     const age = req.body.age || null;
     const alternativeContactNumber = req.body.alternativeContactNumber || null;
+    const homeAddress = req.body.homeAddress || null;
     const emailAddress = req.body.emailAddress || null;
     const nokFirstName = req.body.nokFirstName || null;
     const nokLastName = req.body.nokLastName || null;
@@ -269,6 +270,7 @@ const createPatient = async (req, res) => {
       nationalIDNumber,
       age,
       alternativeContactNumber,
+      homeAddress,
       emailAddress,
       nokFirstName,
       nokLastName,
@@ -284,6 +286,72 @@ const createPatient = async (req, res) => {
     return res.status(201).json({ status: 'success', message: 'Patient record created successfully', data: newPatient });
   } catch (error) {
     console.error('Error creating patient:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Update a patient
+const updatePatient = async (req, res) => {
+  try {
+    // Extract patient data from the request body
+
+    const { firstName, lastName, dateOfBirth, gender, contactNumber } = req.body;
+
+    // Convert empty strings to null for nullable fields
+    const nationalIDNumber = req.body.nationalIDNumber || null;
+    const age = req.body.age || null;
+    const alternativeContactNumber = req.body.alternativeContactNumber || null;
+    const homeAddress = req.body.homeAddress || null;
+    const emailAddress = req.body.emailAddress || null;
+    const nokFirstName = req.body.nokFirstName || null;
+    const nokLastName = req.body.nokLastName || null;
+    const nokRelationship = req.body.nokRelationship || null;
+    const nokContactNumber = req.body.nokContactNumber || null;
+    const nokHomeAddress = req.body.nokHomeAddress || null;
+    const billingMethodId = req.body.billingMethodId || null;
+
+
+    const patientId = req.params.id;
+
+
+    // Check if the patient already exists in the database
+    const existingPatient = await Patient.findOne({ where: { patientId } });
+
+    if (!existingPatient) {
+      return res.status(400).json({ message: 'Patient does not exist' });
+    }
+
+    // Update the patient record in the database
+    const updatedPatient = await existingPatient.update({
+      firstName,
+      lastName,
+      dateOfBirth,
+      gender,
+      contactNumber,
+      nationalIDNumber,
+      age,
+      alternativeContactNumber,
+      homeAddress,
+      emailAddress,
+      nokFirstName,
+      nokLastName,
+      nokRelationship,
+      nokContactNumber,
+      nokHomeAddress,
+      billingMethodId
+    });
+
+    // Create an audit log
+    await createAuditLog('Patient', patientId, 'UPDATE', existingPatient.dataValues, updatedPatient.dataValues, req.session.user.userId);
+
+    // Respond with the updated patient object
+    return res.status(200).json({ status: 'success', message: 'Patient record updated successfully', data: updatedPatient });
+
+  } catch (error) {
+    // Log out the error to the console
+    console.error('Error updating patient:', error);
+
+    // Respond with the error to the client
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -1540,6 +1608,7 @@ module.exports = {
   updateDoctor,
   fetchUsers,
   createPatient, 
+  updatePatient,
   fetchPatients, 
   fetchPatientById, 
   fetchPatientByVisitId, 

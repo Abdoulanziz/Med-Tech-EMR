@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     handleCreateVisitForm();
 
     // Fetch tests through worker thread
-    fetchTestsThroughWorkerThread();
+    // fetchTestsThroughWorkerThread();
 
 
 
@@ -67,7 +67,60 @@ async function loadAllPatients() {
         // Execute function on each row
         rowCallback: function(row, data, index) {
             const rowDataString = JSON.stringify(data);
-            const viewMoreCta = row.cells[5].querySelectorAll("button")[0];
+
+            // Update Patient
+            const updatePatientCta = row.cells[5].querySelectorAll("button")[0];
+
+            updatePatientCta.dataset.patient = rowDataString;
+            updatePatientCta.style.cursor = "pointer";
+            updatePatientCta.classList.add("modal-trigger");
+            updatePatientCta.dataset.modal = "update-patient-modal";
+
+            UTILS.triggerModal(updatePatientCta, "modal", async () => {
+                // TODO: Pre Fetch Using WORKER THREAD
+                // Fetch patient data
+                const response = await API.patients.fetchById(data.patientId);
+                const fetchedPatient = await response.data;
+
+
+                // Populate the form with the data
+                populateFormWithData(
+                    "update-patient-modal",
+                    JSON.stringify(fetchedPatient),
+                    [
+                        "firstName",
+                        "lastName",
+                        "nationalIDNumber",
+                        "dateOfBirth",
+                        "age",
+                        "gender",
+                        "contactNumber",
+                        "alternativeContactNumber",
+                        "homeAddress",
+                        "emailAddress",
+                        "nokFirstName",
+                        "nokLastName",
+                        "nokRelationship",
+                        "nokContactNumber",
+                        "nokHomeAddress",
+                        "billingMethodId"
+                    ]
+                );
+
+                // Callback to handle patient update form
+                handleUpdatePatientForm(data.patientId);
+
+            });
+
+
+
+
+
+
+
+
+            // View Details
+            const viewMoreCta = row.cells[5].querySelectorAll("button")[1];
 
             viewMoreCta.dataset.patient = rowDataString;
             viewMoreCta.style.cursor = "pointer";
@@ -79,6 +132,8 @@ async function loadAllPatients() {
                     loadSinglePatientVists(data.patientId);
                 });
             });
+
+
         },
 
         // Load the data to the columns
@@ -119,6 +174,7 @@ async function loadAllPatients() {
                 render: function (data, type, row, meta) {
                     return `
                     <td>
+                        <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Update Patient <i class="ti-pencil"></i> </button>
                         <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">View Details <i class="ti-arrow-right"></i> </button>
                     </td>
                     `;
@@ -405,6 +461,52 @@ async function handleCreateVisitForm() {
 
             // Reset the form
             createVisitForm.reset();
+        });
+    });
+}
+
+// Handle patient update form
+async function handleUpdatePatientForm(patientId) {
+    const updatePatientForm = document.querySelector('#update-patient-form');
+    updatePatientForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+    
+        // Collect form data
+        const formData = new FormData(updatePatientForm);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+    
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(updatePatientForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to update a patient record
+                const response = await API.patients.update(patientId, URLEncodedData, true);
+    
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    updatePatientForm.reset();
+    
+                    // Remove form
+                    updatePatientForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the patients table
+                    loadAllPatients();
+    
+                } else {
+                    alert('Failed to update patient record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while updating the patient record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            updatePatientForm.reset();
         });
     });
 }

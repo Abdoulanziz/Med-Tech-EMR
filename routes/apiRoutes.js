@@ -9,6 +9,7 @@ const {
     updateDoctor,
     fetchUsers,
     createPatient, 
+    updatePatient,
     fetchPatients, 
     fetchPatientById, 
     fetchPatientByVisitId, 
@@ -47,6 +48,7 @@ router.put("/doctors/:id", updateDoctor);
 router.post("/patients", createPatient);
 router.get("/patients", fetchPatients);
 router.get("/patients/:id", fetchPatientById);
+router.put("/patients/:id", updatePatient);
 router.get("/patients/visit/:visitId", fetchPatientByVisitId);
 
 router.post("/visits", createVisit);
