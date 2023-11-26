@@ -588,19 +588,14 @@ const fetchVisits = async (req, res) => {
     // Access the doctor's fields in each visit result
     const visitsWithDoctorInfo = result.rows.map((visit) => ({
       // Extract fields from the 'doctor' association
-      // doctorFirstName: visit.Doctor.firstName,
-      // doctorLastName: visit.Doctor.lastName,
       doctorFullName: `${visit.Doctor.firstName} ${visit.Doctor.lastName}`,
-      // patientFirstName: visit.Patient.firstName,
-      // patientLastName: visit.Patient.lastName,
       patientFullName: `${visit.Patient.firstName} ${visit.Patient.lastName}`,
       visitId: visit.visitId,
       visitCategoryId: visit.visitCategoryId,
       visitDate: visit.visitDate,
+      visitStatus: visit.visitStatus,
       visitCreatedAt: visit.createdAt,
     }));
-
-    // console.log(visitsWithDoctorInfo);
 
     return res.status(200).json({
       draw: draw,
@@ -642,6 +637,7 @@ const updateVisitById = async (req, res) => {
 
     const visitDate = req.body.visitDate || null;
     const visitCategoryId = req.body.visitCategoryId || null;
+    const visitStatus = req.body.visitStatus || null;
     const patientId = req.body.patientId || null;
     const doctorId = req.body.doctorId || null;
 
@@ -660,6 +656,7 @@ const updateVisitById = async (req, res) => {
     const updatedVisit = await existingVisit.update({
       visitDate,
       visitCategoryId,
+      visitStatus,
       patientId,
       doctorId
     });
@@ -736,11 +733,7 @@ const fetchVisitsByPatientId = async (req, res) => {
         {
           model: models.Doctor,
           attributes: ['firstName', 'lastName'],
-        },
-        {
-          model: models.Patient,
-          attributes: ['firstName', 'lastName'],
-        },
+        }
       ],
     };
 
@@ -749,18 +742,13 @@ const fetchVisitsByPatientId = async (req, res) => {
     // Access the doctor's fields in each visit result
     const visitsWithDoctorInfo = result.rows.map((visit) => ({
       // Extract fields from the 'doctor' association
-      // doctorFirstName: visit.Doctor.firstName,
-      // doctorLastName: visit.Doctor.lastName,
       doctorFullName: `${visit.Doctor.firstName} ${visit.Doctor.lastName}`,
-      // patientFirstName: visit.Patient.firstName,
-      // patientLastName: visit.Patient.lastName,
       visitId: visit.visitId,
       visitCategoryId: visit.visitCategoryId,
       visitDate: visit.visitDate,
+      visitStatus: visit.visitStatus,
       visitCreatedAt: visit.createdAt,
     }));
-
-    // console.log(visitsWithDoctorInfo);
 
     return res.status(200).json({
       draw: draw,

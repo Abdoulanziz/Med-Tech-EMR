@@ -38,15 +38,17 @@ async function loadAllVisits() {
             { data : null },
             { data : null },
             { data : null },
+            { data : null },
+            { data : null },
             { data : null }
         ],
         rowCallback: function(row, data, index) {
             const rowDataString = JSON.stringify(data);
 
-            const editVisitCta = row.cells[4].querySelectorAll("button")[0];
+            const editVisitCta = row.cells[6].querySelectorAll("button")[0];
 
-            const viewVisitCta = row.cells[4].querySelectorAll("button")[1];
-            const deleteVisitCta = row.cells[4].querySelectorAll("button")[2];
+            const viewVisitCta = row.cells[6].querySelectorAll("button")[1];
+            const deleteVisitCta = row.cells[6].querySelectorAll("button")[2];
 
             editVisitCta.dataset.patient = rowDataString;
             editVisitCta.style.cursor = "pointer";
@@ -71,7 +73,8 @@ async function loadAllVisits() {
                     [
                         "visitCategoryId",
                         "doctorFullName",
-                        "visitDate"
+                        "visitDate",
+                        "visitStatus"
                     ]
                 );
 
@@ -107,6 +110,12 @@ async function loadAllVisits() {
             },
             {
                 targets: 3,
+                render: function (data, type, row, meta) {
+                    return "Visit";
+                },
+            },
+            {
+                targets: 4,
                 render: function(data, type, row, meta) {
                     const originalDate = data.visitDate;
                     const dateObj = new Date(originalDate);
@@ -115,19 +124,35 @@ async function loadAllVisits() {
                 }
             },
             {
-                targets: 4,
+                targets: 5,
+                render: function(data, type, row, meta) {
+                    const status = data.visitStatus.toLowerCase();
+                    let backgroundColor;
+
+                    if (status === 'scheduled') {
+                        backgroundColor = 'grey';
+                    } else if (status === 'completed') {
+                        backgroundColor = 'yellowgreen';
+                    } else {
+                        backgroundColor = 'orange';
+                    }
+
+                    return '<span style="font-size: 10px;display: block;inline-size: 80%;border-radius:6px;padding: .4rem .6rem;color: #fff;background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
+                }
+            },
+            {
+                targets: 6,
                 render: function (data, type, row, meta) {
                     return `
                     <td>
-                        <button class="btn" style="background-color: #1da1f2;padding-inline: .6rem;border-radius: 0;font-size: 12px;"> <i class="ti-pencil"></i> Edit </button>
-                        <button class="btn" style="background-color: yellowgreen;padding-inline: .6rem;border-radius: 0;font-size: 12px;"> <i class="ti-file"></i> Update </button>
+                        <button class="btn" style="background-color: #1da1f2;padding-inline: .6rem;border-radius: 0;font-size: 12px;"> <i class="ti-pencil"></i> Update </button>
                         <button class="btn" style="background-color: orange;padding-inline: .6rem;border-radius: 0;font-size: 12px;"> <i class="ti-trash"></i> Delete </button>
                     </td>
                     `;
                 },
             },
             {
-                targets: 5,
+                targets: 7,
                 render: function(data, type, row, meta) {
                     const originalDate = data.visitCreatedAt;
                     const dateObj = new Date(originalDate);

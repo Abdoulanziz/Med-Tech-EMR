@@ -280,15 +280,17 @@ async function loadSinglePatientVists(patientId) {
             { data : null },
             { data : null },
             { data : null },
+            { data : null },
+            { data : null },
             { data : null }
         ],
         rowCallback: function(row, data, index) {
             const rowDataString = JSON.stringify(data);
 
-            const editVisitCta = row.cells[3].querySelectorAll("button")[0];
+            const editVisitCta = row.cells[5].querySelectorAll("button")[0];
 
-            const viewVisitCta = row.cells[3].querySelectorAll("button")[1];
-            const deleteVisitCta = row.cells[3].querySelectorAll("button")[2];
+            const viewVisitCta = row.cells[5].querySelectorAll("button")[1];
+            const deleteVisitCta = row.cells[5].querySelectorAll("button")[2];
 
             editVisitCta.dataset.patient = rowDataString;
             editVisitCta.style.cursor = "pointer";
@@ -313,7 +315,8 @@ async function loadSinglePatientVists(patientId) {
                     [
                         "visitCategoryId",
                         "doctorFullName",
-                        "visitDate"
+                        "visitDate",
+                        "visitStatus"
                     ]
                 );
 
@@ -336,6 +339,12 @@ async function loadSinglePatientVists(patientId) {
             },
             {
                 targets: 2,
+                render: function (data, type, row, meta) {
+                    return "Visit";
+                },
+            },
+            {
+                targets: 3,
                 render: function(data, type, row, meta) {
                     const originalDate = data.visitDate;
                     const dateObj = new Date(originalDate);
@@ -344,19 +353,35 @@ async function loadSinglePatientVists(patientId) {
                 }
             },
             {
-                targets: 3,
+                targets: 4,
+                render: function(data, type, row, meta) {
+                    const status = data.visitStatus.toLowerCase();
+                    let backgroundColor;
+
+                    if (status === 'scheduled') {
+                        backgroundColor = 'grey';
+                    } else if (status === 'completed') {
+                        backgroundColor = 'yellowgreen';
+                    } else {
+                        backgroundColor = 'orange';
+                    }
+
+                    return '<span style="font-size: 10px;display: block;inline-size: 80%;border-radius:6px;padding: .4rem .6rem;color: #fff;background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
+                }
+            },
+            {
+                targets: 5,
                 render: function (data, type, row, meta) {
                     return `
                     <td>
-                        <button class="btn" style="background-color: #1da1f2;padding-inline: .6rem;border-radius: 0;font-size: 12px;"> <i class="ti-pencil"></i> Edit </button>
-                        <button class="btn" style="background-color: yellowgreen;padding-inline: .6rem;border-radius: 0;font-size: 12px;"> <i class="ti-file"></i> Update </button>
+                        <button class="btn" style="background-color: #1da1f2;padding-inline: .6rem;border-radius: 0;font-size: 12px;"> <i class="ti-pencil"></i> Update </button>
                         <button class="btn" style="background-color: orange;padding-inline: .6rem;border-radius: 0;font-size: 12px;"> <i class="ti-trash"></i> Delete </button>
                     </td>
                     `;
                 },
             },
             {
-                targets: 4,
+                targets: 6,
                 render: function(data, type, row, meta) {
                     const originalDate = data.visitCreatedAt;
                     const dateObj = new Date(originalDate);

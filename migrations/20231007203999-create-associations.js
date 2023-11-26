@@ -23,6 +23,16 @@ module.exports = {
         onDelete: 'CASCADE',
       }),
 
+      queryInterface.changeColumn('visits', 'visit_category_id', {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'visit_categories',
+          key: 'visit_category_id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      }),
+
       queryInterface.changeColumn('visits', 'patient_id', {
         type: Sequelize.INTEGER,
         references: {
@@ -189,6 +199,7 @@ module.exports = {
     return Promise.all([
       queryInterface.removeColumn('users', 'role_id'),
       queryInterface.removeColumn('doctors', 'user_id'),
+      queryInterface.removeColumn('visits', 'visit_category_id'),
       queryInterface.removeColumn('visits', 'patient_id'),
       queryInterface.removeColumn('visits', 'doctor_id'),
       queryInterface.removeColumn('queues', 'doctor_id'),

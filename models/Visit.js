@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       field: 'visit_category_id',
     },
     visitStatus: {
-      type: DataTypes.ENUM('Scheduled', 'Cancelled', 'Completed'),
+      type: DataTypes.ENUM('Scheduled', 'Canceled', 'Completed'),
       allowNull: false,
       defaultValue: 'Scheduled',
       field: 'visit_status',

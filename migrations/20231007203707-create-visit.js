@@ -24,7 +24,7 @@ module.exports = {
         allowNull: false,
       },
       visit_status: {
-        type: Sequelize.ENUM('Scheduled', 'Cancelled', 'Completed'),
+        type: Sequelize.ENUM('Scheduled', 'Canceled', 'Completed'),
         allowNull: false,
         defaultValue: 'Scheduled',
       },
