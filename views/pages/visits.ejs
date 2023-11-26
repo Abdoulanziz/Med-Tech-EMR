@@ -186,14 +186,11 @@
                             <div class="breadcrumb">
                                 <a href="#" class="section-toggler" data-section="section_00">Visits</a>
                                 <span class="separator">/</span>
-                                <a href="#" class="current section-toggler" data-section="section_01">Patient</a>
+                                <a href="#" class="current">Medical History</a>
                             </div>
                         </div>
-                        <button class="btn section-header-cta modal-trigger" id="open-create-visit-modal-btn" data-modal="create-visit-modal"> <i class="ti-plus"></i> Create Visit</button>
                     </div>
                     <div class="section-body" style="padding-block-start: .8rem;">
-
-                        <h2 class="special-heading">Personal Information</h2>
                         <div class="grid info">
                             <div class="info-wrapper">
                                 <h2 class="special-heading">Personal Information</h2>
@@ -235,51 +232,10 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="info-wrapper">
-                                <h2 class="special-heading">Personal Information</h2>
-                                <div class="patient-details" id="patient-info-section_02">
-                                    <div class="patient-info">
-                                        <div class="patient-info-item">
-                                            <div class="content content-major flex">
-                                                <img class="avatar" src="/assets/img/profiledefault.png">
-                                                <div class="flex" style="align-items: flex-start; flex-direction: column;">
-                                                    <h5 class="label">Name: <span id="patient-name"></span></h5>
-                                                    <h5 class="label">Gender: <span id="gender"></span></h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="patient-info-item">
-                                            <div class="content flex">
-                                                <div class="icon icon-contact">
-                                                    <img src="/assets/svg/mail.svg" alt="">
-                                                </div>
-                                                <div class="flex" style="align-items: flex-start; flex-direction: column;">
-                                                    <h5 class="label">Date of Birth: <span id="date-of-birth"></span></h5>
-                                                    <h5 class="label">Age: <span id="age"></span></h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="patient-info-item">
-                                            <div class="content flex" style="justify-content: space-between;">
-                                                <div class="content flex">
-                                                    <div class="icon icon-phone">
-                                                        <img src="/assets/svg/phone.svg" alt="">
-                                                    </div>
-                                                    <div class="flex" style="align-items: flex-start; flex-direction: column;">
-                                                        <h5 class="label">Contact: <span id="contact-number"></span> <i class="ti-pencil" style="font-size: 14px;"></i></h5>
-                                                        <h5 class="label">Address: <span id="home-address">Not provided</span> <i class="ti-pencil" style="font-size: 14px;"></i></h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             
-                            <!-- <div class="info-wrapper">
-                                <h2>Upload Documents</h2>
-                                <div class="documents flex">
+                            <div class="info-wrapper">
+                                <h2 class="special-heading">Special Documents</h2>
+                                <div class="documents flex" id="special-documents-01">
                                     <div class="file-upload-container flex" id="file-drop-area">
                                         <div>
                                             <label for="file-input" class="file-label">Drag & Drop or Click to Upload</label>
@@ -288,23 +244,24 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
 
-                        <h2 class="special-heading">Recent Visits</h2>
-                        <table id="single-patient-visits" class="display" style="width:100%;margin-top:.5rem;">
+                        <h2 class="special-heading">Medical History</h2>
+                        <table id="single-patient-visit-records" class="display" style="width:100%;margin-top:.5rem;">
                             <thead>
                                 <tr>
                                     <th>#ID</th>
-                                    <th>Doctor</th>
+                                    <th>Test Name</th>
+                                    <th>Visit Date</th>
                                     <th>Status</th>
-                                    <th>Actions</th>
                                     <th>Created At</th>
                                 </tr>
                             </thead>
                             <tbody>
                             </tbody>
                         </table>
+                        
                     </div>
                 </div>
 
@@ -318,54 +275,6 @@
                             <span class="system-version-label">System version: <span class="system-version-value"> 1.0.0 </span></span>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Create visit modal -->
-            <div id="create-visit-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="create-visit-form">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Create Visit</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="modal-form-body">
-                            <div class="form-section">
-                                <h2>Visit Information</h2>
-                                <div class="form-group">
-                                    <label for="category">Visit Category:</label>
-                                    <select id="category" class="form-control" name="visitCategoryId" required>
-                                        <option value="1">Consultation</option>
-                                        <option value="2">Treatment</option>
-                                        <option value="3">Other</option>
-                                    </select>
-                                </div>
-    
-                                <div class="form-group">
-                                    <label for="doctor-id">To See Doctor:</label>
-                                    <select id="doctor-id" class="form-control" name="doctorId" required>
-                                        <option value="1">Caxton Mulondo</option>
-                                        <option value="2">John North</option>
-                                        <option value="3">Abdoulanziz Ally</option>
-                                    </select>
-                                </div>
-                            
-                                <div class="form-group">
-                                    <label for="visit-date">Date:</label>
-                                    <input type="date" class="form-control" id="visit-date" name="visitDate" required>
-                                </div>
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
-                        </div>
-                    </form>
                 </div>
             </div>
 
@@ -425,6 +334,88 @@
                     </form>
                 </div>
             </div>
+
+
+            <!-- Services payment modal -->
+            <div id="services-payment-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="services-payment-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Receive Payment</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="services-payment-form-body">
+                            <style>
+                                .container {
+                                    width: 80%;
+                                    margin: 0 auto;
+                                }
+
+                                .table {
+                                    width: 100%;
+                                    border-collapse: collapse;
+                                }
+
+                                .table th,
+                                .table td {
+                                    padding: 5px;
+                                    border: 1px solid #ccc;
+                                    text-align: left;
+                                }
+
+                                .table th {
+                                    background-color: #eee;
+                                }
+
+                                .total {
+                                    text-align: right;
+                                    font-weight: bold;
+                                }
+
+                                .checkout-button {
+                                    background-color: #007bff;
+                                    color: white;
+                                    padding: 10px 20px;
+                                    border: none;
+                                    cursor: pointer;
+                                }
+
+                                #select-all {
+                                    cursor: pointer;
+                                }
+                            </style>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="select-all"></th>
+                                        <th>Service Name</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="services-payment-table-body">
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2" class="total">Total</td>
+                                        <td class="total-value">0</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="submit" id="update-services-payment-status-btn"> Process</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
         </div>
     </div>
 
@@ -433,5 +424,42 @@
     <!-- Load modules -->
     <script type="module" src="/js/core/ui.js"></script>
     <script type="module" src="/js/modules/visits.js"></script>
+
+    <script>
+         // Display the selected file name when a file is chosen
+        function displayFileName() {
+            const fileInput = document.querySelector('#file-input');
+            const selectedFile = document.querySelector('#selected-file');
+
+            if (fileInput.files.length > 0) {
+                selectedFile.textContent = 'Selected File: ' + fileInput.files[0].name;
+            } else {
+                selectedFile.textContent = '';
+            }
+        }
+
+
+        // Enable drag and drop functionality
+        const fileDropArea = document.querySelector('#file-drop-area');
+        fileDropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.add('file-upload-container-active');
+        });
+
+
+        fileDropArea.addEventListener('dragleave', () => {
+            fileDropArea.classList.remove('file-upload-container-active');
+        });
+
+
+        fileDropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.remove('file-upload-container-active');
+            const fileInput = document.querySelector('#file-input');
+            fileInput.files = e.dataTransfer.files;
+            displayFileName();
+        });
+    </script>
+    
 </body>
 </html>

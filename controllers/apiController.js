@@ -578,7 +578,7 @@ const fetchVisits = async (req, res) => {
         },
         {
           model: models.Patient,
-          attributes: ['firstName', 'lastName'],
+          attributes: ['patientId', 'firstName', 'lastName'],
         },
       ],
     };
@@ -589,6 +589,7 @@ const fetchVisits = async (req, res) => {
     const visitsWithDoctorInfo = result.rows.map((visit) => ({
       // Extract fields from the 'doctor' association
       doctorFullName: `${visit.Doctor.firstName} ${visit.Doctor.lastName}`,
+      patientId: visit.Patient.patientId,
       patientFullName: `${visit.Patient.firstName} ${visit.Patient.lastName}`,
       visitId: visit.visitId,
       visitCategoryId: visit.visitCategoryId,
