@@ -36,6 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle create patient cardiology service request
     handlePatientCardiologyServiceRequestForm();
+
+    // Handle create patient radiology service request
+    handlePatientRadiologyServiceRequestForm();
     
 });
 
@@ -913,6 +916,57 @@ async function handlePatientCardiologyServiceRequestForm() {
 
             // Reset the form
             patientCardiologyServiceRequestForm.reset();
+        });
+    });
+}
+
+// Handle create patient radiology service request form
+async function handlePatientRadiologyServiceRequestForm() {
+    const patientRadiologyServiceRequestForm = document.querySelector('#create-patient-radiology-service-request-form');
+    patientRadiologyServiceRequestForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        // Get Id of selected visit
+        const selectedVisitId = UTILS.getSelectedVisitId();
+        if (! selectedVisitId) return;
+    
+        // Collect form data
+        const formData = new FormData(patientRadiologyServiceRequestForm);
+        formData.append('visitId', selectedVisitId);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+    
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(patientRadiologyServiceRequestForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to create a radiology service request record
+                const response = await API.services.forRadiology.requests.create(URLEncodedData, true);
+    
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    patientRadiologyServiceRequestForm.reset();
+    
+                    // Remove form
+                    patientRadiologyServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the requests table
+                    loadSinglePatientVisitHistory(selectedVisitId);
+    
+                } else {
+                    alert('Failed to create radiology record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while creating the radiology record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            patientRadiologyServiceRequestForm.reset();
         });
     });
 }

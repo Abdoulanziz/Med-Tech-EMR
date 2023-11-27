@@ -13,6 +13,7 @@ const {
   ClinicalRequestForEye,
   ClinicalRequestForDental,
   ClinicalRequestForCardiology,
+  ClinicalRequestForRadiology,
   LabTest,
   Medicine,
   LabRequest,
@@ -1039,6 +1040,35 @@ const createClinicalRequestForCardiology = async (req, res) => {
   }
 };
 
+// // Create clinical request for radiology
+const createClinicalRequestForRadiology = async (req, res) => {
+  try {
+    const {
+      visitId,
+      referralReason,
+      currentMedication,
+      observationNotes,
+      serviceFee
+    } = req.body;
+
+    const newClinicalRequestForRadiology = await ClinicalRequestForRadiology.create({
+      visitId,
+      referralReason,
+      currentMedication,
+      observationNotes,
+      serviceFee
+    });
+
+    // Create an audit log
+    await createAuditLog('ClinicalRequestForRadiology', newClinicalRequestForRadiology.resultId, 'CREATE', {}, newClinicalRequestForRadiology.dataValues, req.session.user.userId);
+
+    return res.status(201).json({ status: 'success', message: 'Clinical request for Radiology created successfully', data: newClinicalRequestForRadiology });
+  } catch (error) {
+    console.error('Error creating Clinical request for Radiology:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 // Fetch medical history
 const fetchMedicalHistoryByVisitId = async (req, res) => {
   const visitId = req.params.visitId;
@@ -1770,6 +1800,7 @@ module.exports = {
   createClinicalRequestForEye,
   createClinicalRequestForDental,
   createClinicalRequestForCardiology,
+  createClinicalRequestForRadiology,
   fetchLabRequestsByVisitId, 
   updateLabRequestPaymentStatus,
   fetchMedicalHistoryByVisitId, 

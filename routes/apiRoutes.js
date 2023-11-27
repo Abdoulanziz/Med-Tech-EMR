@@ -25,6 +25,7 @@ const {
     createClinicalRequestForEye,
     createClinicalRequestForDental,
     createClinicalRequestForCardiology,
+    createClinicalRequestForRadiology,
     fetchLabRequestsByVisitId, 
     updateLabRequestPaymentStatus,
     fetchMedicalHistoryByVisitId, 
@@ -72,6 +73,7 @@ router.post("/allergy", createAllergy);
 router.post("/services/eye/requests", createClinicalRequestForEye);
 router.post("/services/dental/requests", createClinicalRequestForDental);
 router.post("/services/cardiology/requests", createClinicalRequestForCardiology);
+router.post("/services/radiology/requests", createClinicalRequestForRadiology);
 
 router.post("/requests", createLabRequest);
 router.get("/requests/:visitId", fetchLabRequestsByVisitId);

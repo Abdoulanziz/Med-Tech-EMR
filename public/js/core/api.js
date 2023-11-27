@@ -484,7 +484,36 @@ export const API = {
         },
 
         // For Radiology
-        forRadiology: {},
+        forRadiology: {
+            // Requests
+            requests: {
+                // Add to requests POST api/v1/services/radiology/requests
+                create: async (report, fromFormData) => {
+                    const endpoint = `${API.BACKEND_BASE_API_URI}/services/radiology/requests`;
+                    return await API.makePostRequest(endpoint, report, fromFormData);
+                },
+
+                // Get from requests GET api/v1/services/radiology/requests/:id
+                fetchByRequestId: async (id) => {
+                    const endpoint = `${API.BACKEND_BASE_API_URI}/services/radiology/requests/${id}`;
+                    return await API.makeGetRequest(endpoint);
+                },
+            },
+            // Results
+            results: {
+                // Add to results POST api/v1/services/radiology/results
+                create: async (report, fromFormData) => {
+                    const endpoint = `${API.BACKEND_BASE_API_URI}/services/radiology/results`;
+                    return await API.makePostRequest(endpoint, report, fromFormData);
+                },
+
+                // Get from results GET api/v1/services/radiology/results/:id
+                fetchByRequestId: async (id) => {
+                    const endpoint = `${API.BACKEND_BASE_API_URI}/services/radiology/results/${id}`;
+                    return await API.makeGetRequest(endpoint);
+                },
+            },
+        },
         
     },
 }
