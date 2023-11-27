@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('clinical_requests_for_eye', {
+    await queryInterface.createTable('clinical_requests_for_cardiology', {
       request_id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -19,26 +19,21 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      target_eye: {
-        type: Sequelize.ENUM('Right', 'Left'),
-        defaultValue: 'Right',
+      referral_reason: {
+        type: Sequelize.TEXT,
         allowNull: false,
       },
-      diagnosis: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      service_fee: {
-        type: Sequelize.STRING,
+      current_medication: {
+        type: Sequelize.TEXT,
         allowNull: true,
       },
       observation_notes: {
         type: Sequelize.TEXT,
         allowNull: true,
       },
-      description_notes: {
-        type: Sequelize.TEXT,
-        allowNull: true,
+      service_fee: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       created_at: {
         type: Sequelize.DATE,
@@ -51,6 +46,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('clinical_requests_for_eye');
+    await queryInterface.dropTable('clinical_requests_for_cardiology');
   }
 };

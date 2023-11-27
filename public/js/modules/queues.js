@@ -30,6 +30,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle create patient eye service request
     handlePatientEyeServiceRequestForm();
+
+    // Handle create patient dental service request
+    handlePatientDentalServiceRequestForm();
+
+    // Handle create patient cardiology service request
+    handlePatientCardiologyServiceRequestForm();
     
 });
 
@@ -794,17 +800,119 @@ async function handlePatientEyeServiceRequestForm() {
                     loadSinglePatientVisitHistory(selectedVisitId);
     
                 } else {
-                    alert('Failed to create allergy record. Please check the form data.');
+                    alert('Failed to create eye record. Please check the form data.');
                 }
             } catch (error) {
                 console.error(error);
-                alert('An error occurred while creating the allergy record.');
+                alert('An error occurred while creating the eye record.');
             }
         }, () => {
             // TODO: Run when cancelled
 
             // Reset the form
             patientEyeServiceRequestForm.reset();
+        });
+    });
+}
+
+// Handle create patient dental service request form
+async function handlePatientDentalServiceRequestForm() {
+    const patientDentalServiceRequestForm = document.querySelector('#create-patient-dental-service-request-form');
+    patientDentalServiceRequestForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        // Get Id of selected visit
+        const selectedVisitId = UTILS.getSelectedVisitId();
+        if (! selectedVisitId) return;
+    
+        // Collect form data
+        const formData = new FormData(patientDentalServiceRequestForm);
+        formData.append('visitId', selectedVisitId);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+    
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(patientDentalServiceRequestForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to create a dental service request record
+                const response = await API.services.forDental.requests.create(URLEncodedData, true);
+    
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    patientDentalServiceRequestForm.reset();
+    
+                    // Remove form
+                    patientDentalServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the requests table
+                    loadSinglePatientVisitHistory(selectedVisitId);
+    
+                } else {
+                    alert('Failed to create dental record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while creating the dental record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            patientDentalServiceRequestForm.reset();
+        });
+    });
+}
+
+// Handle create patient cardiology service request form
+async function handlePatientCardiologyServiceRequestForm() {
+    const patientCardiologyServiceRequestForm = document.querySelector('#create-patient-cardiology-service-request-form');
+    patientCardiologyServiceRequestForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        // Get Id of selected visit
+        const selectedVisitId = UTILS.getSelectedVisitId();
+        if (! selectedVisitId) return;
+    
+        // Collect form data
+        const formData = new FormData(patientCardiologyServiceRequestForm);
+        formData.append('visitId', selectedVisitId);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+    
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(patientCardiologyServiceRequestForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to create a cardiology service request record
+                const response = await API.services.forCardiology.requests.create(URLEncodedData, true);
+    
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    patientCardiologyServiceRequestForm.reset();
+    
+                    // Remove form
+                    patientCardiologyServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the requests table
+                    loadSinglePatientVisitHistory(selectedVisitId);
+    
+                } else {
+                    alert('Failed to create cardiology record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while creating the cardiology record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            patientCardiologyServiceRequestForm.reset();
         });
     });
 }

@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class ClinicalRequestForEye extends Model {
+  class ClinicalRequestForCardiology extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ClinicalRequestForEye.belongsTo(models.Visit, { foreignKey: 'visitId' });
+      ClinicalRequestForCardiology.belongsTo(models.Visit, { foreignKey: 'visitId' });
     }
   }
-  ClinicalRequestForEye.init({ 
+  ClinicalRequestForCardiology.init({ 
     requestId: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -34,31 +34,25 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       field: 'visit_id',
     },
-    targetEye: {
-      type: DataTypes.ENUM('Right', 'Left'),
+    referralReason: {
+      type: DataTypes.TEXT,
       allowNull: false,
-      defaultValue: 'Right',
-      field: 'target_eye',
+      field: 'referral_reason',
     },
-    diagnosis: {
-      type: DataTypes.STRING,
+    currentMedication: {
+      type: DataTypes.TEXT,
       allowNull: true,
-      field: 'diagnosis',
-    },
-    serviceFee: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      field: 'service_fee',
+      field: 'current_medication',
     },
     observationNotes: {
       type: DataTypes.TEXT,
       allowNull: true,
       field: 'observation_notes',
     },
-    descriptionNotes: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-      field: 'description_notes',
+    serviceFee: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      field: 'service_fee',
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -72,8 +66,8 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'ClinicalRequestForEye',
-    tableName: 'clinical_requests_for_eye',
+    modelName: 'ClinicalRequestForCardiology',
+    tableName: 'clinical_requests_for_cardiology',
   });
-  return ClinicalRequestForEye;
+  return ClinicalRequestForCardiology;
 };

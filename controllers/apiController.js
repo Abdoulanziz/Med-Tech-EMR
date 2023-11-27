@@ -11,6 +11,8 @@ const {
   Triage,
   Allergy,
   ClinicalRequestForEye,
+  ClinicalRequestForDental,
+  ClinicalRequestForCardiology,
   LabTest,
   Medicine,
   LabRequest,
@@ -953,7 +955,7 @@ const createClinicalRequestForEye = async (req, res) => {
   try {
     const {
       visitId,
-      specificEye,
+      targetEye,
       diagnosis,
       serviceFee,
       observationNotes,
@@ -962,7 +964,7 @@ const createClinicalRequestForEye = async (req, res) => {
 
     const newClinicalRequestForEye = await ClinicalRequestForEye.create({
       visitId,
-      specificEye,
+      targetEye,
       diagnosis,
       serviceFee,
       observationNotes,
@@ -975,6 +977,64 @@ const createClinicalRequestForEye = async (req, res) => {
     return res.status(201).json({ status: 'success', message: 'Clinical request for Eye created successfully', data: newClinicalRequestForEye });
   } catch (error) {
     console.error('Error creating Clinical request for Eye:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// // Create clinical request for dental
+const createClinicalRequestForDental = async (req, res) => {
+  try {
+    const {
+      visitId,
+      toothType,
+      diagnosis,
+      procedure,
+      serviceFee
+    } = req.body;
+
+    const newClinicalRequestForDental = await ClinicalRequestForDental.create({
+      visitId,
+      toothType,
+      diagnosis,
+      procedure,
+      serviceFee
+    });
+
+    // Create an audit log
+    await createAuditLog('ClinicalRequestForDental', newClinicalRequestForDental.resultId, 'CREATE', {}, newClinicalRequestForDental.dataValues, req.session.user.userId);
+
+    return res.status(201).json({ status: 'success', message: 'Clinical request for Dental created successfully', data: newClinicalRequestForDental });
+  } catch (error) {
+    console.error('Error creating Clinical request for Dental:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// // Create clinical request for cardiology
+const createClinicalRequestForCardiology = async (req, res) => {
+  try {
+    const {
+      visitId,
+      referralReason,
+      currentMedication,
+      observationNotes,
+      serviceFee
+    } = req.body;
+
+    const newClinicalRequestForCardiology = await ClinicalRequestForCardiology.create({
+      visitId,
+      referralReason,
+      currentMedication,
+      observationNotes,
+      serviceFee
+    });
+
+    // Create an audit log
+    await createAuditLog('ClinicalRequestForCardiology', newClinicalRequestForCardiology.resultId, 'CREATE', {}, newClinicalRequestForCardiology.dataValues, req.session.user.userId);
+
+    return res.status(201).json({ status: 'success', message: 'Clinical request for Cardiology created successfully', data: newClinicalRequestForCardiology });
+  } catch (error) {
+    console.error('Error creating Clinical request for Cardiology:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -1708,6 +1768,8 @@ module.exports = {
   createTriage, 
   createAllergy, 
   createClinicalRequestForEye,
+  createClinicalRequestForDental,
+  createClinicalRequestForCardiology,
   fetchLabRequestsByVisitId, 
   updateLabRequestPaymentStatus,
   fetchMedicalHistoryByVisitId, 

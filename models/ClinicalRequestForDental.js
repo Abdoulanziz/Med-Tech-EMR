@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class ClinicalRequestForEye extends Model {
+  class ClinicalRequestForDental extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ClinicalRequestForEye.belongsTo(models.Visit, { foreignKey: 'visitId' });
+      ClinicalRequestForDental.belongsTo(models.Visit, { foreignKey: 'visitId' });
     }
   }
-  ClinicalRequestForEye.init({ 
+  ClinicalRequestForDental.init({ 
     requestId: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -34,31 +34,26 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       field: 'visit_id',
     },
-    targetEye: {
-      type: DataTypes.ENUM('Right', 'Left'),
+    toothType: {
+      type: DataTypes.ENUM('Pre-molar', 'Molar', 'Incisor', 'Canine'),
       allowNull: false,
-      defaultValue: 'Right',
-      field: 'target_eye',
+      defaultValue: 'Pre-molar',
+      field: 'tooth_type',
     },
     diagnosis: {
       type: DataTypes.STRING,
       allowNull: true,
       field: 'diagnosis',
     },
+    procedure: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      field: 'procedure',
+    },
     serviceFee: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
       field: 'service_fee',
-    },
-    observationNotes: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-      field: 'observation_notes',
-    },
-    descriptionNotes: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-      field: 'description_notes',
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -72,8 +67,8 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'ClinicalRequestForEye',
-    tableName: 'clinical_requests_for_eye',
+    modelName: 'ClinicalRequestForDental',
+    tableName: 'clinical_requests_for_dental',
   });
-  return ClinicalRequestForEye;
+  return ClinicalRequestForDental;
 };

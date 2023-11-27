@@ -113,6 +113,26 @@ module.exports = {
         onDelete: 'CASCADE',
       }),
 
+      queryInterface.changeColumn('clinical_requests_for_dental', 'visit_id', {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'visits',
+          key: 'visit_id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      }),
+
+      queryInterface.changeColumn('clinical_requests_for_cardiology', 'visit_id', {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'visits',
+          key: 'visit_id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      }),
+
       queryInterface.changeColumn('diagnoses', 'visit_id', {
         type: Sequelize.INTEGER,
         references: {
@@ -217,6 +237,9 @@ module.exports = {
       queryInterface.removeColumn('queues', 'patient_id'),
       queryInterface.removeColumn('triages', 'visit_id'),
       queryInterface.removeColumn('allergies', 'visit_id'),
+      queryInterface.removeColumn('clinical_requests_for_eye', 'visit_id'),
+      queryInterface.removeColumn('clinical_requests_for_dental', 'visit_id'),
+      queryInterface.removeColumn('clinical_requests_for_cardiology', 'visit_id'),
       queryInterface.removeColumn('diagnoses', 'visit_id'),
       queryInterface.removeColumn('diagnosis_reports', 'diagnosis_id'),
       queryInterface.removeColumn('lab_requests', 'test_id'),

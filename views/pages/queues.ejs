@@ -221,36 +221,6 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <!-- <div class="info-wrapper">
-                                <h2 class="special-heading">Billing Services</h2>
-                                <div class="ongoing-services" id="ongoing-services-01">
-                                    <div class="service paid">
-                                      <div class="service-content flex">
-                                        <h3>Consultation (UGX 40,000)</h3>
-                                        <img src="/assets/svg/cancel.png" alt="remove service icon">
-                                      </div>
-                                    </div>
-                                    <div class="service unpaid">
-                                        <div class="service-content flex">
-                                          <h3>Complete Blood Count Test (UGX 25,000)</h3>
-                                          <img src="/assets/svg/cancel.png" alt="remove service icon">
-                                        </div>
-                                    </div>
-                                    <div class="service unpaid">
-                                        <div class="service-content flex">
-                                          <h3>Malaria (UGX 5,000)</h3>
-                                          <img src="/assets/svg/cancel.png" alt="remove service icon">
-                                        </div>
-                                    </div>
-                                    <div class="service unpaid">
-                                        <div class="service-content flex">
-                                          <h3>Root Canal (UGX 200,000)</h3>
-                                          <img src="/assets/svg/cancel.png" alt="remove service icon">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
 
                             <div class="info-wrapper">
                                 <h2 class="special-heading">Special Documents</h2>
@@ -317,8 +287,8 @@
                                 <div class="section-dropdown-menu" id="menu_01">
                                     <ul class="section-dropdown-items">
                                         <li class="section-dropdown-item modal-trigger" data-modal="create-patient-eye-service-request-modal"> <i class="ti-plus"></i> <span>Eye</span></li>
-                                        <li class="section-dropdown-item modal-trigger" data-modal="send-patient-to-dental-clinic-modal"> <i class="ti-plus"></i> <span>Dental Lab</span></li>
-                                        <li class="section-dropdown-item modal-trigger" data-modal="send-patient-to-cardiology-clinic-modal"> <i class="ti-plus"></i> <span>Cardiology</span></li>
+                                        <li class="section-dropdown-item modal-trigger" data-modal="create-patient-dental-service-request-modal"> <i class="ti-plus"></i> <span>Dental Lab</span></li>
+                                        <li class="section-dropdown-item modal-trigger" data-modal="create-patient-cardiology-service-request-modal"> <i class="ti-plus"></i> <span>Cardiology</span></li>
                                         <li class="section-dropdown-item modal-trigger" data-modal="send-patient-to-radiology-clinic-modal"> <i class="ti-plus"></i> <span>Radiology</span></li>
                                     </ul>
                                 </div>
@@ -896,10 +866,10 @@
                             <div class="form-section">
                                 <h2>Eye Information</h2>
                                 <div class="form-group">
-                                    <label for="specific-eye">Specific Eye:</label>
-                                    <select id="specific-eye" class="form-control" name="specificEye" required>
-                                        <option value="right">Right eye</option>
-                                        <option value="left">Left eye</option>
+                                    <label for="target-eye">Specific Eye:</label>
+                                    <select id="target-eye" class="form-control" name="targetEye" required>
+                                        <option value="Right">Right eye</option>
+                                        <option value="Left">Left eye</option>
                                     </select>
                                 </div>
         
@@ -937,9 +907,9 @@
             </div>
 
             <!-- Send patient to dental clinic modal -->
-            <div id="send-patient-to-dental-clinic-modal" class="form-modal">
+            <div id="create-patient-dental-service-request-modal" class="form-modal">
                 <div class="form-modal-content">
-                    <form class="modal-form" id="create-patient-dental-request-form">
+                    <form class="modal-form" id="create-patient-dental-service-request-form">
                         <div class="form-modal-header flex">
                             <div class="form-modal-header-left flex">
                                 <img src="/assets/actions/patients.png" alt="" class="icon">
@@ -948,36 +918,45 @@
                             <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
                         </div>
             
-                        <div class="modal-form-body" id="create-patient-dental-request-form-body">
+                        <div class="modal-form-body" id="create-patient-dental-service-request-form-body">
                             <div class="form-section">
-                                <label for="toothName">Tooth Name</label>
-                                <input type="text" name="toothName[]">
-                                <label for="testName">Diagnosis Test</label>
-                                <input type="text" name="testName[]">
-                                <label for="procedure">Procedure</label>
-                                <input type="text" name="procedure[]">
-                                <label for="fees">Fees ($)</label>
-                                <input type="number" name="fees[]">
-                                <button type="button" class="btn remove-test"> <i class="ti-trash"></i> Remove</button>
-                            </div>
-                            <div class="flex" style="block-size: fit-content;justify-content: space-between;">
-                                <button type="button" id="addTest" class="btn"> <i class="ti-plus"></i> Add Test</button>
-                                <div class="total-fees">Total Fees: $0.00</div>
+                                <h2>Medical Information</h2>
+                                <div class="form-group">
+                                    <label for="tooth-type">Tooth Type:</label>
+                                    <select id="tooth-type" name="toothType">
+                                        <option value="Pre-molar">Pre Molar</option>
+                                        <option value="Molar">Molar Tooth</option>
+                                        <option value="Canine">Canine</option>
+                                        <option value="Incisor">Incisor</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="diagnosis">Diagnosis:</label>
+                                    <textarea id="diagnosis" name="diagnosis" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="procedure">Procedure:</label>
+                                    <textarea id="procedure" name="procedure" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="service-fee">Service Fee:</label>
+                                    <input type="text" id="service-fee" name="serviceFee" class="form-control" required>
+                                </div>
                             </div>
                         </div>
             
                         <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary" type="submit">Cancel</button>
                             <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
                         </div>
                     </form>
                 </div>
             </div>
 
-            <!-- Send patient to cardiolody clinic modal -->
-            <div id="send-patient-to-cardiology-clinic-modal" class="form-modal">
+            <!-- Send patient to cardiology clinic modal -->
+            <div id="create-patient-cardiology-service-request-modal" class="form-modal">
                 <div class="form-modal-content">
-                    <form class="modal-form" id="">
+                    <form class="modal-form" id="create-patient-cardiology-service-request-form">
                         <div class="form-modal-header flex">
                             <div class="form-modal-header-left flex">
                                 <img src="/assets/actions/patients.png" alt="" class="icon">
@@ -986,102 +965,31 @@
                             <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
                         </div>
             
-                        <div class="modal-form-body" id="">
+                        <div class="modal-form-body" id="create-patient-cardiology-service-request-form-body">
                             <div class="form-section">
                                 <h2>Medical Information</h2>
                                 <div class="form-group">
-                                    <label for="reason-for-referral">Reason for Referral:</label>
-                                    <select id="reason-for-referral" class="form-control" name="reasonForReferral" required>
-                                        <option value="">Chest Pain</option>
-                                        <option value="">Shortness of Breath</option>
-                                        <option value="">Palpitations</option>
-                                        <option value="">Hypertension</option>
-                                        <option value="">Heart Murmur</option>
-                                        <option value="">Other</option>
-                                    </select>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="current-medications">Current Medications:</label>
-                                    <textarea id="current-medications" name="currentMedications" class="form-control"></textarea>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="service-fee">Service Fee:</label>
-                                    <input type="text" class="form-control" id="service-fee" name="serviceFee" required>
-                                </div>
-                            
-                                <div class="form-group">
-                                    <label for="observation-notes">Observation Notes:</label>
-                                    <textarea id="observation-notes" name="observationNotes" class="form-control"></textarea>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="additional-notes">Additional Notes:</label>
-                                    <textarea id="additional-notes" name="additionalNotes" class="form-control"></textarea>
-                                </div>
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                                    <label for="referral-reason">Referral Reason:</label>
+                                    <textarea id="referral-reason" name="referralReason" class="form-control" required></textarea>
 
-            <!-- Send patient to radiology clinic modal -->
-            <div id="send-patient-to-cardiology-clinic-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Send Patient to Radiology Clinic</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="">
-                            <div class="form-section">
-                                <h2>Medical Information</h2>
-                                <div class="form-group">
-                                    <label for="reason-for-referral">Reason for Referral:</label>
-                                    <select id="reason-for-referral" class="form-control" name="reasonForReferral" required>
-                                        <option value="">Chest Pain</option>
-                                        <option value="">Shortness of Breath</option>
-                                        <option value="">Palpitations</option>
-                                        <option value="">Hypertension</option>
-                                        <option value="">Heart Murmur</option>
-                                        <option value="">Other</option>
-                                    </select>
                                 </div>
-        
                                 <div class="form-group">
-                                    <label for="current-medications">Current Medications:</label>
-                                    <textarea id="current-medications" name="currentMedications" class="form-control"></textarea>
+                                    <label for="current-medication">Current Medication:</label>
+                                    <textarea id="current-medication" name="currentMedication" class="form-control"></textarea>
                                 </div>
-        
-                                <div class="form-group">
-                                    <label for="service-fee">Service Fee:</label>
-                                    <input type="text" class="form-control" id="service-fee" name="serviceFee" required>
-                                </div>
-                            
                                 <div class="form-group">
                                     <label for="observation-notes">Observation Notes:</label>
                                     <textarea id="observation-notes" name="observationNotes" class="form-control"></textarea>
                                 </div>
-        
                                 <div class="form-group">
-                                    <label for="additional-notes">Additional Notes:</label>
-                                    <textarea id="additional-notes" name="additionalNotes" class="form-control"></textarea>
+                                    <label for="service-fee">Service Fee:</label>
+                                    <input type="text" id="service-fee" name="serviceFee" class="form-control" required>
                                 </div>
                             </div>
                         </div>
             
                         <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary" type="submit">Cancel</button>
                             <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
                         </div>
                     </form>
@@ -1202,8 +1110,10 @@
                 </div>
             </div>
 
-            <!-- Send patient to dental clinic modal
-            <div id="send-patient-to-dental-clinic-modal" class="form-modal">
+            
+            <!-- Reference -->
+            <!-- Send patient to dental clinic modal -->
+            <!-- <div id="create-patient-dental-service-request-modal" class="form-modal">
                 <div class="form-modal-content">
                     <form class="modal-form" id="create-patient-form">
                         <div class="form-modal-header flex">
@@ -1341,6 +1251,7 @@
                     </form>
                 </div>
             </div> -->
+        
         </div>
     </div>
 
@@ -1352,104 +1263,6 @@
     <script type="module" src="/js/modules/queues.js"></script>
 
     <script>
-
-        // Set up dental with dynamic test items and total fees calculation
-        function createDentalForm(formId, formBodyId) {
-            const form = document.getElementById(formId);
-            const formBody = form.querySelector(`#${formBodyId}`);
-            const totalFeesDisplay = formBody.querySelector(".total-fees");
-
-            function addTestItem() {
-                const testItem = document.createElement("div");
-                testItem.classList.add("form-section");
-                testItem.innerHTML = `
-                    <label for="toothName">Tooth Name</label>
-                    <input type="text" name="toothName[]">
-                    <label for="testName">Diagnosis Test</label>
-                    <input type="text" name="testName[]">
-                    <label for="procedure">Procedure</label>
-                    <input type="text" name="procedure[]">
-                    <label for="fees">Fees ($)</label>
-                    <input type="number" name="fees[]">
-                    <button type="button" class="btn remove-test"> <i class="ti-trash"></i> Remove</button>
-                `;
-
-                formBody.insertBefore(testItem, formBody.lastElementChild);
-
-                const removeTestButton = testItem.querySelector(".remove-test");
-                removeTestButton.addEventListener("click", () => {
-                    formBody.removeChild(testItem);
-                    recalculateTotalFees();
-                });
-            }
-
-            function recalculateTotalFees() {
-                const feeInputs = Array.from(formBody.querySelectorAll("input[name='fees[]']"));
-                const totalFees = feeInputs.reduce((total, input) => {
-                    const fee = parseFloat(input.value) || 0;
-                    return total + fee;
-                }, 0).toFixed(2);
-                totalFeesDisplay.textContent = `Total Fees: $${totalFees}`;
-            }
-
-            const addTestButton = form.querySelector("#addTest");
-            addTestButton.addEventListener("click", addTestItem);
-            formBody.addEventListener("input", recalculateTotalFees);
-        }
-
-
-        function getDentalFormValues(formId) {
-            const form = document.getElementById(formId);
-            const testItems = form.querySelectorAll(".form-section");
-            const values = [];
-
-            testItems.forEach(testItem => {
-                const toothNameInput = testItem.querySelector("input[name='toothName[]']");
-                const testNameInput = testItem.querySelector("input[name='testName[]']");
-                const procedureInput = testItem.querySelector("input[name='procedure[]']");
-                const feeInput = testItem.querySelector("input[name='fees[]']");
-                
-                const toothName = toothNameInput.value;
-                const testName = testNameInput.value;
-                const procedure = procedureInput.value;
-                const fee = parseFloat(feeInput.value) || 0;
-
-                values.push({ toothName, testName, procedure, fee });
-            });
-
-            return values;
-        }
-
-
-        // Create dental form
-        createDentalForm("create-patient-dental-request-form", "create-patient-dental-request-form-body");
-
-
-        // Handle dental create form
-        async function handleCreateDentalForm() {
-            const patientDiagnosisForm = document.querySelector('#create-patient-dental-request-form');
-            patientDiagnosisForm.addEventListener('submit', (event) => {
-                event.preventDefault();
-
-                // Call the getDentalFormValues function to retrieve the values
-                const formId = "create-patient-dental-request-form";
-                const formValues = getDentalFormValues(formId);
-
-                console.log(formValues);
-
-            });
-        }
-        handleCreateDentalForm();
-
-
-
-
-
-
-
-        
-
-
         // Display the selected file name when a file is chosen
         function displayFileName() {
             const fileInput = document.querySelector('#file-input');

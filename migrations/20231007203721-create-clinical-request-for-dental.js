@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('clinical_requests_for_eye', {
+    await queryInterface.createTable('clinical_requests_for_dental', {
       request_id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -19,26 +19,22 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      target_eye: {
-        type: Sequelize.ENUM('Right', 'Left'),
-        defaultValue: 'Right',
+      tooth_type: {
+        type: Sequelize.ENUM('Pre-molar', 'Molar', 'Incisor', 'Canine'),
+        defaultValue: 'Pre-molar',
         allowNull: false,
       },
       diagnosis: {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      procedure: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
       service_fee: {
         type: Sequelize.STRING,
-        allowNull: true,
-      },
-      observation_notes: {
-        type: Sequelize.TEXT,
-        allowNull: true,
-      },
-      description_notes: {
-        type: Sequelize.TEXT,
-        allowNull: true,
+        allowNull: false,
       },
       created_at: {
         type: Sequelize.DATE,
@@ -51,6 +47,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('clinical_requests_for_eye');
+    await queryInterface.dropTable('clinical_requests_for_dental');
   }
 };
