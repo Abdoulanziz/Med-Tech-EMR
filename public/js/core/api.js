@@ -350,6 +350,7 @@ export const API = {
         },
     },
 
+
     // Doctors
     doctors: {
         // Create doctor POST api/v1/doctors
@@ -381,5 +382,51 @@ export const API = {
             const endpoint = `${API.BACKEND_BASE_API_URI}/doctors/${id}`;
             return await API.makePostRequest(endpoint, id);
         },
+    },
+
+
+    // Services
+    services: {
+        // For Eye
+        forEye: {
+            // Requests
+            requests: {
+                // Add to requests POST api/v1/services/requests/eye
+                create: async (report, fromFormData) => {
+                    const endpoint = `${API.BACKEND_BASE_API_URI}/services/requests/eye`;
+                    return await API.makePostRequest(endpoint, report, fromFormData);
+                },
+
+                // Get from requests GET api/v1/services/requests/eye/:id
+                fetchByRequestId: async (id) => {
+                    const endpoint = `${API.BACKEND_BASE_API_URI}/services/requests/eye/${id}`;
+                    return await API.makeGetRequest(endpoint);
+                },
+            },
+            // Results
+            results: {
+                // Add to results POST api/v1/services/results/eye
+                create: async (report, fromFormData) => {
+                    const endpoint = `${API.BACKEND_BASE_API_URI}/services/results/eye`;
+                    return await API.makePostRequest(endpoint, report, fromFormData);
+                },
+
+                // Get from results GET api/v1/services/results/eye/:id
+                fetchByRequestId: async (id) => {
+                    const endpoint = `${API.BACKEND_BASE_API_URI}/services/results/eye/${id}`;
+                    return await API.makeGetRequest(endpoint);
+                },
+            },
+        },
+
+        // For Dental
+        forDental: {},
+
+        // For Cardiology
+        forCardiology: {},
+
+        // For Radiology
+        forRadiology: {},
+        
     },
 }

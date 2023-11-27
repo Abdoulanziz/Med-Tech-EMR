@@ -316,7 +316,7 @@
                                 </div>
                                 <div class="section-dropdown-menu" id="menu_01">
                                     <ul class="section-dropdown-items">
-                                        <li class="section-dropdown-item modal-trigger" data-modal="send-patient-to-eye-clinic-modal"> <i class="ti-plus"></i> <span>Eye</span></li>
+                                        <li class="section-dropdown-item modal-trigger" data-modal="create-patient-eye-service-request-modal"> <i class="ti-plus"></i> <span>Eye</span></li>
                                         <li class="section-dropdown-item modal-trigger" data-modal="send-patient-to-dental-clinic-modal"> <i class="ti-plus"></i> <span>Dental Lab</span></li>
                                         <li class="section-dropdown-item modal-trigger" data-modal="send-patient-to-cardiology-clinic-modal"> <i class="ti-plus"></i> <span>Cardiology</span></li>
                                         <li class="section-dropdown-item modal-trigger" data-modal="send-patient-to-radiology-clinic-modal"> <i class="ti-plus"></i> <span>Radiology</span></li>
@@ -801,7 +801,7 @@
                 </div>
             </div>
 
-                        <!-- Services payment modal -->
+            <!-- Services payment modal -->
             <div id="services-payment-modal" class="form-modal">
                 <div class="form-modal-content">
                     <form class="modal-form" id="services-payment-form">
@@ -880,13 +880,10 @@
                 </div>
             </div>
 
-
-
-
-            <!-- Send patient to eye clinic modal -->
-            <div id="send-patient-to-eye-clinic-modal" class="form-modal">
+            <!-- Create patient eye service request modal -->
+            <div id="create-patient-eye-service-request-modal" class="form-modal">
                 <div class="form-modal-content">
-                    <form class="modal-form" id="">
+                    <form class="modal-form" id="create-patient-eye-service-request-form">
                         <div class="form-modal-header flex">
                             <div class="form-modal-header-left flex">
                                 <img src="/assets/actions/patients.png" alt="" class="icon">
@@ -895,7 +892,7 @@
                             <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
                         </div>
             
-                        <div class="modal-form-body" id="">
+                        <div class="modal-form-body" id="create-patient-eye-service-request-form-body">
                             <div class="form-section">
                                 <h2>Eye Information</h2>
                                 <div class="form-group">
@@ -909,8 +906,8 @@
                                 <div class="form-group">
                                     <label for="diagnosis">Diagnosis:</label>
                                     <select id="diagnosis" class="form-control" name="diagnosis" required>
-                                        <option value="vision-test">Vision Test</option>
-                                        <option value="eye-pressure-test">Eye Pressure Test</option>
+                                        <option value="Vision Test">Vision Test</option>
+                                        <option value="Eye Pressure Test">Eye Pressure Test</option>
                                     </select>
                                 </div>
         
@@ -921,12 +918,12 @@
                             
                                 <div class="form-group">
                                     <label for="observation-notes">Observation Notes:</label>
-                                    <input type="text" class="form-control" id="observation-notes" name="observationNotes" required>
+                                    <input type="text" class="form-control" id="observation-notes" name="observationNotes">
                                 </div>
         
                                 <div class="form-group">
                                     <label for="description-notes">Description Notes:</label>
-                                    <input type="text" class="form-control" id="description-notes" name="descriptionNotes" required>
+                                    <input type="text" class="form-control" id="description-notes" name="descriptionNotes">
                                 </div>
                             </div>
                         </div>
@@ -1353,8 +1350,6 @@
     <!-- Load modules -->
     <script type="module" src="/js/core/ui.js"></script>
     <script type="module" src="/js/modules/queues.js"></script>
-    
-
 
     <script>
 

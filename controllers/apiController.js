@@ -10,6 +10,7 @@ const {
   Queue,
   Triage,
   Allergy,
+  ClinicalRequestForEye,
   LabTest,
   Medicine,
   LabRequest,
@@ -947,6 +948,37 @@ const createAllergy = async (req, res) => {
   }
 };
 
+// // Create clinical request for eye
+const createClinicalRequestForEye = async (req, res) => {
+  try {
+    const {
+      visitId,
+      specificEye,
+      diagnosis,
+      serviceFee,
+      observationNotes,
+      descriptionNotes
+    } = req.body;
+
+    const newClinicalRequestForEye = await ClinicalRequestForEye.create({
+      visitId,
+      specificEye,
+      diagnosis,
+      serviceFee,
+      observationNotes,
+      descriptionNotes
+    });
+
+    // Create an audit log
+    await createAuditLog('ClinicalRequestForEye', newClinicalRequestForEye.resultId, 'CREATE', {}, newClinicalRequestForEye.dataValues, req.session.user.userId);
+
+    return res.status(201).json({ status: 'success', message: 'Clinical request for Eye created successfully', data: newClinicalRequestForEye });
+  } catch (error) {
+    console.error('Error creating Clinical request for Eye:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 // Fetch medical history
 const fetchMedicalHistoryByVisitId = async (req, res) => {
   const visitId = req.params.visitId;
@@ -1675,6 +1707,7 @@ module.exports = {
   fetchAllPatientsOnQueue, 
   createTriage, 
   createAllergy, 
+  createClinicalRequestForEye,
   fetchLabRequestsByVisitId, 
   updateLabRequestPaymentStatus,
   fetchMedicalHistoryByVisitId, 

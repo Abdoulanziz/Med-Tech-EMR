@@ -27,6 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle medical prescription
     handleMedicinePrescription();
+
+    // Handle create patient eye service request
+    handlePatientEyeServiceRequestForm();
     
 });
 
@@ -751,6 +754,57 @@ async function handleCreateAllergyForm() {
 
             // Reset the form
             patientAllergyForm.reset();
+        });
+    });
+}
+
+// Handle create patient eye service request form
+async function handlePatientEyeServiceRequestForm() {
+    const patientEyeServiceRequestForm = document.querySelector('#create-patient-eye-service-request-form');
+    patientEyeServiceRequestForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        // Get Id of selected visit
+        const selectedVisitId = UTILS.getSelectedVisitId();
+        if (! selectedVisitId) return;
+    
+        // Collect form data
+        const formData = new FormData(patientEyeServiceRequestForm);
+        formData.append('visitId', selectedVisitId);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+    
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(patientEyeServiceRequestForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to create an eye service request record
+                const response = await API.services.forEye.requests.create(URLEncodedData, true);
+    
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    patientEyeServiceRequestForm.reset();
+    
+                    // Remove form
+                    patientEyeServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the requests table
+                    loadSinglePatientVisitHistory(selectedVisitId);
+    
+                } else {
+                    alert('Failed to create allergy record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while creating the allergy record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            patientEyeServiceRequestForm.reset();
         });
     });
 }
