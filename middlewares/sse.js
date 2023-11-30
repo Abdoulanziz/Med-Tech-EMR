@@ -2,30 +2,12 @@ const SSEConnections = [];
 
 function sendSSEUpdateToAll(data) {
   SSEConnections.forEach((res) => {
-    console.log("SSE all -------------------------->>>>>", res.sendData);
-
-
     res.write(`data: ${data}\n\n`);
   });
 }
 
-// function sendSSEUpdateToAllExcept(data, excludedRes) {
-//   SSEConnections.forEach((res) => {
-//     if (res !== excludedRes) {
-//       res.write(`data: ${data}\n\n`);
-//     }
-//   });
-// }
-
 function sendSSEUpdateToAllExcept(data, excludedRes) {
-  // console.log(data);
-  // console.log(excludedRes);
-
-
   SSEConnections.forEach((res) => {
-    console.log("SSE except-------------------------->>>>>", res.sendData);
-
-
     // Ensure the response object is not the one we want to exclude
     if (res !== excludedRes && !res.finished && res.writableEnded !== true) {
       res.write(`data: ${data}\n\n`);
