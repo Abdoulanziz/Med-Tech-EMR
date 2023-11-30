@@ -1,6 +1,7 @@
 import { UI } from "../core/ui.js";
 import { UTILS } from "../core/utils.js";
 import { API } from "../core/api.js";
+import {SSE} from '../core/sse.js';
 
 document.addEventListener("DOMContentLoaded", () => {
     // Init UI
@@ -39,8 +40,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle create patient radiology service request
     handlePatientRadiologyServiceRequestForm();
-    
+
+
+    // SSE
+    SSE.initializeSSE(`${window.location.origin}/page/sse`);
+
+    // Register handlers for specific message types
+    // SSE.registerMessageHandler('Reload', reloadHandler);
+    // SSE.registerMessageHandler('OtherMessageType', otherMessageHandler);
+
+
 });
+
 
 
 async function loadAllPatientsOnQueue() {
@@ -304,111 +315,129 @@ async function loadSinglePatientVisitHistory(visitId) {
             { data : null }
         ],
         rowCallback: function(row, data, index) {
-            const rowDataObject = data;
+            // Check
+            // Lab Test
+            if(data.requestType.toLowerCase() === "test"){
+                // Edit Button
+                // Common to all test requests
+                const viewResultsCta = row.cells[4].querySelectorAll("button")[0];
+                viewResultsCta.style.cursor = "pointer";
+                viewResultsCta.classList.add("modal-trigger");
+                viewResultsCta.dataset.modal = "edit-patient-diagnosis-modal";
 
-            // Common to all test requests
-            const viewResultsCta = row.cells[4].querySelectorAll("button")[0];
-            viewResultsCta.style.cursor = "pointer";
-            viewResultsCta.classList.add("modal-trigger");
-            viewResultsCta.dataset.modal = "edit-patient-diagnosis-modal";
-
-            UTILS.triggerModal(viewResultsCta, "modal", () => {
-                // Populate the form with the rowData
-                populateFormWithData(
-                    "edit-patient-diagnosis-modal",
-                    JSON.stringify(data),
-                    [
-                        "testName",
-                        "testFees"
-                    ]
-                );
-            });
-
-            // Specific to test request
-            if(rowDataObject.testName === "Complete Blood Count Test"){
-                const viewReportCta = row.cells[4].querySelectorAll("button")[1];
-                viewReportCta.style.cursor = "pointer";
-                viewReportCta.classList.add("modal-trigger");
-                viewReportCta.dataset.modal = "complete-blood-count-lab-report-modal";
-
-                UTILS.triggerModal(viewReportCta, "modal", async () => {
-                    document.querySelector("#complete-blood-count-lab-report-form").dataset.requestId = data.requestId;
-
-                    // Populate the form with the server data
-                    generateLabReportForCompleteBloodCountTest("complete-blood-count-lab-report-form", data.requestId);
-
-                    // Get patient id from visit id
-                    const patient = await API.patients.fetchByVisitId(selectedVisitId);
-                    const patientData = patient.data;
-
-                    // Trigger print lab report
-                    printLabReportForCompleteBloodCountTest(patientData);
-                    
+                UTILS.triggerModal(viewResultsCta, "modal", () => {
+                    // Populate the form with the rowData
+                    populateFormWithData(
+                        "edit-patient-diagnosis-modal",
+                        JSON.stringify(data),
+                        [
+                            "requestName",
+                            "requestFees"
+                        ]
+                    );
                 });
+
+                // Check test
+                // Complete Blood Count
+                if(data.requestName === "Complete Blood Count Test"){
+                    const viewReportCta = row.cells[4].querySelectorAll("button")[1];
+                    viewReportCta.style.cursor = "pointer";
+                    viewReportCta.classList.add("modal-trigger");
+                    viewReportCta.dataset.modal = "complete-blood-count-lab-report-modal";
+
+                    UTILS.triggerModal(viewReportCta, "modal", async () => {
+                        document.querySelector("#complete-blood-count-lab-report-form").dataset.requestId = data.requestId;
+
+                        // Populate the form with the server data
+                        generateLabReportForCompleteBloodCountTest("complete-blood-count-lab-report-form", data.requestId);
+
+                        // Get patient id from visit id
+                        const patient = await API.patients.fetchByVisitId(selectedVisitId);
+                        const patientData = patient.data;
+
+                        // Trigger print lab report
+                        printLabReportForCompleteBloodCountTest(patientData);
+                        
+                    });
+                }
+
+                // Check test
+                // Urinalysis
+                if(data.requestName === "Urinalysis Test") {
+                    const workOnReportCta = row.cells[4].querySelectorAll("button")[1];
+                    workOnReportCta.style.cursor = "pointer";
+                    workOnReportCta.classList.add("modal-trigger");
+                    workOnReportCta.dataset.modal = "urinalysis-report-modal";
+
+                    UTILS.triggerModal(workOnReportCta, "modal", async () => {
+                        document.querySelector("#urinalysis-report-form").dataset.requestId = data.requestId;
+
+                        // Populate the form with the server data
+                        generateLabReportForUrinalysisTest("urinalysis-report-form", data.requestId);
+
+                        // Get patient id from visit id
+                        const patient = await API.patients.fetchByVisitId(selectedVisitId);
+                        const patientData = patient.data;
+
+                        // Trigger print lab report
+                        printLabReportForUrinalysisTest(patientData);
+                        
+                    });
+                }
+
+                // if("triageUuid" in JSON.parse(rowData)){
+                //     const viewRequestCta = row.cells[3].querySelectorAll("button")[0];
+                //     viewRequestCta.style.cursor = "pointer";
+                //     viewRequestCta.classList.add("modal-trigger");
+                //     viewRequestCta.dataset.modal = "edit-patient-triage-data-modal";
+
+                //     UTILS.triggerModal(viewRequestCta, "modal", () => {
+                //         // Populate the form with the rowData
+                //         populateFormWithData(
+                //             "edit-patient-triage-data-modal",
+                //             rowData,
+                //             [
+                //                 "bloodPressure",
+                //                 "heartRate",
+                //                 "respiratoryRate",
+                //                 "signsAndSymptoms",
+                //                 "injuryDetails"
+                //             ]
+                //         );
+                //     });
+                // }else if("allergyUuid" in JSON.parse(rowData)){
+                //     const viewAlergiesCta = row.cells[3].querySelectorAll("button")[0];
+                //     viewAlergiesCta.style.cursor = "pointer";
+                //     viewAlergiesCta.classList.add("modal-trigger");
+                //     viewAlergiesCta.dataset.modal = "edit-patient-allergies-data-modal";
+
+                //     UTILS.triggerModal(viewAlergiesCta, "modal", () => {
+                //         // Populate the form with the rowData
+                //         populateFormWithData(
+                //             "edit-patient-allergies-data-modal",
+                //             rowData,
+                //             [
+                //                 "allergies"
+                //             ]
+                //         );
+                //     });
+                // }
             }
 
-            // Check the specific request (Urinalysis)
-            if(rowDataObject.testName === "Urinalysis Test") {
-                const workOnReportCta = row.cells[4].querySelectorAll("button")[1];
-                workOnReportCta.style.cursor = "pointer";
-                workOnReportCta.classList.add("modal-trigger");
-                workOnReportCta.dataset.modal = "urinalysis-report-modal";
+            // Check
+            // Service
+            if(data.requestType.toLowerCase() === "service"){
 
-                UTILS.triggerModal(workOnReportCta, "modal", async () => {
-                    document.querySelector("#urinalysis-report-form").dataset.requestId = data.requestId;
-
-                    // console.log(data)
-
-                    // Populate the form with the server data
-                    generateLabReportForUrinalysisTest("urinalysis-report-form", data.requestId);
-
-                    // Get patient id from visit id
-                    const patient = await API.patients.fetchByVisitId(selectedVisitId);
-                    const patientData = patient.data;
-
-                    // Trigger print lab report
-                    printLabReportForUrinalysisTest(patientData);
-                    
-                });
             }
 
-            // if("triageUuid" in JSON.parse(rowData)){
-            //     const viewRequestCta = row.cells[3].querySelectorAll("button")[0];
-            //     viewRequestCta.style.cursor = "pointer";
-            //     viewRequestCta.classList.add("modal-trigger");
-            //     viewRequestCta.dataset.modal = "edit-patient-triage-data-modal";
+            // Check
+            // Others (Triage, Allergy)
+            if(data.requestType.toLowerCase() === "triage" || data.requestType.toLowerCase() === "allergy"){
 
-            //     UTILS.triggerModal(viewRequestCta, "modal", () => {
-            //         // Populate the form with the rowData
-            //         populateFormWithData(
-            //             "edit-patient-triage-data-modal",
-            //             rowData,
-            //             [
-            //                 "bloodPressure",
-            //                 "heartRate",
-            //                 "respiratoryRate",
-            //                 "signsAndSymptoms",
-            //                 "injuryDetails"
-            //             ]
-            //         );
-            //     });
-            // }else if("allergyUuid" in JSON.parse(rowData)){
-            //     const viewAlergiesCta = row.cells[3].querySelectorAll("button")[0];
-            //     viewAlergiesCta.style.cursor = "pointer";
-            //     viewAlergiesCta.classList.add("modal-trigger");
-            //     viewAlergiesCta.dataset.modal = "edit-patient-allergies-data-modal";
+            }
 
-            //     UTILS.triggerModal(viewAlergiesCta, "modal", () => {
-            //         // Populate the form with the rowData
-            //         populateFormWithData(
-            //             "edit-patient-allergies-data-modal",
-            //             rowData,
-            //             [
-            //                 "allergies"
-            //             ]
-            //         );
-            //     });
-            // }
+
+            
         },
         columnDefs: [
             {
@@ -420,7 +449,7 @@ async function loadSinglePatientVisitHistory(visitId) {
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return '<span>' + data.testName + '</span>';
+                    return '<span>' + data.requestName + '</span>';
                 },
             },
             {
@@ -452,13 +481,18 @@ async function loadSinglePatientVisitHistory(visitId) {
             {
                 targets: 4,
                 render: function (data, type, row, meta) {
+                    const buttonBackgroundColor = data.requestStatus.toLowerCase() === "pending" ? "#8e8d8d" : "yellowgreen";
+                    const isDisabled = data.requestStatus.toLowerCase() === "pending";
+
                     return `
-                    <td style="border: 1px solid #ddd;">
-                        <button class="btn view-request" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Edit Request  <i class="ti-arrow-right"></i> </button>
-                        <button class="btn view-results" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">View Report  <i class="ti-arrow-right"></i> </button>
-                    </td>
+                        <td style="border: 1px solid #ddd;">
+                            <button class="btn view-request" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Edit Request  <i class="ti-arrow-right"></i> </button>
+                            <button ${isDisabled ? "disabled" : ""} class="btn view-results" style="background-color: ${buttonBackgroundColor};padding-inline: .6rem;border-radius: 0;font-size: 12px;${isDisabled ? "cursor: not-allowed;" : ""}">View Report  <i style="${isDisabled ? "opacity: 0.5;" : ""}" class="ti-arrow-right"></i> </button>
+                        </td>
                     `;
                 },
+
+
             },
             {
                 targets: 5,
@@ -470,6 +504,15 @@ async function loadSinglePatientVisitHistory(visitId) {
                 }
             }
         ]  
+    });
+
+    // This causes double (re)renders for the table
+    // TODO: client that triggers the action
+    // should not re-render
+    SSE.registerMessageHandler('Reload', () => {
+        // Reload the table
+        loadSinglePatientVisitHistory(selectedVisitId);
+        console.log("run from sse");
     });
 
 }
@@ -954,7 +997,9 @@ async function handlePatientRadiologyServiceRequestForm() {
     
                     // Reload the requests table
                     loadSinglePatientVisitHistory(selectedVisitId);
-    
+
+                    // SSE
+
                 } else {
                     alert('Failed to create radiology record. Please check the form data.');
                 }

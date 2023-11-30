@@ -20,8 +20,8 @@ module.exports = {
         allowNull: false,
       },
       target_eye: {
-        type: Sequelize.ENUM('Right', 'Left'),
-        defaultValue: 'Right',
+        type: Sequelize.ENUM('right', 'left'),
+        defaultValue: 'right',
         allowNull: false,
       },
       diagnosis: {
@@ -31,6 +31,16 @@ module.exports = {
       service_fee: {
         type: Sequelize.STRING,
         allowNull: true,
+      },
+      payment_status: {
+        type: Sequelize.ENUM('unpaid', 'paid'),
+        defaultValue: 'unpaid',
+        allowNull: false,
+      },
+      request_status: {
+        type: Sequelize.ENUM('pending', 'complete', 'canceled'),
+        defaultValue: 'pending',
+        allowNull: false,
       },
       observation_notes: {
         type: Sequelize.TEXT,

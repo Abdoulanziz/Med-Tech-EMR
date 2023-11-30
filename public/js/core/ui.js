@@ -1,4 +1,6 @@
 import { UTILS } from "./utils.js";
+import {SSE} from './sse.js';
+
 
 export const UI = {
   apiBaseURL: (window.location.hostname === 'localhost') ? "http://localhost:5000/api/v1" : "https://med-tech-demo.onrender.com/api/v1",
@@ -155,6 +157,7 @@ export const UI = {
     UTILS.APIStatus.checkApiStatus();
     setInterval(UTILS.APIStatus.checkApiStatus, 1000);
   },
+
 
 
 }

@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const Sequelize = require('sequelize');
 const models = require('../models');
+const sse = require('../middlewares/sse');
 
 const { 
   User,
@@ -1062,6 +1063,13 @@ const createClinicalRequestForRadiology = async (req, res) => {
     // Create an audit log
     await createAuditLog('ClinicalRequestForRadiology', newClinicalRequestForRadiology.resultId, 'CREATE', {}, newClinicalRequestForRadiology.dataValues, req.session.user.userId);
 
+    // Emit a server-sent event to all connected clients
+    // sse.sendSSEUpdateToAll('Reload');
+
+    // Emit a server-sent event to all clients except the excluded one
+    sse.sendSSEUpdateToAllExcept('Reload', res);
+
+
     return res.status(201).json({ status: 'success', message: 'Clinical request for Radiology created successfully', data: newClinicalRequestForRadiology });
   } catch (error) {
     console.error('Error creating Clinical request for Radiology:', error);
@@ -1121,7 +1129,7 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
     // sort.push(['id', 'desc']); // This line will sort by createdAt in descending order
 
      // Construct the Sequelize query
-    const queryOptions = {
+    const labRequestQuery = {
       where: filter,
       offset: start,
       limit: length,
@@ -1134,23 +1142,101 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
       ],
     };
 
-    const result = await LabRequest.findAndCountAll(queryOptions);
+    const clinicalEyeQuery = {
+      where: filter,
+      offset: start,
+      limit: length,
+      order: sort,
+    };
 
-    // Access the lab test's fields in each request result
-    const requestsWithTestResults = result.rows.map((request) => ({
-      // Extract fields from the 'LabTest' model
-      testName: request.LabTest.testName,
-      testFees: request.LabTest.testFees,
+    const clinicalCardiologyQuery = {
+      where: filter,
+      offset: start,
+      limit: length,
+      order: sort,
+    };
+
+    const clinicalRadiologyQuery = {
+      where: filter,
+      offset: start,
+      limit: length,
+      order: sort,
+    };
+
+    const clinicalDentalQuery = {
+      where: filter,
+      offset: start,
+      limit: length,
+      order: sort,
+    };
+
+    // Use Promise.all to concurrently fetch data from multiple models
+    const [labRequestResult, eyeResult, cardiologyResult, radiologyResult, dentalResult] = await Promise.all([
+      LabRequest.findAndCountAll(labRequestQuery),
+      ClinicalRequestForEye.findAndCountAll(clinicalEyeQuery),
+      ClinicalRequestForCardiology.findAndCountAll(clinicalCardiologyQuery),
+      ClinicalRequestForRadiology.findAndCountAll(clinicalRadiologyQuery),
+      ClinicalRequestForDental.findAndCountAll(clinicalDentalQuery),
+    ]);
+
+    // Access the lab test's fields in each LabRequest result
+    const labRequestsWithTestResults = labRequestResult.rows.map((request) => ({
+      requestName: request.LabTest.testName,
+      requestFees: request.LabTest.testFees,
       requestId: request.requestId,
       requestStatus: request.requestStatus,
       requestCreatedAt: request.createdAt,
+      requestType: 'test',
     }));
+
+    // Access fields from ClinicalRequestForEye results
+    const clinicalEyeResults = eyeResult.rows.map((request) => ({
+      requestName: 'Eye Service',
+      requestFees: request.serviceFee,
+      requestId: request.requestId,
+      requestStatus: "Pending",
+      requestCreatedAt: request.createdAt,
+      requestType: 'service'
+    }));
+
+    // Access fields from ClinicalRequestForCardiology results
+    const clinicalCardiologyResults = cardiologyResult.rows.map((request) => ({
+      requestName: 'Cardiology Service',
+      requestFees: request.serviceFee,
+      requestId: request.requestId,
+      requestStatus: "Pending",
+      requestCreatedAt: request.createdAt,
+      requestType: 'service'
+    }));
+
+    // Access fields from ClinicalRequestForRadiology results
+    const clinicalRadiologyResults = radiologyResult.rows.map((request) => ({
+      requestName: 'Radiology Service',
+      requestFees: request.serviceFee,
+      requestId: request.requestId,
+      requestStatus: "Pending",
+      requestCreatedAt: request.createdAt,
+      requestType: 'service'
+    }));
+
+    // Access fields from ClinicalRequestForDental results
+    const clinicalDentalResults = dentalResult.rows.map((request) => ({
+      requestName: 'Dental Service',
+      requestFees: request.serviceFee,
+      requestId: request.requestId,
+      requestStatus: "Pending",
+      requestCreatedAt: request.createdAt,
+      requestType: 'service'
+    }));
+
+    // Combine results from all models
+    const allResults = [...labRequestsWithTestResults, ...clinicalEyeResults, ...clinicalCardiologyResults, ...clinicalRadiologyResults, ...clinicalDentalResults];
 
     return res.status(200).json({
       draw: draw,
-      recordsTotal: result.count,
-      recordsFiltered: result.count,
-      data: requestsWithTestResults,
+      recordsTotal: allResults.length,
+      recordsFiltered: allResults.length,
+      data: allResults,
     });
 
   } catch (error) {

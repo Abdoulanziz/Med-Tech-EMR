@@ -35,15 +35,27 @@ module.exports = (sequelize, DataTypes) => {
       field: 'visit_id',
     },
     targetEye: {
-      type: DataTypes.ENUM('Right', 'Left'),
+      type: DataTypes.ENUM('right', 'left'),
       allowNull: false,
-      defaultValue: 'Right',
+      defaultValue: 'right',
       field: 'target_eye',
     },
     diagnosis: {
       type: DataTypes.STRING,
       allowNull: true,
       field: 'diagnosis',
+    },
+    paymentStatus: {
+      type: DataTypes.ENUM('unpaid', 'paid'),
+      defaultValue: 'unpaid',
+      allowNull: false,
+      field: 'payment_status',
+    },
+    requestStatus: {
+      type: DataTypes.ENUM('pending', 'complete', 'canceled'),
+      defaultValue: 'pending',
+      allowNull: false,
+      field: 'request_status',
     },
     serviceFee: {
       type: DataTypes.STRING,
