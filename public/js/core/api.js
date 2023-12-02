@@ -183,21 +183,27 @@ export const API = {
 
 
     // Triage 
-    triage: {
+    triages: {
         // Add to triage POST api/v1/triage
         create: async (triage, fromFormData) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/triage`;
+            const endpoint = `${API.BACKEND_BASE_API_URI}/triages`;
             return await API.makePostRequest(endpoint, triage, fromFormData);
         },
     },
 
      
     // Allergy 
-    allergy: {
-        // Add to allergy POST api/v1/allergy
+    allergies: {
+        // Add to allergy POST api/v1/allergies
         create: async (allergy, fromFormData) => {
-            const endpoint = `${API.BACKEND_BASE_API_URI}/allergy`;
+            const endpoint = `${API.BACKEND_BASE_API_URI}/allergies`;
             return await API.makePostRequest(endpoint, allergy, fromFormData);
+        },
+
+        // Update allergy PUT api/v1/allergies/:id
+        update: async (id, data, fromFormData) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/allergies/${id}`;
+            return await API.makePutRequest(endpoint, data, fromFormData);
         },
     },
 

@@ -200,7 +200,7 @@ const fetchUsers = async (req, res) => {
       sort.push([columnData, orderDirection]);
     }
 
-    // // Add sorting by createdAt in descending order (latest first)
+    // Add sorting by createdAt in descending order (latest first)
     // sort.push(['id', 'desc']); // This line will sort by createdAt in descending order
 
     // Construct the Sequelize query
@@ -402,7 +402,7 @@ const fetchPatients = async (req, res) => {
       sort.push([columnData, orderDirection]);
     }
 
-    // // Add sorting by createdAt in descending order (latest first)
+    // Add sorting by createdAt in descending order (latest first)
     // sort.push(['id', 'desc']); // This line will sort by createdAt in descending order
 
     // Construct the Sequelize query
@@ -567,7 +567,7 @@ const fetchVisits = async (req, res) => {
       sort.push([columnData, orderDirection]);
     }
 
-    // // Add sorting by createdAt in descending order (latest first)
+    // Add sorting by createdAt in descending order (latest first)
     // sort.push(['id', 'desc']); // This line will sort by createdAt in descending order
 
     // Construct the Sequelize query
@@ -841,7 +841,7 @@ const fetchAllPatientsOnQueue = async (req, res) => {
       sort.push([columnData, orderDirection]);
     }
 
-    // // Add sorting by createdAt in descending order (latest first)
+    // Add sorting by createdAt in descending order (latest first)
     // sort.push(['id', 'desc']); // This line will sort by createdAt in descending order
 
     // Construct the Sequelize query
@@ -941,7 +941,6 @@ const createAllergy = async (req, res) => {
     const newAllergy = await Allergy.create({
       allergies,
       visitId,
-      // userId
     });
 
 
@@ -952,7 +951,45 @@ const createAllergy = async (req, res) => {
   }
 };
 
-// // Create clinical request for eye
+// Update a allergy
+const updateAllergyById = async (req, res) => {
+  try {
+    // Extract allergy data from the request body
+    // Convert empty strings to null for nullable fields
+    const allergies = req.body.allergies || null;
+
+    const allergyId = req.params.id;
+
+
+    // Check if the allergy already exists in the database
+    const existingAllergy = await Allergy.findOne({ where: { allergyId } });
+
+    if (!existingAllergy) {
+      return res.status(400).json({ message: 'Allergy does not exist' });
+    }
+
+    // Update the allergy record in the database
+    const updatedAllergy = await existingAllergy.update({
+      allergies,
+      // visitId,
+    });
+
+    // Create an audit log
+    await createAuditLog('Allergy', existingAllergy.allergyId, 'UPDATE', existingAllergy.dataValues, updatedAllergy.dataValues, req.session.user.userId);
+
+    // Respond with the updated allergy object
+    return res.status(200).json({ status: 'success', message: 'Allergy record updated successfully', data: updatedAllergy });
+
+  } catch (error) {
+    // Log out the error to the console
+    console.error('Error updating allergy:', error);
+
+    // Respond with the error to the client
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Create clinical request for eye
 const createClinicalRequestForEye = async (req, res) => {
   try {
     const {
@@ -983,7 +1020,7 @@ const createClinicalRequestForEye = async (req, res) => {
   }
 };
 
-// // Create clinical request for dental
+// Create clinical request for dental
 const createClinicalRequestForDental = async (req, res) => {
   try {
     const {
@@ -1012,7 +1049,7 @@ const createClinicalRequestForDental = async (req, res) => {
   }
 };
 
-// // Create clinical request for cardiology
+// Create clinical request for cardiology
 const createClinicalRequestForCardiology = async (req, res) => {
   try {
     const {
@@ -1041,7 +1078,7 @@ const createClinicalRequestForCardiology = async (req, res) => {
   }
 };
 
-// // Create clinical request for radiology
+// Create clinical request for radiology
 const createClinicalRequestForRadiology = async (req, res) => {
   try {
     const {
@@ -1125,8 +1162,22 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
       sort.push([columnData, orderDirection]);
     }
 
-    // // Add sorting by createdAt in descending order (latest first)
+    // Add sorting by createdAt in descending order (latest first)
     // sort.push(['id', 'desc']); // This line will sort by createdAt in descending order
+
+    const allergyQuery = {
+      where: filter,
+      offset: start,
+      limit: length,
+      order: sort,
+    };
+
+    const triageQuery = {
+      where: filter,
+      offset: start,
+      limit: length,
+      order: sort,
+    };
 
      // Construct the Sequelize query
     const labRequestQuery = {
@@ -1171,13 +1222,48 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
     };
 
     // Use Promise.all to concurrently fetch data from multiple models
-    const [labRequestResult, eyeResult, cardiologyResult, radiologyResult, dentalResult] = await Promise.all([
+    const [allergyResult, triageResult, labRequestResult, eyeResult, cardiologyResult, radiologyResult, dentalResult] = await Promise.all([
+      Allergy.findAndCountAll(allergyQuery),
+      Triage.findAndCountAll(triageQuery),
       LabRequest.findAndCountAll(labRequestQuery),
       ClinicalRequestForEye.findAndCountAll(clinicalEyeQuery),
       ClinicalRequestForCardiology.findAndCountAll(clinicalCardiologyQuery),
       ClinicalRequestForRadiology.findAndCountAll(clinicalRadiologyQuery),
       ClinicalRequestForDental.findAndCountAll(clinicalDentalQuery),
     ]);
+
+    // Access the fields from Allergy result
+    const allergyResults = allergyResult.rows.map((request) => ({
+      // Used on table
+      requestName: "Allergy",
+      requestFees: "N/A",
+      requestId: request.allergyId,
+      requestStatus: "N/A",
+      requestCreatedAt: request.createdAt,
+      requestType: 'allergy',
+
+      // Used on form
+      allergies: request.allergies,
+      visitId: request.visitId,
+    }));
+
+    // Access the fields from Triage result
+    const triageResults = triageResult.rows.map((request) => ({
+      // Used on table
+      requestName: "Triage",
+      requestFees: "N/A",
+      requestId: request.triageId,
+      requestStatus: "N/A",
+      requestCreatedAt: request.createdAt,
+      requestType: 'triage',
+
+      // Used on form
+      bloodPressure: request.bloodPressure,
+      heartRate: request.heartRate,
+      respiratoryRate: request.respiratoryRate,
+      signsAndSymptoms: request.signsAndSymptoms,
+      injuryDetails: request.injuryDetails,
+    }));
 
     // Access the lab test's fields in each LabRequest result
     const labRequestsWithTestResults = labRequestResult.rows.map((request) => ({
@@ -1191,46 +1277,75 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
 
     // Access fields from ClinicalRequestForEye results
     const clinicalEyeResults = eyeResult.rows.map((request) => ({
+      // Used on table
       requestName: 'Eye Service',
       requestFees: request.serviceFee,
       requestId: request.requestId,
       requestStatus: "Pending",
       requestCreatedAt: request.createdAt,
-      requestType: 'service'
+      requestType: 'service',
+
+      // Used on form
+      targetEye: request.targetEye,
+      diagnosis: request.diagnosis,
+      serviceFee: request.serviceFee,
+      observationNotes: request.observationNotes,
+      descriptionNotes: request.descriptionNotes,
     }));
 
     // Access fields from ClinicalRequestForCardiology results
     const clinicalCardiologyResults = cardiologyResult.rows.map((request) => ({
+      // Used on table
       requestName: 'Cardiology Service',
       requestFees: request.serviceFee,
       requestId: request.requestId,
       requestStatus: "Pending",
       requestCreatedAt: request.createdAt,
-      requestType: 'service'
+      requestType: 'service',
+
+      // Used on form
+      referralReason: request.referralReason,
+      currentMedication: request.currentMedication,
+      observationNotes: request.observationNotes,
+      serviceFee: request.serviceFee,
     }));
 
     // Access fields from ClinicalRequestForRadiology results
     const clinicalRadiologyResults = radiologyResult.rows.map((request) => ({
+      // Used on table
       requestName: 'Radiology Service',
       requestFees: request.serviceFee,
       requestId: request.requestId,
       requestStatus: "Pending",
       requestCreatedAt: request.createdAt,
-      requestType: 'service'
+      requestType: 'service',
+
+      // Used on form
+      referralReason: request.referralReason,
+      currentMedication: request.currentMedication,
+      observationNotes: request.observationNotes,
+      serviceFee: request.serviceFee,
     }));
 
     // Access fields from ClinicalRequestForDental results
     const clinicalDentalResults = dentalResult.rows.map((request) => ({
+      // Used of table
       requestName: 'Dental Service',
       requestFees: request.serviceFee,
       requestId: request.requestId,
       requestStatus: "Pending",
       requestCreatedAt: request.createdAt,
-      requestType: 'service'
+      requestType: 'service',
+
+      // Used on form
+      toothType: request.toothType,
+      diagnosis: request.diagnosis,
+      procedure: request.procedure,
+      serviceFee: request.serviceFee,
     }));
 
     // Combine results from all models
-    const allResults = [...labRequestsWithTestResults, ...clinicalEyeResults, ...clinicalCardiologyResults, ...clinicalRadiologyResults, ...clinicalDentalResults];
+    const allResults = [...allergyResults, ...triageResults, ...labRequestsWithTestResults, ...clinicalEyeResults, ...clinicalCardiologyResults, ...clinicalRadiologyResults, ...clinicalDentalResults];
 
     return res.status(200).json({
       draw: draw,
@@ -1579,7 +1694,7 @@ const fetchMedicines = async (req, res) => {
   }
 };
 
-// // Create lab request for CBC
+// Create lab request for CBC
 const createLabRequest = async (req, res) => {
   try {
     // Convert empty strings to null for nullable fields
@@ -1656,7 +1771,7 @@ const fetchLabRequestsByVisitId = async (req, res) => {
       sort.push([columnData, orderDirection]);
     }
 
-    // // Add sorting by createdAt in descending order (latest first)
+    // Add sorting by createdAt in descending order (latest first)
     // sort.push(['id', 'desc']); // This line will sort by createdAt in descending order
 
 
@@ -1732,7 +1847,7 @@ const updateLabRequestPaymentStatus = async (req, res) => {
   }
 };
 
-// // Create prescription
+// Create prescription
 const createPrescription = async (req, res) => {
   try {
     // Convert empty strings to null for nullable fields
@@ -1809,7 +1924,7 @@ const fetchPrescriptionsByVisitId = async (req, res) => {
       sort.push([columnData, orderDirection]);
     }
 
-    // // Add sorting by createdAt in descending order (latest first)
+    // Add sorting by createdAt in descending order (latest first)
     // sort.push(['id', 'desc']); // This line will sort by createdAt in descending order
 
 
@@ -1883,6 +1998,7 @@ module.exports = {
   fetchAllPatientsOnQueue, 
   createTriage, 
   createAllergy, 
+  updateAllergyById,
   createClinicalRequestForEye,
   createClinicalRequestForDental,
   createClinicalRequestForCardiology,

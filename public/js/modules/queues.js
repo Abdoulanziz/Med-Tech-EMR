@@ -320,12 +320,12 @@ async function loadSinglePatientVisitHistory(visitId) {
             if(data.requestType.toLowerCase() === "test"){
                 // Edit Button
                 // Common to all test requests
-                const viewResultsCta = row.cells[4].querySelectorAll("button")[0];
-                viewResultsCta.style.cursor = "pointer";
-                viewResultsCta.classList.add("modal-trigger");
-                viewResultsCta.dataset.modal = "edit-patient-diagnosis-modal";
+                const editRequestCta = row.cells[4].querySelectorAll("button")[0];
+                editRequestCta.style.cursor = "pointer";
+                editRequestCta.classList.add("modal-trigger");
+                editRequestCta.dataset.modal = "edit-patient-diagnosis-modal";
 
-                UTILS.triggerModal(viewResultsCta, "modal", () => {
+                UTILS.triggerModal(editRequestCta, "modal", () => {
                     // Populate the form with the rowData
                     populateFormWithData(
                         "edit-patient-diagnosis-modal",
@@ -384,57 +384,162 @@ async function loadSinglePatientVisitHistory(visitId) {
                         
                     });
                 }
-
-                // if("triageUuid" in JSON.parse(rowData)){
-                //     const viewRequestCta = row.cells[3].querySelectorAll("button")[0];
-                //     viewRequestCta.style.cursor = "pointer";
-                //     viewRequestCta.classList.add("modal-trigger");
-                //     viewRequestCta.dataset.modal = "edit-patient-triage-data-modal";
-
-                //     UTILS.triggerModal(viewRequestCta, "modal", () => {
-                //         // Populate the form with the rowData
-                //         populateFormWithData(
-                //             "edit-patient-triage-data-modal",
-                //             rowData,
-                //             [
-                //                 "bloodPressure",
-                //                 "heartRate",
-                //                 "respiratoryRate",
-                //                 "signsAndSymptoms",
-                //                 "injuryDetails"
-                //             ]
-                //         );
-                //     });
-                // }else if("allergyUuid" in JSON.parse(rowData)){
-                //     const viewAlergiesCta = row.cells[3].querySelectorAll("button")[0];
-                //     viewAlergiesCta.style.cursor = "pointer";
-                //     viewAlergiesCta.classList.add("modal-trigger");
-                //     viewAlergiesCta.dataset.modal = "edit-patient-allergies-data-modal";
-
-                //     UTILS.triggerModal(viewAlergiesCta, "modal", () => {
-                //         // Populate the form with the rowData
-                //         populateFormWithData(
-                //             "edit-patient-allergies-data-modal",
-                //             rowData,
-                //             [
-                //                 "allergies"
-                //             ]
-                //         );
-                //     });
-                // }
             }
 
             // Check
             // Service
             if(data.requestType.toLowerCase() === "service"){
 
+                // Eye service
+                if(data.requestName.toLowerCase() === "eye service"){
+                    // Edit Button
+                    const editRequestCta = row.cells[4].querySelectorAll("button")[0];
+                    editRequestCta.style.cursor = "pointer";
+                    editRequestCta.classList.add("modal-trigger");
+                    editRequestCta.dataset.modal = "edit-patient-eye-service-request-modal";
+
+
+                    UTILS.triggerModal(editRequestCta, "modal", () => {
+                        // Populate the form with the data
+                        populateFormWithData(
+                            "edit-patient-eye-service-request-modal",
+                            JSON.stringify(data),
+                            [
+                                "targetEye",
+                                "diagnosis",
+                                "serviceFee",
+                                "observationNotes",
+                                "descriptionNotes"
+                            ]
+                        );
+                    });
+                }
+
+                // Dental service
+                if(data.requestName.toLowerCase() === "dental service"){
+                    // Edit Button
+                    const editRequestCta = row.cells[4].querySelectorAll("button")[0];
+                    editRequestCta.style.cursor = "pointer";
+                    editRequestCta.classList.add("modal-trigger");
+                    editRequestCta.dataset.modal = "edit-patient-dental-service-request-modal";
+
+
+                    UTILS.triggerModal(editRequestCta, "modal", () => {
+                        // Populate the form with the data
+                        populateFormWithData(
+                            "edit-patient-dental-service-request-modal",
+                            JSON.stringify(data),
+                            [
+                                "toothType",
+                                "diagnosis",
+                                "procedure",
+                                "serviceFee"
+                            ]
+                        );
+                    });
+                }
+
+                // Cardiology service
+                if(data.requestName.toLowerCase() === "cardiology service"){
+                    // Edit Button
+                    const editRequestCta = row.cells[4].querySelectorAll("button")[0];
+                    editRequestCta.style.cursor = "pointer";
+                    editRequestCta.classList.add("modal-trigger");
+                    editRequestCta.dataset.modal = "edit-patient-cardiology-service-request-modal";
+
+
+                    UTILS.triggerModal(editRequestCta, "modal", () => {
+                        // Populate the form with the data
+                        populateFormWithData(
+                            "edit-patient-cardiology-service-request-modal",
+                            JSON.stringify(data),
+                            [
+                                "referralReason",
+                                "currentMedication",
+                                "observationNotes",
+                                "serviceFee"
+                            ]
+                        );
+                    });
+                }
+                
+                
+                // Radiology service
+                if(data.requestName.toLowerCase() === "radiology service"){
+                    // Edit Button
+                    const editRequestCta = row.cells[4].querySelectorAll("button")[0];
+                    editRequestCta.style.cursor = "pointer";
+                    editRequestCta.classList.add("modal-trigger");
+                    editRequestCta.dataset.modal = "edit-patient-radiology-service-request-modal";
+
+
+                    UTILS.triggerModal(editRequestCta, "modal", () => {
+                        // Populate the form with the data
+                        populateFormWithData(
+                            "edit-patient-radiology-service-request-modal",
+                            JSON.stringify(data),
+                            [
+                                "referralReason",
+                                "currentMedication",
+                                "observationNotes",
+                                "serviceFee"
+                            ]
+                        );
+                    });
+                }
+
             }
 
             // Check
-            // Others (Triage, Allergy)
-            if(data.requestType.toLowerCase() === "triage" || data.requestType.toLowerCase() === "allergy"){
+            // Allery
+            if(data.requestType.toLowerCase() === "allergy"){
+                // Edit Button
+                const editAlergiesCta = row.cells[4].querySelectorAll("button")[0];
+                editAlergiesCta.style.cursor = "pointer";
+                editAlergiesCta.classList.add("modal-trigger");
+                editAlergiesCta.dataset.modal = "edit-patient-allergies-data-modal";
 
+                UTILS.triggerModal(editAlergiesCta, "modal", () => {
+                    // Populate the form with the rowData
+                    populateFormWithData(
+                        "edit-patient-allergies-data-modal",
+                        JSON.stringify(data),
+                        [
+                            "allergies"
+                        ]
+                    );
+
+                    // Callback to handle edit allergies form
+                    handleEditAllergyForm(data.visitId, data.requestId);
+                });
             }
+
+
+            // Check
+            // Triage
+            if(data.requestType.toLowerCase() === "triage"){
+                // Edit Button
+                const editRequestCta = row.cells[4].querySelectorAll("button")[0];
+                editRequestCta.style.cursor = "pointer";
+                editRequestCta.classList.add("modal-trigger");
+                editRequestCta.dataset.modal = "edit-patient-triage-data-modal";
+
+
+                UTILS.triggerModal(editRequestCta, "modal", () => {
+                    // Populate the form with the data
+                    populateFormWithData(
+                        "edit-patient-triage-data-modal",
+                        JSON.stringify(data),
+                        [
+                            "bloodPressure",
+                            "heartRate",
+                            "respiratoryRate",
+                            "signsAndSymptoms",
+                            "injuryDetails"
+                        ]
+                    );
+                });
+            }            
 
 
             
@@ -512,7 +617,6 @@ async function loadSinglePatientVisitHistory(visitId) {
     SSE.registerMessageHandler('Reload', () => {
         // Reload the table
         loadSinglePatientVisitHistory(selectedVisitId);
-        console.log("run from sse");
     });
 
 }
@@ -704,7 +808,7 @@ function displaySelectedPatientBillsPaymentModal(event) {
 
 // Handle triage create form
 async function handleCreateTriageForm() {
-    const patientTriageForm = document.querySelector('#patient-triage-form');
+    const patientTriageForm = document.querySelector('#create-patient-triage-form');
     patientTriageForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
@@ -723,7 +827,7 @@ async function handleCreateTriageForm() {
         UTILS.showConfirmationModal(patientTriageForm, "Are you sure you want to save this record?", async () => {
             try {
                 // Make an API POST request to create a triage record
-                const response = await API.triage.create(URLEncodedData, true);
+                const response = await API.triages.create(URLEncodedData, true);
     
                 // Check if the request was successful
                 if (response.status === 'success') {
@@ -758,7 +862,7 @@ async function handleCreateTriageForm() {
 
 // Handle allergy create form
 async function handleCreateAllergyForm() {
-    const patientAllergyForm = document.querySelector('#patient-allergy-form');
+    const patientAllergyForm = document.querySelector('#create-patient-allergy-form');
     patientAllergyForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
@@ -777,7 +881,7 @@ async function handleCreateAllergyForm() {
         UTILS.showConfirmationModal(patientAllergyForm, "Are you sure you want to save this record?", async () => {
             try {
                 // Make an API POST request to create a triage record
-                const response = await API.allergy.create(URLEncodedData, true);
+                const response = await API.allergies.create(URLEncodedData, true);
     
                 // Check if the request was successful
                 if (response.status === 'success') {
@@ -806,6 +910,54 @@ async function handleCreateAllergyForm() {
 
             // Reset the form
             patientAllergyForm.reset();
+        });
+    });
+}
+
+// Handle allergy edit form
+// @Update using the instance ID not visit ID
+// @applies to all similar entities/services
+async function handleEditAllergyForm(visitId, allergyId) {
+    const editPatientAllergyForm = document.querySelector('#edit-patient-allergy-form');
+    editPatientAllergyForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        // Collect form data
+        const formData = new FormData(editPatientAllergyForm);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(editPatientAllergyForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to update a triage record
+                const response = await API.allergies.update(allergyId, URLEncodedData, true);
+
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    editPatientAllergyForm.reset();
+    
+                    // Remove form
+                    editPatientAllergyForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the requests table
+                    loadSinglePatientVisitHistory(visitId);
+    
+                } else {
+                    alert('Failed to create allergy record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while creating the allergy record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            editPatientAllergyForm.reset();
         });
     });
 }

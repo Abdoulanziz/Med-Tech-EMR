@@ -273,8 +273,8 @@
                                 </div>
                                 <div class="section-dropdown-menu" id="menu_00">
                                     <ul class="section-dropdown-items">
-                                        <li class="section-dropdown-item modal-trigger" data-modal="collect-patient-triage-data-modal"> <i class="ti-plus"></i> <span>Triage</span></li>
-                                        <li class="section-dropdown-item modal-trigger" data-modal="collect-patient-allergies-data-modal"> <i class="ti-plus"></i> <span>Allergies</span></li>
+                                        <li class="section-dropdown-item modal-trigger" data-modal="create-patient-triage-data-modal"> <i class="ti-plus"></i> <span>Triage</span></li>
+                                        <li class="section-dropdown-item modal-trigger" data-modal="create-patient-allergies-data-modal"> <i class="ti-plus"></i> <span>Allergies</span></li>
                                         <li class="section-dropdown-item modal-trigger" data-modal="create-patient-diagnosis-modal"> <i class="ti-plus"></i> <span>Diagnosis</span></li>
                                         <li class="section-dropdown-item modal-trigger" data-modal="create-patient-medical-prescription-modal"> <i class="ti-plus"></i> <span>Prescriptions</span></li>
                                     </ul>
@@ -412,9 +412,9 @@
             </div>
 
             <!-- Collect patient triage modal -->
-            <div id="collect-patient-triage-data-modal" class="form-modal">
+            <div id="create-patient-triage-data-modal" class="form-modal">
                 <div class="form-modal-content">
-                    <form class="modal-form" id="patient-triage-form">
+                    <form class="modal-form" id="create-patient-triage-form">
                         <div class="form-modal-header flex">
                             <div class="form-modal-header-left flex">
                                 <img src="/assets/actions/patients.png" alt="" class="icon">
@@ -473,7 +473,7 @@
             <!-- Edit patient triage modal -->
             <div id="edit-patient-triage-data-modal" class="form-modal">
                 <div class="form-modal-content">
-                    <form class="modal-form" id="patient-triage-form">
+                    <form class="modal-form" id="edit-patient-triage-form">
                         <div class="form-modal-header flex">
                             <div class="form-modal-header-left flex">
                                 <img src="/assets/actions/patients.png" alt="" class="icon">
@@ -530,9 +530,9 @@
             </div>
 
             <!-- Collect patient allergies modal -->
-            <div id="collect-patient-allergies-data-modal" class="form-modal">
+            <div id="create-patient-allergies-data-modal" class="form-modal">
                 <div class="form-modal-content">
-                    <form class="modal-form" id="patient-allergy-form">
+                    <form class="modal-form" id="create-patient-allergy-form">
                         <div class="form-modal-header flex">
                             <div class="form-modal-header-left flex">
                                 <img src="/assets/actions/patients.png" alt="" class="icon">
@@ -547,7 +547,7 @@
     
                                 <div class="form-group">
                                     <label for="allergies">Fill the allergies from the patient:</label>
-                                    <textarea class="form-control" name="allergies" id="allergies" cols="30" rows="10"></textarea>
+                                    <textarea class="form-control" name="allergies" id="allergies" cols="30" rows="10" required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -563,7 +563,7 @@
             <!-- Edit patient allergies modal -->
             <div id="edit-patient-allergies-data-modal" class="form-modal">
                 <div class="form-modal-content">
-                    <form class="modal-form" id="patient-allergy-form">
+                    <form class="modal-form" id="edit-patient-allergy-form">
                         <div class="form-modal-header flex">
                             <div class="form-modal-header-left flex">
                                 <img src="/assets/actions/patients.png" alt="" class="icon">
@@ -578,7 +578,7 @@
     
                                 <div class="form-group">
                                     <label for="allergies">Fill the allergies from the patient:</label>
-                                    <textarea class="form-control" name="allergies" id="allergies" cols="30" rows="10"></textarea>
+                                    <textarea class="form-control" name="allergies" id="allergies" cols="30" rows="10" required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -857,7 +857,7 @@
                         <div class="form-modal-header flex">
                             <div class="form-modal-header-left flex">
                                 <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Send Patient to Eye Clinic</h2>
+                                <h2 class="title">Create Eye Service Request</h2>
                             </div>
                             <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
                         </div>
@@ -906,14 +906,70 @@
                 </div>
             </div>
 
-            <!-- Send patient to dental clinic modal -->
+            <!-- Edit patient eye service request modal -->
+            <div id="edit-patient-eye-service-request-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="edit-patient-eye-service-request-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Edit Eye Service Request</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="edit-patient-eye-service-request-form-body">
+                            <div class="form-section">
+                                <h2>Eye Information</h2>
+                                <div class="form-group">
+                                    <label for="target-eye">Specific Eye:</label>
+                                    <select id="target-eye" class="form-control" name="targetEye" required>
+                                        <option value="right">Right eye</option>
+                                        <option value="left">Left eye</option>
+                                    </select>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="diagnosis">Diagnosis:</label>
+                                    <select id="diagnosis" class="form-control" name="diagnosis" required>
+                                        <option value="Vision Test">Vision Test</option>
+                                        <option value="Eye Pressure Test">Eye Pressure Test</option>
+                                    </select>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="service-fee">Service Fee:</label>
+                                    <input type="text" class="form-control" id="service-fee" name="serviceFee" required>
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="observation-notes">Observation Notes:</label>
+                                    <input type="text" class="form-control" id="observation-notes" name="observationNotes">
+                                </div>
+        
+                                <div class="form-group">
+                                    <label for="description-notes">Description Notes:</label>
+                                    <input type="text" class="form-control" id="description-notes" name="descriptionNotes">
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Create dental request modal -->
             <div id="create-patient-dental-service-request-modal" class="form-modal">
                 <div class="form-modal-content">
                     <form class="modal-form" id="create-patient-dental-service-request-form">
                         <div class="form-modal-header flex">
                             <div class="form-modal-header-left flex">
                                 <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Send Patient to Dental Clinic</h2>
+                                <h2 class="title">Create Dental Service Request</h2>
                             </div>
                             <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
                         </div>
@@ -953,14 +1009,61 @@
                 </div>
             </div>
 
-            <!-- Send patient to cardiology clinic modal -->
+            <!-- Edit dental request modal -->
+            <div id="edit-patient-dental-service-request-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="edit-patient-dental-service-request-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Edit Dental Service Request</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="edit-patient-dental-service-request-form-body">
+                            <div class="form-section">
+                                <h2>Medical Information</h2>
+                                <div class="form-group">
+                                    <label for="tooth-type">Tooth Type:</label>
+                                    <select id="tooth-type" name="toothType">
+                                        <option value="Pre-molar">Pre Molar</option>
+                                        <option value="Molar">Molar Tooth</option>
+                                        <option value="Canine">Canine</option>
+                                        <option value="Incisor">Incisor</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="diagnosis">Diagnosis:</label>
+                                    <textarea id="diagnosis" name="diagnosis" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="procedure">Procedure:</label>
+                                    <textarea id="procedure" name="procedure" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="service-fee">Service Fee:</label>
+                                    <input type="text" id="service-fee" name="serviceFee" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="submit">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Create cardiology request modal -->
             <div id="create-patient-cardiology-service-request-modal" class="form-modal">
                 <div class="form-modal-content">
                     <form class="modal-form" id="create-patient-cardiology-service-request-form">
                         <div class="form-modal-header flex">
                             <div class="form-modal-header-left flex">
                                 <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Send Patient to Cardiology Clinic</h2>
+                                <h2 class="title">Create Cardiology Service Request</h2>
                             </div>
                             <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
                         </div>
@@ -996,14 +1099,57 @@
                 </div>
             </div>
 
-            <!-- Send patient to radiology clinic modal -->
+            <!-- Edit cardiology request modal -->
+            <div id="edit-patient-cardiology-service-request-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="edit-patient-cardiology-service-request-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Edit Cardiology Service Request </h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="edit-patient-cardiology-service-request-form-body">
+                            <div class="form-section">
+                                <h2>Medical Information</h2>
+                                <div class="form-group">
+                                    <label for="referral-reason">Referral Reason:</label>
+                                    <textarea id="referral-reason" name="referralReason" class="form-control" required></textarea>
+
+                                </div>
+                                <div class="form-group">
+                                    <label for="current-medication">Current Medication:</label>
+                                    <textarea id="current-medication" name="currentMedication" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="observation-notes">Observation Notes:</label>
+                                    <textarea id="observation-notes" name="observationNotes" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="service-fee">Service Fee:</label>
+                                    <input type="text" id="service-fee" name="serviceFee" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="submit">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>            
+
+            <!-- Create radiology request modal -->
             <div id="create-patient-radiology-service-request-modal" class="form-modal">
                 <div class="form-modal-content">
                     <form class="modal-form" id="create-patient-radiology-service-request-form">
                         <div class="form-modal-header flex">
                             <div class="form-modal-header-left flex">
                                 <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Send Patient to Radiology Clinic</h2>
+                                <h2 class="title">Create Radiology Service Request</h2>
                             </div>
                             <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
                         </div>
@@ -1038,6 +1184,49 @@
                     </form>
                 </div>
             </div>
+
+            <!-- Edit radiology request modal -->
+            <div id="edit-patient-radiology-service-request-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="edit-patient-radiology-service-request-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Edit Radiology Service Request</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="edit-patient-radiology-service-request-form-body">
+                            <div class="form-section">
+                                <h2>Medical Information</h2>
+                                <div class="form-group">
+                                    <label for="referral-reason">Referral Reason:</label>
+                                    <textarea id="referral-reason" name="referralReason" class="form-control" required></textarea>
+
+                                </div>
+                                <div class="form-group">
+                                    <label for="current-medication">Current Medication:</label>
+                                    <textarea id="current-medication" name="currentMedication" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="observation-notes">Observation Notes:</label>
+                                    <textarea id="observation-notes" name="observationNotes" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="service-fee">Service Fee:</label>
+                                    <input type="text" id="service-fee" name="serviceFee" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="submit">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>            
 
             <!-- Send patient to theatre clinic modal -->
             <div id="send-patient-to-theatre-clinic-modal" class="form-modal">
