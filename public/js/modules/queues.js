@@ -439,6 +439,9 @@ async function loadSinglePatientVisitHistory(visitId) {
                                 "serviceFee"
                             ]
                         );
+
+                        // Callback to handle edit dental form
+                        handleEditPatientDentalServiceRequestForm(data.visitId, data.requestId);
                     });
                 }
 
@@ -463,6 +466,9 @@ async function loadSinglePatientVisitHistory(visitId) {
                                 "serviceFee"
                             ]
                         );
+
+                        // Callback to handle edit cardiology form
+                        handleEditPatientCardiologyServiceRequestForm(data.visitId, data.requestId);
                     });
                 }
                 
@@ -488,6 +494,9 @@ async function loadSinglePatientVisitHistory(visitId) {
                                 "serviceFee"
                             ]
                         );
+
+                        // Callback to handle edit radiology form
+                        handleEditPatientRadiologyServiceRequestForm(data.visitId, data.requestId);
                     });
                 }
 
@@ -1160,6 +1169,52 @@ async function handlePatientDentalServiceRequestForm() {
     });
 }
 
+// Handle edit patient dental service request form
+async function handleEditPatientDentalServiceRequestForm(visitId, requestId) {
+    const editPatientDentalServiceRequestForm = document.querySelector('#edit-patient-dental-service-request-form');
+    editPatientDentalServiceRequestForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        // Collect form data
+        const formData = new FormData(editPatientDentalServiceRequestForm);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(editPatientDentalServiceRequestForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to update a dental service request record
+                const response = await API.services.forDental.requests.update(requestId, URLEncodedData, true);
+
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    editPatientDentalServiceRequestForm.reset();
+    
+                    // Remove form
+                    editPatientDentalServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the requests table
+                    loadSinglePatientVisitHistory(visitId);
+    
+                } else {
+                    alert('Failed to edit dental service request record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while editing the dental service request record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            editPatientDentalServiceRequestForm.reset();
+        });
+    });
+}
+
 // Handle create patient cardiology service request form
 async function handlePatientCardiologyServiceRequestForm() {
     const patientCardiologyServiceRequestForm = document.querySelector('#create-patient-cardiology-service-request-form');
@@ -1207,6 +1262,52 @@ async function handlePatientCardiologyServiceRequestForm() {
 
             // Reset the form
             patientCardiologyServiceRequestForm.reset();
+        });
+    });
+}
+
+// Handle edit patient cardiology service request form
+async function handleEditPatientCardiologyServiceRequestForm(visitId, requestId) {
+    const editPatientCardiologyServiceRequestForm = document.querySelector('#edit-patient-cardiology-service-request-form');
+    editPatientCardiologyServiceRequestForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        // Collect form data
+        const formData = new FormData(editPatientCardiologyServiceRequestForm);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(editPatientCardiologyServiceRequestForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to update a cardiology service request record
+                const response = await API.services.forCardiology.requests.update(requestId, URLEncodedData, true);
+
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    editPatientCardiologyServiceRequestForm.reset();
+    
+                    // Remove form
+                    editPatientCardiologyServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the requests table
+                    loadSinglePatientVisitHistory(visitId);
+    
+                } else {
+                    alert('Failed to edit cardiology service request record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while editing the cardiology service request record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            editPatientCardiologyServiceRequestForm.reset();
         });
     });
 }
@@ -1260,6 +1361,52 @@ async function handlePatientRadiologyServiceRequestForm() {
 
             // Reset the form
             patientRadiologyServiceRequestForm.reset();
+        });
+    });
+}
+
+// Handle edit patient radiology service request form
+async function handleEditPatientRadiologyServiceRequestForm(visitId, requestId) {
+    const editPatientRadiologyServiceRequestForm = document.querySelector('#edit-patient-radiology-service-request-form');
+    editPatientRadiologyServiceRequestForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        // Collect form data
+        const formData = new FormData(editPatientRadiologyServiceRequestForm);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(editPatientRadiologyServiceRequestForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to update a radiology service request record
+                const response = await API.services.forRadiology.requests.update(requestId, URLEncodedData, true);
+
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    editPatientRadiologyServiceRequestForm.reset();
+    
+                    // Remove form
+                    editPatientRadiologyServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the requests table
+                    loadSinglePatientVisitHistory(visitId);
+    
+                } else {
+                    alert('Failed to edit radiology service request record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while editing the radiology service request record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            editPatientRadiologyServiceRequestForm.reset();
         });
     });
 }

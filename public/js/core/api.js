@@ -447,6 +447,12 @@ export const API = {
                     return await API.makePostRequest(endpoint, report, fromFormData);
                 },
 
+                // Update request PUT api/v1/services/dental/requests/:id
+                update: async (id, data, fromFormData) => {
+                    const endpoint = `${API.BACKEND_BASE_API_URI}/services/dental/requests/${id}`;
+                    return await API.makePutRequest(endpoint, data, fromFormData);
+                },
+
                 // Get from requests GET api/v1/services/dental/requests/:id
                 fetchByRequestId: async (id) => {
                     const endpoint = `${API.BACKEND_BASE_API_URI}/services/dental/requests/${id}`;
@@ -479,6 +485,12 @@ export const API = {
                     return await API.makePostRequest(endpoint, report, fromFormData);
                 },
 
+                // Update request PUT api/v1/services/cardiology/requests/:id
+                update: async (id, data, fromFormData) => {
+                    const endpoint = `${API.BACKEND_BASE_API_URI}/services/cardiology/requests/${id}`;
+                    return await API.makePutRequest(endpoint, data, fromFormData);
+                },
+
                 // Get from requests GET api/v1/services/cardiology/requests/:id
                 fetchByRequestId: async (id) => {
                     const endpoint = `${API.BACKEND_BASE_API_URI}/services/cardiology/requests/${id}`;
@@ -509,6 +521,12 @@ export const API = {
                 create: async (report, fromFormData) => {
                     const endpoint = `${API.BACKEND_BASE_API_URI}/services/radiology/requests`;
                     return await API.makePostRequest(endpoint, report, fromFormData);
+                },
+
+                // Update request PUT api/v1/services/radiology/requests/:id
+                update: async (id, data, fromFormData) => {
+                    const endpoint = `${API.BACKEND_BASE_API_URI}/services/radiology/requests/${id}`;
+                    return await API.makePutRequest(endpoint, data, fromFormData);
                 },
 
                 // Get from requests GET api/v1/services/radiology/requests/:id

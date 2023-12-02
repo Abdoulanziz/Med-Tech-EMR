@@ -1141,6 +1141,50 @@ const createClinicalRequestForDental = async (req, res) => {
   }
 };
 
+// Update clinical request for dental
+const updateClinicalRequestForDentalById = async (req, res) => {
+  try {
+    // Extract request data from the request body
+    // Convert empty strings to null for nullable fields
+    const toothType = req.body.toothType || null;
+    const diagnosis = req.body.diagnosis || null;
+    const procedure = req.body.procedure || null;
+    const serviceFee = req.body.serviceFee || null;
+
+    const requestId = req.params.id;
+
+
+    // Check if the request already exists in the database
+    const existingRequest = await ClinicalRequestForDental.findOne({ where: { requestId } });
+
+    if (!existingRequest) {
+      return res.status(400).json({ message: 'Dental request does not exist' });
+    }
+
+    // Update the request record in the database
+    const updatedRequest = await existingRequest.update({
+      toothType,
+      diagnosis,
+      procedure,
+      serviceFee,
+      // visitId,
+    });
+
+    // Create an audit log
+    await createAuditLog('ClinicalRequestForDental', existingRequest.requestId, 'UPDATE', existingRequest.dataValues, updatedRequest.dataValues, req.session.user.userId);
+
+    // Respond with the updated request object
+    return res.status(200).json({ status: 'success', message: 'Dental request record updated successfully', data: updatedRequest });
+
+  } catch (error) {
+    // Log out the error to the console
+    console.error('Error updating request:', error);
+
+    // Respond with the error to the client
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 // Create clinical request for cardiology
 const createClinicalRequestForCardiology = async (req, res) => {
   try {
@@ -1166,6 +1210,50 @@ const createClinicalRequestForCardiology = async (req, res) => {
     return res.status(201).json({ status: 'success', message: 'Clinical request for Cardiology created successfully', data: newClinicalRequestForCardiology });
   } catch (error) {
     console.error('Error creating Clinical request for Cardiology:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Update clinical request for cardiology
+const updateClinicalRequestForCardiologyById = async (req, res) => {
+  try {
+    // Extract request data from the request body
+    // Convert empty strings to null for nullable fields
+    const referralReason = req.body.referralReason || null;
+    const currentMedication = req.body.currentMedication || null;
+    const observationNotes = req.body.observationNotes || null;
+    const serviceFee = req.body.serviceFee || null;
+
+    const requestId = req.params.id;
+
+
+    // Check if the request already exists in the database
+    const existingRequest = await ClinicalRequestForCardiology.findOne({ where: { requestId } });
+
+    if (!existingRequest) {
+      return res.status(400).json({ message: 'Cardiology request does not exist' });
+    }
+
+    // Update the request record in the database
+    const updatedRequest = await existingRequest.update({
+      referralReason,
+      currentMedication,
+      observationNotes,
+      serviceFee,
+      // visitId,
+    });
+
+    // Create an audit log
+    await createAuditLog('ClinicalRequestForCardiology', existingRequest.requestId, 'UPDATE', existingRequest.dataValues, updatedRequest.dataValues, req.session.user.userId);
+
+    // Respond with the updated request object
+    return res.status(200).json({ status: 'success', message: 'Cardiology request record updated successfully', data: updatedRequest });
+
+  } catch (error) {
+    // Log out the error to the console
+    console.error('Error updating request:', error);
+
+    // Respond with the error to the client
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -1202,6 +1290,50 @@ const createClinicalRequestForRadiology = async (req, res) => {
     return res.status(201).json({ status: 'success', message: 'Clinical request for Radiology created successfully', data: newClinicalRequestForRadiology });
   } catch (error) {
     console.error('Error creating Clinical request for Radiology:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Update clinical request for radiology
+const updateClinicalRequestForRadiologyById = async (req, res) => {
+  try {
+    // Extract request data from the request body
+    // Convert empty strings to null for nullable fields
+    const referralReason = req.body.referralReason || null;
+    const currentMedication = req.body.currentMedication || null;
+    const observationNotes = req.body.observationNotes || null;
+    const serviceFee = req.body.serviceFee || null;
+
+    const requestId = req.params.id;
+
+
+    // Check if the request already exists in the database
+    const existingRequest = await ClinicalRequestForRadiology.findOne({ where: { requestId } });
+
+    if (!existingRequest) {
+      return res.status(400).json({ message: 'Radiology request does not exist' });
+    }
+
+    // Update the request record in the database
+    const updatedRequest = await existingRequest.update({
+      referralReason,
+      currentMedication,
+      observationNotes,
+      serviceFee,
+      // visitId,
+    });
+
+    // Create an audit log
+    await createAuditLog('ClinicalRequestForRadiology', existingRequest.requestId, 'UPDATE', existingRequest.dataValues, updatedRequest.dataValues, req.session.user.userId);
+
+    // Respond with the updated request object
+    return res.status(200).json({ status: 'success', message: 'Radiology request record updated successfully', data: updatedRequest });
+
+  } catch (error) {
+    // Log out the error to the console
+    console.error('Error updating request:', error);
+
+    // Respond with the error to the client
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -1402,6 +1534,7 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
       currentMedication: request.currentMedication,
       observationNotes: request.observationNotes,
       serviceFee: request.serviceFee,
+      visitId: request.visitId,
     }));
 
     // Access fields from ClinicalRequestForRadiology results
@@ -1419,6 +1552,7 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
       currentMedication: request.currentMedication,
       observationNotes: request.observationNotes,
       serviceFee: request.serviceFee,
+      visitId: request.visitId,
     }));
 
     // Access fields from ClinicalRequestForDental results
@@ -1436,6 +1570,7 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
       diagnosis: request.diagnosis,
       procedure: request.procedure,
       serviceFee: request.serviceFee,
+      visitId: request.visitId,
     }));
 
     // Combine results from all models
@@ -2097,8 +2232,11 @@ module.exports = {
   createClinicalRequestForEye,
   updateClinicalRequestForEyeById,
   createClinicalRequestForDental,
+  updateClinicalRequestForDentalById,
   createClinicalRequestForCardiology,
+  updateClinicalRequestForCardiologyById,
   createClinicalRequestForRadiology,
+  updateClinicalRequestForRadiologyById,
   fetchLabRequestsByVisitId, 
   updateLabRequestPaymentStatus,
   fetchMedicalHistoryByVisitId, 
