@@ -21,9 +21,11 @@ const {
     addPatientToQueue, 
     fetchAllPatientsOnQueue, 
     createTriage, 
+    updateTriageById,
     createAllergy, 
     updateAllergyById,
     createClinicalRequestForEye,
+    updateClinicalRequestForEyeById,
     createClinicalRequestForDental,
     createClinicalRequestForCardiology,
     createClinicalRequestForRadiology,
@@ -69,11 +71,14 @@ router.post("/queues", addPatientToQueue);
 router.get("/queues", fetchAllPatientsOnQueue);
 
 router.post("/triages", createTriage);
+router.put("/triages/:id", updateTriageById);
 
 router.post("/allergies", createAllergy);
 router.put("/allergies/:id", updateAllergyById);
 
 router.post("/services/eye/requests", createClinicalRequestForEye);
+router.put("/services/eye/requests/:id", updateClinicalRequestForEyeById);
+
 router.post("/services/dental/requests", createClinicalRequestForDental);
 router.post("/services/cardiology/requests", createClinicalRequestForCardiology);
 router.post("/services/radiology/requests", createClinicalRequestForRadiology);

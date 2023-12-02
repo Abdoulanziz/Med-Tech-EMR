@@ -412,6 +412,9 @@ async function loadSinglePatientVisitHistory(visitId) {
                                 "descriptionNotes"
                             ]
                         );
+
+                        // Callback to handle edit eye request form
+                        handleEditPatientEyeServiceRequestForm(data.visitId, data.requestId);
                     });
                 }
 
@@ -538,6 +541,9 @@ async function loadSinglePatientVisitHistory(visitId) {
                             "injuryDetails"
                         ]
                     );
+
+                    // Callback to handle edit triages form
+                    handleEditTriageForm(data.visitId, data.requestId);
                 });
             }            
 
@@ -860,6 +866,52 @@ async function handleCreateTriageForm() {
     });
 }
 
+// Handle triage edit form
+async function handleEditTriageForm(visitId, triageId) {
+    const editPatientTriageForm = document.querySelector('#edit-patient-triage-form');
+    editPatientTriageForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        // Collect form data
+        const formData = new FormData(editPatientTriageForm);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(editPatientTriageForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to update a triage record
+                const response = await API.triages.update(triageId, URLEncodedData, true);
+
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    editPatientTriageForm.reset();
+    
+                    // Remove form
+                    editPatientTriageForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the requests table
+                    loadSinglePatientVisitHistory(visitId);
+    
+                } else {
+                    alert('Failed to edit triage record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while editing the triage record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            editPatientTriageForm.reset();
+        });
+    });
+}
+
 // Handle allergy create form
 async function handleCreateAllergyForm() {
     const patientAllergyForm = document.querySelector('#create-patient-allergy-form');
@@ -945,11 +997,11 @@ async function handleEditAllergyForm(visitId, allergyId) {
                     loadSinglePatientVisitHistory(visitId);
     
                 } else {
-                    alert('Failed to create allergy record. Please check the form data.');
+                    alert('Failed to edit allergy record. Please check the form data.');
                 }
             } catch (error) {
                 console.error(error);
-                alert('An error occurred while creating the allergy record.');
+                alert('An error occurred while editing the allergy record.');
             }
         }, () => {
             // TODO: Run when cancelled
@@ -1007,6 +1059,52 @@ async function handlePatientEyeServiceRequestForm() {
 
             // Reset the form
             patientEyeServiceRequestForm.reset();
+        });
+    });
+}
+
+// Handle edit patient eye service request form
+async function handleEditPatientEyeServiceRequestForm(visitId, requestId) {
+    const editPatientEyeServiceRequestForm = document.querySelector('#edit-patient-eye-service-request-form');
+    editPatientEyeServiceRequestForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        // Collect form data
+        const formData = new FormData(editPatientEyeServiceRequestForm);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(editPatientEyeServiceRequestForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to update a eye service request record
+                const response = await API.services.forEye.requests.update(requestId, URLEncodedData, true);
+
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    editPatientEyeServiceRequestForm.reset();
+    
+                    // Remove form
+                    editPatientEyeServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the requests table
+                    loadSinglePatientVisitHistory(visitId);
+    
+                } else {
+                    alert('Failed to edit eye service request record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while editing the eye service request record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            editPatientEyeServiceRequestForm.reset();
         });
     });
 }

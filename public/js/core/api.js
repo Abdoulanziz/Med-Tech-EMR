@@ -189,6 +189,12 @@ export const API = {
             const endpoint = `${API.BACKEND_BASE_API_URI}/triages`;
             return await API.makePostRequest(endpoint, triage, fromFormData);
         },
+
+        // Update triage PUT api/v1/triages/:id
+        update: async (id, data, fromFormData) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/triages/${id}`;
+            return await API.makePutRequest(endpoint, data, fromFormData);
+        },
     },
 
      
@@ -401,6 +407,12 @@ export const API = {
                 create: async (report, fromFormData) => {
                     const endpoint = `${API.BACKEND_BASE_API_URI}/services/eye/requests`;
                     return await API.makePostRequest(endpoint, report, fromFormData);
+                },
+
+                // Update request PUT api/v1/services/eye/requests/:id
+                update: async (id, data, fromFormData) => {
+                    const endpoint = `${API.BACKEND_BASE_API_URI}/services/eye/requests/${id}`;
+                    return await API.makePutRequest(endpoint, data, fromFormData);
                 },
 
                 // Get from requests GET api/v1/services/eye/requests/:id

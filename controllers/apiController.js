@@ -897,7 +897,7 @@ const fetchAllPatientsOnQueue = async (req, res) => {
   }
 };
 
-// Create a new triage
+// Create triage
 const createTriage = async (req, res) => {
   try {
 
@@ -929,7 +929,53 @@ const createTriage = async (req, res) => {
   }
 };
 
-// Create a new allergy
+// Update triage
+const updateTriageById = async (req, res) => {
+  try {
+    // Extract triage data from the request body
+    // Convert empty strings to null for nullable fields
+    const bloodPressure = req.body.bloodPressure || null;
+    const heartRate = req.body.heartRate || null;
+    const respiratoryRate = req.body.respiratoryRate || null;
+    const signsAndSymptoms = req.body.signsAndSymptoms || null;
+    const injuryDetails = req.body.injuryDetails || null;
+
+    const triageId = req.params.id;
+
+
+    // Check if the triage already exists in the database
+    const existingTriage = await Triage.findOne({ where: { triageId } });
+
+    if (!existingTriage) {
+      return res.status(400).json({ message: 'Triage does not exist' });
+    }
+
+    // Update the triage record in the database
+    const updatedTriage = await existingTriage.update({
+      bloodPressure,
+      heartRate,
+      respiratoryRate,
+      signsAndSymptoms,
+      injuryDetails,
+      // visitId,
+    });
+
+    // Create an audit log
+    await createAuditLog('Triage', existingTriage.triageId, 'UPDATE', existingTriage.dataValues, updatedTriage.dataValues, req.session.user.userId);
+
+    // Respond with the updated triage object
+    return res.status(200).json({ status: 'success', message: 'Triage record updated successfully', data: updatedTriage });
+
+  } catch (error) {
+    // Log out the error to the console
+    console.error('Error updating triage:', error);
+
+    // Respond with the error to the client
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Create allergy
 const createAllergy = async (req, res) => {
   try {
 
@@ -951,7 +997,7 @@ const createAllergy = async (req, res) => {
   }
 };
 
-// Update a allergy
+// Update allergy
 const updateAllergyById = async (req, res) => {
   try {
     // Extract allergy data from the request body
@@ -1016,6 +1062,52 @@ const createClinicalRequestForEye = async (req, res) => {
     return res.status(201).json({ status: 'success', message: 'Clinical request for Eye created successfully', data: newClinicalRequestForEye });
   } catch (error) {
     console.error('Error creating Clinical request for Eye:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Update clinical request for eye
+const updateClinicalRequestForEyeById = async (req, res) => {
+  try {
+    // Extract request data from the request body
+    // Convert empty strings to null for nullable fields
+    const targetEye = req.body.targetEye || null;
+    const diagnosis = req.body.diagnosis || null;
+    const serviceFee = req.body.serviceFee || null;
+    const observationNotes = req.body.observationNotes || null;
+    const descriptionNotes = req.body.descriptionNotes || null;
+
+    const requestId = req.params.id;
+
+
+    // Check if the request already exists in the database
+    const existingRequest = await ClinicalRequestForEye.findOne({ where: { requestId } });
+
+    if (!existingRequest) {
+      return res.status(400).json({ message: 'Eye request does not exist' });
+    }
+
+    // Update the request record in the database
+    const updatedRequest = await existingRequest.update({
+      targetEye,
+      diagnosis,
+      serviceFee,
+      observationNotes,
+      descriptionNotes,
+      // visitId,
+    });
+
+    // Create an audit log
+    await createAuditLog('ClinicalRequestForEye', existingRequest.requestId, 'UPDATE', existingRequest.dataValues, updatedRequest.dataValues, req.session.user.userId);
+
+    // Respond with the updated request object
+    return res.status(200).json({ status: 'success', message: 'Eye request record updated successfully', data: updatedRequest });
+
+  } catch (error) {
+    // Log out the error to the console
+    console.error('Error updating request:', error);
+
+    // Respond with the error to the client
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -1263,6 +1355,7 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
       respiratoryRate: request.respiratoryRate,
       signsAndSymptoms: request.signsAndSymptoms,
       injuryDetails: request.injuryDetails,
+      visitId: request.visitId,
     }));
 
     // Access the lab test's fields in each LabRequest result
@@ -1291,6 +1384,7 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
       serviceFee: request.serviceFee,
       observationNotes: request.observationNotes,
       descriptionNotes: request.descriptionNotes,
+      visitId: request.visitId,
     }));
 
     // Access fields from ClinicalRequestForCardiology results
@@ -1997,9 +2091,11 @@ module.exports = {
   addPatientToQueue, 
   fetchAllPatientsOnQueue, 
   createTriage, 
+  updateTriageById,
   createAllergy, 
   updateAllergyById,
   createClinicalRequestForEye,
+  updateClinicalRequestForEyeById,
   createClinicalRequestForDental,
   createClinicalRequestForCardiology,
   createClinicalRequestForRadiology,
