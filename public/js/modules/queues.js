@@ -915,8 +915,6 @@ async function handleCreateAllergyForm() {
 }
 
 // Handle allergy edit form
-// @Update using the instance ID not visit ID
-// @applies to all similar entities/services
 async function handleEditAllergyForm(visitId, allergyId) {
     const editPatientAllergyForm = document.querySelector('#edit-patient-allergy-form');
     editPatientAllergyForm.addEventListener('submit', async (event) => {

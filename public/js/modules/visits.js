@@ -294,10 +294,6 @@ function populateFormWithData(formId, data, formFieldsNamesArray) {
 
 
 
-
-
-
-
 // Load patient visit requests to DOM
 async function loadSinglePatientVisitHistory(visitId) {
     // Get Id of selected visit
@@ -345,7 +341,7 @@ async function loadSinglePatientVisitHistory(visitId) {
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return '<span>' + data.testName + '</span>';
+                    return '<span>' + data.requestName + '</span>';
                 },
             },
             {
@@ -386,7 +382,107 @@ async function loadSinglePatientVisitHistory(visitId) {
         ]  
     });
 
+    // This causes double (re)renders for the table
+    // TODO: client that triggers the action
+    // should not re-render
+    SSE.registerMessageHandler('Reload', () => {
+        // Reload the table
+        loadSinglePatientVisitHistory(selectedVisitId);
+    });
+
 }
+
+
+
+// // Load patient visit requests to DOM
+// async function loadSinglePatientVisitHistory(visitId) {
+//     // Get Id of selected visit
+//     const selectedVisitId = parseInt(visitId);
+
+//     // Persist Id of selected visit
+//     UTILS.setSelectedVisitId(selectedVisitId);
+
+//     let allPatients;
+//     const apiEndpoint = `${UI.apiBaseURL}/history/${selectedVisitId}`;
+
+//     allPatients = $('#single-patient-visit-records').DataTable({
+//         processing: true,
+//         serverSide: true,
+//         paging: true,
+//         searching: true,
+//         filter:true,
+//         destroy: true,
+
+//         ajax: {
+//             url: apiEndpoint,
+//             dataSrc: "data",
+//             data: function (d) {
+//                 d.minDate = $('#min-date').val();
+//                 d.maxDate = $('#max-date').val();
+//             },
+//         },  
+//         columns: [ 
+//             { data : null },
+//             { data : null },
+//             { data : null },
+//             { data : null },
+//             { data : null }
+//         ],
+//         rowCallback: function(row, data, index) {
+            
+//         },
+//         columnDefs: [
+//             {
+//                 targets: 0,
+//                 render: function(data, type, row, meta) {
+//                     return '<span>' + (meta.row + 1) + '</span>';
+//                 }
+//             },
+//             {
+//                 targets: 1,
+//                 render: function (data, type, row, meta) {
+//                     return '<span>' + data.testName + '</span>';
+//                 },
+//             },
+//             {
+//                 targets: 2,
+//                 render: function(data, type, row, meta) {
+//                     const originalDate = data.requestCreatedAt;
+//                     const dateObj = new Date(originalDate);
+//                     const formattedDate = dateObj.toISOString().split('T')[0];
+//                     return '<span>' + formattedDate + '</span>';
+//                 }
+//             },
+//             {
+//                 targets: 3,
+//                 render: function(data, type, row, meta) {
+//                     const status = data.requestStatus.toLowerCase();
+//                     let backgroundColor;
+
+//                     if (status === 'pending') {
+//                         backgroundColor = 'grey';
+//                     } else if (status === 'complete') {
+//                         backgroundColor = 'yellowgreen';
+//                     } else {
+//                         backgroundColor = 'orange';
+//                     }
+
+//                     return '<span style="font-size: 10px;display: block;inline-size: 50%;border-radius:6px;padding: .4rem .6rem;color: #fff;background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
+//                 }
+//             },
+//             {
+//                 targets: 4,
+//                 render: function(data, type, row, meta) {
+//                     const originalDate = data.requestCreatedAt;
+//                     const dateObj = new Date(originalDate);
+//                     const formattedDate = dateObj.toISOString().split('T')[0];
+//                     return '<span>' + formattedDate + '</span>';
+//                 }
+//             }
+//         ]  
+//     });
+
+// }
 
 // Function to display selected patient details
 async function displaySelectedPatientDetails(divID, data, callback) {
