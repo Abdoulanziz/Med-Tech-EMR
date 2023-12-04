@@ -26,12 +26,16 @@ const {
     updateAllergyById,
     createClinicalRequestForEye,
     updateClinicalRequestForEyeById,
+    updateClinicalRequestForEyePaymentStatusById,
     createClinicalRequestForDental,
     updateClinicalRequestForDentalById,
+    updateClinicalRequestForDentalPaymentStatusById,
     createClinicalRequestForCardiology,
     updateClinicalRequestForCardiologyById,
+    updateClinicalRequestForCardiologyPaymentStatusById,
     createClinicalRequestForRadiology,
     updateClinicalRequestForRadiologyById,
+    updateClinicalRequestForRadiologyPaymentStatusById,
     fetchLabRequestsByVisitId, 
     updateLabRequestPaymentStatus,
     fetchMedicalHistoryByVisitId, 
@@ -42,6 +46,7 @@ const {
     fetchTests, 
     fetchMedicines,
     createLabRequest,
+    updateLabRequestById,
     fetchBillsByVisitId, 
     fetchUnpaidBillsByVisitId,
     createPrescription,
@@ -81,17 +86,23 @@ router.put("/allergies/:id", updateAllergyById);
 
 router.post("/services/eye/requests", createClinicalRequestForEye);
 router.put("/services/eye/requests/:id", updateClinicalRequestForEyeById);
+router.patch("/services/eye/requests/:id/payment-status/:status", updateClinicalRequestForEyePaymentStatusById);
 
 router.post("/services/dental/requests", createClinicalRequestForDental);
 router.put("/services/dental/requests/:id", updateClinicalRequestForDentalById);
+router.patch("/services/dental/requests/:id/payment-status/:status", updateClinicalRequestForDentalPaymentStatusById);
 ;
 router.post("/services/cardiology/requests", createClinicalRequestForCardiology);
 router.put("/services/cardiology/requests/:id", updateClinicalRequestForCardiologyById);
+router.patch("/services/cardiology/requests/:id/payment-status/:status", updateClinicalRequestForCardiologyPaymentStatusById);
 
 router.post("/services/radiology/requests", createClinicalRequestForRadiology);
 router.put("/services/radiology/requests/:id", updateClinicalRequestForRadiologyById);
+router.patch("/services/radiology/requests/:id/payment-status/:status", updateClinicalRequestForRadiologyPaymentStatusById);
+
 
 router.post("/requests", createLabRequest);
+router.put("/requests/:id", updateLabRequestById);
 router.get("/requests/:visitId", fetchLabRequestsByVisitId);
 router.patch("/requests/:requestId/payment-status/:status", updateLabRequestPaymentStatus);
 

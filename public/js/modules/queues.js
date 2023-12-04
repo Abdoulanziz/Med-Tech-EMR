@@ -335,6 +335,9 @@ async function loadSinglePatientVisitHistory(visitId) {
                             "requestFees"
                         ]
                     );
+
+                    // Callback to handle edit lab request form
+                    handleEditLabRequest(data.visitId, data.requestId);
                 });
 
                 // Check test
@@ -692,7 +695,7 @@ async function displaySelectedPatientBills(divId) {
             const template = `
             <div class="service ${billItem.paymentStatus === "paid" ? 'paid' : 'unpaid'}">
                 <div class="service-content flex">
-                    <h3>${billItem.testName} (UGX ${billItem.testFees})</h3>
+                    <h3>${billItem.requestName} (UGX ${billItem.requestFees})</h3>
                     ${billItem.paymentStatus === "paid" ? '<img src="/assets/svg/check.png" alt="remove service icon">' : ''}
                 </div>
             </div>
@@ -742,9 +745,9 @@ function displaySelectedPatientBillsPaymentModal(event) {
             const rows = data.map(item => {
                 return `
                     <tr>
-                        <td><input type="checkbox" class="service-checkbox" data-id="${item.requestId}"></td>
-                        <td>${item.testName}</td>
-                        <td>${item.testFees}</td>
+                        <td><input type="checkbox" class="service-checkbox" data-item='${JSON.stringify(item)}'></td>
+                        <td>${item.requestName}</td>
+                        <td>${item.requestFees}</td>
                     </tr>
                 `;
             });
@@ -783,8 +786,36 @@ function displaySelectedPatientBillsPaymentModal(event) {
                 const updatePaymentStatusPromises = [];
 
                 for (const checkbox of checkedCheckboxes) {
-                    const requestId = checkbox.dataset.id;
-                    updatePaymentStatusPromises.push(API.requests.updatePaymentStatus(requestId, "paid"));
+                    // Update Eye Service
+                    if(JSON.parse(checkbox.dataset.item).requestName === "Eye Service") {
+                        const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                        updatePaymentStatusPromises.push(API.services.forEye.requests.updatePaymentStatus(requestId, "paid"));
+                    }
+
+                    // Update Dental Service
+                    else if(JSON.parse(checkbox.dataset.item).requestName === "Dental Service") {
+                        const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                        updatePaymentStatusPromises.push(API.services.forDental.requests.updatePaymentStatus(requestId, "paid"));
+                    }
+
+                    // Update Cardiolody Service
+                    else if(JSON.parse(checkbox.dataset.item).requestName === "Cardiology Service") {
+                        const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                        updatePaymentStatusPromises.push(API.services.forCardiology.requests.updatePaymentStatus(requestId, "paid"));
+                    }
+
+                    // Update Radiology Service
+                    else if(JSON.parse(checkbox.dataset.item).requestName === "Radiology Service") {
+                        const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                        updatePaymentStatusPromises.push(API.services.forRadiology.requests.updatePaymentStatus(requestId, "paid"));
+                    }
+
+                    // Update Lab Tests
+                    else {
+                        const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                        updatePaymentStatusPromises.push(API.requests.updatePaymentStatus(requestId, "paid"));
+                    }
+
                 }
 
                 try {
@@ -1052,6 +1083,9 @@ async function handlePatientEyeServiceRequestForm() {
     
                     // Remove form
                     patientEyeServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+
+                    // Fetch the bills
+                    displaySelectedPatientBills("ongoing-services-02");
     
                     // Reload the requests table
                     loadSinglePatientVisitHistory(selectedVisitId);
@@ -1098,6 +1132,9 @@ async function handleEditPatientEyeServiceRequestForm(visitId, requestId) {
     
                     // Remove form
                     editPatientEyeServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+
+                    // Reload the bills
+                    displaySelectedPatientBills("ongoing-services-02");
     
                     // Reload the requests table
                     loadSinglePatientVisitHistory(visitId);
@@ -1149,6 +1186,9 @@ async function handlePatientDentalServiceRequestForm() {
     
                     // Remove form
                     patientDentalServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+
+                    // Fetch the bills
+                    displaySelectedPatientBills("ongoing-services-02");
     
                     // Reload the requests table
                     loadSinglePatientVisitHistory(selectedVisitId);
@@ -1195,6 +1235,9 @@ async function handleEditPatientDentalServiceRequestForm(visitId, requestId) {
     
                     // Remove form
                     editPatientDentalServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+
+                    // Reload the bills
+                    displaySelectedPatientBills("ongoing-services-02");
     
                     // Reload the requests table
                     loadSinglePatientVisitHistory(visitId);
@@ -1246,6 +1289,9 @@ async function handlePatientCardiologyServiceRequestForm() {
     
                     // Remove form
                     patientCardiologyServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+
+                    // Fetch the bills
+                    displaySelectedPatientBills("ongoing-services-02");
     
                     // Reload the requests table
                     loadSinglePatientVisitHistory(selectedVisitId);
@@ -1292,6 +1338,9 @@ async function handleEditPatientCardiologyServiceRequestForm(visitId, requestId)
     
                     // Remove form
                     editPatientCardiologyServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+
+                    // Reload the bills
+                    displaySelectedPatientBills("ongoing-services-02");
     
                     // Reload the requests table
                     loadSinglePatientVisitHistory(visitId);
@@ -1343,6 +1392,9 @@ async function handlePatientRadiologyServiceRequestForm() {
     
                     // Remove form
                     patientRadiologyServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+
+                    // Fetch the bills
+                    displaySelectedPatientBills("ongoing-services-02");
     
                     // Reload the requests table
                     loadSinglePatientVisitHistory(selectedVisitId);
@@ -1391,6 +1443,9 @@ async function handleEditPatientRadiologyServiceRequestForm(visitId, requestId) 
     
                     // Remove form
                     editPatientRadiologyServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+
+                    // Reload the bills
+                    displaySelectedPatientBills("ongoing-services-02");
     
                     // Reload the requests table
                     loadSinglePatientVisitHistory(visitId);
@@ -1486,6 +1541,55 @@ async function handleLabRequest() {
             // Run when canceled
             // Reset the form (clear selected tests)
             clearSelectedLabTests();
+        });
+    });
+}
+
+// Handle edit lab request form
+async function handleEditLabRequest(visitId, requestId) {
+    const editPatientLabRequestForm = document.querySelector('#edit-patient-diagnosis-form');
+    editPatientLabRequestForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        // Collect form data
+        const formData = new FormData(editPatientLabRequestForm);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(editPatientLabRequestForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to update a lab request record
+                const response = await API.requests.update(requestId, URLEncodedData, true);
+
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    editPatientLabRequestForm.reset();
+    
+                    // Remove form
+                    editPatientLabRequestForm.parentElement.parentElement.classList.remove("inview");
+
+                    // Reload the bills
+                    displaySelectedPatientBills("ongoing-services-02");
+    
+                    // Reload the requests table
+                    loadSinglePatientVisitHistory(visitId);
+    
+                } else {
+                    alert('Failed to edit lab request record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while editing the lab request record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            editPatientLabRequestForm.reset();
         });
     });
 }

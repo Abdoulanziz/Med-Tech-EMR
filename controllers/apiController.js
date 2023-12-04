@@ -1112,6 +1112,40 @@ const updateClinicalRequestForEyeById = async (req, res) => {
   }
 };
 
+
+// Update clinical request for eye payment status
+const updateClinicalRequestForEyePaymentStatusById = async (req, res) => {
+  try {
+    const requestId = req.params.id;
+    const paymentStatus = req.params.status;
+
+    const [updatedCount] = await ClinicalRequestForEye.update(
+      { paymentStatus: paymentStatus },
+      { where: { requestId: requestId } }
+    );
+
+    // Create an audit log
+    await createAuditLog('ClinicalRequestForEye', requestId, 'UPDATE', {}, {paymentStatus}, req.session.user.userId);
+
+    if (updatedCount > 0) {
+      // Clinical Request For Eye payment status updated successfully
+      return res.status(200).json({
+        status: 'success',
+        message: 'Clinical Request For Eye payment status updated',
+      });
+    } else {
+      // No Clinical Request For Eye found with the given ID
+      return res.status(404).json({
+        status: 'failure',
+        message: 'Clinical Request For Eye not found',
+      });
+    }
+  } catch (error) {
+    console.error('Error updating Clinical Request For Eye payment status:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 // Create clinical request for dental
 const createClinicalRequestForDental = async (req, res) => {
   try {
@@ -1185,6 +1219,39 @@ const updateClinicalRequestForDentalById = async (req, res) => {
   }
 };
 
+// Update clinical request for dental payment status
+const updateClinicalRequestForDentalPaymentStatusById = async (req, res) => {
+  try {
+    const requestId = req.params.id;
+    const paymentStatus = req.params.status;
+
+    const [updatedCount] = await ClinicalRequestForDental.update(
+      { paymentStatus: paymentStatus },
+      { where: { requestId: requestId } }
+    );
+
+    // Create an audit log
+    await createAuditLog('ClinicalRequestForDental', requestId, 'UPDATE', {}, {paymentStatus}, req.session.user.userId);
+
+    if (updatedCount > 0) {
+      // Clinical Request For Dental payment status updated successfully
+      return res.status(200).json({
+        status: 'success',
+        message: 'Clinical Request For Dental payment status updated',
+      });
+    } else {
+      // No Clinical Request For Dental found with the given ID
+      return res.status(404).json({
+        status: 'failure',
+        message: 'Clinical Request For Dental not found',
+      });
+    }
+  } catch (error) {
+    console.error('Error updating Clinical Request For Dental payment status:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 // Create clinical request for cardiology
 const createClinicalRequestForCardiology = async (req, res) => {
   try {
@@ -1254,6 +1321,39 @@ const updateClinicalRequestForCardiologyById = async (req, res) => {
     console.error('Error updating request:', error);
 
     // Respond with the error to the client
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Update clinical request for cardiology payment status
+const updateClinicalRequestForCardiologyPaymentStatusById = async (req, res) => {
+  try {
+    const requestId = req.params.id;
+    const paymentStatus = req.params.status;
+
+    const [updatedCount] = await ClinicalRequestForCardiology.update(
+      { paymentStatus: paymentStatus },
+      { where: { requestId: requestId } }
+    );
+
+    // Create an audit log
+    await createAuditLog('ClinicalRequestForCardiology', requestId, 'UPDATE', {}, {paymentStatus}, req.session.user.userId);
+
+    if (updatedCount > 0) {
+      // Clinical Request For Cardiology payment status updated successfully
+      return res.status(200).json({
+        status: 'success',
+        message: 'Clinical Request For Cardiology payment status updated',
+      });
+    } else {
+      // No Clinical Request For Cardiology found with the given ID
+      return res.status(404).json({
+        status: 'failure',
+        message: 'Clinical Request For Cardiology not found',
+      });
+    }
+  } catch (error) {
+    console.error('Error updating Clinical Request For Cardiology payment status:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -1334,6 +1434,39 @@ const updateClinicalRequestForRadiologyById = async (req, res) => {
     console.error('Error updating request:', error);
 
     // Respond with the error to the client
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Update clinical request for radiology payment status
+const updateClinicalRequestForRadiologyPaymentStatusById = async (req, res) => {
+  try {
+    const requestId = req.params.id;
+    const paymentStatus = req.params.status;
+
+    const [updatedCount] = await ClinicalRequestForRadiology.update(
+      { paymentStatus: paymentStatus },
+      { where: { requestId: requestId } }
+    );
+
+    // Create an audit log
+    await createAuditLog('ClinicalRequestForRadiology', requestId, 'UPDATE', {}, {paymentStatus}, req.session.user.userId);
+
+    if (updatedCount > 0) {
+      // Clinical Request For Radiology payment status updated successfully
+      return res.status(200).json({
+        status: 'success',
+        message: 'Clinical Request For Radiology payment status updated',
+      });
+    } else {
+      // No Clinical Request For Radiology found with the given ID
+      return res.status(404).json({
+        status: 'failure',
+        message: 'Clinical Request For Radiology not found',
+      });
+    }
+  } catch (error) {
+    console.error('Error updating Clinical Request For Radiology payment status:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -1492,12 +1625,20 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
 
     // Access the lab test's fields in each LabRequest result
     const labRequestsWithTestResults = labRequestResult.rows.map((request) => ({
+      // Used on table
       requestName: request.LabTest.testName,
-      requestFees: request.LabTest.testFees,
+      // This fees if from Lab tests
+      // requestFees: request.LabTest.testFees,
+      // This fees is from Lab requests
+      // requestFees: request.testFees,
+      requestFees: request.testFees || request.LabTest.testFees,
       requestId: request.requestId,
       requestStatus: request.requestStatus,
       requestCreatedAt: request.createdAt,
       requestType: 'test',
+
+      // Used on form
+      visitId: request.visitId,
     }));
 
     // Access fields from ClinicalRequestForEye results
@@ -1804,7 +1945,7 @@ const fetchBillsByVisitId = async (req, res) => {
     const visitId = req.params.visitId;
 
     // Construct the Sequelize query
-    const queryOptions = {
+    const labRequestQuery = {
       where: { visit_id: visitId },
       include: [
         {
@@ -1814,24 +1955,81 @@ const fetchBillsByVisitId = async (req, res) => {
       ],
     };
 
-    const result = await LabRequest.findAndCountAll(queryOptions);
+    const clinicalEyeQuery = {
+      where: { visit_id: visitId }
+    };
 
-    // Access the lab test's fields in each request result
-    const requestsWithTestResults = result.rows.map((request) => ({
-      // Extract fields from the 'LabTest' model
+    const clinicalCardiologyQuery = {
+      where: { visit_id: visitId }
+    };
+
+    const clinicalRadiologyQuery = {
+      where: { visit_id: visitId }
+    };
+
+    const clinicalDentalQuery = {
+      where: { visit_id: visitId }
+    };
+
+    // Use Promise.all to concurrently fetch data from multiple models
+    const [labRequestResult, eyeResult, cardiologyResult, radiologyResult, dentalResult] = await Promise.all([
+      LabRequest.findAndCountAll(labRequestQuery),
+      ClinicalRequestForEye.findAndCountAll(clinicalEyeQuery),
+      ClinicalRequestForCardiology.findAndCountAll(clinicalCardiologyQuery),
+      ClinicalRequestForRadiology.findAndCountAll(clinicalRadiologyQuery),
+      ClinicalRequestForDental.findAndCountAll(clinicalDentalQuery),
+    ]);
+
+
+    // Access the lab test's fields in each LabRequest result
+    const labRequestsWithTestResults = labRequestResult.rows.map((request) => ({
+      requestName: request.LabTest.testName,
+      requestFees: request.testFees || request.LabTest.testFees,
       requestId: request.requestId,
       paymentStatus: request.paymentStatus,
-      testName: request.LabTest.testName,
-      testFees: request.LabTest.testFees,
     }));
 
-    
+    // Access fields from ClinicalRequestForEye results
+    const clinicalEyeResults = eyeResult.rows.map((request) => ({
+      requestName: 'Eye Service',
+      requestFees: request.serviceFee,
+      requestId: request.requestId,
+      paymentStatus: request.paymentStatus,
+    }));
 
-    if (result) {
+    // Access fields from ClinicalRequestForCardiology results
+    const clinicalCardiologyResults = cardiologyResult.rows.map((request) => ({
+      requestName: 'Cardiology Service',
+      requestFees: request.serviceFee,
+      requestId: request.requestId,
+      paymentStatus: request.paymentStatus,
+    }));
+
+    // Access fields from ClinicalRequestForRadiology results
+    const clinicalRadiologyResults = radiologyResult.rows.map((request) => ({
+      requestName: 'Radiology Service',
+      requestFees: request.serviceFee,
+      requestId: request.requestId,
+      paymentStatus: request.paymentStatus,
+    }));
+
+    // Access fields from ClinicalRequestForDental results
+    const clinicalDentalResults = dentalResult.rows.map((request) => ({
+      requestName: 'Dental Service',
+      requestFees: request.serviceFee,
+      requestId: request.requestId,
+      paymentStatus: request.paymentStatus,
+    }));
+
+    // Combine results from all models
+    const allResults = [...labRequestsWithTestResults, ...clinicalEyeResults, ...clinicalCardiologyResults, ...clinicalRadiologyResults, ...clinicalDentalResults];
+
+
+    if (allResults) {
       // Results found
       return res.status(200).json({
         status: 'success',
-        data: requestsWithTestResults,
+        data: allResults,
       });
     } else {
       // No result found
@@ -1848,13 +2046,13 @@ const fetchBillsByVisitId = async (req, res) => {
 };
 
 const fetchUnpaidBillsByVisitId = async (req, res) => {
-  try {
+    try {
 
     const visitId = req.params.visitId;
 
     // Construct the Sequelize query
-    const queryOptions = {
-      where: { visit_id: visitId, payment_status: "unpaid" },
+    const labRequestQuery = {
+      where: { visit_id: visitId, payment_status: 'unpaid' },
       include: [
         {
           model: models.LabTest,
@@ -1863,23 +2061,81 @@ const fetchUnpaidBillsByVisitId = async (req, res) => {
       ],
     };
 
-    const result = await LabRequest.findAndCountAll(queryOptions);
+    const clinicalEyeQuery = {
+      where: { visit_id: visitId, payment_status: 'unpaid' }
+    };
 
-    // Access the lab test's fields in each request result
-    const requestsWithTestResults = result.rows.map((request) => ({
-      // Extract fields from the 'LabTest' model
+    const clinicalCardiologyQuery = {
+      where: { visit_id: visitId, payment_status: 'unpaid' }
+    };
+
+    const clinicalRadiologyQuery = {
+      where: { visit_id: visitId, payment_status: 'unpaid' }
+    };
+
+    const clinicalDentalQuery = {
+      where: { visit_id: visitId, payment_status: 'unpaid' }
+    };
+
+    // Use Promise.all to concurrently fetch data from multiple models
+    const [labRequestResult, eyeResult, cardiologyResult, radiologyResult, dentalResult] = await Promise.all([
+      LabRequest.findAndCountAll(labRequestQuery),
+      ClinicalRequestForEye.findAndCountAll(clinicalEyeQuery),
+      ClinicalRequestForCardiology.findAndCountAll(clinicalCardiologyQuery),
+      ClinicalRequestForRadiology.findAndCountAll(clinicalRadiologyQuery),
+      ClinicalRequestForDental.findAndCountAll(clinicalDentalQuery),
+    ]);
+
+
+    // Access the lab test's fields in each LabRequest result
+    const labRequestsWithTestResults = labRequestResult.rows.map((request) => ({
+      requestName: request.LabTest.testName,
+      requestFees: request.testFees || request.LabTest.testFees,
       requestId: request.requestId,
-      testName: request.LabTest.testName,
-      testFees: request.LabTest.testFees,
+      paymentStatus: request.paymentStatus,
     }));
 
-    
+    // Access fields from ClinicalRequestForEye results
+    const clinicalEyeResults = eyeResult.rows.map((request) => ({
+      requestName: 'Eye Service',
+      requestFees: request.serviceFee,
+      requestId: request.requestId,
+      paymentStatus: "Pending",
+    }));
 
-    if (result) {
+    // Access fields from ClinicalRequestForCardiology results
+    const clinicalCardiologyResults = cardiologyResult.rows.map((request) => ({
+      requestName: 'Cardiology Service',
+      requestFees: request.serviceFee,
+      requestId: request.requestId,
+      requestStatus: "Pending",
+    }));
+
+    // Access fields from ClinicalRequestForRadiology results
+    const clinicalRadiologyResults = radiologyResult.rows.map((request) => ({
+      requestName: 'Radiology Service',
+      requestFees: request.serviceFee,
+      requestId: request.requestId,
+      requestStatus: "Pending",
+    }));
+
+    // Access fields from ClinicalRequestForDental results
+    const clinicalDentalResults = dentalResult.rows.map((request) => ({
+      requestName: 'Dental Service',
+      requestFees: request.serviceFee,
+      requestId: request.requestId,
+      requestStatus: "Pending",
+    }));
+
+    // Combine results from all models
+    const allResults = [...labRequestsWithTestResults, ...clinicalEyeResults, ...clinicalCardiologyResults, ...clinicalRadiologyResults, ...clinicalDentalResults];
+
+
+    if (allResults) {
       // Results found
       return res.status(200).json({
         status: 'success',
-        data: requestsWithTestResults,
+        data: allResults,
       });
     } else {
       // No result found
@@ -1893,6 +2149,51 @@ const fetchUnpaidBillsByVisitId = async (req, res) => {
     console.error('Error fetching bills:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
+  // try {
+
+  //   const visitId = req.params.visitId;
+
+  //   // Construct the Sequelize query
+  //   const queryOptions = {
+  //     where: { visit_id: visitId, payment_status: "unpaid" },
+  //     include: [
+  //       {
+  //         model: models.LabTest,
+  //         attributes: ['testName', 'testFees'],
+  //       },
+  //     ],
+  //   };
+
+  //   const result = await LabRequest.findAndCountAll(queryOptions);
+
+  //   // Access the lab test's fields in each request result
+  //   const requestsWithTestResults = result.rows.map((request) => ({
+  //     // Extract fields from the 'LabTest' model
+  //     requestId: request.requestId,
+  //     testName: request.LabTest.testName,
+  //     testFees: request.testFees || request.LabTest.testFees,
+  //   }));
+
+    
+
+  //   if (result) {
+  //     // Results found
+  //     return res.status(200).json({
+  //       status: 'success',
+  //       data: requestsWithTestResults,
+  //     });
+  //   } else {
+  //     // No result found
+  //     return res.status(404).json({
+  //       status: 'failure',
+  //       message: 'Diagnosis bill not found',
+  //     });
+  //   }
+
+  // } catch (error) {
+  //   console.error('Error fetching bills:', error);
+  //   return res.status(500).json({ message: 'Internal Server Error' });
+  // }
 };
 
 // Fetch tests
@@ -1923,7 +2224,7 @@ const fetchMedicines = async (req, res) => {
   }
 };
 
-// Create lab request for CBC
+// Create lab request 
 const createLabRequest = async (req, res) => {
   try {
     // Convert empty strings to null for nullable fields
@@ -1945,12 +2246,53 @@ const createLabRequest = async (req, res) => {
       newLabRequests.push(newRequest);
     }
 
-    return res.status(201).json({ status: 'success', message: 'CBC request records created successfully', data: newLabRequests });
+    return res.status(201).json({ status: 'success', message: 'Lab request request records created successfully', data: newLabRequests });
   } catch (error) {
-    console.error('Error creating CBC request:', error);
+    console.error('Error creating Lab request request:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+
+// Update lab request
+const updateLabRequestById = async (req, res) => {
+  try {
+    // Extract request data from the request body
+    // Convert empty strings to null for nullable fields
+    const requestFees = req.body.requestFees || null;
+
+    const requestId = req.params.id;
+
+
+    // Check if the request already exists in the database
+    const existingRequest = await LabRequest.findOne({ where: { requestId } });
+
+    if (!existingRequest) {
+      return res.status(400).json({ message: 'Lab request request does not exist' });
+    }
+
+    // Update the request record in the database
+    const updatedRequest = await existingRequest.update({
+      testFees: requestFees,
+      // visitId,
+    });
+
+    // Create an audit log
+    // await createAuditLog('LabRequest', existingRequest.requestId, 'UPDATE', existingRequest.dataValues, updatedRequest.dataValues, req.session.user.userId);
+
+    // Respond with the updated request object
+    return res.status(200).json({ status: 'success', message: 'Lab request request record updated successfully', data: updatedRequest });
+
+  } catch (error) {
+    // Log out the error to the console
+    console.error('Error updating request:', error);
+
+    // Respond with the error to the client
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
 
 // Fetch lab requests
 const fetchLabRequestsByVisitId = async (req, res) => {
@@ -2075,6 +2417,7 @@ const updateLabRequestPaymentStatus = async (req, res) => {
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
 
 // Create prescription
 const createPrescription = async (req, res) => {
@@ -2231,12 +2574,16 @@ module.exports = {
   updateAllergyById,
   createClinicalRequestForEye,
   updateClinicalRequestForEyeById,
+  updateClinicalRequestForEyePaymentStatusById,
   createClinicalRequestForDental,
   updateClinicalRequestForDentalById,
+  updateClinicalRequestForDentalPaymentStatusById,
   createClinicalRequestForCardiology,
   updateClinicalRequestForCardiologyById,
+  updateClinicalRequestForCardiologyPaymentStatusById,
   createClinicalRequestForRadiology,
   updateClinicalRequestForRadiologyById,
+  updateClinicalRequestForRadiologyPaymentStatusById,
   fetchLabRequestsByVisitId, 
   updateLabRequestPaymentStatus,
   fetchMedicalHistoryByVisitId, 
@@ -2247,6 +2594,7 @@ module.exports = {
   fetchTests, 
   fetchMedicines,
   createLabRequest,
+  updateLabRequestById,
   fetchBillsByVisitId, 
   fetchUnpaidBillsByVisitId,
   createPrescription,
