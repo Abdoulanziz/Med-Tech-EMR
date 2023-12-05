@@ -252,7 +252,18 @@ async function loadSinglePatientVisits(patientId) {
             {
                 targets: 3,
                 render: function(data, type, row, meta) {
-                    return '<span>' + "Completed" + '</span>';
+                    const status = data.visitStatus.toLowerCase();
+                    let backgroundColor;
+
+                    if (status === 'scheduled') {
+                        backgroundColor = 'grey';
+                    } else if (status === 'completed') {
+                        backgroundColor = 'yellowgreen';
+                    } else {
+                        backgroundColor = 'orange';
+                    }
+
+                    return '<span style="font-size: 10px;display: block;inline-size: 80%;border-radius:6px;padding: .4rem .6rem;color: #fff;background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
                 }
             },
             {

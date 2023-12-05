@@ -388,7 +388,7 @@ async function displaySelectedPatientBills(divId) {
             const template = `
             <div class="service ${billItem.paymentStatus === "paid" ? 'paid' : 'unpaid'}">
                 <div class="service-content flex">
-                    <h3>${billItem.testName} (UGX ${billItem.testFees})</h3>
+                    <h3>${billItem.requestName} (UGX ${billItem.requestFees})</h3>
                     ${billItem.paymentStatus === "paid" ? '<img src="/assets/svg/check.png" alt="remove service icon">' : ''}
                 </div>
             </div>
@@ -405,6 +405,15 @@ async function displaySelectedPatientBills(divId) {
             // Append the template to the billContainer
             billContainer.appendChild(serviceElement);
         });
+
+        // const ongoingServices02Container = document.querySelector("#ongoing-services-02");
+        // const containerHeight = ongoingServices02Container.offsetHeight;
+        // const contentHeight = ongoingServices02Container.scrollHeight;
+
+        // if(parseInt(contentHeight) > parseInt(containerHeight)) {
+        //     ongoingServices02Container.style.overflow = 'hidden';
+        // }
+
     }
 }
 
@@ -429,9 +438,9 @@ function displaySelectedPatientBillsPaymentModal(event) {
             const rows = data.map(item => {
                 return `
                     <tr>
-                        <td><input type="checkbox" class="service-checkbox" data-id="${item.requestId}"></td>
-                        <td>${item.testName}</td>
-                        <td>${item.testFees}</td>
+                        <td><input type="checkbox" class="service-checkbox" data-item='${JSON.stringify(item)}'></td>
+                        <td>${item.requestName}</td>
+                        <td>${item.requestFees}</td>
                     </tr>
                 `;
             });
@@ -450,16 +459,16 @@ function displaySelectedPatientBillsPaymentModal(event) {
                     serviceCheckboxes.forEach(checkbox => checkbox.checked = false);
                 }
 
-                updateTotal();
+                updateTotalFeesForSelectedLabTests();
             });
 
             // Update the individual service checkbox event listeners
             serviceCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('click', updateTotal);
+                checkbox.addEventListener('click', updateTotalFeesForSelectedLabTests);
             });
 
             // Update the initial total
-            updateTotal();
+            updateTotalFeesForSelectedLabTests();
 
             // Pay
             const updateServicesPaymentStatusBtn = document.querySelector("#update-services-payment-status-btn");
@@ -470,8 +479,36 @@ function displaySelectedPatientBillsPaymentModal(event) {
                 const updatePaymentStatusPromises = [];
 
                 for (const checkbox of checkedCheckboxes) {
-                    const requestId = checkbox.dataset.id;
-                    updatePaymentStatusPromises.push(API.requests.updatePaymentStatus(requestId, "paid"));
+                    // Update Eye Service
+                    if(JSON.parse(checkbox.dataset.item).requestName === "Eye Service") {
+                        const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                        updatePaymentStatusPromises.push(API.services.forEye.requests.updatePaymentStatus(requestId, "paid"));
+                    }
+
+                    // Update Dental Service
+                    else if(JSON.parse(checkbox.dataset.item).requestName === "Dental Service") {
+                        const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                        updatePaymentStatusPromises.push(API.services.forDental.requests.updatePaymentStatus(requestId, "paid"));
+                    }
+
+                    // Update Cardiolody Service
+                    else if(JSON.parse(checkbox.dataset.item).requestName === "Cardiology Service") {
+                        const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                        updatePaymentStatusPromises.push(API.services.forCardiology.requests.updatePaymentStatus(requestId, "paid"));
+                    }
+
+                    // Update Radiology Service
+                    else if(JSON.parse(checkbox.dataset.item).requestName === "Radiology Service") {
+                        const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                        updatePaymentStatusPromises.push(API.services.forRadiology.requests.updatePaymentStatus(requestId, "paid"));
+                    }
+
+                    // Update Lab Tests
+                    else {
+                        const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                        updatePaymentStatusPromises.push(API.requests.updatePaymentStatus(requestId, "paid"));
+                    }
+
                 }
 
                 try {
@@ -489,11 +526,10 @@ function displaySelectedPatientBillsPaymentModal(event) {
                     console.error('Error updating payment status:', error);
                 }
 
-                
             });
         })();
 
-        function updateTotal() {
+        function updateTotalFeesForSelectedLabTests() {
             let total = 0;
 
             serviceCheckboxes.forEach(checkbox => {
