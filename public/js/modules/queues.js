@@ -1,7 +1,7 @@
 import { UI } from "../core/ui.js";
 import { UTILS } from "../core/utils.js";
 import { API } from "../core/api.js";
-import {SSE} from '../core/sse.js';
+import { SSE } from '../core/sse.js';
 
 document.addEventListener("DOMContentLoaded", () => {
     // Init UI
@@ -646,6 +646,9 @@ async function loadSinglePatientVisitHistory(visitId) {
     SSE.registerMessageHandler('Reload', () => {
         // Reload the table
         loadSinglePatientVisitHistory(selectedVisitId);
+
+        // Play sound
+        UI.playSound();
     });
 
 }

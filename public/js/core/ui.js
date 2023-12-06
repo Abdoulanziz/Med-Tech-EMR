@@ -1,10 +1,10 @@
 import { UTILS } from "./utils.js";
-import {SSE} from './sse.js';
-
 
 export const UI = {
   apiBaseURL: (window.location.hostname === 'localhost') ? "http://localhost:5000/api/v1" : "https://med-tech-demo.onrender.com/api/v1",
   
+  PATH_TO_SOUND_FILE: "../assets/sound/sound.mp3",
+
   init: () => {
     // Set up sidebar
     UI.renderSideBar();
@@ -23,6 +23,8 @@ export const UI = {
 
     // Check API health status
     // UI.checkAPIStatus();
+
+    
 
 
   },
@@ -158,6 +160,11 @@ export const UI = {
     setInterval(UTILS.APIStatus.checkApiStatus, 1000);
   },
 
+  // Play sound
+  playSound: () => {
+    const audio = new Audio(UI.PATH_TO_SOUND_FILE);
+    audio.play();
+  },
 
 
 }
