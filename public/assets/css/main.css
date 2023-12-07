@@ -581,16 +581,94 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  block-size: 236px;
+  block-size: 250px;
   padding: 1.2rem;
   border: 1px solid #9dd0ff;
-  border-radius: .4rem;
+  border-radius: 1rem;
   background-color: #cce6fe;
 }
 
 .ongoing-services {
-  overflow-y: scroll;
+  padding: 0;
+  padding-bottom: 0 !important;
 }
+
+
+.ongoing-services-card {
+  display: flex;
+  flex-direction: row;
+  border-radius: 1rem;
+  inline-size: 100%;
+}
+
+
+.ongoing-services-card-left {
+  background: linear-gradient(to bottom, hsl(39, 100%, 56%, .1) 0% 20%, hsl(39, 100%, 56%, .1));
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 1.2rem;
+  block-size: 248px !important;
+  inline-size: 50%;
+  border-radius: 1rem 0 0 1rem;
+}
+
+.ongoing-services-card-left h4 {
+  color: rgb(109, 108, 108);
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.ongoing-services-card-left .bill-content h2 {
+  font-size: 1.5rem;
+  color: #fff;
+  text-align: center;
+}
+
+.ongoing-services-card-left .bill-content p {
+  margin-top: .8rem;
+  color: #ea953b;
+  text-align: center;
+}
+
+.ongoing-services-card-right {
+  padding: 1.2rem 2rem 0 2rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.2rem;
+  inline-size: 50%;
+}
+
+.ongoing-services-card-right ul {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  row-gap: .8rem;
+}
+
+.ongoing-services-card-right ul li {
+  display: flex;
+  justify-content: space-between;
+  padding: .8rem;
+  border-radius: 1rem;
+  background: hsl(166, 100%, 37%, .1);
+  color: #60b487;
+}
+
+.ongoing-services-card-right .li-left {
+  display: flex;
+  column-gap: .6rem;
+}
+
+.ongoing-services-card-right .li-right img {
+  inline-size: 20px;
+  block-size: 20px;
+}
+
+
+
+
 
 .patient-details .action-buttons,
 .documents .action-buttons {
@@ -601,65 +679,69 @@
   inline-size: 100%;
 }
 
-.patient-info-item {
-  border-radius: 0;
-  margin: 0;
-  border-block-end: 1px solid #d8d8d8;
-  padding-block: .4rem;
+                                           
+.patient-info-wrapper {
+  inline-size: 100%;
+  display: flex;
 }
 
-.patient-info-item .label {
-  font-weight: normal !important; 
-  font-size: 16px !important;
-  color: #919191;
-  font-family: sans-serif;
+.patient-info-wrapper .left {
+  inline-size: 30%;
+  background: linear-gradient(to right,hsl(39, 100%, 56%, .1),hsl(39, 100%, 56%, .1));
+  padding: 2rem 1.4rem;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  text-align: center;
+  color: #fff;
+  block-size: 248px;
 }
 
-.patient-info-item .label span {
-  font-weight: 400;
-  color: #1da1f2;
+.patient-info-wrapper .left img {
+  border-radius: 1rem;
+  margin-bottom: .8rem;
+  inline-size: 80px;
+  block-size: 80px;
 }
 
-.patient-info-item:last-child {
-  border-block-end: none;
+.patient-info-wrapper .left h4 {
+  margin-bottom: .8rem;
 }
 
-.patient-info-item .content.flex {
-  justify-content: flex-start;
-  gap: 20px;
-  background-color: inherit;
+.patient-info-wrapper .right {
+  inline-size: 70%;
+  background: #fff;
+  padding: 1.8rem 1rem .6rem 1rem;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
 }
 
-.patient-info-item .content.content-major.flex {
-  justify-content: flex-start;
-  gap: 20px;
-  inline-size: 100%; 
-  justify-content: flex-start
+.patient-info-wrapper .right .info h3 {
+  margin-block-end: 1rem;
+  padding-block-end: .2rem;
+  border-bottom: 1px solid #e0e0e0;
+  color: #353c4e;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
-.patient-info-item .content.flex .icon {
-  padding: 0.6em;
-  color: #ffffff;
-  border-radius: 50%;
-  block-size: 48px;
-  inline-size: 48px;
+.patient-info-wrapper .right .info-data {
+  display: flex;
+  justify-content: space-between;
 }
 
-.patient-info-item .content.flex .icon.icon-phone {
-  background-color: #34bf49;
-}
-.patient-info-item .content.flex .icon.icon-contact {
-  background-color: #511378;
+.patient-info-wrapper .right .info-data .data {
+  inline-size: 45%;
 }
 
-.patient-info-item .content h5 {
-  font-size: 14px;
-  font-weight: 400;
+.patient-info-wrapper .right .info-data .data h4 {
+  color: #353c4e;
+  margin-bottom: .2rem;
 }
 
-.patient-info-item .content h6 {
-  font-size: 14px;
-  font-weight: 400;
+.patient-info-wrapper .right .info-data .data p {
+  font-size: 16px;
+  margin-bottom: .2rem;
+  color: #919aa3;
 }
 
 

@@ -508,7 +508,7 @@ async function displaySelectedPatientDetails(divID, data, callback) {
         patientName.textContent = `${selectedPatient.firstName} ${selectedPatient.lastName}`;
         contactNumber.textContent = selectedPatient.contactNumber;
         dateOfBirth.textContent = selectedPatient.dateOfBirth;
-        gender.textContent = selectedPatient.gender.charAt(0).toUpperCase() + selectedPatient.gender.slice(1).toLowerCase();
+        // gender.textContent = selectedPatient.gender.charAt(0).toUpperCase() + selectedPatient.gender.slice(1).toLowerCase();
         age.textContent = new Date().getFullYear() - new Date(selectedPatient.dateOfBirth).getFullYear();
     }
 

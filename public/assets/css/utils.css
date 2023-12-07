@@ -413,22 +413,18 @@ table.dataTable {
   width: 100%;
   border-collapse: collapse;
   margin: 0 auto;
+  background-color: #ffffff;
 }
 
 table.testsTable th,
 table.testsTable td,
 table.dataTable th,
 table.dataTable td {
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-}
-
-table.testsTable,
-table.dataTable {
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  border-spacing: 0;
-  clear: both;
+  padding: 15px;
+  border: 1px solid #f1f1f1;
+  font-family: Roboto, sans-serif;
+  font-size: 15px;
+  color: #333333;
 }
 
 table.testsTable thead th,
@@ -436,18 +432,37 @@ table.testsTable thead td,
 table.dataTable thead th,
 table.dataTable thead td {
   font-weight: bold;
-  text-align: left;
-  background-color: var(--accent-color);
-  color: #fff;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #f1f1f1;
 }
 
-table.testsTable tbody th,
-table.testsTable tbody td,
-table.dataTable tbody th,
-table.dataTable tbody td {
-  padding: 10px;
+table.testsTable tbody tr:hover {
+  background-color: #e5e5e5;
+  cursor: pointer;
+}
+
+div.dataTables_paginate {
+  margin-top: 20px;
+  text-align: left;
+}
+
+div.dataTables_paginate a {
+  padding: 10px 15px;
+  margin: 0 5px;
+  border: 1px solid #f1f1f1;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #333333;
+  font-size: 14px;
+}
+
+div.dataTables_paginate a:hover {
+  background-color: #d1e9ff;
+  color: #333333;
+}
+
+div.dataTables_paginate .paginate_button.current {
+  background-color: #d1e9ff;
+  color: #333333;
 }
 
 table.dataTable.no-footer {
@@ -469,32 +484,6 @@ table.dataTable.no-footer {
 
 .dataTables_filter input::placeholder {
   color: #999;
-}
-
-div.dataTables_paginate {
-  margin-top: 10px;
-  text-align: center;
-}
-
-div.dataTables_paginate a {
-  padding: 5px 10px;
-  margin: 0 2px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  text-decoration: none;
-  color: #333;
-  background-color: #fff;
-  font-size: 14px;
-}
-
-div.dataTables_paginate a:hover {
-  background-color: #009688;
-  color: #fff;
-}
-
-div.dataTables_paginate .paginate_button.current {
-  background-color: #009688;
-  color: #fff;
 }
 
 .date-range {

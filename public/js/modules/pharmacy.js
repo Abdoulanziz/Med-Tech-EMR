@@ -356,7 +356,7 @@ async function displaySelectedPatientDetails(divID, data, callback) {
         patientName.textContent = `${selectedPatient.firstName} ${selectedPatient.lastName}`;
         contactNumber.textContent = selectedPatient.contactNumber;
         dateOfBirth.textContent = selectedPatient.dateOfBirth;
-        gender.textContent = selectedPatient.gender.charAt(0).toUpperCase() + selectedPatient.gender.slice(1).toLowerCase();
+        // gender.textContent = selectedPatient.gender.charAt(0).toUpperCase() + selectedPatient.gender.slice(1).toLowerCase();
         age.textContent = new Date().getFullYear() - new Date(selectedPatient.dateOfBirth).getFullYear();
     }
 
@@ -376,24 +376,29 @@ async function displaySelectedPatientBills(divId) {
     // Populate the patient details section with the fetched data
     const billItems = selectedBills;
     if (billItems) {
-        const billContainer = document.querySelector(`#${divId}`);
+        const billContainer = document.querySelector(`#${divId}`).querySelector("ul");
 
         // Clear the existing items in the container
         while (billContainer.firstChild) {
             billContainer.removeChild(billContainer.firstChild);
         }
 
-        billItems.forEach((billItem, index) => {
+        // Display only the first three items
+        const itemsToDisplay = billItems.slice(0, 3);
+
+        itemsToDisplay.forEach((billItem, index) => {
             // Create a template for each bill item
             const template = `
-            <div class="service ${billItem.paymentStatus === "paid" ? 'paid' : 'unpaid'}">
-                <div class="service-content flex">
-                    <h3>${billItem.requestName} (UGX ${billItem.requestFees})</h3>
+            <li>
+                <div class="li-left">
+                    <p>${billItem.requestName} (UGX ${billItem.requestFees})</p>
+                </div>
+                <div class="li-right">
                     ${billItem.paymentStatus === "paid" ? '<img src="/assets/svg/check.png" alt="remove service icon">' : ''}
                 </div>
-            </div>
+            </li>
             `;
-            
+
             // Temporary container element to hold the template
             const tempContainer = document.createElement("div");
             tempContainer.innerHTML = template;
@@ -405,15 +410,6 @@ async function displaySelectedPatientBills(divId) {
             // Append the template to the billContainer
             billContainer.appendChild(serviceElement);
         });
-
-        // const ongoingServices02Container = document.querySelector("#ongoing-services-02");
-        // const containerHeight = ongoingServices02Container.offsetHeight;
-        // const contentHeight = ongoingServices02Container.scrollHeight;
-
-        // if(parseInt(contentHeight) > parseInt(containerHeight)) {
-        //     ongoingServices02Container.style.overflow = 'hidden';
-        // }
-
     }
 }
 
