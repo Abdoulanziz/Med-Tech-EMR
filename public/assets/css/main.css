@@ -645,15 +645,22 @@
   display: flex;
   flex-direction: column;
   row-gap: .8rem;
+  cursor: pointer;
 }
 
 .ongoing-services-card-right ul li {
   display: flex;
   justify-content: space-between;
-  padding: .8rem;
+  padding: .4rem .8rem;
   border-radius: 1rem;
-  background: hsl(166, 100%, 37%, .1);
-  color: #60b487;
+  background: #fff;
+  color: yellowgreen;
+  border: 1px solid yellowgreen;
+}
+
+.ongoing-services-card-right ul li.paid {
+  background: yellowgreen;
+  color: #fff;
 }
 
 .ongoing-services-card-right .li-left {

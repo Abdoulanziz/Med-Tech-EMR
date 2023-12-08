@@ -389,7 +389,7 @@ async function displaySelectedPatientBills(divId) {
         itemsToDisplay.forEach((billItem, index) => {
             // Create a template for each bill item
             const template = `
-            <li>
+            <li class="service ${billItem.paymentStatus === "paid" ? 'paid' : 'unpaid'}">
                 <div class="li-left">
                     <p>${billItem.requestName} (UGX ${billItem.requestFees})</p>
                 </div>
