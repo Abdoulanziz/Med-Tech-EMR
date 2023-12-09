@@ -713,10 +713,24 @@ async function displaySelectedPatientBills(divId) {
             billContainer.removeChild(billContainer.firstChild);
         }
 
+        
+        // Calculate bill
+        let billToDisplay = 0;
+
+        const itemsToCalculateBill = billItems;
+        itemsToCalculateBill.forEach((billItem, index) => {
+            if(billItem.paymentStatus === "unpaid") {
+                billToDisplay += parseInt(billItem.requestFees);
+            }else{
+                billToDisplay = billToDisplay;
+            }
+        });
+
         // Display only the first three items
         const itemsToDisplay = billItems.slice(0, 3);
 
         itemsToDisplay.forEach((billItem, index) => {
+            
             // Create a template for each bill item
             const template = `
             <li class="service ${billItem.paymentStatus === "paid" ? 'paid' : 'unpaid'}">
@@ -740,8 +754,11 @@ async function displaySelectedPatientBills(divId) {
             // Append the template to the billContainer
             billContainer.appendChild(serviceElement);
         });
+
+        document.querySelector(".bill-content").querySelector("h2").textContent = `UGX ${billToDisplay}`;
     }
 }
+
 
 // Display receive services payment modal
 function displaySelectedPatientBillsPaymentModal(event) {
