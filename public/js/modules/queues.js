@@ -615,15 +615,24 @@ async function loadSinglePatientVisitHistory(visitId) {
             {
                 targets: 4,
                 render: function (data, type, row, meta) {
-                    const buttonBackgroundColor = data.requestStatus.toLowerCase() === "pending" ? "#8e8d8d" : "yellowgreen";
-                    const isDisabled = data.requestStatus.toLowerCase() === "pending";
+                    if(data.requestName.toLowerCase() == "allergy" || data.requestName.toLowerCase() == "triage"){
+                        return `
+                            <td style="border: 1px solid #ddd;">
+                                <button class="btn view-request" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Edit Request  <i class="ti-arrow-right"></i> </button>
+                            </td>
+                        `;
+                    }else{
+                        const buttonBackgroundColor = data.requestStatus.toLowerCase() === "pending" ? "#8e8d8d" : "yellowgreen";
+                        const isDisabled = data.requestStatus.toLowerCase() === "pending";
 
-                    return `
-                        <td style="border: 1px solid #ddd;">
-                            <button class="btn view-request" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Edit Request  <i class="ti-arrow-right"></i> </button>
-                            <button ${isDisabled ? "disabled" : ""} class="btn view-results" style="background-color: ${buttonBackgroundColor};padding-inline: .6rem;border-radius: 0;font-size: 12px;${isDisabled ? "cursor: not-allowed;" : ""}">View Report  <i style="${isDisabled ? "opacity: 0.5;" : ""}" class="ti-arrow-right"></i> </button>
-                        </td>
-                    `;
+                        return `
+                            <td style="border: 1px solid #ddd;">
+                                <button class="btn view-request" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Edit Request  <i class="ti-arrow-right"></i> </button>
+                                <button ${isDisabled ? "disabled" : ""} class="btn view-results" style="background-color: ${buttonBackgroundColor};padding-inline: .6rem;border-radius: 0;font-size: 12px;${isDisabled ? "cursor: not-allowed;" : ""}">View Report  <i style="${isDisabled ? "opacity: 0.5;" : ""}" class="ti-arrow-right"></i> </button>
+                            </td>
+                        `;
+                    }
+                    
                 },
 
 

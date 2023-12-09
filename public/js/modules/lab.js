@@ -20,6 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Set up tinymce
     setupUrinalysisLabReportTinymce();
+
+    // Set up tinymce
+    setupOtherLabReportTinymce();
     
 });
 
@@ -320,7 +323,7 @@ async function loadSinglePatientVisitLabRequests(visitId) {
             }
 
             // Check the specific request (Urinalysis)
-            if(rowDataObject.testName === "Urinalysis Test") {
+            else if(rowDataObject.testName === "Urinalysis Test") {
                 const workOnTestCta = row.cells[4].querySelectorAll("button")[0];
                 workOnTestCta.style.cursor = "pointer";
                 workOnTestCta.classList.add("modal-trigger");
@@ -348,6 +351,39 @@ async function loadSinglePatientVisitLabRequests(visitId) {
 
                     // Trigger print lab report
                     printLabReportForUrinalysisTest(patientData);
+                    
+                });
+            }
+
+            // Check the specific request (Others)
+            else {
+                const workOnTestCta = row.cells[4].querySelectorAll("button")[0];
+                workOnTestCta.style.cursor = "pointer";
+                workOnTestCta.classList.add("modal-trigger");
+                workOnTestCta.dataset.modal = "other-results-modal";
+
+                UTILS.triggerModal(workOnTestCta, "modal", () => {
+                    // Parse the diagnosisId to the form
+                    document.querySelector("#other-results-form").dataset.requestId = rowDataObject.requestId;
+                });
+            
+                const workOnReportCta = row.cells[4].querySelectorAll("button")[1];
+                workOnReportCta.style.cursor = "pointer";
+                workOnReportCta.classList.add("modal-trigger");
+                workOnReportCta.dataset.modal = "other-lab-report-modal";
+
+                UTILS.triggerModal(workOnReportCta, "modal", async () => {
+                    document.querySelector("#other-lab-report-form").dataset.requestId = data.requestId;
+
+                    // Populate the form with the server data
+                    generateLabReportForOtherTest("other-lab-report-form", data.requestId);
+
+                    // Get patient id from visit id
+                    const patient = await API.patients.fetchByVisitId(selectedVisitId);
+                    const patientData = patient.data;
+
+                    // // Trigger print lab report
+                    // printLabReportForUrinalysisTest(patientData);
                     
                 });
             }
@@ -1279,6 +1315,123 @@ async function generateLabReportForUrinalysisTest(formId, labRequestId) {
     } catch (error) {
         console.error(error);
         alert('An error occurred while generating the cbc lab report.');
+    }
+}
+
+function setupOtherLabReportTinymce() {
+    tinymce.init({
+        selector: "#other-lab-report",
+        width: "100%",
+        height: "100%",
+        setup: function (editor) {
+            // TODO: something();
+        }
+    });
+}
+
+// Generate Other lab report
+async function generateLabReportForOtherTest(formId, labRequestId) {
+    try {
+        // Get id of selected visit
+        const selectedVisitId = UTILS.getSelectedVisitId();
+
+        // Get patient id from visit id
+        const fetchPatientRequest = await API.patients.fetchByVisitId(selectedVisitId);
+        const patientData = fetchPatientRequest.data;
+
+        if (fetchPatientRequest.status === 'success') {
+            // Make an API POST request to create a triage record
+            // const fetchUrinalysisResultsRequest = await API.results.urinalysis.fetchByRequestId(labRequestId);
+
+            // Sample CBC Test Report
+            // Hospital Details
+            const hospitalName = "Med Tech Hospital";
+            const hospitalAddress = "Rwenzori Street, Kampala";
+            const hospitalContact = "Phone: +256 782 615 136";
+
+            // Patient Details
+            const patientName = `${patientData.firstName} ${patientData.lastName}`;
+            const patientDOB = patientData.dateOfBirth;
+            const patientAge = new Date().getFullYear() - new Date(patientData.dateOfBirth).getFullYear();
+            const patientGender = patientData.gender.charAt(0).toUpperCase() + patientData.gender.slice(1);
+
+            // const {
+            //     appearance,
+            //     glucose,
+            //     ketone,
+            //     blood,
+            //     ph,
+            //     protein,
+            //     nitrites,
+            //     leucocytes,
+            //     urobilinogen,
+            //     bilirubin,
+            //     specificGravity,
+            //     rbc,
+            //     pusCells,
+            //     epithelialCells,
+            //     cast,
+            //     wbc,
+            //     parasite,
+            //     crystals,
+            //     tVaginalis,
+            //     yeastCells,
+            //     requestId,
+            //     comment,
+            // } = fetchUrinalysisResultsRequest.data;
+
+            // Report editor
+            const editor = tinymce.get("other-lab-report");
+
+
+            const reportHTML = `
+                <div style="background-color: #ffffff; border-radius: 0; padding-block: 30px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <div style="display: flex; align-items: center;">
+                        <img src="../../assets/svg/512x512.png" style="inline-size: 60px; block-size: 60px;" />
+                        <h2 style="color: #004080; font-weight: 600; margin-left: 20px;">${hospitalName}</h2>
+                        </div>
+                        <div style="text-align: right;">
+                        <p style="color: #666; margin-bottom: 5px;">${hospitalAddress}</p>
+                        <p style="color: #666; margin-bottom: 5px;">${hospitalContact}</p>
+                        </div>
+                    </div>
+                    <hr style="border-top: 1px solid #ccc; margin-top: 20px; margin-bottom: 20px;">
+                </div>
+
+                <div style="background-color: #ffffff; padding: 15px; border-radius: 0;">
+                    <h3 style="color: #004080; font-weight: 600; margin-bottom: 10px;">Patient Information</h3>
+                    <ul style="list-style-type: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Patient Name:</span> ${patientName}</li>
+                        <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Date of Birth:</span> ${patientDOB}</li>
+                        <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Age:</span> ${patientAge}</li>
+                        <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Gender:</span> ${patientGender}</li>
+                    </ul>
+                </div>  
+
+                <div>
+                    <br/>
+                    <p>Interpretation of the CBC results should be conducted in consultation with a healthcare professional. The reference ranges provided in the report are essential for assessing whether the patient's blood parameters fall within the expected values.</p>
+                    <br/>
+                    <p>Further clinical evaluation and follow-up may be required based on these findings. Please do not hesitate to contact our medical team at ${hospitalContact} for any additional information or to schedule a consultation.</p>
+                </div>
+                            
+            `;
+
+            // Check if the request was successful
+            // if (fetchUrinalysisResultsRequest.status === 'success') {
+            if (true) {
+                editor.setContent(reportHTML);
+            } else {
+                editor.setContent("");
+            }
+        } else {
+            console.error(error);
+            alert('An error occurred while fetching the patient info.');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('An error occurred while generating the other lab report.');
     }
 }
 

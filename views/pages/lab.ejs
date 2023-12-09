@@ -192,7 +192,7 @@
                                             </div>
                                             <div class="right">
                                                 <div class="info">
-                                                    <h3>Visit Date: 07-12-2023</h3>
+                                                    <h3>Patient Info</h3>
                                                     <div class="info-data">
                                                         <div class="data">
                                                             <h4>Email</h4>
@@ -346,7 +346,7 @@
                                             </div>
                                             <div class="right">
                                                 <div class="info">
-                                                    <h3>Visit Date: 07-12-2023</h3>
+                                                    <h3>Patient Info</h3>
                                                     <div class="info-data">
                                                         <div class="data">
                                                             <h4>Email</h4>
@@ -826,6 +826,57 @@
                 </div>
             </div>
 
+            <!-- Work on Other Test modal -->
+            <div id="other-results-modal" class="form-modal">
+                <div class="form-modal-content" style="inline-size: 42%;">
+                    <form class="modal-form" id="other-results-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Fill Other Test Results</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="other-results-form-body">
+                            <div class="form-section">
+                                <label for="other-results-comment-editor">Comments</label>
+                                <textarea id="other-results-comment-editor" style="border-radius: 0 !important;"></textarea>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Other report modal -->
+            <div id="other-lab-report-modal" class="form-modal">
+                <div class="form-modal-content" style="inline-size: 40%;">
+                    <form class="modal-form" id="other-lab-report-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Other Lab Report</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="other-lab-report-form-body" style="padding: 0;">
+                            <textarea id="other-lab-report" name="labReport" style="border-radius: 0 !important;"></textarea>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="button" id="print-lab-report-btn"> <i class="ti-printer"></i> Print</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <!-- Services payment modal -->
             <div id="services-payment-modal" class="form-modal">
                 <div class="form-modal-content">
@@ -929,6 +980,13 @@
             selector: "#urinalysis-results-comment-editor",
             width: "100%",
             height: 300,
+            setup: function (editor) {}
+        });
+
+        tinymce.init({
+            selector: "#other-results-comment-editor",
+            width: "100%",
+            height: 400,
             setup: function (editor) {}
         });
 
