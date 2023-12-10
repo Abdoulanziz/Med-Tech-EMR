@@ -10,7 +10,7 @@
     <link rel="shortcut icon" href="/assets/svg/favicon.ico" type="image/x-icon"/>
 
     <link rel="stylesheet" href="/assets/css/utils.css">
-    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
     <link rel="stylesheet" href="/assets/css/table.min.css">
     <link rel="stylesheet" href="/assets/icons/themify-icons.css">
 
@@ -35,35 +35,35 @@
                     <li class="menu-item active">
                         <a href="/admin/dashboard">
                             <span class="flex">
-                                <span class="flex"><img src="/assets/actions-admin/dashboard.png" alt="" class="icon"><span class="text">Dashboard</span></span>
+                                <span class="flex"><img src="/assets/actions-admin/dashboard.svg" alt="" class="icon"><span class="text">Dashboard</span></span>
                             </span>
                         </a>
                     </li>
                     <li class="menu-item">
                         <a href="/admin/accounts">
                             <span class="flex">
-                                <span class="flex"><img src="/assets/actions-admin/user.png" alt="" class="icon"><span class="text">Accounts</span></span>
+                                <span class="flex"><img src="/assets/actions-admin/user.svg" alt="" class="icon"><span class="text">Accounts</span></span>
                             </span>
                         </a>
                     </li>
                     <li class="menu-item">
                         <a href="/admin/inventory">
                             <span class="flex">
-                                <span class="flex"><img src="/assets/actions-admin/inventory.png" alt="" class="icon"><span class="text">Inventory</span></span>
+                                <span class="flex"><img src="/assets/actions-admin/inventory.svg" alt="" class="icon"><span class="text">Inventory</span></span>
                             </span>
                         </a>
                     </li>
                     <li class="menu-item">
                         <a href="/admin/reports">
                             <span class="flex">
-                                <span class="flex"><img src="/assets/actions-admin/reports.png" alt="" class="icon"><span class="text">Reports</span></span>
+                                <span class="flex"><img src="/assets/actions-admin/reports.svg" alt="" class="icon"><span class="text">Reports</span></span>
                             </span>
                         </a>
                     </li>
                     <li class="menu-item">
                         <a href="/admin/activities">
                             <span class="flex">
-                                <span class="flex"><img src="/assets/actions-admin/reports.png" alt="" class="icon"><span class="text">Activities</span></span>
+                                <span class="flex"><img src="/assets/actions-admin/activity.svg" alt="" class="icon"><span class="text">Activities</span></span>
                             </span>
                         </a>
                     </li>
@@ -103,73 +103,148 @@
 
                 <!-- Section 00 -->
                 <div class="sections br-0 inview" id="section_00">
-                    <!-- <div class="section-header flex" style="border-block-end: 0;"></div> -->
-                    <div class="section-body" style="padding-block-start: .8rem;">
-                        <div class="top-cards">
-                            <div class="top-card card flex">
-                                <div class="card-content card-content-left">
-                                    <span><i class="ti ti-money"></i></span>
-                                </div>
-                                <div class="card-content card-content-right">
-                                    <h4>Requests</h4>
-                                    <h6 id="requests">12</h6>
-                                </div>
-                            </div>
-                            <div class="top-card card flex">
-                                <div class="card-content card-content-left">
-                                    <span><i class="ti ti-credit-card"></i></span>
-                                </div>
-                                <div class="card-content card-content-right">
-                                    <h4>Pending</h4>
-                                    <h6 id="pending">00</h6>
-                                </div>
-                            </div>
-                            <div class="top-card card flex">
-                                <div class="card-content card-content-left">
-                                    <span><i class="ti ti-credit-card"></i></span>
-                                </div>
-                                <div class="card-content card-content-right">
-                                    <h4>Income</h4>
-                                    <h6 id="income">UGX 7,850,000</h6>
-                                </div>
-                            </div>
-                            <div class="top-card card flex">
-                                <div class="card-content card-content-left">
-                                    <span><i class="ti ti-credit-card"></i></span>
-                                </div>
-                                <div class="card-content card-content-right">
-                                    <h4>Expenses</h4>
-                                    <h6 id="expenses">UGX 50,000</h6>
-                                </div>
-                            </div>
-                            <div class="top-card card flex">
-                                <div class="card-content card-content-left">
-                                    <span><i class="ti ti-credit-card"></i></span>
-                                </div>
-                                <div class="card-content card-content-right">
-                                    <h4>Pending</h4>
-                                    <h6 id="pending">00</h6>
+                    <div class="section-header">
+
+                        <div class="section-header-top flex">
+                            <h2 class="section-header-title">Dashboard</h2>
+                            <div class="flex" style="gap: .8rem;">
+                                <div class="btn section-header-cta">
+                                    <span>Operations <i class="ti-plus"></i> </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="data-charts flex">
-                            <div class="filters flex">
-                                <div>
-                                    <button class="btn act-btn active br-0 m-0 day" id="day">Today</button>
-                                    <button class="btn act-btn br-0 m-0 week" id="week">Week</button>
-                                    <button class="btn act-btn br-0 m-0 month" id="month">Month</button>
-                                    <button class="btn act-btn br-0 m-0 year" id="year">Year</button>
+
+                        <div class="section-header-bottom">
+                            <div class="section-togglers">
+                                <span class="section-toggler active">General Insights</span>
+                                <span class="section-toggler">Financials</span>
+                                <span class="section-toggler">Expenses</span>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="section-body" style="padding-block-start: .8rem;">
+
+                        <div class="top-cards">
+                            <div class="top-card card">
+                                <div class="flex">
+                                    <div class="card-content card-content-left">
+                                        <h4>Income</h4>
+                                        <h2 id="">UGX 260,000,000</h2>
+                                    </div>
+                                    <div class="card-content card-content-right">
+                                        <span><i class="ti ti-money"></i></span>
+                                    </div>
+                                </div>
+                                <div class="metrics">
+                                    <div class="metrics-wrapper flex">
+                                        <div class="metrics-card">
+                                            <span><i class="ti-arrow-up"></i></span>
+                                            <span>56%</span>
+                                        </div>
+                                        <h4>Since last month</h4>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="data-chart card br-0">
-                                <h3 id="chart-1-title">Services</h3>
-                                <button id="print-data-graph" class="btn">Print <i class="ti-printer"></i> </button>
-                                <canvas class="sales" id="chart-1"></canvas>
+                            <div class="top-card card">
+                                <div class="flex">
+                                    <div class="card-content card-content-left">
+                                        <h4>Patients</h4>
+                                        <h2 id="">20,000</h2>
+                                    </div>
+                                    <div class="card-content card-content-right">
+                                        <span><i class="ti ti-user"></i></span>
+                                    </div>
+                                </div>
+                                <div class="metrics">
+                                    <div class="metrics-wrapper flex">
+                                        <div class="metrics-card">
+                                            <span><i class="ti-arrow-up"></i></span>
+                                            <span>56%</span>
+                                        </div>
+                                        <h4>Since last month</h4>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="data-chart card br-0">
-                                <h3 id="chart-2-title">Income</h3>
-                                <button id="print-data-graph" class="btn">Print <i class="ti-printer"></i> </button>
-                                <canvas class="income" id="chart-2"></canvas>
+                            <div class="top-card card">
+                                <div class="flex">
+                                    <div class="card-content card-content-left">
+                                        <h4>Income</h4>
+                                        <h2 id="">UGX 260,000,000</h2>
+                                    </div>
+                                    <div class="card-content card-content-right">
+                                        <span><i class="ti ti-time"></i></span>
+                                    </div>
+                                </div>
+                                <div class="metrics">
+                                    <div class="metrics-wrapper flex">
+                                        <div class="metrics-card">
+                                            <span><i class="ti-arrow-up"></i></span>
+                                            <span>56%</span>
+                                        </div>
+                                        <h4>Since last month</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="top-card card">
+                                <div class="flex">
+                                    <div class="card-content card-content-left">
+                                        <h4>Income</h4>
+                                        <h2 id="">UGX 260,000,000</h2>
+                                    </div>
+                                    <div class="card-content card-content-right">
+                                        <span><i class="ti ti-pencil"></i></span>
+                                    </div>
+                                </div>
+                                <div class="metrics">
+                                    <div class="metrics-wrapper flex">
+                                        <div class="metrics-card">
+                                            <span><i class="ti-arrow-up"></i></span>
+                                            <span>56%</span>
+                                        </div>
+                                        <h4>Since last month</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="data-charts">
+                            <div class="data-charts-title-container">
+                                <h3 class="card-title">Metrics</h3>
+                            </div>
+
+                            <div class="charts-container">
+                                <div class="data-chart card services-chart" style="width: 50% !important;">
+                                    <h3 id="chart-1-title" class="chart-title">Services</h3>
+
+                                    <div class="filters">
+                                        <div class="button-group flex">
+                                            <button class="btn act-btn active day" id="day">Today</button>
+                                            <button class="btn act-btn week" id="week">Week</button>
+                                            <button class="btn act-btn month" id="month">Month</button>
+                                            <button class="btn act-btn year" id="year">Year</button>
+                                        </div>
+                                    </div>
+
+                                    <button id="print-data-graph" class="btn print-btn">Print <i class="ti ti-printer"></i></button>
+                                    <canvas class="sales-chart" id="chart-1"></canvas>
+                                </div>
+
+                                <div class="data-chart card income-chart" style="width: 50% !important;">
+                                    <h3 id="chart-2-title" class="chart-title">Income</h3>
+
+                                    <div class="filters">
+                                        <div class="button-group flex">
+                                            <button class="btn act-btn active day" id="day">Today</button>
+                                            <button class="btn act-btn week" id="week">Week</button>
+                                            <button class="btn act-btn month" id="month">Month</button>
+                                            <button class="btn act-btn year" id="year">Year</button>
+                                        </div>
+                                    </div>
+
+                                    <button id="print-data-graph" class="btn print-btn">Print <i class="ti ti-printer"></i></button>
+                                    <canvas class="income-chart" id="chart-2"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -560,7 +635,7 @@
                 </div>
             </div>
 
-                        <!-- Services payment modal -->
+            <!-- Services payment modal -->
             <div id="services-payment-modal" class="form-modal">
                 <div class="form-modal-content">
                     <form class="modal-form" id="services-payment-form">
@@ -963,146 +1038,6 @@
                     </form>
                 </div>
             </div>
-
-            <!-- Send patient to dental clinic modal
-            <div id="send-patient-to-dental-clinic-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="create-patient-form">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Send Patient to Dental Clinic</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="medical-diagnosis-form-body">
-                            <div class="form-section">
-                                <h2>Referring Doctor</h2>
-                                <div class="form-group">
-                                    <label for="doctorName">Referring Doctor:</label>
-                                    <input type="text" id="doctorName" name="doctorName" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="department">Department:</label>
-                                    <input type="text" id="department" name="department" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="date">Date:</label>
-                                    <input type="date" id="date" name="date" class="form-control" required>
-                                </div>
-                            </div>
-                            
-                            <div class="form-section">
-                                <h2>Patient Information</h2>
-                                <div class="form-group">
-                                    <label for="patientName">Patient Name:</label>
-                                    <input type="text" id="patientName" name="patientName" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="patientID">Patient ID:</label>
-                                    <input type="text" id="patientID" name="patientID" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="dob">DOB:</label>
-                                    <input type="date" id="dob" name="dob" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="gender">Gender:</label>
-                                    <input type="text" id="gender" name="gender" class="form-control" required>
-                                </div>
-                            </div>
-                            
-                            <div class="form-section">
-                                <h2>Referral Information</h2>
-                                <div class="form-group">
-                                    <label for="reasonForReferral">Reason for Referral:</label>
-                                    <textarea id="reasonForReferral" name="reasonForReferral" class="form-control" required></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="attachments">Radiographs/Attachments:</label>
-                                    <input type="file" id="attachments" name="attachments" class="form-control" multiple>
-                                </div>
-                                <div class="form-group">
-                                    <label for="treatmentPlan">Treatment Plan:</label>
-                                    <textarea id="treatmentPlan" name="treatmentPlan" class="form-control" required></textarea>
-                                </div>
-                            </div>
-                            
-                            <div class="form-section">
-                                <h2>Dental Lab Instructions</h2>
-                                <div class="form-group">
-                                    <div class="checkbox-group">
-                                        <input type="checkbox" id="evaluate" name="instructions" value="Evaluate" class="form-control">
-                                        <label for="evaluate">Please evaluate the case and provide a cost estimate.</label>
-                                    </div>
-                                    <div class="checkbox-group">
-                                        <input type="checkbox" id="proceed" name="instructions" value="Proceed" class="form-control">
-                                        <label for="proceed">Proceed with the following treatment:</label>
-                                        <textarea id="proceedTreatmentPlan" name="proceedTreatmentPlan" class="form-control"></textarea>
-                                    </div>
-                                    <div class="checkbox-group">
-                                        <input type="checkbox" id="urgent" name="urgency" value="Urgent" class="form-control">
-                                        <label for="urgent">Urgent Case</label>
-                                    </div>
-                                    <div class="checkbox-group">
-                                        <input type="checkbox" id="routine" name="urgency" value="Routine" class="form-control">
-                                        <label for="routine">Routine Case</label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="deadline">Specific Deadline:</label>
-                                        <input type="date" id="deadline" name="deadline" class="form-control">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="specialInstructions">Special Instructions:</label>
-                                        <textarea id="specialInstructions" name="specialInstructions" class="form-control"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-    
-                            <div class="form-section">
-                                <h2>Lab Use Only</h2>
-                                <div class="form-group">
-                                    <label for="receivedBy">Received by:</label>
-                                    <input type="text" id="receivedBy" name="receivedBy" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="dateReceived">Date Received:</label>
-                                    <input type="date" id="dateReceived" name="dateReceived" class="form-control">
-                                </div>
-                            </div>
-                                    
-                            <div class="form-section">   
-                                <h3>Lab Work Details</h3>
-                                <div class="form-group">
-                                    <label for="completionDate">Estimated Completion Date:</label>
-                                    <input type="date" id="completionDate" name="completionDate" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="materialsRequired">Materials/Components Required:</label>
-                                    <textarea id="materialsRequired" name="materialsRequired" class="form-control"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="costEstimate">Cost Estimate: $</label>
-                                    <input type="text" id="costEstimate" name="costEstimate" class="form-control">
-                                </div>
-                            </div>
-                                    
-                            <div class="form-section">    
-                                <h3>Lab Technician's Notes</h3>
-                                <div class="form-group">
-                                    <textarea id="labTechnicianNotes" name="labTechnicianNotes" class="form-control"></textarea>
-                                </div>
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="submit">Cancel</button>
-                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div> -->
         </div>
     </div>
 
@@ -1115,27 +1050,23 @@
    
     <script>
         document.addEventListener('DOMContentLoaded', ()=>{
-            let totalServices = document.querySelector('#requests');
-            let totalIncome = document.querySelector('#pending');
-            totalServices.textContent = "300";
-            totalIncome.textContent = "17,850,000";
 
             let chartTitle1 = document.querySelector('#chart-1-title');
             let chartTitle2 = document.querySelector('#chart-2-title');
-            chartTitle1.textContent = "Day's Services";
-            chartTitle2.textContent = "Day's Income";
+            chartTitle1.textContent = "Week's Services";
+            chartTitle2.textContent = "Week's Income";
 
-            let mChart1 = createChart('Durations',
+            mChart1 = createChart('Days',
             'bar',
-            ['Morning', 'Afternoon', 'Eevening'],
-            [80, 100, 46],
+            ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            [80, 100, 46, 39, 57, 25, 66],
             'chart-1'
             );
 
-            let mChart2 = createChart('Durations',
+            mChart2 = createChart('Days',
             'line',
-            ['Morning', 'Afternoon', 'Eevening'],
-            [80000, 1000000, 460000],
+            ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            [80000, 1000000, 460000, 0, 5700000, 0, 0],
             'chart-2'
             );
             
@@ -1150,8 +1081,6 @@
                     actionBtns[i].classList.add('active');
 
                     if(actionBtns[i].getAttribute('id') === "day"){
-                        totalServices.textContent = "300";
-                        totalIncome.textContent = "17,850,000";
 
                         chartTitle1.textContent = "Day's Services";
                         chartTitle2.textContent = "Day's Income";
@@ -1173,8 +1102,6 @@
                         );
                         
                     }else if(actionBtns[i].getAttribute('id') === "week"){
-                        totalServices.textContent = "1000";
-                        totalIncome.textContent = "54,850,000";
 
                         chartTitle1.textContent = "Week's Services";
                         chartTitle2.textContent = "Week's Income";
@@ -1196,8 +1123,6 @@
                         );
 
                     }else if(actionBtns[i].getAttribute('id') === "month"){
-                        totalServices.textContent = "17000";
-                        totalIncome.textContent = "456,850,000";
 
                         chartTitle1.textContent = "Month's Services";
                         chartTitle2.textContent = "Month's Income";
@@ -1219,8 +1144,6 @@
                         );
 
                     }else if(actionBtns[i].getAttribute('id') === "year"){
-                        totalServices.textContent = "10000";
-                        totalIncome.textContent = "1,307,850,000";
 
                         chartTitle1.textContent = "Year's Services";
                         chartTitle2.textContent = "Year's Income";
@@ -1229,15 +1152,15 @@
                         mChart2.destroy();
                         mChart1 = createChart('Months',
                         'bar',
-                        ['Quarter1', 'Quarter2', 'Quarter3'],
-                        [80, 46, 39],
+                        ['Quarter1', 'Quarter2', 'Quarter3', 'Quarter4'],
+                        [80, 46, 39, 60],
                         'chart-1'
                         );
 
                         mChart2 = createChart('Months',
                         'line',
-                        ['Quarter1', 'Quarter2', 'Quarter3'],
-                        [80000, 1000000, 5700000],
+                        ['Quarter1', 'Quarter2', 'Quarter3', 'Quarter4'],
+                        [80000, 1000000, 5700000, 7000000],
                         'chart-2'
                         );
                     }else{
