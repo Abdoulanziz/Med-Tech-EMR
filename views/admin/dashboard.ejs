@@ -107,38 +107,33 @@
 
                         <div class="section-header-top flex">
                             <h2 class="section-header-title">Dashboard</h2>
-                            <div class="flex" style="gap: .8rem;">
-                                <div class="btn section-header-cta">
-                                    <span>Operations <i class="ti-plus"></i> </span>
-                                </div>
-                            </div>
                         </div>
 
                         <div class="section-header-bottom">
                             <div class="section-togglers">
-                                <span class="section-toggler active">General Insights</span>
-                                <span class="section-toggler">Financials</span>
-                                <span class="section-toggler">Expenses</span>
+                                <span class="section-toggler active" data-section="section_00">General Insights</span>
+                                <span class="section-toggler" data-section="section_01">Income</span>
+                                <span class="section-toggler" data-section="section_02">Expenses</span>
                             </div>
                         </div>
                         
                     </div>
                     <div class="section-body" style="padding-block-start: .8rem;">
 
-                        <div class="top-cards">
-                            <div class="top-card card">
-                                <div class="flex">
-                                    <div class="card-content card-content-left">
+                        <div class="summary-cards">
+                            <div class="summary-card card">
+                                <div class="summary-content flex">
+                                    <div class="summary-content-wrapper summary-content-wrapper-left">
                                         <h4>Income</h4>
                                         <h2 id="">UGX 260,000,000</h2>
                                     </div>
-                                    <div class="card-content card-content-right">
+                                    <div class="summary-content-wrapper summary-content-wrapper-right">
                                         <span><i class="ti ti-money"></i></span>
                                     </div>
                                 </div>
-                                <div class="metrics">
-                                    <div class="metrics-wrapper flex">
-                                        <div class="metrics-card">
+                                <div class="summary-metrics">
+                                    <div class="summary-metrics-wrapper flex">
+                                        <div class="summary-metrics-card">
                                             <span><i class="ti-arrow-up"></i></span>
                                             <span>56%</span>
                                         </div>
@@ -146,19 +141,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="top-card card">
-                                <div class="flex">
-                                    <div class="card-content card-content-left">
+                            <div class="summary-card card">
+                                <div class="summary-content flex">
+                                    <div class="summary-content-wrapper summary-content-wrapper-left">
                                         <h4>Patients</h4>
                                         <h2 id="">20,000</h2>
                                     </div>
-                                    <div class="card-content card-content-right">
+                                    <div class="summary-content-wrapper summary-content-wrapper-right">
                                         <span><i class="ti ti-user"></i></span>
                                     </div>
                                 </div>
-                                <div class="metrics">
-                                    <div class="metrics-wrapper flex">
-                                        <div class="metrics-card">
+                                <div class="summary-metrics">
+                                    <div class="summary-metrics-wrapper flex">
+                                        <div class="summary-metrics-card">
                                             <span><i class="ti-arrow-up"></i></span>
                                             <span>56%</span>
                                         </div>
@@ -166,19 +161,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="top-card card">
-                                <div class="flex">
-                                    <div class="card-content card-content-left">
+                            <div class="summary-card card">
+                                <div class="summary-content flex">
+                                    <div class="summary-content-wrapper summary-content-wrapper-left">
                                         <h4>Income</h4>
                                         <h2 id="">UGX 260,000,000</h2>
                                     </div>
-                                    <div class="card-content card-content-right">
+                                    <div class="summary-content-wrapper summary-content-wrapper-right">
                                         <span><i class="ti ti-time"></i></span>
                                     </div>
                                 </div>
-                                <div class="metrics">
-                                    <div class="metrics-wrapper flex">
-                                        <div class="metrics-card">
+                                <div class="summary-metrics">
+                                    <div class="summary-metrics-wrapper flex">
+                                        <div class="summary-metrics-card">
                                             <span><i class="ti-arrow-up"></i></span>
                                             <span>56%</span>
                                         </div>
@@ -186,19 +181,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="top-card card">
-                                <div class="flex">
-                                    <div class="card-content card-content-left">
+                            <div class="summary-card card">
+                                <div class="summary-content flex">
+                                    <div class="summary-content-wrapper summary-content-wrapper-left">
                                         <h4>Income</h4>
                                         <h2 id="">UGX 260,000,000</h2>
                                     </div>
-                                    <div class="card-content card-content-right">
+                                    <div class="summary-content-wrapper summary-content-wrapper-right">
                                         <span><i class="ti ti-pencil"></i></span>
                                     </div>
                                 </div>
-                                <div class="metrics">
-                                    <div class="metrics-wrapper flex">
-                                        <div class="metrics-card">
+                                <div class="summary-metrics">
+                                    <div class="summary-metrics-wrapper flex">
+                                        <div class="summary-metrics-card">
                                             <span><i class="ti-arrow-up"></i></span>
                                             <span>56%</span>
                                         </div>
@@ -208,42 +203,58 @@
                             </div>
                         </div>
 
-                        <div class="data-charts">
-                            <div class="data-charts-title-container">
-                                <h3 class="card-title">Metrics</h3>
+                        <div class="details-card">
+                            <div class="details-card-header">
+                                <h3 class="card-header">Metrics</h3>
                             </div>
 
-                            <div class="charts-container">
-                                <div class="data-chart card services-chart" style="width: 50% !important;">
-                                    <h3 id="chart-1-title" class="chart-title">Services</h3>
+                            <div class="details-card-body">
+                                <div class="data-charts flex">
+                                    <div class="data-chart card services-chart">
+                                        <h3 id="chart-1-title" class="chart-title">Services</h3>
 
-                                    <div class="filters">
-                                        <div class="button-group flex">
-                                            <button class="btn act-btn active day" id="day">Today</button>
-                                            <button class="btn act-btn week" id="week">Week</button>
-                                            <button class="btn act-btn month" id="month">Month</button>
-                                            <button class="btn act-btn year" id="year">Year</button>
+                                        <div class="filters">
+                                            <i class="ti-filter filter-icon"></i>
+                                            <div class="select-container">
+                                                <select class="filter-select" id="filter-select-left">
+                                                    <option value="day">Today</option>
+                                                    <option value="week">Week</option>
+                                                    <option value="month">Month</option>
+                                                    <option value="year">Year</option>
+                                                </select>
+                                                <div class="filter-select-icon">&#9660;</div>
+                                            </div>
                                         </div>
+
+                                        <div class="data-chart-ctas flex">
+                                            <button id="print-data-graph" class="btn print-btn">Print <i class="ti ti-printer"></i></button>
+                                        </div>
+
+                                        <canvas class="sales-chart" id="chart-1"></canvas>
                                     </div>
 
-                                    <button id="print-data-graph" class="btn print-btn">Print <i class="ti ti-printer"></i></button>
-                                    <canvas class="sales-chart" id="chart-1"></canvas>
-                                </div>
+                                    <div class="data-chart card income-chart">
+                                        <h3 id="chart-2-title" class="chart-title">Income</h3>
 
-                                <div class="data-chart card income-chart" style="width: 50% !important;">
-                                    <h3 id="chart-2-title" class="chart-title">Income</h3>
-
-                                    <div class="filters">
-                                        <div class="button-group flex">
-                                            <button class="btn act-btn active day" id="day">Today</button>
-                                            <button class="btn act-btn week" id="week">Week</button>
-                                            <button class="btn act-btn month" id="month">Month</button>
-                                            <button class="btn act-btn year" id="year">Year</button>
+                                         <div class="filters">
+                                            <i class="ti-filter filter-icon"></i>
+                                            <div class="select-container">
+                                                <select class="filter-select" id="filter-select-right">
+                                                    <option value="day">Today</option>
+                                                    <option value="week">Week</option>
+                                                    <option value="month">Month</option>
+                                                    <option value="year">Year</option>
+                                                </select>
+                                                <div class="filter-select-icon">&#9660;</div>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <button id="print-data-graph" class="btn print-btn">Print <i class="ti ti-printer"></i></button>
-                                    <canvas class="income-chart" id="chart-2"></canvas>
+                                        <div class="data-chart-ctas flex">
+                                            <button id="print-data-graph" class="btn print-btn">Print <i class="ti ti-printer"></i></button>
+                                        </div>
+                                        
+                                        <canvas class="income-chart" id="chart-2"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -252,13 +263,42 @@
 
                 <!-- Section 01 -->
                 <div class="sections br-0" id="section_01">
-                    <div class="section-header flex" style="border-block-end: 0;"></div>
-                    <div class="section-body" style="padding-block-start: .8rem;"></div>
+                    <div class="section-header">
+
+                        <div class="section-header-top flex">
+                            <h2 class="section-header-title">Dashboard</h2>
+                        </div>
+
+                        <div class="section-header-bottom">
+                            <div class="section-togglers">
+                                <span class="section-toggler" data-section="section_00">General Insights</span>
+                                <span class="section-toggler active" data-section="section_01">Income</span>
+                                <span class="section-toggler" data-section="section_02">Expenses</span>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="section-body" style="padding-block-start: .8rem;">
+                    </div>
                 </div>
 
                 <!-- Section 02 -->
                 <div class="sections br-0" id="section_02">
-                    <div class="section-header flex" style="border-block-end: 0;"></div>
+                    <div class="section-header">
+
+                        <div class="section-header-top flex">
+                            <h2 class="section-header-title">Dashboard</h2>
+                        </div>
+
+                        <div class="section-header-bottom">
+                            <div class="section-togglers">
+                                <span class="section-toggler" data-section="section_00">General Insights</span>
+                                <span class="section-toggler" data-section="section_01">Income</span>
+                                <span class="section-toggler active" data-section="section_02">Expenses</span>
+                            </div>
+                        </div>
+                        
+                    </div>
                     <div class="section-body" style="padding-block-start: .8rem;"></div>
                 </div>
 
@@ -272,770 +312,6 @@
                             <span class="system-version-label">System version: <span class="system-version-value"> 1.0.0 </span></span>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Collect patient triage modal -->
-            <div id="collect-patient-triage-data-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="patient-triage-form">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Record Patient Triage</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="">
-                            <div class="form-section">
-                                <h2>Vitals</h2>
-    
-                                <div class="form-group">
-                                    <label for="blood-pressure">Blood pressure:</label>
-                                    <input type="text" class="form-control" id="blood-pressure" name="bloodPressure">
-                                </div>
-                            
-                                <div class="form-group">
-                                    <label for="heart-rate">Heart rate:</label>
-                                    <input type="text" class="form-control" id="heart-rate" name="heartRate">
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="respiratory-rate">Respiratory rate:</label>
-                                    <input type="text" class="form-control" id="respiratory-rate" name="respiratoryRate">
-                                </div>
-                            </div>
-    
-                            <div class="form-section">
-                                <h2>Signs & symptoms</h2>
-    
-                                <div class="form-group">
-                                    <label for="signs-and-symptoms">Fill the signs and symptoms from the patient:</label>
-                                    <textarea id="signs-and-symptoms" name="signsAndSymptoms" class="form-control"></textarea>
-                                </div>
-                            </div>
-    
-                            <div class="form-section">
-                                <h2>Injury details</h2>
-    
-                                <div class="form-group">
-                                    <label for="injury-details">Fill the type, location and severity of the injury:</label>
-                                    <textarea id="injury-details" name="injuryDetails" class="form-control"></textarea>
-                                </div>
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Edit patient triage modal -->
-            <div id="edit-patient-triage-data-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="patient-triage-form">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Edit Patient Triage</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="">
-                            <div class="form-section">
-                                <h2>Vitals</h2>
-    
-                                <div class="form-group">
-                                    <label for="blood-pressure">Blood pressure:</label>
-                                    <input type="text" class="form-control" id="blood-pressure" name="bloodPressure">
-                                </div>
-                            
-                                <div class="form-group">
-                                    <label for="heart-rate">Heart rate:</label>
-                                    <input type="text" class="form-control" id="heart-rate" name="heartRate">
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="respiratory-rate">Respiratory rate:</label>
-                                    <input type="text" class="form-control" id="respiratory-rate" name="respiratoryRate">
-                                </div>
-                            </div>
-    
-                            <div class="form-section">
-                                <h2>Signs & symptoms</h2>
-    
-                                <div class="form-group">
-                                    <label for="signs-and-symptoms">Fill the signs and symptoms from the patient:</label>
-                                    <textarea id="signs-and-symptoms" name="signsAndSymptoms" class="form-control"></textarea>
-                                </div>
-                            </div>
-    
-                            <div class="form-section">
-                                <h2>Injury details</h2>
-    
-                                <div class="form-group">
-                                    <label for="injury-details">Fill the type, location and severity of the injury:</label>
-                                    <textarea id="injury-details" name="injuryDetails" class="form-control"></textarea>
-                                </div>
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Collect patient allergies modal -->
-            <div id="collect-patient-allergies-data-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="patient-allergy-form">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Record Patient Allergies</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="">
-                            <div class="form-section">
-                                <h2>Allergies</h2>
-    
-                                <div class="form-group">
-                                    <label for="allergies">Fill the allergies from the patient:</label>
-                                    <textarea class="form-control" name="allergies" id="allergies" cols="30" rows="10"></textarea>
-                                </div>
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Edit patient allergies modal -->
-            <div id="edit-patient-allergies-data-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="patient-allergy-form">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Edit Patient Allergies</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="">
-                            <div class="form-section">
-                                <h2>Allergies</h2>
-    
-                                <div class="form-group">
-                                    <label for="allergies">Fill the allergies from the patient:</label>
-                                    <textarea class="form-control" name="allergies" id="allergies" cols="30" rows="10"></textarea>
-                                </div>
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Create patient medical prescriptions modal -->
-            <div id="create-patient-medical-prescription-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="create-patient-medical-prescription-form">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Medical Prescription</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="create-patient-medical-prescription-form-body">
-                            <div class="request-form search-form-in-modal">
-                                <div class="form-section">
-                                    <h2>Search Medicines</h2>
-
-                                    <div class="dropdown">
-                                        <input type="text" id="medicines-dropdown-input" placeholder="Type to filter medicines">
-                                        <div class="dropdown-list" id="medicines-dropdown">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-section">
-                                    <h2>Prescriptions</h2>
-                                    <table id="selected-medicines-table" class="testsTable">
-                                        <thead>
-                                            <tr>
-                                                <th>Drug Name</th>
-                                                <th>Prescription</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save" type="submit">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Create patient diagnosis modal -->
-            <div id="create-patient-diagnosis-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="create-patient-diagnosis-form">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Medical Diagnoses</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="create-patient-diagnosis-form-body">
-                            <div class="request-form search-form-in-modal">
-                                <div class="form-section">
-                                    <h2>Search Diagnostic Test</h2>
-
-                                    <div class="dropdown">
-                                        <input type="text" id="lab-tests-dropdown-input" placeholder="Type to filter tests">
-                                        <div class="dropdown-list" id="lab-tests-dropdown">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-section">
-                                    <h2>Test Requests</h2>
-                                    <table id="selected-tests-table" class="testsTable">
-                                        <thead>
-                                            <tr>
-                                                <th>Test Name</th>
-                                                <th>Fee</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr class="total-row">
-                                                <td>Total</td>
-                                                <td class="total-fee"></td>
-                                                <td></td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save" type="submit">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Edit patient diagnosis modal -->
-            <div id="edit-patient-diagnosis-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="edit-patient-diagnosis-form">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Edit Medical Diagnosis</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="edit-patient-diagnosis-form-body">
-
- 
-                            <div class="form-section">
-                                <label for="testName">Diagnosis Test</label>
-                                <input type="text" name="testName">
-                                <label for="fees">Fees ($)</label>
-                                <input type="number" name="testFees">
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save" type="submit">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Complete blood count report modal -->
-            <div id="complete-blood-count-lab-report-modal" class="form-modal">
-                <div class="form-modal-content" style="inline-size: 40%;">
-                    <form class="modal-form" id="complete-blood-count-lab-report-form">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">CBC Lab Report</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-
-                        <div class="modal-form-body" id="complete-blood-count-lab-report-form-body" style="padding: 0;">
-                            <div id="complete-blood-count-lab-report" style="padding: 20px;background-color: #ffffff;"></div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Urinalysis report modal -->
-            <div id="urinalysis-report-modal" class="form-modal">
-                <div class="form-modal-content" style="inline-size: 42%;">
-                    <form class="modal-form" id="urinalysis-report-form">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Urinalysis Lab Report</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-
-                        <div class="modal-form-body" id="urinalysis-report-form-body" style="padding: 0;">
-                            <div id="urinalysis-lab-report" style="padding: 20px;background-color: #ffffff;"></div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Services payment modal -->
-            <div id="services-payment-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="services-payment-form">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Receive Payment</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-
-                        <div class="modal-form-body" id="services-payment-form-body">
-                            <style>
-                                .container {
-                                    width: 80%;
-                                    margin: 0 auto;
-                                }
-
-                                .table {
-                                    width: 100%;
-                                    border-collapse: collapse;
-                                }
-
-                                .table th,
-                                .table td {
-                                    padding: 5px;
-                                    border: 1px solid #ccc;
-                                    text-align: left;
-                                }
-
-                                .table th {
-                                    background-color: #eee;
-                                }
-
-                                .total {
-                                    text-align: right;
-                                    font-weight: bold;
-                                }
-
-                                .checkout-button {
-                                    background-color: #007bff;
-                                    color: white;
-                                    padding: 10px 20px;
-                                    border: none;
-                                    cursor: pointer;
-                                }
-
-                                #select-all {
-                                    cursor: pointer;
-                                }
-                            </style>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th><input type="checkbox" id="select-all"></th>
-                                        <th>Service Name</th>
-                                        <th>Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="services-payment-table-body">
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="2" class="total">Total</td>
-                                        <td class="total-value">0</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save" type="submit" id="update-services-payment-status-btn"> Process</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-
-
-
-            <!-- Send patient to eye clinic modal -->
-            <div id="send-patient-to-eye-clinic-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Send Patient to Eye Clinic</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="">
-                            <div class="form-section">
-                                <h2>Eye Information</h2>
-                                <div class="form-group">
-                                    <label for="specific-eye">Specific Eye:</label>
-                                    <select id="specific-eye" class="form-control" name="specificEye" required>
-                                        <option value="right">Right eye</option>
-                                        <option value="left">Left eye</option>
-                                    </select>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="diagnosis">Diagnosis:</label>
-                                    <select id="diagnosis" class="form-control" name="diagnosis" required>
-                                        <option value="vision-test">Vision Test</option>
-                                        <option value="eye-pressure-test">Eye Pressure Test</option>
-                                    </select>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="service-fee">Service Fee:</label>
-                                    <input type="text" class="form-control" id="service-fee" name="serviceFee" required>
-                                </div>
-                            
-                                <div class="form-group">
-                                    <label for="observation-notes">Observation Notes:</label>
-                                    <input type="text" class="form-control" id="observation-notes" name="observationNotes" required>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="description-notes">Description Notes:</label>
-                                    <input type="text" class="form-control" id="description-notes" name="descriptionNotes" required>
-                                </div>
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Send patient to dental clinic modal -->
-            <div id="send-patient-to-dental-clinic-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="create-patient-dental-request-form">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Send Patient to Dental Clinic</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="create-patient-dental-request-form-body">
-                            <div class="form-section">
-                                <label for="toothName">Tooth Name</label>
-                                <input type="text" name="toothName[]">
-                                <label for="testName">Diagnosis Test</label>
-                                <input type="text" name="testName[]">
-                                <label for="procedure">Procedure</label>
-                                <input type="text" name="procedure[]">
-                                <label for="fees">Fees ($)</label>
-                                <input type="number" name="fees[]">
-                                <button type="button" class="btn remove-test"> <i class="ti-trash"></i> Remove</button>
-                            </div>
-                            <div class="flex" style="block-size: fit-content;justify-content: space-between;">
-                                <button type="button" id="addTest" class="btn"> <i class="ti-plus"></i> Add Test</button>
-                                <div class="total-fees">Total Fees: $0.00</div>
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Send patient to cardiolody clinic modal -->
-            <div id="send-patient-to-cardiology-clinic-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Send Patient to Cardiology Clinic</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="">
-                            <div class="form-section">
-                                <h2>Medical Information</h2>
-                                <div class="form-group">
-                                    <label for="reason-for-referral">Reason for Referral:</label>
-                                    <select id="reason-for-referral" class="form-control" name="reasonForReferral" required>
-                                        <option value="">Chest Pain</option>
-                                        <option value="">Shortness of Breath</option>
-                                        <option value="">Palpitations</option>
-                                        <option value="">Hypertension</option>
-                                        <option value="">Heart Murmur</option>
-                                        <option value="">Other</option>
-                                    </select>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="current-medications">Current Medications:</label>
-                                    <textarea id="current-medications" name="currentMedications" class="form-control"></textarea>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="service-fee">Service Fee:</label>
-                                    <input type="text" class="form-control" id="service-fee" name="serviceFee" required>
-                                </div>
-                            
-                                <div class="form-group">
-                                    <label for="observation-notes">Observation Notes:</label>
-                                    <textarea id="observation-notes" name="observationNotes" class="form-control"></textarea>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="additional-notes">Additional Notes:</label>
-                                    <textarea id="additional-notes" name="additionalNotes" class="form-control"></textarea>
-                                </div>
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Send patient to radiology clinic modal -->
-            <div id="send-patient-to-cardiology-clinic-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Send Patient to Radiology Clinic</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="">
-                            <div class="form-section">
-                                <h2>Medical Information</h2>
-                                <div class="form-group">
-                                    <label for="reason-for-referral">Reason for Referral:</label>
-                                    <select id="reason-for-referral" class="form-control" name="reasonForReferral" required>
-                                        <option value="">Chest Pain</option>
-                                        <option value="">Shortness of Breath</option>
-                                        <option value="">Palpitations</option>
-                                        <option value="">Hypertension</option>
-                                        <option value="">Heart Murmur</option>
-                                        <option value="">Other</option>
-                                    </select>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="current-medications">Current Medications:</label>
-                                    <textarea id="current-medications" name="currentMedications" class="form-control"></textarea>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="service-fee">Service Fee:</label>
-                                    <input type="text" class="form-control" id="service-fee" name="serviceFee" required>
-                                </div>
-                            
-                                <div class="form-group">
-                                    <label for="observation-notes">Observation Notes:</label>
-                                    <textarea id="observation-notes" name="observationNotes" class="form-control"></textarea>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="additional-notes">Additional Notes:</label>
-                                    <textarea id="additional-notes" name="additionalNotes" class="form-control"></textarea>
-                                </div>
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Send patient to radiology clinic modal -->
-            <div id="send-patient-to-radiology-clinic-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Send Patient to Radiology Clinic</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="">
-                            <div class="form-section">
-                                <h2>Medical Information</h2>
-                                <div class="form-group">
-                                    <label for="reason-for-referral">Reason for Referral:</label>
-                                    <select id="reason-for-referral" class="form-control" name="reasonForReferral" required>
-                                        <option value="">Chest Pain</option>
-                                        <option value="">Shortness of Breath</option>
-                                        <option value="">Palpitations</option>
-                                        <option value="">Hypertension</option>
-                                        <option value="">Heart Murmur</option>
-                                        <option value="">Other</option>
-                                    </select>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="current-medications">Current Medications:</label>
-                                    <textarea id="current-medications" name="currentMedications" class="form-control"></textarea>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="service-fee">Service Fee:</label>
-                                    <input type="text" class="form-control" id="service-fee" name="serviceFee" required>
-                                </div>
-                            
-                                <div class="form-group">
-                                    <label for="observation-notes">Observation Notes:</label>
-                                    <textarea id="observation-notes" name="observationNotes" class="form-control"></textarea>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="additional-notes">Additional Notes:</label>
-                                    <textarea id="additional-notes" name="additionalNotes" class="form-control"></textarea>
-                                </div>
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Send patient to theatre clinic modal -->
-            <div id="send-patient-to-theatre-clinic-modal" class="form-modal">
-                <div class="form-modal-content">
-                    <form class="modal-form" id="">
-                        <div class="form-modal-header flex">
-                            <div class="form-modal-header-left flex">
-                                <img src="/assets/actions/patients.png" alt="" class="icon">
-                                <h2 class="title">Send Patient to Theatre</h2>
-                            </div>
-                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
-                        </div>
-            
-                        <div class="modal-form-body" id="">
-                            <div class="form-section">
-                                <h2>Medical Information</h2>
-                                <div class="form-group">
-                                    <label for="reason-for-referral">Reason for Referral:</label>
-                                    <select id="reason-for-referral" class="form-control" name="reasonForReferral" required>
-                                        <option value="">Chest Pain</option>
-                                        <option value="">Shortness of Breath</option>
-                                        <option value="">Palpitations</option>
-                                        <option value="">Hypertension</option>
-                                        <option value="">Heart Murmur</option>
-                                        <option value="">Other</option>
-                                    </select>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="current-medications">Current Medications:</label>
-                                    <textarea id="current-medications" name="currentMedications" class="form-control"></textarea>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="service-fee">Service Fee:</label>
-                                    <input type="text" class="form-control" id="service-fee" name="serviceFee" required>
-                                </div>
-                            
-                                <div class="form-group">
-                                    <label for="observation-notes">Observation Notes:</label>
-                                    <textarea id="observation-notes" name="observationNotes" class="form-control"></textarea>
-                                </div>
-        
-                                <div class="form-group">
-                                    <label for="additional-notes">Additional Notes:</label>
-                                    <textarea id="additional-notes" name="additionalNotes" class="form-control"></textarea>
-                                </div>
-                            </div>
-                        </div>
-            
-                        <div class="form-modal-footer flex">
-                            <button class="btn btn-primary" type="button">Cancel</button>
-                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
@@ -1069,108 +345,112 @@
             [80000, 1000000, 460000, 0, 5700000, 0, 0],
             'chart-2'
             );
-            
-            
-            const actionBtns = document.querySelectorAll('.act-btn');
-            for(let i=0; i<actionBtns.length; i++){
-                actionBtns[i].addEventListener('click', e =>{
-                    actionBtns.forEach(btn => {
-                        if(btn.classList.contains('active')) btn.classList.remove('active');
-                    });
 
-                    actionBtns[i].classList.add('active');
+            const filterSelectLeft = document.querySelector("#filter-select-left");
+            filterSelectLeft.addEventListener("change", event => {
+                const selectedFilter = event.target.value;
+                if(selectedFilter === "day"){
+                    chartTitle1.textContent = "Day's Services";
 
-                    if(actionBtns[i].getAttribute('id') === "day"){
+                    mChart1.destroy();
+                    mChart1 = createChart('Durations',
+                    'bar',
+                    ['Morning', 'Afternoon', 'Eevening'],
+                    [80, 100, 46],
+                    'chart-1'
+                    );
+                    
+                }else if(selectedFilter === "week"){
 
-                        chartTitle1.textContent = "Day's Services";
-                        chartTitle2.textContent = "Day's Income";
+                    chartTitle1.textContent = "Week's Services";
 
-                        mChart1.destroy();
-                        mChart2.destroy();
-                        mChart1 = createChart('Durations',
-                        'bar',
-                        ['Morning', 'Afternoon', 'Eevening'],
-                        [80, 100, 46],
-                        'chart-1'
-                        );
+                    mChart1.destroy();
+                    mChart1 = createChart('Days',
+                    'bar',
+                    ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    [80, 100, 46, 39, 57, 25, 66],
+                    'chart-1'
+                    );
 
-                        mChart2 = createChart('Durations',
-                        'line',
-                        ['Morning', 'Afternoon', 'Eevening'],
-                        [80000, 1000000, 460000],
-                        'chart-2'
-                        );
-                        
-                    }else if(actionBtns[i].getAttribute('id') === "week"){
+                }else if(selectedFilter === "month"){
 
-                        chartTitle1.textContent = "Week's Services";
-                        chartTitle2.textContent = "Week's Income";
+                    chartTitle1.textContent = "Month's Services";
 
-                        mChart1.destroy();
-                        mChart2.destroy();
-                        mChart1 = createChart('Days',
-                        'bar',
-                        ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                        [80, 100, 46, 39, 57, 25, 66],
-                        'chart-1'
-                        );
+                    mChart1.destroy();
+                    mChart1 = createChart('Weeks',
+                    'bar',
+                    ['Week1', 'Week2', 'Week3','Week4'],
+                    [80, 100, 46, 39],
+                    'chart-1'
+                    );
 
-                        mChart2 = createChart('Days',
-                        'line',
-                        ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                        [80000, 1000000, 460000, 0, 5700000, 0, 0],
-                        'chart-2'
-                        );
+                }else if(selectedFilter === "year"){
 
-                    }else if(actionBtns[i].getAttribute('id') === "month"){
+                    chartTitle1.textContent = "Year's Services";
 
-                        chartTitle1.textContent = "Month's Services";
-                        chartTitle2.textContent = "Month's Income";
+                    mChart1.destroy();
+                    mChart1 = createChart('Months',
+                    'bar',
+                    ['Quarter1', 'Quarter2', 'Quarter3', 'Quarter4'],
+                    [80, 46, 39, 60],
+                    'chart-1'
+                    );
+                }
+                
+            });
 
-                        mChart1.destroy();
-                        mChart2.destroy();
-                        mChart1 = createChart('Weeks',
-                        'bar',
-                        ['Week1', 'Week2', 'Week3','Week4'],
-                        [80, 100, 46, 39],
-                        'chart-1'
-                        );
+            const filterSelectRight = document.querySelector("#filter-select-right");
+            filterSelectRight.addEventListener("change", event => {
+                const selectedFilter = event.target.value;
+                if(selectedFilter === "day"){
+                    chartTitle2.textContent = "Day's Income";
 
-                        mChart2 = createChart('Weeks',
-                        'line',
-                        ['Week1', 'Week2', 'Week3','Week4'],
-                        [80000, 1000000, 460000, 5700000],
-                        'chart-2'
-                        );
+                    mChart2.destroy();
+                    mChart2 = createChart('Durations',
+                    'line',
+                    ['Morning', 'Afternoon', 'Eevening'],
+                    [80000, 1000000, 460000],
+                    'chart-2'
+                    );
+                    
+                }else if(selectedFilter === "week"){
 
-                    }else if(actionBtns[i].getAttribute('id') === "year"){
+                    chartTitle2.textContent = "Week's Income";
 
-                        chartTitle1.textContent = "Year's Services";
-                        chartTitle2.textContent = "Year's Income";
+                    mChart2.destroy();
+                    mChart2 = createChart('Days',
+                    'line',
+                    ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    [80000, 1000000, 460000, 0, 5700000, 0, 0],
+                    'chart-2'
+                    );
 
-                        mChart1.destroy();
-                        mChart2.destroy();
-                        mChart1 = createChart('Months',
-                        'bar',
-                        ['Quarter1', 'Quarter2', 'Quarter3', 'Quarter4'],
-                        [80, 46, 39, 60],
-                        'chart-1'
-                        );
+                }else if(selectedFilter === "month"){
 
-                        mChart2 = createChart('Months',
-                        'line',
-                        ['Quarter1', 'Quarter2', 'Quarter3', 'Quarter4'],
-                        [80000, 1000000, 5700000, 7000000],
-                        'chart-2'
-                        );
-                    }else{
-                        console.log("");
-                    }
-                });
-            }
+                    chartTitle2.textContent = "Month's Income";
 
+                    mChart2.destroy();
+                    mChart2 = createChart('Weeks',
+                    'line',
+                    ['Week1', 'Week2', 'Week3','Week4'],
+                    [80000, 1000000, 460000, 5700000],
+                    'chart-2'
+                    );
 
+                }else if(selectedFilter === "year"){
 
+                    chartTitle2.textContent = "Year's Income";
+
+                    mChart2.destroy();
+                    mChart2 = createChart('Months',
+                    'line',
+                    ['Quarter1', 'Quarter2', 'Quarter3', 'Quarter4'],
+                    [80000, 1000000, 5700000, 7000000],
+                    'chart-2'
+                    );
+                }
+                
+            });
         });
 
 
