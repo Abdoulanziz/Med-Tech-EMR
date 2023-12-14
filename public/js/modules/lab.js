@@ -115,7 +115,7 @@ async function loadAllPatientsOnQueue() {
                         backgroundColor = '#fcf1dd';
                     }
 
-                    return '<span style="font-weight: bold;font-size: 10px;display: block;inline-size: 50%;border-radius:6px;padding: .4rem .6rem;color: ' + color + ';background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
+                    return '<span style="font-weight: bold;font-size: 10px;display: block;inline-size: 80%;border-radius:6px;padding: .4rem .6rem;color: ' + color + ';background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
                 }
             },
             {
