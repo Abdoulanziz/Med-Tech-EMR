@@ -456,7 +456,8 @@ table.dataTable tbody td {
 .dataTables_wrapper .dataTables_paginate .paginate_button.current,
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
     color: #ffffff !important;
-    border: 1px solid #979797 !important;
+    border: 1px solid yellowgreen !important;
+    border-radius: 6px !important;
     background-color: yellowgreen !important;
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, yellowgreen), color-stop(100%, yellowgreen)) !important;
     background: -webkit-linear-gradient(top, yellowgreen 0%, yellowgreen 100%) !important;
@@ -484,8 +485,8 @@ table.dataTable tbody td {
 }
 
 .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
-    color: #7e7e7e;
-    font-family: var(--font-tilt-neon);
+  color: #7e7e7e !important;
+  font-family: var(--font-tilt-neon);
 }
 
 
