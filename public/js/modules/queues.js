@@ -127,7 +127,22 @@ async function loadAllPatientsOnQueue() {
             {
                 targets: 4,
                 render: function(data, type, row, meta) {
-                    return data.queueStatus;
+                    const status = data.queueStatus.toLowerCase();
+                    let color;
+                    let backgroundColor;
+
+                    if (status === 'scheduled') {
+                        color = 'grey';
+                        backgroundColor = '#f4f4ea';
+                    } else if (status === 'completed') {
+                        color = 'yellowgreen';
+                        backgroundColor = '#f3fed2';
+                    } else {
+                        color = 'orange';
+                        backgroundColor = '#fcf1dd';
+                    }
+
+                    return '<span style="font-weight: bold;font-size: 10px;display: block;inline-size: 50%;border-radius:6px;padding: .4rem .6rem;color: ' + color + ';background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
                 }
             },
             {
@@ -253,17 +268,21 @@ async function loadSinglePatientVisits(patientId) {
                 targets: 3,
                 render: function(data, type, row, meta) {
                     const status = data.visitStatus.toLowerCase();
+                    let color;
                     let backgroundColor;
 
                     if (status === 'scheduled') {
-                        backgroundColor = 'grey';
+                        color = 'grey';
+                        backgroundColor = '#f4f4ea';
                     } else if (status === 'completed') {
-                        backgroundColor = 'yellowgreen';
+                        color = 'yellowgreen';
+                        backgroundColor = '#f3fed2';
                     } else {
-                        backgroundColor = 'orange';
+                        color = 'orange';
+                        backgroundColor = '#fcf1dd';
                     }
 
-                    return '<span style="font-size: 10px;display: block;inline-size: 80%;border-radius:6px;padding: .4rem .6rem;color: #fff;background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
+                    return '<span style="font-weight: bold;font-size: 10px;display: block;inline-size: 50%;border-radius:6px;padding: .4rem .6rem;color: ' + color + ';background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
                 }
             },
             {
@@ -599,17 +618,21 @@ async function loadSinglePatientVisitHistory(visitId) {
                 targets: 3,
                 render: function(data, type, row, meta) {
                     const status = data.requestStatus.toLowerCase();
+                    let color;
                     let backgroundColor;
 
                     if (status === 'pending') {
-                        backgroundColor = 'grey';
+                        color = 'grey';
+                        backgroundColor = '#f4f4ea';
                     } else if (status === 'complete') {
-                        backgroundColor = 'yellowgreen';
+                        color = 'yellowgreen';
+                        backgroundColor = '#f3fed2';
                     } else {
-                        backgroundColor = 'orange';
+                        color = 'orange';
+                        backgroundColor = '#fcf1dd';
                     }
 
-                    return '<span style="font-size: 10px;display: block;inline-size: 50%;border-radius:6px;padding: .4rem .6rem;color: #fff;background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
+                    return '<span style="font-weight: bold;font-size: 10px;display: block;inline-size: 50%;border-radius:6px;padding: .4rem .6rem;color: ' + color + ';background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
                 }
             },
             {
