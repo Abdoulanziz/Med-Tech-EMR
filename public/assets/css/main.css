@@ -360,11 +360,10 @@
 .details-card-header {
   padding-inline:  1.6rem;
   padding-block-end: 1rem;
-  margin-block: .6rem;
+  margin-block: .6rem 1.2rem;
   border-block-end: 1px solid #efefef;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-weight: 100 !important;
-  margin-block-end: 0.6rem;
   font-size: 13px;
   color: #919191;
   text-transform: uppercase;
@@ -398,7 +397,8 @@
   inline-size: 600px;
 
   border: 0;
-  font-family: sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  /* font-family: sans-serif; */
   overflow-y: hidden;
 }
 
@@ -473,10 +473,11 @@
 }
 
 .modal-form-body .form-section h2 {
-  color: #7e7e7e;
+  color: #5a5a5a;
   font-weight: 400;
   font-size: 19px !important;
-  font-family: var(--font-tilt-neon);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  /* font-family: var(--font-tilt-neon); */
   margin-block-end: .6rem;
 }
 
@@ -490,11 +491,12 @@
 
 .modal-form-body label {
   display: block;
-  font-weight: 300;
+  font-weight: normal;
   margin-bottom: 5px;
   color: #8d8d8d;
   font-size: 16px !important;
-  font-family: var(--font-tilt-neon);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  /* font-family: var(--font-tilt-neon); */
 }
 
 .modal-form-body input[type="text"],
@@ -504,7 +506,7 @@
 .modal-form-body select {
   width: 100%;
   padding: 12px 10px;
-  border: 1px solid #f5f5f5;
+  border: 1px solid #e0e0e0;
   border-radius: 5px;
   font-size: 16px;
   background-color: #ffffff !important;
@@ -550,12 +552,13 @@
 }
 
 .special-heading {
-  font-weight: 300;
+  font-weight: bold;
   margin-block-end: .6rem;
-  font-family: sans-serif;
   font-size: 15px;
-  color: #919191;
   text-transform: uppercase;
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #919191;
 }
 
 .grid.info {
@@ -609,18 +612,26 @@
   color: rgb(143, 142, 142);
   text-align: center;
   font-size: 1.2rem;
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #919191;
 }
 
 .ongoing-services-card-left .bill-content h2 {
   font-size: 1.5rem;
   color: #444;
   text-align: center;
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .ongoing-services-card-left .bill-content p {
   margin-top: .8rem;
-  color: #969595;
   text-align: center;
+  font-size: 18px;
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #919191;
 }
 
 .ongoing-services-card-right {
@@ -699,7 +710,8 @@
 .patient-info-wrapper .left h4 {
   text-align: center;
   color: #6e6d6d;
-  font-weight: bold;
+  font-weight: normal;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-size: 20px;
 }
 
@@ -720,18 +732,22 @@
   padding: 1.8rem 1rem .6rem 1rem;
   border-top-right-radius: 1rem;
   border-bottom-right-radius: 1rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .patient-info-wrapper .right .info h3 {
   margin-block-end: 1rem;
   padding-block-end: .2rem;
   border-bottom: 1px solid #e0e0e0;
-  color: #353c4e;
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #919191;
 }
 
 .patient-info-wrapper .right .info-data {
   display: flex;
   justify-content: space-between;
+  margin-block-end: .4rem;
 }
 
 .patient-info-wrapper .right .info-data .data {
@@ -739,14 +755,15 @@
 }
 
 .patient-info-wrapper .right .info-data .data h4 {
-  color: #353c4e;
-  margin-bottom: .2rem;
+  color: #000;
+  font-weight: normal;
+  margin-bottom: 0;
 }
 
 .patient-info-wrapper .right .info-data .data p {
   font-size: 16px;
   margin-bottom: .2rem;
-  color: #919aa3;
+  color: #888888;
 }
 
 

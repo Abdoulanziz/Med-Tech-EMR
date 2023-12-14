@@ -506,10 +506,11 @@ table.dataTable tbody td {
 
 .date-range-picker input {
   color: #7e7e7e;
-  padding: .4rem;
+  padding: .5rem .8rem;
   border: 1px solid #efefef;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 16px;
+  cursor: pointer;
 }
 
 .date-range-picker input:focus {
