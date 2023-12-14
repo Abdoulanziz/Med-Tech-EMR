@@ -426,7 +426,7 @@ table.dataTable thead th:hover {
 }
 
 table.dataTable tbody tr {
-  border-block: 1px solid #fafafa !important;
+  border-block: 1px solid #faf9f9 !important;
   border-radius: 60px !important;
 }
 
