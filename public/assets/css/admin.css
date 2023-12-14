@@ -53,6 +53,7 @@
   padding: 1rem 1.4rem;
 }
 
+.sidebar-menu .menu-item.active,
 .sidebar-menu .menu-item:hover {
   background-color: #535353;
   color: #ffffff;

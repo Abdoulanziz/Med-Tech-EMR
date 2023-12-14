@@ -10,7 +10,7 @@
     <link rel="shortcut icon" href="/assets/svg/favicon.ico" type="image/x-icon"/>
 
     <link rel="stylesheet" href="/assets/css/utils.css">
-    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
     <link rel="stylesheet" href="/assets/css/table.min.css">
     <link rel="stylesheet" href="/assets/icons/themify-icons.css">
 
@@ -103,22 +103,52 @@
 
                 <!-- Section 00 -->
                 <div class="sections br-0 inview" id="section_00">
-                    <!-- <div class="section-header flex" style="border-block-end: 0;"></div> -->
-                    <div class="section-body" style="padding-block-start: .8rem;">
+                    <div class="section-header">
+
+                        <div class="section-header-top flex">
+                            <h2 class="section-header-title">Audit Trail</h2>
+                            <div class="ctas">
+                                <button class="btn section-header-cta modal-trigger" id="open-create-user-modal-btn" data-modal="create-user-modal"> <i class="ti-plus"></i> New User</button>
+                            </div>
+                        </div>
+
+                        <div class="section-header-bottom">
+                            <div class="section-togglers">
+                                <span class="section-toggler active" data-section="section_00">Recent Activities</span>
+                            </div>
+                        </div>
                         
                     </div>
-                </div>
+                    <div class="section-body" style="padding-block-start: 1.2rem;">
 
-                <!-- Section 01 -->
-                <div class="sections br-0" id="section_01">
-                    <div class="section-header flex" style="border-block-end: 0;"></div>
-                    <div class="section-body" style="padding-block-start: .8rem;"></div>
-                </div>
+                        <div class="details-card">
+                            <div class="details-card-header">
+                                <h3 class="card-header">View User Activity Log</h3>
+                            </div>
 
-                <!-- Section 02 -->
-                <div class="sections br-0" id="section_02">
-                    <div class="section-header flex" style="border-block-end: 0;"></div>
-                    <div class="section-body" style="padding-block-start: .8rem;"></div>
+                            <div class="details-card-body">
+                                <table id="all-users-table" class="display" style="width:100%;margin-top:.5rem;">
+                                    <thead>
+                                        <tr>
+                                            <th>Date/Time</th>
+                                            <th>User</th>
+                                            <th>Action</th>
+                                            <th>Resource</th>
+                                            <th>Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <td>2023-12-12 23:45</td>
+                                        <td>admin</td>
+                                        <td>Created</td>
+                                        <td>User</td>
+                                        <td>New user "John Doe" created.</td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                    </div>
                 </div>
 
                 <!-- Bottom banner -->
@@ -132,6 +162,7 @@
                         </div>
                     </div>
                 </div>
+            
             </div>
 
             <!-- Collect patient triage modal -->

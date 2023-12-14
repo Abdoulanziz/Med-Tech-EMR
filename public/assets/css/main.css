@@ -347,6 +347,24 @@
   min-block-size: 100%;
 }
 
+
+.details-card {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding-block: 1rem;
+}
+
+.details-card-header {
+  padding-inline:  1.6rem;
+  padding-block-end: 1rem;
+  margin-block: .6rem;
+  border-block-end: 1px solid #efefef;
+}
+
+.details-card-body {
+  padding-inline:  1.6rem;
+}
+
 .form-modal {
   display: none;
   position: fixed;
@@ -435,17 +453,18 @@
   margin: 0 auto;
   padding: 20px;
   overflow-y: auto;
+  background-color: #ffffff;
 }
 
 .modal-form-body .form-section {
   margin: 20px 0;
   padding: 20px;
-  border: 1px solid #cce6fe;
+  border: 1px solid #f5f5f5;
   border-radius: 15px;
 }
 
 .modal-form-body .form-section h2 {
-  color: rgb(129, 129, 129);
+  color: #7e7e7e;
   font-weight: 400;
   font-size: 19px !important;
   font-family: var(--font-tilt-neon);
@@ -464,8 +483,9 @@
   display: block;
   font-weight: 300;
   margin-bottom: 5px;
-  color: rgb(67, 67, 67);
+  color: #8d8d8d;
   font-size: 16px !important;
+  font-family: var(--font-tilt-neon);
 }
 
 .modal-form-body input[type="text"],
@@ -475,10 +495,11 @@
 .modal-form-body select {
   width: 100%;
   padding: 12px 10px;
-  border: 1px solid #cce6fe;
+  border: 1px solid #f5f5f5;
   border-radius: 5px;
   font-size: 16px;
-  background-color: #f0f9fd;
+  background-color: #ffffff !important;
+  color: #7e7e7e;
 }
 
 .modal-form-body input[type="text"]:focus,
@@ -542,11 +563,12 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  block-size: 250px;
+  block-size: 248px;
   padding: 1.2rem;
-  border: 1px solid #9dd0ff;
   border-radius: 1rem;
-  background-color: #cce6fe;
+  background-color: #ffffff;
+  font-family: var(--font-tilt-neon);
+  box-shadow: 0px 3px 3px -1px rgba(10,22,70,.1), 0px 0px 1px 0px rgba(10,22,70,.06) !important;
 }
 
 .ongoing-services {
@@ -564,7 +586,6 @@
 
 
 .ongoing-services-card-left {
-  background: linear-gradient(to bottom, hsl(39, 100%, 56%, .1) 0% 20%, hsl(39, 100%, 56%, .1));
   padding: 2rem;
   display: flex;
   flex-direction: column;
@@ -576,29 +597,32 @@
 }
 
 .ongoing-services-card-left h4 {
-  color: rgb(109, 108, 108);
+  color: rgb(143, 142, 142);
   text-align: center;
   font-size: 1.2rem;
 }
 
 .ongoing-services-card-left .bill-content h2 {
   font-size: 1.5rem;
-  color: #fff;
+  color: #444;
   text-align: center;
 }
 
 .ongoing-services-card-left .bill-content p {
   margin-top: .8rem;
-  color: #ea953b;
+  color: #969595;
   text-align: center;
 }
 
 .ongoing-services-card-right {
+  background: linear-gradient(to bottom, #cce6fe 0% 20%, #cce6fe);
   padding: 1.2rem 2rem 0 2rem;
   display: flex;
   flex-direction: column;
   row-gap: 1.2rem;
   inline-size: 50%;
+  border-start-end-radius: 1rem !important;
+  border-end-end-radius: 1rem !important;
 }
 
 .ongoing-services-card-right ul {
@@ -655,7 +679,7 @@
 
 .patient-info-wrapper .left {
   inline-size: 30%;
-  background: linear-gradient(to right,hsl(39, 100%, 56%, .1),hsl(39, 100%, 56%, .1));
+  background: linear-gradient(to right,hsla(0, 0%, 73%, 0.1),hsla(0, 1%, 77%, 0.1));
   padding: 2rem 1.4rem;
   border-top-left-radius: 1rem;
   border-bottom-left-radius: 1rem;
