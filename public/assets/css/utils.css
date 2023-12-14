@@ -498,19 +498,21 @@ table.dataTable tbody td {
 
 .date-range-picker.flex {
   justify-content: flex-start;
-  margin-block-end: 1.4rem;
+  margin-block-end: 2.4rem;
   gap: 1.4rem;
+  font-family: var(--font-tilt-neon);
 }
 
 .date-range-picker input {
+  color: #7e7e7e;
   padding: .4rem;
-  border: 1px solid #ccc;
+  border: 1px solid #efefef;
   border-radius: 5px;
   font-size: 16px;
 }
 
 .date-range-picker input:focus {
-  border: 1px solid #ccc;
+  border: 1px solid #efefef;
 }
 
 .date-range-picker img {
