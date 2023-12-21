@@ -32,14 +32,14 @@
                     <span style="margin-inline-start: .6rem;color: #fff;font-family: 'Tilt Neon';font-weight: bolder;font-size: 27px;"><span style="color: rgb(0, 208, 255);">Med</span> <span style="color: yellowgreen;">Tech</span></span>
                 </div>
                 <ul class="sidebar-menu">
-                    <li class="menu-item active">
+                    <li class="menu-item">
                         <a href="/admin/dashboard">
                             <span class="flex">
                                 <span class="flex"><img src="/assets/actions-admin/dashboard.svg" alt="" class="icon"><span class="text">Dashboard</span></span>
                             </span>
                         </a>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item active">
                         <a href="/admin/inventory">
                             <span class="flex">
                                 <span class="flex"><img src="/assets/actions-admin/inventory.svg" alt="" class="icon"><span class="text">Inventory</span></span>
@@ -106,158 +106,19 @@
                     <div class="section-header">
 
                         <div class="section-header-top flex">
-                            <h2 class="section-header-title">Dashboard</h2>
+                            <h2 class="section-header-title">Inventory</h2>
                         </div>
 
                         <div class="section-header-bottom">
                             <div class="section-togglers">
-                                <span class="section-toggler active" data-section="section_00">General Insights</span>
-                                <span class="section-toggler" data-section="section_01">Income</span>
-                                <span class="section-toggler" data-section="section_02">Expenses</span>
+                                <span class="section-toggler active" data-section="section_00">General</span>
+                                <span class="section-toggler" data-section="section_01">Medicines</span>
+                                <span class="section-toggler" data-section="section_02">Equipment</span>
                             </div>
                         </div>
                         
                     </div>
                     <div class="section-body" style="padding-block-start: .8rem;">
-
-                        <div class="summary-cards">
-                            <div class="summary-card card">
-                                <div class="summary-content flex">
-                                    <div class="summary-content-wrapper summary-content-wrapper-left">
-                                        <h4>Income</h4>
-                                        <h2 id="">UGX 260,000,000</h2>
-                                    </div>
-                                    <div class="summary-content-wrapper summary-content-wrapper-right">
-                                        <span><i class="ti ti-money"></i></span>
-                                    </div>
-                                </div>
-                                <div class="summary-metrics">
-                                    <div class="summary-metrics-wrapper flex">
-                                        <div class="summary-metrics-card">
-                                            <span><i class="ti-arrow-up"></i></span>
-                                            <span>56%</span>
-                                        </div>
-                                        <h4>Since last month</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="summary-card card">
-                                <div class="summary-content flex">
-                                    <div class="summary-content-wrapper summary-content-wrapper-left">
-                                        <h4>Patients</h4>
-                                        <h2 id="">20,000</h2>
-                                    </div>
-                                    <div class="summary-content-wrapper summary-content-wrapper-right">
-                                        <span><i class="ti ti-user"></i></span>
-                                    </div>
-                                </div>
-                                <div class="summary-metrics">
-                                    <div class="summary-metrics-wrapper flex">
-                                        <div class="summary-metrics-card">
-                                            <span><i class="ti-arrow-up"></i></span>
-                                            <span>56%</span>
-                                        </div>
-                                        <h4>Since last month</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="summary-card card">
-                                <div class="summary-content flex">
-                                    <div class="summary-content-wrapper summary-content-wrapper-left">
-                                        <h4>Income</h4>
-                                        <h2 id="">UGX 260,000,000</h2>
-                                    </div>
-                                    <div class="summary-content-wrapper summary-content-wrapper-right">
-                                        <span><i class="ti ti-time"></i></span>
-                                    </div>
-                                </div>
-                                <div class="summary-metrics">
-                                    <div class="summary-metrics-wrapper flex">
-                                        <div class="summary-metrics-card">
-                                            <span><i class="ti-arrow-up"></i></span>
-                                            <span>56%</span>
-                                        </div>
-                                        <h4>Since last month</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="summary-card card">
-                                <div class="summary-content flex">
-                                    <div class="summary-content-wrapper summary-content-wrapper-left">
-                                        <h4>Income</h4>
-                                        <h2 id="">UGX 260,000,000</h2>
-                                    </div>
-                                    <div class="summary-content-wrapper summary-content-wrapper-right">
-                                        <span><i class="ti ti-pencil"></i></span>
-                                    </div>
-                                </div>
-                                <div class="summary-metrics">
-                                    <div class="summary-metrics-wrapper flex">
-                                        <div class="summary-metrics-card">
-                                            <span><i class="ti-arrow-up"></i></span>
-                                            <span>56%</span>
-                                        </div>
-                                        <h4>Since last month</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="details-card">
-                            <div class="details-card-header">
-                                <h3 class="card-header">Metrics</h3>
-                            </div>
-
-                            <div class="details-card-body">
-                                <div class="data-charts flex">
-                                    <div class="data-chart card services-chart">
-                                        <h3 id="chart-1-title" class="chart-title">Services</h3>
-
-                                        <div class="filters">
-                                            <i class="ti-filter filter-icon"></i>
-                                            <div class="select-container">
-                                                <select class="filter-select" id="filter-select-left">
-                                                    <option value="day">Today</option>
-                                                    <option value="week">Week</option>
-                                                    <option value="month">Month</option>
-                                                    <option value="year">Year</option>
-                                                </select>
-                                                <div class="filter-select-icon">&#9660;</div>
-                                            </div>
-                                        </div>
-
-                                        <div class="data-chart-ctas flex">
-                                            <button id="print-data-graph" class="btn print-btn">Print <i class="ti ti-printer"></i></button>
-                                        </div>
-
-                                        <canvas class="sales-chart" id="chart-1"></canvas>
-                                    </div>
-
-                                    <div class="data-chart card income-chart">
-                                        <h3 id="chart-2-title" class="chart-title">Income</h3>
-
-                                         <div class="filters">
-                                            <i class="ti-filter filter-icon"></i>
-                                            <div class="select-container">
-                                                <select class="filter-select" id="filter-select-right">
-                                                    <option value="day">Today</option>
-                                                    <option value="week">Week</option>
-                                                    <option value="month">Month</option>
-                                                    <option value="year">Year</option>
-                                                </select>
-                                                <div class="filter-select-icon">&#9660;</div>
-                                            </div>
-                                        </div>
-
-                                        <div class="data-chart-ctas flex">
-                                            <button id="print-data-graph" class="btn print-btn">Print <i class="ti ti-printer"></i></button>
-                                        </div>
-                                        
-                                        <canvas class="income-chart" id="chart-2"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -266,14 +127,14 @@
                     <div class="section-header">
 
                         <div class="section-header-top flex">
-                            <h2 class="section-header-title">Dashboard</h2>
+                            <h2 class="section-header-title">Inventory</h2>
                         </div>
 
                         <div class="section-header-bottom">
                             <div class="section-togglers">
-                                <span class="section-toggler" data-section="section_00">General Insights</span>
-                                <span class="section-toggler active" data-section="section_01">Income</span>
-                                <span class="section-toggler" data-section="section_02">Expenses</span>
+                                <span class="section-toggler" data-section="section_00">General</span>
+                                <span class="section-toggler active" data-section="section_01">Medicines</span>
+                                <span class="section-toggler" data-section="section_02">Equipment</span>
                             </div>
                         </div>
                         
@@ -287,14 +148,14 @@
                     <div class="section-header">
 
                         <div class="section-header-top flex">
-                            <h2 class="section-header-title">Dashboard</h2>
+                            <h2 class="section-header-title">Inventory</h2>
                         </div>
 
                         <div class="section-header-bottom">
                             <div class="section-togglers">
-                                <span class="section-toggler" data-section="section_00">General Insights</span>
-                                <span class="section-toggler" data-section="section_01">Income</span>
-                                <span class="section-toggler active" data-section="section_02">Expenses</span>
+                                <span class="section-toggler" data-section="section_00">General</span>
+                                <span class="section-toggler" data-section="section_01">Medicines</span>
+                                <span class="section-toggler active" data-section="section_02">Equipment</span>
                             </div>
                         </div>
                         

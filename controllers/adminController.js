@@ -10,5 +10,13 @@ const renderActivities = (req, res) => {
     res.render("admin/activities" , {data: {user:req.session.user}});
 };
 
+const renderInventory = (req, res) => {
+    res.render("admin/inventory" , {data: {user:req.session.user}});
+};
 
-module.exports = { renderDashboard, renderAccounts, renderActivities };
+const renderReports = (req, res) => {
+    res.render("admin/reports" , {data: {user:req.session.user}});
+};
+
+
+module.exports = { renderDashboard, renderAccounts, renderActivities, renderInventory, renderReports };
