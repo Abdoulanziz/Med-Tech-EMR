@@ -136,13 +136,19 @@ async function loadAllUsers() {
                 render: function(data, type, row, meta) {
                     const status = data.userAccountStatus.toLowerCase();
                     let backgroundColor;
+                    let color;
 
                     if (status === 'active') {
-                        backgroundColor = 'yellowgreen';
+                        color = 'yellowgreen';
+                        backgroundColor = '#f3fed2';
                     } else if(status === 'suspended') {
-                        backgroundColor = 'orange';
+                        color = 'orange';
+                        backgroundColor = '#fcf1dd';
+                    } else {
+                        color = 'grey';
+                        backgroundColor = '#f4f4ea';
                     }
-                    return '<span style="font-size: 10px;display: block;inline-size: 50%;border-radius:6px;padding: .4rem .6rem;color: #fff;background-color: ' + backgroundColor + ';">' + data.userAccountStatus.toUpperCase() + '</span>';
+                    return '<span style="font-size: 10px;display: block;inline-size: 50%;border-radius:6px;padding: .4rem .6rem;color: #fff;color: ' + color + ';background-color: ' + backgroundColor + ';">' + data.userAccountStatus.toUpperCase() + '</span>';
 
                 }
             },
