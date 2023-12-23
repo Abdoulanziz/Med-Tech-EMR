@@ -21,6 +21,7 @@ const {
   LabResultForCompleteBloodCount,
   LabResultForUrinalysis,
   Prescription,
+  AuditLog,
 } = require('../models');
 
 
@@ -2546,6 +2547,89 @@ const fetchPrescriptionsByVisitId = async (req, res) => {
 };
 
 
+// Fetch audit logs
+const fetchAuditLogs = async (req, res) => {
+  try {
+    const draw = req.query.draw;
+    const start = parseInt(req.query.start);
+    const length = parseInt(req.query.length);
+    const searchValue = req.query.search.value;
+    const orderColumnIndex = req.query.order[0].column;
+    const orderDirection = req.query.order[0].dir;
+    const minDate = req.query.minDate;
+    const maxDate = req.query.maxDate;
+
+    const filter = {};
+
+    const sort = [];
+
+    // if (searchValue) {
+    //   filter[Op.or] = [
+    //     { patientId: { [Op.iLike]: `%${searchValue}%` } },
+    //     // { lastName: { [Op.iLike]: `%${searchValue}%` } },
+    //     // Add more columns to search here as needed
+    //   ];
+    // }
+
+    if (minDate && maxDate) {
+      filter.createdAt = {
+        [Op.between]: [new Date(minDate), new Date(maxDate)],
+      };
+    }
+
+    // Define the column mappings for sorting
+    const columnMappings = {
+      0: 'audit_log_id', // Map column 0 to the 'id' column
+      // Add mappings for other columns as needed
+    };
+
+    // Check if the column index is valid and get the column name
+    const columnData = columnMappings[orderColumnIndex];
+    if (columnData) {
+      sort.push([columnData, orderDirection]);
+    }
+
+    // Add sorting by createdAt in descending order (latest first)
+    // sort.push(['id', 'desc']); // This line will sort by createdAt in descending order
+
+    // Construct the Sequelize query
+    const queryOptions = {
+      where: filter,
+      offset: start,
+      limit: length,
+      order: sort,
+      include: [
+        {
+          model: models.User,
+          attributes: ['username'],
+        },
+      ],
+    };
+
+    const result = await AuditLog.findAndCountAll(queryOptions);
+
+    // Access the user's fields in each audit log result
+    const auditLogsWithUserData = result.rows.map((auditLog) => ({
+      // Extract fields from the 'user' association
+      auditLogCreatedAt: auditLog.createdAt,
+      username: auditLog.User.username,
+      auditLogAction: auditLog.action,
+      auditLogEntity: auditLog.entityName,
+    }));
+
+    return res.status(200).json({
+      draw: draw,
+      recordsTotal: result.count,
+      recordsFiltered: result.count,
+      data: auditLogsWithUserData,
+    });
+  } catch (error) {
+    console.error('Error fetching audit logs:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
 
 
 
@@ -2599,4 +2683,5 @@ module.exports = {
   fetchUnpaidBillsByVisitId,
   createPrescription,
   fetchPrescriptionsByVisitId,
+  fetchAuditLogs,
 };

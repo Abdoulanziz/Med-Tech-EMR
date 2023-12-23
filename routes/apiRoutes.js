@@ -51,6 +51,7 @@ const {
     fetchUnpaidBillsByVisitId,
     createPrescription,
     fetchPrescriptionsByVisitId,
+    fetchAuditLogs,
 } = require("../controllers/apiController");
 
 router.get("/status", checkAPIStatus);
@@ -123,6 +124,9 @@ router.get("/prescriptions/:visitId", fetchPrescriptionsByVisitId);
 
 router.get("/tests", fetchTests);
 router.get("/medicines", fetchMedicines);
+
+
+router.get("/admin/audit-logs", fetchAuditLogs);
 
 
 module.exports = router;
