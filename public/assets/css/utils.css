@@ -319,6 +319,7 @@ a {
 .dropdown-menu .dropdown-item.header:first-child {
   border-block-end: 1px solid #f0efef;
   padding-block: 8px;
+  color: rgb(92, 92, 92);
 }
 
 .dropdown-menu .dropdown-item.footer:last-child {
@@ -363,7 +364,7 @@ a {
 
 .dropdown-menu .dropdown-items .dropdown-item:hover i,
 .dropdown-menu .dropdown-items .dropdown-item:hover a {
-    color: var(--brand-primary);
+    color: rgb(101, 101, 101);
 }
 
 .dropdown-menu .dropdown-items .dropdown-item:hover,

@@ -74,22 +74,20 @@ export const UI = {
     // Dropdown
     const dropdownMenu = document.querySelector('#dropdown-menu');
     const toggleDropdown = document.querySelector('#toggle-dropdown');
-    const userFullNameLabel = document.querySelector("#user-fullname-label");
-    const userEmailLabel = document.querySelector("#user-email-label");
     let isDropdownToggled = false;
 
     toggleDropdown?.addEventListener('click', () => {
         if (!isDropdownToggled) {
-            isDropdownToggled = true;
-            dropdownMenu.style.display = "block";
+          isDropdownToggled = true;
+          dropdownMenu.style.display = "block";
         } else {
-            isDropdownToggled = false;
-            dropdownMenu.style.display = "none";
+          isDropdownToggled = false;
+          dropdownMenu.style.display = "none";
         }
     });
 
     if (!dropdownMenu.classList.contains('left') || !dropdownMenu.classList.contains('right')) {
-        dropdownMenu.classList.add('dropdown-menu-default');
+      dropdownMenu.classList.add('dropdown-menu-default');
     }
 
     // Hide the dropdown function

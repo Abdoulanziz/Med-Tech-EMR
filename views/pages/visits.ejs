@@ -106,28 +106,34 @@
 
             <!-- Main section -->
             <div class="content">
+
                 <!-- Navbar -->
                 <div class="navbar">
                     <nav>
                         <ul class="nav-links flex">
                             <img src="/assets/svg/cancel.png" alt="" id="sidebar-toggler" class="sidebar-toggler" style="block-size: 32px;inline-size: 32px;">
-                            <div class="dropdown">
-                                <div class="flex">
-                                    <img src="/assets/img/profiledefault.png" alt="" class="dropdown-avatar" id="toggle-dropdown">
-                                    <img src="/assets/svg/bell.png" alt="" class="">
-                                </div>
-                                <div class="dropdown-menu" id="dropdown-menu">
-                                    <ul class="dropdown-items">
-                                        <li class="dropdown-item header">
-                                            <span id="user-fullname-label"><%= data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1) %></span>
-                                            <br>
-                                            <small id="user-email-label">admin@coire.live</small>
-                                        </li>
-                                        <li class="dropdown-item"><i class="ti-settings"></i> <a href="#">Settings</a></li>
-                                        <li class="dropdown-item"><i class="ti-user"></i> <a href="#">My Profile</a></li>
-                                        <li class="dropdown-item"><i class="ti-info-alt"></i> <a href="#">About</a></li>
-                                        <li class="dropdown-item footer" id="signout-cta"><span>Sign Out</span></li>
-                                    </ul>
+                            <div class="nav-badges flex">
+                                <div class="user-badge flex">
+                                    <h4 class="user-name"><%= data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1) %></h4>
+                                    <div class="user-avatar dropdown">
+                                        <div class="dropdown-avatar flex">
+                                            <img src="/assets/img/profiledefault.png" alt="user avatar" class="avatar">
+                                            <i class="ti-angle-down" id="toggle-dropdown"></i>
+                                        </div>
+                                        <div class="dropdown-menu" id="dropdown-menu">
+                                            <ul class="dropdown-items">
+                                                <li class="dropdown-item header">
+                                                    <span id="user-fullname-label"><%= data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1) %></span>
+                                                    <br>
+                                                    <small id="user-email-label">admin@coire.live</small>
+                                                </li>
+                                                <li class="dropdown-item"><i class="ti-settings"></i> <a href="#">Settings</a></li>
+                                                <li class="dropdown-item"><i class="ti-user"></i> <a href="#">My Profile</a></li>
+                                                <li class="dropdown-item"><i class="ti-info-alt"></i> <a href="#">About</a></li>
+                                                <li class="dropdown-item footer" id="signout-cta"><span>Sign Out</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </ul>

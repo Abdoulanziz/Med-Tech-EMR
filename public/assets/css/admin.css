@@ -122,24 +122,36 @@
 .navbar nav .nav-links .link > * {
   font-weight: bold;
 }
-  
-.navbar nav .nav-links .dropdown img {
-  margin-left: .5rem;
-  margin-right: .5rem;
-  cursor: pointer;
+
+.navbar .nav-badges .user-badge.flex {
+  color: #f3f3f3;
+  padding: .2rem .4rem;
+  border-radius: 1rem;
+  border: 1px solid rgb(55, 55, 55);
+  min-inline-size: 12.4rem;
+  justify-content: flex-end;
+  gap: .6rem;
+  background-color: #535353;
+  font-family: var(--font-tilt-neon);
 }
 
-.navbar .dropdown-avatar {
-  block-size: 34px;
-  inline-size: 34px;
-  border-radius: 6px;
+.navbar .nav-badges .dropdown-avatar.flex {
+  justify-content: flex-end;
+  gap: .28rem;
 }
 
-.navbar .dropdown .flex img:nth-child(2) {
+.navbar .nav-badges .dropdown-avatar .ti-angle-down {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.navbar .nav-badges .avatar {
   background-color: var(--accent-color);
   color: #f3f3f3;
   padding: .2rem .2rem;
-  border-radius: 9px;
+  border-radius: 50%;
+  inline-size: 42px;
+  block-size: 42px;
 }
   
 .navbar nav div {
