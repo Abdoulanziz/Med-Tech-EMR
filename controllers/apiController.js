@@ -22,6 +22,7 @@ const {
   LabResultForUrinalysis,
   Prescription,
   AuditLog,
+  Income,
 } = require('../models');
 
 
@@ -1114,12 +1115,77 @@ const updateClinicalRequestForEyeById = async (req, res) => {
 };
 
 
+
+
+
+
+// Middleware
+const createIncomeRecord = async (patientId, amount, incomeSource, narration, userId) => {
+  try {
+    const incomeRecord = await Income.create({
+      patientId,
+      amount,
+      incomeSource,
+      narration,
+      userId,
+    });
+
+    return incomeRecord;
+  } catch (error) {
+    console.error('Error creating income record:', error);
+    throw new Error('Error creating income record');
+  }
+};
+
+
+
+
+
+
 // Update clinical request for eye payment status
 const updateClinicalRequestForEyePaymentStatusById = async (req, res) => {
   try {
     const requestId = req.params.id;
     const paymentStatus = req.params.status;
 
+    // Retrieve the visit associated with the ClinicalRequestForEye
+    const clinicalRequest = await ClinicalRequestForEye.findByPk(requestId, {
+      include: [{ model: Visit, attributes: ['patientId'] }],
+    });
+
+    if (!clinicalRequest) {
+      return res.status(404).json({
+        status: 'failure',
+        message: 'Clinical Request For Eye not found',
+      });
+    }
+
+    const visit = clinicalRequest.Visit;
+    const patientId = visit.patientId;
+    const amount = clinicalRequest.serviceFee;
+
+    // Create an income record
+    const incomeRecord = await createIncomeRecord(
+      patientId,
+      amount,
+      "cash",
+      "Payment for Eye service",
+      req.session.user.userId
+    );
+
+    // Check if the income record was created successfully
+    if (!incomeRecord) {
+      return res.status(500).json({
+        status: 'failure',
+        message: 'Error creating income record',
+      });
+    }
+
+    // Create an audit log
+    await createAuditLog('Income', incomeRecord.incomeId, 'CREATE', {}, {incomeRecord}, req.session.user.userId);
+
+
+    // Then update payment status
     const [updatedCount] = await ClinicalRequestForEye.update(
       { paymentStatus: paymentStatus },
       { where: { requestId: requestId } }
@@ -1226,6 +1292,44 @@ const updateClinicalRequestForDentalPaymentStatusById = async (req, res) => {
     const requestId = req.params.id;
     const paymentStatus = req.params.status;
 
+    // Retrieve the visit associated with the ClinicalRequestForDental
+    const clinicalRequest = await ClinicalRequestForDental.findByPk(requestId, {
+      include: [{ model: Visit, attributes: ['patientId'] }],
+    });
+
+    if (!clinicalRequest) {
+      return res.status(404).json({
+        status: 'failure',
+        message: 'Clinical Request For Dental not found',
+      });
+    }
+
+    const visit = clinicalRequest.Visit;
+    const patientId = visit.patientId;
+    const amount = clinicalRequest.serviceFee;
+
+    // Create an income record
+    const incomeRecord = await createIncomeRecord(
+      patientId,
+      amount,
+      "cash",
+      "Payment for Dental service",
+      req.session.user.userId
+    );
+
+    // Check if the income record was created successfully
+    if (!incomeRecord) {
+      return res.status(500).json({
+        status: 'failure',
+        message: 'Error creating income record',
+      });
+    }
+
+    // Create an audit log
+    await createAuditLog('Income', incomeRecord.incomeId, 'CREATE', {}, {incomeRecord}, req.session.user.userId);
+
+
+    // Then update payment status
     const [updatedCount] = await ClinicalRequestForDental.update(
       { paymentStatus: paymentStatus },
       { where: { requestId: requestId } }
@@ -1332,6 +1436,44 @@ const updateClinicalRequestForCardiologyPaymentStatusById = async (req, res) => 
     const requestId = req.params.id;
     const paymentStatus = req.params.status;
 
+    // Retrieve the visit associated with the ClinicalRequestForCardiology
+    const clinicalRequest = await ClinicalRequestForCardiology.findByPk(requestId, {
+      include: [{ model: Visit, attributes: ['patientId'] }],
+    });
+
+    if (!clinicalRequest) {
+      return res.status(404).json({
+        status: 'failure',
+        message: 'Clinical Request For Cardiology not found',
+      });
+    }
+
+    const visit = clinicalRequest.Visit;
+    const patientId = visit.patientId;
+    const amount = clinicalRequest.serviceFee;
+
+    // Create an income record
+    const incomeRecord = await createIncomeRecord(
+      patientId,
+      amount,
+      "cash",
+      "Payment for Cardiology service",
+      req.session.user.userId
+    );
+
+    // Check if the income record was created successfully
+    if (!incomeRecord) {
+      return res.status(500).json({
+        status: 'failure',
+        message: 'Error creating income record',
+      });
+    }
+
+    // Create an audit log
+    await createAuditLog('Income', incomeRecord.incomeId, 'CREATE', {}, {incomeRecord}, req.session.user.userId);
+
+
+    // Then update payment status
     const [updatedCount] = await ClinicalRequestForCardiology.update(
       { paymentStatus: paymentStatus },
       { where: { requestId: requestId } }
@@ -1445,6 +1587,44 @@ const updateClinicalRequestForRadiologyPaymentStatusById = async (req, res) => {
     const requestId = req.params.id;
     const paymentStatus = req.params.status;
 
+    // Retrieve the visit associated with the ClinicalRequestForRadiology
+    const clinicalRequest = await ClinicalRequestForRadiology.findByPk(requestId, {
+      include: [{ model: Visit, attributes: ['patientId'] }],
+    });
+
+    if (!clinicalRequest) {
+      return res.status(404).json({
+        status: 'failure',
+        message: 'Clinical Request For Radiology not found',
+      });
+    }
+
+    const visit = clinicalRequest.Visit;
+    const patientId = visit.patientId;
+    const amount = clinicalRequest.serviceFee;
+
+    // Create an income record
+    const incomeRecord = await createIncomeRecord(
+      patientId,
+      amount,
+      "cash",
+      "Payment for Radiology service",
+      req.session.user.userId
+    );
+
+    // Check if the income record was created successfully
+    if (!incomeRecord) {
+      return res.status(500).json({
+        status: 'failure',
+        message: 'Error creating income record',
+      });
+    }
+
+    // Create an audit log
+    await createAuditLog('Income', incomeRecord.incomeId, 'CREATE', {}, {incomeRecord}, req.session.user.userId);
+
+
+    // Then update payment status
     const [updatedCount] = await ClinicalRequestForRadiology.update(
       { paymentStatus: paymentStatus },
       { where: { requestId: requestId } }
@@ -2630,6 +2810,74 @@ const fetchAuditLogs = async (req, res) => {
 };
 
 
+// Fetch income
+const fetchIncome = async (req, res) => {
+  try {
+    const draw = req.query.draw;
+    const start = parseInt(req.query.start);
+    const length = parseInt(req.query.length);
+    const searchValue = req.query.search.value;
+    const orderColumnIndex = req.query.order[0].column;
+    const orderDirection = req.query.order[0].dir;
+    const minDate = req.query.minDate;
+    const maxDate = req.query.maxDate;
+
+    const filter = {};
+
+    const sort = [];
+
+    // if (searchValue) {
+    //   filter[Op.or] = [
+    //     { patientId: { [Op.iLike]: `%${searchValue}%` } },
+    //     // { lastName: { [Op.iLike]: `%${searchValue}%` } },
+    //     // Add more columns to search here as needed
+    //   ];
+    // }
+
+    if (minDate && maxDate) {
+      filter.createdAt = {
+        [Op.between]: [new Date(minDate), new Date(maxDate)],
+      };
+    }
+
+    // Define the column mappings for sorting
+    const columnMappings = {
+      0: 'income_id', // Map column 0 to the 'id' column
+      // Add mappings for other columns as needed
+    };
+
+    // Check if the column index is valid and get the column name
+    const columnData = columnMappings[orderColumnIndex];
+    if (columnData) {
+      sort.push([columnData, orderDirection]);
+    }
+
+    // Add sorting by createdAt in descending order (latest first)
+    // sort.push(['id', 'desc']); // This line will sort by createdAt in descending order
+
+    // Construct the Sequelize query
+    const queryOptions = {
+      where: filter,
+      offset: start,
+      limit: length,
+      order: sort,
+    };
+
+    const result = await Income.findAndCountAll(queryOptions);
+
+    return res.status(200).json({
+      draw: draw,
+      recordsTotal: result.count,
+      recordsFiltered: result.count,
+      data: result.rows,
+    });
+  } catch (error) {
+    console.error('Error fetching income data:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
 
 
 
@@ -2684,4 +2932,5 @@ module.exports = {
   createPrescription,
   fetchPrescriptionsByVisitId,
   fetchAuditLogs,
+  fetchIncome,
 };

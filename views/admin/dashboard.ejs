@@ -302,7 +302,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <table id="all-users-table" class="display" style="width:100%;margin-top:.5rem;">
+                                <table id="income-table" class="display" style="width:100%;margin-top:.5rem;">
                                     <thead>
                                         <tr>
                                             <th>Income ID</th>
@@ -313,11 +313,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <td>1</td>
-                                        <td>Dental service</td>
-                                        <td>50000</td>
-                                        <td>Payment for root canal</td>
-                                        <td>2023-12-12</td>
                                     </tbody>
                                 </table>
                             </div>
@@ -376,12 +371,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <td>1</td>
-                                        <td>Utilities</td>
-                                        <td>1000000</td>
-                                        <td>Payment for electricity bill</td>
-                                        <td>Cash</td>
-                                        <td>2023-12-12</td>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Utilities</td>
+                                            <td>1000000</td>
+                                            <td>Payment for electricity bill</td>
+                                            <td>Cash</td>
+                                            <td>2023-12-12</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -398,6 +395,65 @@
                         <div class="banner-content-right">
                             <span class="system-version-label">System version: <span class="system-version-value"> 1.0.0 </span></span>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Collect patient triage modal -->
+                <div id="create-user-modal" class="form-modal">
+                    <div class="form-modal-content">
+                        <form class="modal-form" id="create-patient-triage-form">
+                            <div class="form-modal-header flex">
+                                <div class="form-modal-header-left flex">
+                                    <img src="/assets/actions/patients.png" alt="" class="icon">
+                                    <h2 class="title">Create Expense Record</h2>
+                                </div>
+                                <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                            </div>
+                
+                            <div class="modal-form-body" id="">
+                                <div class="form-section">
+                                    <h2>Vitals</h2>
+        
+                                    <div class="form-group">
+                                        <label for="blood-pressure">Blood pressure:</label>
+                                        <input type="text" class="form-control" id="blood-pressure" name="bloodPressure">
+                                    </div>
+                                
+                                    <div class="form-group">
+                                        <label for="heart-rate">Heart rate:</label>
+                                        <input type="text" class="form-control" id="heart-rate" name="heartRate">
+                                    </div>
+            
+                                    <div class="form-group">
+                                        <label for="respiratory-rate">Respiratory rate:</label>
+                                        <input type="text" class="form-control" id="respiratory-rate" name="respiratoryRate">
+                                    </div>
+                                </div>
+        
+                                <div class="form-section">
+                                    <h2>Signs & symptoms</h2>
+        
+                                    <div class="form-group">
+                                        <label for="signs-and-symptoms">Fill the signs and symptoms from the patient:</label>
+                                        <textarea id="signs-and-symptoms" name="signsAndSymptoms" class="form-control"></textarea>
+                                    </div>
+                                </div>
+        
+                                <div class="form-section">
+                                    <h2>Injury details</h2>
+        
+                                    <div class="form-group">
+                                        <label for="injury-details">Fill the type, location and severity of the injury:</label>
+                                        <textarea id="injury-details" name="injuryDetails" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                
+                            <div class="form-modal-footer flex">
+                                <button class="btn btn-primary" type="button">Cancel</button>
+                                <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

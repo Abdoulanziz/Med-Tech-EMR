@@ -52,6 +52,7 @@ const {
     createPrescription,
     fetchPrescriptionsByVisitId,
     fetchAuditLogs,
+    fetchIncome,
 } = require("../controllers/apiController");
 
 router.get("/status", checkAPIStatus);
@@ -92,7 +93,7 @@ router.patch("/services/eye/requests/:id/payment-status/:status", updateClinical
 router.post("/services/dental/requests", createClinicalRequestForDental);
 router.put("/services/dental/requests/:id", updateClinicalRequestForDentalById);
 router.patch("/services/dental/requests/:id/payment-status/:status", updateClinicalRequestForDentalPaymentStatusById);
-;
+
 router.post("/services/cardiology/requests", createClinicalRequestForCardiology);
 router.put("/services/cardiology/requests/:id", updateClinicalRequestForCardiologyById);
 router.patch("/services/cardiology/requests/:id/payment-status/:status", updateClinicalRequestForCardiologyPaymentStatusById);
@@ -127,6 +128,7 @@ router.get("/medicines", fetchMedicines);
 
 
 router.get("/admin/audit-logs", fetchAuditLogs);
+router.get("/admin/income", fetchIncome);
 
 
 module.exports = router;
