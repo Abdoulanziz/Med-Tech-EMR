@@ -6,6 +6,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Init UI
     UI.init();
 
+    // Update new patients count
+    updateNewPatientsCount();
+
+    // Update repeat patients count
+    updateRepeatPatientsCount();
+
     // Load income data
     loadIncomeData();
 
@@ -251,4 +257,54 @@ async function handleCreateExpenseRecordForm() {
             expenseRecordForm.reset();
         });
     });
+}
+
+// Update new patients count
+async function updateNewPatientsCount() {
+    try {
+        // Get current year month
+        const currentYearMonth = UTILS.getCurrentYearMonth();
+
+        // Make GET request to fetch new patients count
+        const response = await API.analytics.patients.fetchNewPatientsCountForCurrentMonth(currentYearMonth);
+        const count = await response.count;
+
+        // Check if the request was successful
+        if (response.status === 'success') {
+
+            // Update the UI
+            document.querySelector("#new-patients-count").textContent = count;
+
+        } else {
+            alert('Failed to fetch new patients count.');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('An error occurred while fetching new patients count.');
+    }
+}
+
+// Update repeat patients count
+async function updateRepeatPatientsCount() {
+    try {
+        // Get current year month
+        const currentYearMonth = UTILS.getCurrentYearMonth();
+
+        // Make GET request to fetch repeat patients count
+        const response = await API.analytics.patients.fetchRepeatPatientsCountForCurrentMonth(currentYearMonth);
+        const count = await response.count;
+
+        // Check if the request was successful
+        if (response.status === 'success') {
+
+            // Update the UI
+            document.querySelector("#repeat-patients-count").textContent = count;
+
+        } else {
+            alert('Failed to fetch repeat patients count.');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('An error occurred while fetching repeat patients count.');
+    }
 }

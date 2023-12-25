@@ -216,6 +216,20 @@ export const UTILS = {
         return workerInstance;
     },
 
+    // Get the current year month
+    getCurrentYearMonth: () => {
+        var currentDate = new Date();
+
+        var year = currentDate.getFullYear();
+        var month = currentDate.getMonth() + 1;
+        
+        var formattedMonth = month < 10 ? "0" + month : month;
+
+        var result = year + "-" + formattedMonth;
+
+        return result;
+    },
+
     APIStatus: {
         bannerTimeout: null,
         isApiRunning: false,
