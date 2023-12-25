@@ -429,7 +429,7 @@
 
 .date-range-picker input,
 .filter-select {
-  border: 1px solid rgb(229, 251, 186);;
+  border: 1px solid rgb(229, 251, 186);
 }
 
 .filter-select:focus {
@@ -445,12 +445,21 @@
 
 .filters-ctas {
   display: flex;
-  gap: .6rem;
+  gap: 1.2rem;
+  display: flex; 
+  justify-content: 
+  space-between; 
+  align-items: center; 
+  padding: .6rem 1.2rem; 
+  background-color: inherit;
+  border: 1px solid rgb(229, 251, 186);
+  border-radius: .6rem;
 }
 
-.filters-ctas i {
+.filters-ctas img {
   cursor: pointer;
-  font-size: 20px;
+  inline-size: 34px;
+  block-size: 34px;
 }
 
 .data-chart-ctas.flex {
