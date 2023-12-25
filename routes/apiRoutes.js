@@ -55,6 +55,8 @@ const {
     fetchIncome,
     createExpenseRecord,
     fetchExpenses,
+    fetchNewPatientsCountByMonth,
+    fetchRepeatPatientsCountByMonth,
 } = require("../controllers/apiController");
 
 router.get("/status", checkAPIStatus);
@@ -132,8 +134,12 @@ router.get("/medicines", fetchMedicines);
 router.get("/admin/audit-logs", fetchAuditLogs);
 
 router.get("/finance/income", fetchIncome);
-router.post("/finance/expenses", createExpenseRecord)
-router.get("/finance/expenses", fetchExpenses)
+router.post("/finance/expenses", createExpenseRecord);
+router.get("/finance/expenses", fetchExpenses);
+
+
+router.get("/analytics/patients/new/:month", fetchNewPatientsCountByMonth);
+router.get("/analytics/patients/repeat/:month", fetchRepeatPatientsCountByMonth);
 
 
 module.exports = router;

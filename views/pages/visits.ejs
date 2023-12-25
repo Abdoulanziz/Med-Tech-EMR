@@ -161,14 +161,25 @@
 
                             <div class="details-card-body">
                                 <div class="filter-section">
-                                    <div class="date-range-picker flex">
-                                        <div class="form-group flex flex-column">
-                                            <label for="min-date">From:</label>
-                                            <input type="date" name="from" id="min-date" class="date-range-filter">
+                                    <div class="filters">
+                                        <div class="filters-wrapper">
+                                            <i class="ti-filter filter-icon"></i>
+                                            <div class="date-range-picker flex">
+                                                <div class="form-group flex">
+                                                    <label for="min-date">From:</label>
+                                                    <input type="date" name="from" id="min-date" class="date-range-filter">
+                                                </div>
+                                                <div class="form-group flex">
+                                                    <label for="max-date">To:</label>
+                                                    <input type="date" name="to" id="max-date" class="date-range-filter">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="form-group flex flex-column">
-                                            <label for="max-date">To:</label>
-                                            <input type="date" name="to" id="max-date" class="date-range-filter">
+                                        <div class="filters-ctas">
+                                            <img src="/assets/filters-ctas/pdf.png" alt="pdf icon" title="Download as PDF">
+                                            <img src="/assets/filters-ctas/csv.png" alt="csv icon" title="Download as CSV">
+                                            <img src="/assets/filters-ctas/xls.png" alt="xls icon" title="Download as XLS">
+                                            <img src="/assets/filters-ctas/printer.png" alt="printer icon" title="Print">
                                         </div>
                                     </div>
                                 </div>

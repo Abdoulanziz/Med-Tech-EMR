@@ -2974,6 +2974,85 @@ const fetchExpenses = async (req, res) => {
 };
 
 
+// Fetch new patients count by month
+const fetchNewPatientsCountByMonth = async (req, res) => {
+  try {
+    const { month } = req.params;
+
+    // Ensure proper timezone handling
+    const startDate = new Date(`${month}-01T00:00:00Z`);
+    const endDate = new Date(startDate);
+    endDate.setUTCMonth(endDate.getUTCMonth() + 1); // Start of the next month
+
+    // Count distinct patient IDs with only one visit in the current month
+    const result = await Visit.findAll({
+      attributes: [
+        'patient_id',
+        [Visit.sequelize.fn('COUNT', Visit.sequelize.fn('DISTINCT', Visit.sequelize.col('visit_date'))), 'count'],
+      ],
+      group: ['patient_id'],
+      having: {
+        [Op.and]: [
+          Visit.sequelize.literal(`COUNT(DISTINCT visit_date) = 1`), // Only one visit
+          Visit.sequelize.literal(`MAX(visit_date) >= '${startDate.toISOString()}'`), // Visit in the current month
+        ],
+      },
+      raw: true, // Get raw data instead of Sequelize instances
+    });
+
+    // Remove the 'count' property from each object
+    const rawData = result.map(({ count, ...rest }) => ({ ...rest }));
+
+    return res.status(200).json({
+      count: rawData.length,
+      data: rawData,
+    });
+  } catch (error) {
+    console.error('Error fetching new patients count:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
+// Fetch repeat patients count by month
+const fetchRepeatPatientsCountByMonth = async (req, res) => {
+  try {
+    const { month } = req.params;
+
+    // Ensure proper timezone handling
+    const startDate = new Date(`${month}-01T00:00:00Z`);
+    const endDate = new Date(startDate);
+    endDate.setUTCMonth(endDate.getUTCMonth() + 1); // Start of the next month
+
+    // Count distinct patient IDs with more than one visit in the current month
+    const result = await Visit.findAll({
+      attributes: [
+        'patient_id',
+        [Visit.sequelize.fn('COUNT', Visit.sequelize.fn('DISTINCT', Visit.sequelize.col('visit_date'))), 'count'],
+      ],
+      group: ['patient_id'],
+      having: {
+        [Op.and]: [
+          Visit.sequelize.literal(`COUNT(DISTINCT visit_date) > 1`), // More than one visit
+          Visit.sequelize.literal(`MAX(visit_date) >= '${startDate.toISOString()}'`), // Visit in the current month
+        ],
+      },
+      raw: true, // Get raw data instead of Sequelize instances
+    });
+
+    // Remove the 'count' property from each object
+    const rawData = result.map(({ count, ...rest }) => ({ ...rest }));
+
+    return res.status(200).json({
+      count: rawData.length,
+      data: rawData,
+    });
+  } catch (error) {
+    console.error('Error fetching repeat patients count:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 
 
 
@@ -3031,4 +3110,6 @@ module.exports = {
   fetchIncome,
   createExpenseRecord,
   fetchExpenses,
+  fetchNewPatientsCountByMonth,
+  fetchRepeatPatientsCountByMonth,
 };

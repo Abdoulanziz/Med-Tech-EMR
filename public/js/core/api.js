@@ -334,7 +334,6 @@ export const API = {
     },
 
 
-    // Admin API
     // Users
     users: {
         // Create user POST api/v1/users
@@ -582,6 +581,7 @@ export const API = {
         },
     },
 
+
     // Finance operations
     finance: {
         // Income
@@ -597,6 +597,29 @@ export const API = {
                 return await API.makePostRequest(endpoint, expense, fromFormData);
             },
         }
+
+    },
+
+
+    // Data analytics
+    analytics: {
+        // Patients
+        patients: {
+            // Fetch new patients number for this month
+            // GET api/v1/analytics/patients/new/:month
+            fetchNewPatientsCountByMonth: async (month) => {
+                const endpoint = `${API.BACKEND_BASE_API_URI}/analytics/patients/new/${month}`;
+                return await API.makeGetRequest(endpoint);
+            },
+
+            // Fetch repeat patients number for this month
+            // GET api/v1/analytics/patients/repeat/:month
+            fetchRepeatPatientsCountByMonth: async (month) => {
+                const endpoint = `${API.BACKEND_BASE_API_URI}/analytics/patients/repeat/${month}`;
+                return await API.makeGetRequest(endpoint);
+            },
+
+        },
 
     },
 }

@@ -387,6 +387,108 @@
   padding-inline:  1.6rem;
 }
 
+
+.filter-section {
+  margin-block-end: 1.4rem;
+}
+
+.filters {
+  background-color: #fff;
+  border: 1px solid #efefef;
+  border-radius: 8px;
+  padding: .8rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-block: .4rem;
+}
+
+.filters-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.filters .date-range-picker.flex {
+  align-items: center;
+  justify-content: center;
+  margin-block-end: 0;
+}
+
+.filters .date-range-picker label {
+  margin-inline-end: .6rem;
+}
+
+.filter-icon {
+  font-size: 24px;
+  margin-right: 10px;
+  color: yellowgreen;
+}
+
+.select-container {
+  position: relative;
+}
+
+.date-range-picker input {
+  padding: .4rem .6rem;
+  border: 1px solid #efefef;
+  background-color: #ffffff;
+  border-radius: 5px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 150px;
+  outline: none;
+}
+
+.filter-select {
+  padding: .6rem;
+  border: 1px solid #efefef;
+  background-color: #ffffff;
+  border-radius: 5px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 150px;
+  outline: none;
+}
+
+.date-range-picker input,
+.filter-select {
+  border: 1px solid rgb(229, 251, 186);
+}
+
+.filter-select:focus {
+  border-color: yellowgreen;
+}
+
+.filter-select-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+}
+
+.filters-ctas {
+  display: flex;
+  gap: 1.2rem;
+  display: flex; 
+  justify-content: 
+  space-between; 
+  align-items: center; 
+  padding: .6rem 1.2rem; 
+  background-color: inherit;
+  border: 1px solid rgb(229, 251, 186);
+  border-radius: .6rem;
+}
+
+.filters-ctas img {
+  cursor: pointer;
+  inline-size: 34px;
+  block-size: 34px;
+}
+
 .form-modal {
   display: none;
   position: fixed;

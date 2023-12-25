@@ -352,15 +352,6 @@
   padding-inline:  1.6rem;
 }
 
-.data-charts.flex {
-  gap: 2rem;
-}
-
-.data-chart.card {
-  border-radius: 0;
-  box-shadow: none;
-}
-
 .filter-section {
   margin-block-end: 1.4rem;
 }
@@ -460,6 +451,15 @@
   cursor: pointer;
   inline-size: 34px;
   block-size: 34px;
+}
+
+.data-charts.flex {
+  gap: 2rem;
+}
+
+.data-chart.card {
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .data-chart-ctas.flex {

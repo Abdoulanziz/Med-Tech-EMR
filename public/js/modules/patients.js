@@ -179,7 +179,7 @@ async function loadAllPatients() {
                 render: function (data, type, row, meta) {
                     return `
                     <td>
-                        <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Update Patient <i class="ti-pencil"></i> </button>
+                        <button class="btn" style="background-color: #1da1f2;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Update <i class="ti-pencil"></i> </button>
                         <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">View Details <i class="ti-arrow-right"></i> </button>
                     </td>
                     `;
@@ -289,9 +289,6 @@ async function loadSinglePatientVists(patientId) {
 
             const editVisitCta = row.cells[5].querySelectorAll("button")[0];
 
-            const viewVisitCta = row.cells[5].querySelectorAll("button")[1];
-            const deleteVisitCta = row.cells[5].querySelectorAll("button")[2];
-
             editVisitCta.dataset.patient = rowDataString;
             editVisitCta.style.cursor = "pointer";
             editVisitCta.classList.add("modal-trigger");
@@ -379,7 +376,6 @@ async function loadSinglePatientVists(patientId) {
                     return `
                     <td>
                         <button class="btn" style="background-color: #1da1f2;padding-inline: .6rem;border-radius: 0;font-size: 12px;"> <i class="ti-pencil"></i> Update </button>
-                        <button class="btn" style="background-color: orange;padding-inline: .6rem;border-radius: 0;font-size: 12px;"> <i class="ti-trash"></i> Delete </button>
                     </td>
                     `;
                 },

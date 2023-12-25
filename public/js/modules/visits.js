@@ -1,6 +1,7 @@
 import { UI } from "../core/ui.js";
 import { UTILS } from "../core/utils.js";
 import { API } from "../core/api.js";
+import { SSE } from '../core/sse.js';
 
 document.addEventListener("DOMContentLoaded", () => {
     // Init UI
@@ -49,7 +50,6 @@ async function loadAllVisits() {
 
             const viewVisitCta = row.cells[6].querySelectorAll("button")[0];
             const editVisitCta = row.cells[6].querySelectorAll("button")[1];
-            const deleteVisitCta = row.cells[6].querySelectorAll("button")[2];
 
             // Edit
             editVisitCta.dataset.patient = rowDataString;
@@ -113,7 +113,6 @@ async function loadAllVisits() {
                     return `
                     <td>
                         <div style="display:flex; justify-content:flex-start; align-items:center; gap: .2rem;">
-                            <img src="/assets/svg/folder.png" alt="" class="icon" style="inline-size: 28px; block-size: 28px;" />
                             <span>${data.patientFullName}</span>
                         </div>
                     </td>
@@ -167,9 +166,8 @@ async function loadAllVisits() {
                 render: function (data, type, row, meta) {
                     return `
                     <td>
-                    <button class="btn" style="background-color: orange;padding-inline: .6rem;border-radius: 0;font-size: 12px;"> <i class="ti-trash"></i> View </button>
+                        <button class="btn" style="background-color: orange;padding-inline: .6rem;border-radius: 0;font-size: 12px;"> <i class="ti-trash"></i> View </button>
                         <button class="btn" style="background-color: #1da1f2;padding-inline: .6rem;border-radius: 0;font-size: 12px;"> <i class="ti-pencil"></i> Update </button>
-                        <button class="btn" style="background-color: orange;padding-inline: .6rem;border-radius: 0;font-size: 12px;"> <i class="ti-trash"></i> Delete </button>
                     </td>
                     `;
                 },
