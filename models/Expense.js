@@ -2,34 +2,34 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Income extends Model {
+  class Expense extends Model {
     static associate(models) {
       // define association here
-      Income.belongsTo(models.Patient, { foreignKey: 'patientId' });
-      Income.belongsTo(models.User, { foreignKey: 'userId' });
+      Expense.belongsTo(models.User, { foreignKey: 'userId' });
     }
   }
 
-  Income.init(
+  Expense.init(
     {
-      incomeId: {
+      expenseId: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
-        field: 'income_id',
+        field: 'expense_id',
       },
-      incomeUuid: {
+      expenseUuid: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
         unique: true,
-        field: 'income_uuid',
+        field: 'expense_uuid',
       },
-      patientId: {
-        type: DataTypes.INTEGER,
+      expenseCategory: {
+        type: DataTypes.ENUM('utilities', 'rent', 'others'),
+        defaultValue: 'utilities',
         allowNull: false,
-        field: 'patient_id',
+        field: 'expense_category',
       },
       amount: {
         type: DataTypes.STRING,
@@ -63,10 +63,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'Income',
-      tableName: 'income',
+      modelName: 'Expense',
+      tableName: 'expenses',
     }
   );
 
-  return Income;
+  return Expense;
 };

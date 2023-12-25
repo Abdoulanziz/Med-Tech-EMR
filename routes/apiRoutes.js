@@ -53,6 +53,8 @@ const {
     fetchPrescriptionsByVisitId,
     fetchAuditLogs,
     fetchIncome,
+    createExpenseRecord,
+    fetchExpenses,
 } = require("../controllers/apiController");
 
 router.get("/status", checkAPIStatus);
@@ -128,7 +130,10 @@ router.get("/medicines", fetchMedicines);
 
 
 router.get("/admin/audit-logs", fetchAuditLogs);
-router.get("/admin/income", fetchIncome);
+
+router.get("/finance/income", fetchIncome);
+router.post("/finance/expenses", createExpenseRecord)
+router.get("/finance/expenses", fetchExpenses)
 
 
 module.exports = router;

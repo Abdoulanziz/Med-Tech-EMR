@@ -23,6 +23,7 @@ const {
   Prescription,
   AuditLog,
   Income,
+  Expense,
 } = require('../models');
 
 
@@ -1120,12 +1121,12 @@ const updateClinicalRequestForEyeById = async (req, res) => {
 
 
 // Middleware
-const createIncomeRecord = async (patientId, amount, incomeSource, narration, userId) => {
+const createIncomeRecord = async (patientId, amount, paymentMethod, narration, userId) => {
   try {
     const incomeRecord = await Income.create({
       patientId,
       amount,
-      incomeSource,
+      paymentMethod,
       narration,
       userId,
     });
@@ -1137,6 +1138,33 @@ const createIncomeRecord = async (patientId, amount, incomeSource, narration, us
   }
 };
 
+
+const createExpenseRecord = async (req, res) => {
+  try {
+    const {
+      expenseCategory,
+      amount,
+      paymentMethod,
+      narration
+    } = req.body;
+
+    const newExpenseRecord = await Expense.create({
+      expenseCategory,
+      amount,
+      paymentMethod,
+      narration,
+      userId: req.session.user.userId,
+    });
+
+    // Create an audit log
+    await createAuditLog('Expense', newExpenseRecord.expenseId, 'CREATE', {}, newExpenseRecord.dataValues, req.session.user.userId);
+
+    return res.status(201).json({ status: 'success', message: 'Expense record created successfully', data: newExpenseRecord });
+  } catch (error) {
+    console.error('Error creating expense record:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 
 
 
@@ -2878,6 +2906,74 @@ const fetchIncome = async (req, res) => {
 };
 
 
+// Fetch expenses
+const fetchExpenses = async (req, res) => {
+  try {
+    const draw = req.query.draw;
+    const start = parseInt(req.query.start);
+    const length = parseInt(req.query.length);
+    const searchValue = req.query.search.value;
+    const orderColumnIndex = req.query.order[0].column;
+    const orderDirection = req.query.order[0].dir;
+    const minDate = req.query.minDate;
+    const maxDate = req.query.maxDate;
+
+    const filter = {};
+
+    const sort = [];
+
+    // if (searchValue) {
+    //   filter[Op.or] = [
+    //     { patientId: { [Op.iLike]: `%${searchValue}%` } },
+    //     // { lastName: { [Op.iLike]: `%${searchValue}%` } },
+    //     // Add more columns to search here as needed
+    //   ];
+    // }
+
+    if (minDate && maxDate) {
+      filter.createdAt = {
+        [Op.between]: [new Date(minDate), new Date(maxDate)],
+      };
+    }
+
+    // Define the column mappings for sorting
+    const columnMappings = {
+      0: 'expense_id', // Map column 0 to the 'id' column
+      // Add mappings for other columns as needed
+    };
+
+    // Check if the column index is valid and get the column name
+    const columnData = columnMappings[orderColumnIndex];
+    if (columnData) {
+      sort.push([columnData, orderDirection]);
+    }
+
+    // Add sorting by createdAt in descending order (latest first)
+    // sort.push(['id', 'desc']); // This line will sort by createdAt in descending order
+
+    // Construct the Sequelize query
+    const queryOptions = {
+      where: filter,
+      offset: start,
+      limit: length,
+      order: sort,
+    };
+
+    const result = await Expense.findAndCountAll(queryOptions);
+
+    return res.status(200).json({
+      draw: draw,
+      recordsTotal: result.count,
+      recordsFiltered: result.count,
+      data: result.rows,
+    });
+  } catch (error) {
+    console.error('Error fetching expenses data:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
 
 
 
@@ -2933,4 +3029,6 @@ module.exports = {
   fetchPrescriptionsByVisitId,
   fetchAuditLogs,
   fetchIncome,
+  createExpenseRecord,
+  fetchExpenses,
 };

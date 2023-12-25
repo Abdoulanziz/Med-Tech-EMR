@@ -2,21 +2,22 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('income', {
-      income_id: {
+    await queryInterface.createTable('expenses', {
+      expense_id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
       },
-      income_uuid: {
+      expense_uuid: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         allowNull: false,
         unique: true,
       },
-      patient_id: {
-        type: Sequelize.INTEGER,
+      expense_category: {
+        type: Sequelize.ENUM('utilities', 'rent', 'others'),
+        defaultValue: 'utilities',
         allowNull: false,
       },
       amount: {
@@ -47,6 +48,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('income');
+    await queryInterface.dropTable('expenses');
   }
 };

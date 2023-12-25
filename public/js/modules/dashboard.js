@@ -8,11 +8,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Load income data
     loadIncomeData();
+
+    // Handle create expense record
+    handleCreateExpenseRecordForm();
+
+    // Load expense data
+    loadExpensesData();
 });
 
 async function loadIncomeData() {
     let incomeData;
-    const apiEndpoint = `${UI.apiBaseURL}/admin/income`;
+    const apiEndpoint = `${UI.apiBaseURL}/finance/income`;
 
     incomeData = $('#income-table').DataTable({
         processing: true,
@@ -49,7 +55,7 @@ async function loadIncomeData() {
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return data.incomeSource.charAt(0).toUpperCase() + data.incomeSource.slice(1);
+                    return data.paymentMethod.charAt(0).toUpperCase() + data.paymentMethod.slice(1);
                 },
             },
             {
@@ -101,3 +107,148 @@ async function loadIncomeData() {
     });
 
 };
+
+async function loadExpensesData() {
+    let expensesData;
+    const apiEndpoint = `${UI.apiBaseURL}/finance/expenses`;
+
+    expensesData = $('#expenses-table').DataTable({
+        processing: true,
+        serverSide: true,
+        paging: true,
+        searching: true,
+        filter:true,
+        destroy: true,
+
+        ajax: {
+            url: apiEndpoint,
+            dataSrc: "data",
+            data: function (d) {
+                d.minDate = $('#min-date').val();
+                d.maxDate = $('#max-date').val();
+            },
+        },    
+        columns: [ 
+            { data : null },
+            { data : null },
+            { data : null },
+            { data : null },
+            { data : null },
+            { data : null }
+        ],
+        rowCallback: function(row, data, index) {
+        },
+        columnDefs: [
+            {
+                targets: 0,
+                render: function(data, type, row, meta) {
+                    return data.expenseId;
+                }
+            },
+            {
+                targets: 1,
+                render: function(data, type, row, meta) {
+                    return data.expenseCategory.charAt(0).toUpperCase() + data.expenseCategory.slice(1);
+                }
+            },
+            {
+                targets: 2,
+                render: function (data, type, row, meta) {
+                    return data.amount;
+                },
+            },
+            {
+                targets: 3,
+                render: function (data, type, row, meta) {
+                    return data.narration;
+                },
+            },
+            {
+                targets: 4,
+                render: function (data, type, row, meta) {
+                    return data.paymentMethod.charAt(0).toUpperCase() + data.paymentMethod.slice(1);
+                },
+            },
+            {
+                targets: 5,
+                render: function(data, type, row, meta) {
+                    const originalDate = data.createdAt;
+                    const dateObj = new Date(originalDate);
+                    const formattedDate = dateObj.toISOString().split('T')[0];
+                    return '<span>' + formattedDate + '</span>';
+                }
+            },
+        ] 
+    });
+
+
+    // Date range picker
+    // Extend dataTables search
+    $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+        var min = $('#min-date').val();
+        var max = $('#max-date').val();
+        var createdAt = moment(data[4], 'MM/DD/YYYY');
+
+        if ((min === "" && max === "") || (!min && !max)) {
+            return true;
+        } else if ((!min || min === "") && max) {
+            return createdAt.isSameOrBefore(max);
+        } else if ((!max || max === "") && min) {
+            return createdAt.isSameOrAfter(min);
+        } else {
+            return createdAt.isSameOrAfter(min) && createdAt.isSameOrBefore(max);
+        }
+    });
+
+    // Re-draw the table when the a date range filter changes
+    $('.date-range-filter').change(function() {
+        expensesData.draw();
+    });
+
+};
+
+// Handle expense create form
+async function handleCreateExpenseRecordForm() {
+    const expenseRecordForm = document.querySelector('#create-expense-record-form');
+    expenseRecordForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+    
+        // Collect form data
+        const formData = new FormData(expenseRecordForm);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+    
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(expenseRecordForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to create a triage record
+                const response = await API.finance.expenses.create(URLEncodedData, true);
+
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    expenseRecordForm.reset();
+    
+                    // Remove form
+                    expenseRecordForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the expenses table
+                    loadExpensesData();
+    
+                } else {
+                    alert('Failed to create expense record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while creating the expense record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            expenseRecordForm.reset();
+        });
+    });
+}

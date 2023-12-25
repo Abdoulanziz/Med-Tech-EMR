@@ -315,6 +315,26 @@
   box-shadow: none;
 }
 
+.summary-card.green .summary-metrics-card {
+  background-color: rgb(229, 251, 186);
+  color: yellowgreen;
+}
+
+.summary-card.yellow .summary-metrics-card {
+  background-color: #fefbca;
+  color: #efdf00;
+}
+
+.summary-card.orange .summary-metrics-card {
+  background-color: #fbe8e0;
+  color: #fe5000;
+}
+
+.summary-card.blue .summary-metrics-card {
+  background-color: #e0f7fc;
+  color: #00bce4;
+}
+
 .details-card {
   background-color: #ffffff;
   border-radius: 1rem;

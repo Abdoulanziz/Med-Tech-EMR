@@ -580,7 +580,23 @@ export const API = {
                 },
             },
         },
+    },
 
-        
+    // Finance operations
+    finance: {
+        // Income
+        income: {
+
+        },
+
+        // Expenses
+        expenses: {
+            // Create expense record POST api/v1/finance/expenses
+            create: async (expense, fromFormData) => {
+                const endpoint = `${API.BACKEND_BASE_API_URI}/finance/expenses`;
+                return await API.makePostRequest(endpoint, expense, fromFormData);
+            },
+        }
+
     },
 }
