@@ -607,14 +607,14 @@ export const API = {
         patients: {
             // Fetch new patients number for month
             // GET api/v1/analytics/patients/new/:startDate/:endDate
-            fetchNewPatientsCountForMonth: async (startDate, endDate) => {
+            fetchNewPatientsCountByCountTypeAndDateRange: async (startDate, endDate) => {
                 const endpoint = `${API.BACKEND_BASE_API_URI}/analytics/patients/new/${startDate}/${endDate}`;
                 return await API.makeGetRequest(endpoint);
             },
 
             // Fetch repeat patients number for month
             // GET api/v1/analytics/patients/repeat/:startDate/:endDate
-            fetchRepeatPatientsCountForMonth: async (startDate, endDate) => {
+            fetchRepeatPatientsCountByCountTypeAndDateRange: async (startDate, endDate) => {
                 const endpoint = `${API.BACKEND_BASE_API_URI}/analytics/patients/repeat/${startDate}/${endDate}`;
                 return await API.makeGetRequest(endpoint);
             },

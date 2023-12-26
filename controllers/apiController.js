@@ -2983,7 +2983,7 @@ const fetchExpenses = async (req, res) => {
 
 
 // Fetch new patients count for month
-const fetchPatientsCountForDateRange = async (req, res) => {
+const fetchPatientsCountByCountTypeAndDateRange = async (req, res) => {
   try {
     const { startDate, endDate, countType } = req.params;
 
@@ -3094,5 +3094,5 @@ module.exports = {
   fetchIncome,
   createExpenseRecord,
   fetchExpenses,
-  fetchPatientsCountForDateRange,
+  fetchPatientsCountByCountTypeAndDateRange,
 };

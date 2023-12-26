@@ -273,7 +273,7 @@ async function updateNewPatientsCount() {
 
 
         // Make GET request to fetch new patients count
-        const response = await API.analytics.patients.fetchNewPatientsCountForMonth(startDate, endDate);
+        const response = await API.analytics.patients.fetchNewPatientsCountByCountTypeAndDateRange(startDate, endDate);
         const count = await response.count;
 
         // Check if the request was successful
@@ -302,11 +302,11 @@ async function updateNewPatientsPercentageSinceLastMonth() {
 
 
         // Make GET request to fetch new patients count
-        const currentResponse = await API.analytics.patients.fetchNewPatientsCountForMonth(currentStartDate, currentEndDate);
+        const currentResponse = await API.analytics.patients.fetchNewPatientsCountByCountTypeAndDateRange(currentStartDate, currentEndDate);
         const currentCount = await currentResponse.count;
 
         // Make GET request to fetch new patients count
-        const previousResponse = await API.analytics.patients.fetchNewPatientsCountForMonth(previousStartDate, previousEndDate);
+        const previousResponse = await API.analytics.patients.fetchNewPatientsCountByCountTypeAndDateRange(previousStartDate, previousEndDate);
         const previousCount = await previousResponse.count;
 
         // Check if both requests were successful
@@ -337,7 +337,7 @@ async function updateRepeatPatientsCount() {
         const { currentYearMonth, startDate, endDate } = UTILS.getCurrentYearMonthWithDates();
 
         // Make GET request to fetch repeat patients count
-        const response = await API.analytics.patients.fetchRepeatPatientsCountForMonth(startDate, endDate);
+        const response = await API.analytics.patients.fetchRepeatPatientsCountByCountTypeAndDateRange(startDate, endDate);
         const count = await response.count;
 
         // Check if the request was successful
@@ -366,11 +366,11 @@ async function updateRepeatPatientsPercentageSinceLastMonth() {
 
 
         // Make GET request to fetch new patients count
-        const currentResponse = await API.analytics.patients.fetchRepeatPatientsCountForMonth(currentStartDate, currentEndDate);
+        const currentResponse = await API.analytics.patients.fetchRepeatPatientsCountByCountTypeAndDateRange(currentStartDate, currentEndDate);
         const currentCount = await currentResponse.count;
 
         // Make GET request to fetch new patients count
-        const previousResponse = await API.analytics.patients.fetchRepeatPatientsCountForMonth(previousStartDate, previousEndDate);
+        const previousResponse = await API.analytics.patients.fetchRepeatPatientsCountByCountTypeAndDateRange(previousStartDate, previousEndDate);
         const previousCount = await previousResponse.count;
 
         // Check if both requests were successful
