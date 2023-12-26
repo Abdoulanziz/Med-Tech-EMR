@@ -414,7 +414,7 @@ async function updateTotalIncome() {
         if (response.status === 'success') {
 
             // Update the UI
-            document.querySelector("#total-income").textContent = `UGX ${income}`;
+            document.querySelector("#total-income").textContent = UTILS.formatAmountWithCommas(income);
 
         } else {
             alert('Failed to fetch total income.');
@@ -439,7 +439,7 @@ async function updateTotalExpenses() {
         if (response.status === 'success') {
 
             // Update the UI
-            document.querySelector("#total-expenses").textContent = `UGX ${expenses}`;
+            document.querySelector("#total-expenses").textContent = UTILS.formatAmountWithCommas(expenses);
 
         } else {
             alert('Failed to fetch total expenses.');

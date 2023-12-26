@@ -274,6 +274,22 @@ export const UTILS = {
         return parseFloat(percentageDifference.toFixed(2));
     },
 
+    // Format amount with commas
+    formatAmountWithCommas: (amount) => {
+        const amountString = amount.toString();
+
+        // Split the string into integer and decimal parts (if any)
+        const [integerPart, decimalPart] = amountString.split('.');
+
+        // Add commas to the integer part
+        const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+        // Combine the formatted integer part with the decimal part (if any)
+        const formattedAmount = decimalPart ? `${formattedIntegerPart}.${decimalPart}` : formattedIntegerPart;
+
+        return `UGX ${formattedAmount}`;
+    },
+
     APIStatus: {
         bannerTimeout: null,
         isApiRunning: false,
