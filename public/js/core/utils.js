@@ -216,18 +216,26 @@ export const UTILS = {
         return workerInstance;
     },
 
-    // Get the current year month
-    getCurrentYearMonth: () => {
-        var currentDate = new Date();
+    // Get the current year month with dates
+    getCurrentYearMonthWithDates: () => {
+        const currentDate = new Date();
 
-        var year = currentDate.getFullYear();
-        var month = currentDate.getMonth() + 1;
-        
-        var formattedMonth = month < 10 ? "0" + month : month;
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth() + 1;
 
-        var result = year + "-" + formattedMonth;
+        const formattedMonth = month < 10 ? "0" + month : month;
 
-        return result;
+        // Get the starting date of the month
+        const startDate = new Date(year, month - 1, 1).toISOString().slice(0, 10);
+
+        // Get the ending date of the month
+        const endDate = new Date(year, month, 0).toISOString().slice(0, 10);
+
+        return {
+            currentYearMonth: year + "-" + formattedMonth,
+            startDate,
+            endDate,
+        };
     },
 
     APIStatus: {

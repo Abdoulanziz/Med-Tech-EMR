@@ -262,11 +262,12 @@ async function handleCreateExpenseRecordForm() {
 // Update new patients count
 async function updateNewPatientsCount() {
     try {
-        // Get current year month
-        const currentYearMonth = UTILS.getCurrentYearMonth();
+        // Get current year month dates
+        const { currentYearMonth, startDate, endDate } = UTILS.getCurrentYearMonthWithDates();
+
 
         // Make GET request to fetch new patients count
-        const response = await API.analytics.patients.fetchNewPatientsCountForCurrentMonth(currentYearMonth);
+        const response = await API.analytics.patients.fetchNewPatientsCountForMonth(startDate, endDate);
         const count = await response.count;
 
         // Check if the request was successful
@@ -287,11 +288,11 @@ async function updateNewPatientsCount() {
 // Update repeat patients count
 async function updateRepeatPatientsCount() {
     try {
-        // Get current year month
-        const currentYearMonth = UTILS.getCurrentYearMonth();
+        // Get current year month dates
+        const { currentYearMonth, startDate, endDate } = UTILS.getCurrentYearMonthWithDates();
 
         // Make GET request to fetch repeat patients count
-        const response = await API.analytics.patients.fetchRepeatPatientsCountForCurrentMonth(currentYearMonth);
+        const response = await API.analytics.patients.fetchRepeatPatientsCountForMonth(startDate, endDate);
         const count = await response.count;
 
         // Check if the request was successful
