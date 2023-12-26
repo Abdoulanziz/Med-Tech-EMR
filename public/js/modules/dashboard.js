@@ -21,11 +21,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // Load income data
     loadIncomeData();
 
-    // Handle create expense record
-    handleCreateExpenseRecordForm();
+    // Update total income
+    updateTotalIncome();
 
     // Load expense data
     loadExpensesData();
+
+    // Update total expenses
+    updateTotalExpenses();
+
+    // Handle create expense record
+    handleCreateExpenseRecordForm();
 });
 
 async function loadIncomeData() {
@@ -391,5 +397,55 @@ async function updateRepeatPatientsPercentageSinceLastMonth() {
     } catch (error) {
         console.error(error);
         alert('An error occurred while fetching new patients count.');
+    }
+}
+
+// Update total income
+async function updateTotalIncome() {
+    try {
+        // Get current year month dates
+        const { currentYearMonth, startDate, endDate } = UTILS.getCurrentYearMonthWithDates();
+
+        // Make GET request to fetch total income
+        const response = await API.analytics.income.fetchIncomeByDateRange(startDate, endDate);
+        const income = await response.sum;
+
+        // Check if the request was successful
+        if (response.status === 'success') {
+
+            // Update the UI
+            document.querySelector("#total-income").textContent = `UGX ${income}`;
+
+        } else {
+            alert('Failed to fetch total income.');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('An error occurred while fetching total income.');
+    }
+}
+
+// Update total expenses
+async function updateTotalExpenses() {
+    try {
+        // Get current year month dates
+        const { currentYearMonth, startDate, endDate } = UTILS.getCurrentYearMonthWithDates();
+
+        // Make GET request to fetch total expenses
+        const response = await API.analytics.expenses.fetchExpensesByDateRange(startDate, endDate);
+        const expenses = await response.sum;
+
+        // Check if the request was successful
+        if (response.status === 'success') {
+
+            // Update the UI
+            document.querySelector("#total-expenses").textContent = `UGX ${expenses}`;
+
+        } else {
+            alert('Failed to fetch total expenses.');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('An error occurred while fetching total income.');
     }
 }

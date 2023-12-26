@@ -621,5 +621,27 @@ export const API = {
 
         },
 
+        // Income
+        income: {
+            // Fetch income for month
+            // GET api/v1/analytics/income/:startDate/:endDate
+            fetchIncomeByDateRange: async (startDate, endDate) => {
+                const endpoint = `${API.BACKEND_BASE_API_URI}/analytics/income/${startDate}/${endDate}`;
+                return await API.makeGetRequest(endpoint);
+            },
+
+        },
+
+        // Expenses
+        expenses: {
+            // Fetch expenses for month
+            // GET api/v1/analytics/expenses/:startDate/:endDate
+            fetchExpensesByDateRange: async (startDate, endDate) => {
+                const endpoint = `${API.BACKEND_BASE_API_URI}/analytics/expenses/${startDate}/${endDate}`;
+                return await API.makeGetRequest(endpoint);
+            },
+
+        },
+
     },
 }

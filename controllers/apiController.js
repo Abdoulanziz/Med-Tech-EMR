@@ -2982,7 +2982,7 @@ const fetchExpenses = async (req, res) => {
 
 
 
-// Fetch new patients count for month
+// Fetch patients count by count type and date range
 const fetchPatientsCountByCountTypeAndDateRange = async (req, res) => {
   try {
     const { startDate, endDate, countType } = req.params;
@@ -3030,10 +3030,62 @@ const fetchPatientsCountByCountTypeAndDateRange = async (req, res) => {
 
 
 
+// Fetch income by date range
+const fetchIncomeByDateRange = async (req, res) => {
+  try {
+    const { startDate, endDate } = req.params;
+
+    // Ensure proper timezone handling
+    const startDateTime = new Date(`${startDate}T00:00:00Z`);
+    const endDateTime = new Date(`${endDate}T23:59:59Z`); // End of the selected day
+
+    // Fetch the sum of 'amount' within the specified date range
+    const result = await Income.sum('amount', {
+      where: {
+        createdAt: {
+          [Op.between]: [startDateTime, endDateTime],
+        },
+      },
+    });
+
+    return res.status(200).json({
+      sum: result || 0, // If there is no income, return 0
+      status: 'success',
+    });
+  } catch (error) {
+    console.error('Error fetching sum of income amounts for date range:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 
 
+// Fetch expenses by date range
+const fetchExpensesByDateRange = async (req, res) => {
+  try {
+    const { startDate, endDate } = req.params;
 
+    // Ensure proper timezone handling
+    const startDateTime = new Date(`${startDate}T00:00:00Z`);
+    const endDateTime = new Date(`${endDate}T23:59:59Z`); // End of the selected day
 
+    // Fetch the sum of 'amount' within the specified date range
+    const result = await Expense.sum('amount', {
+      where: {
+        createdAt: {
+          [Op.between]: [startDateTime, endDateTime],
+        },
+      },
+    });
+
+    return res.status(200).json({
+      sum: result || 0, // If there is no expenses, return 0
+      status: 'success',
+    });
+  } catch (error) {
+    console.error('Error fetching sum of expenses amounts for date range:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 
 
 
@@ -3095,4 +3147,6 @@ module.exports = {
   createExpenseRecord,
   fetchExpenses,
   fetchPatientsCountByCountTypeAndDateRange,
+  fetchIncomeByDateRange,
+  fetchExpensesByDateRange,
 };

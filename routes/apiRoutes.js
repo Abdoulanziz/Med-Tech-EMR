@@ -56,6 +56,8 @@ const {
     createExpenseRecord,
     fetchExpenses,
     fetchPatientsCountByCountTypeAndDateRange,
+    fetchIncomeByDateRange,
+    fetchExpensesByDateRange,
 } = require("../controllers/apiController");
 
 router.get("/status", checkAPIStatus);
@@ -138,5 +140,7 @@ router.get("/finance/expenses", fetchExpenses);
 
 
 router.get("/analytics/patients/:countType/:startDate/:endDate", fetchPatientsCountByCountTypeAndDateRange);
+router.get("/analytics/income/:startDate/:endDate", fetchIncomeByDateRange);
+router.get("/analytics/expenses/:startDate/:endDate", fetchExpensesByDateRange);
 
 module.exports = router;

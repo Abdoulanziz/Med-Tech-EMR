@@ -20,7 +20,7 @@ module.exports = {
         allowNull: false,
       },
       amount: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       payment_method: {

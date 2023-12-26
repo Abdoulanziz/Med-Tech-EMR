@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
         field: 'expense_category',
       },
       amount: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
         field: 'amount',
       },
