@@ -24,11 +24,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // Update total income
     updateTotalIncome();
 
+    // Update total income percentage
+    updateTotalIncomePercentageSinceLastMonth();
+
     // Load expense data
     loadExpensesData();
 
     // Update total expenses
     updateTotalExpenses();
+
+    // Update total expenses percentage
+    updateTotalExpensesPercentageSinceLastMonth();
 
     // Handle create expense record
     handleCreateExpenseRecordForm();
@@ -425,6 +431,45 @@ async function updateTotalIncome() {
     }
 }
 
+// Update total income percentage since last month
+async function updateTotalIncomePercentageSinceLastMonth() {
+    try {
+        // Get current year month dates
+        const { currentYearMonth, startDate: currentStartDate, endDate: currentEndDate } = UTILS.getCurrentYearMonthWithDates();
+
+        // Get previous year month dates
+        const { previousYearMonth, startDate: previousStartDate, endDate: previousEndDate } = UTILS.getPreviousYearMonthWithDates();
+
+
+        // Make GET request to fetch total income
+        const currentResponse = await API.analytics.income.fetchIncomeByDateRange(currentStartDate, currentEndDate);
+        const currentCount = await currentResponse.sum;
+
+        // Make GET request to fetch total income
+        const previousResponse = await API.analytics.income.fetchIncomeByDateRange(previousStartDate, previousEndDate);
+        const previousCount = await previousResponse.sum;
+
+        // Check if both requests were successful
+        if (currentResponse.status === 'success' && previousResponse.status === 'success') {
+            
+            // Calculate the percentage difference
+            const percentageDifference = UTILS.calculatePercentageDifference(previousCount, currentCount);
+            console.log("Percentage Difference:", percentageDifference);
+
+            // Update the UI
+            document.querySelector("#total-income-percentage").textContent = `${percentageDifference}%`;
+
+        } else {
+            alert('Failed to fetch total income percentage.');
+        }
+
+
+    } catch (error) {
+        console.error(error);
+        alert('An error occurred while fetching new patients count.');
+    }
+}
+
 // Update total expenses
 async function updateTotalExpenses() {
     try {
@@ -447,5 +492,44 @@ async function updateTotalExpenses() {
     } catch (error) {
         console.error(error);
         alert('An error occurred while fetching total income.');
+    }
+}
+
+// Update total expenses percentage since last month
+async function updateTotalExpensesPercentageSinceLastMonth() {
+    try {
+        // Get current year month dates
+        const { currentYearMonth, startDate: currentStartDate, endDate: currentEndDate } = UTILS.getCurrentYearMonthWithDates();
+
+        // Get previous year month dates
+        const { previousYearMonth, startDate: previousStartDate, endDate: previousEndDate } = UTILS.getPreviousYearMonthWithDates();
+
+
+        // Make GET request to fetch total expenses
+        const currentResponse = await API.analytics.expenses.fetchExpensesByDateRange(currentStartDate, currentEndDate);
+        const currentCount = await currentResponse.sum;
+
+        // Make GET request to fetch total expenses
+        const previousResponse = await API.analytics.expenses.fetchExpensesByDateRange(previousStartDate, previousEndDate);
+        const previousCount = await previousResponse.sum;
+
+        // Check if both requests were successful
+        if (currentResponse.status === 'success' && previousResponse.status === 'success') {
+            
+            // Calculate the percentage difference
+            const percentageDifference = UTILS.calculatePercentageDifference(previousCount, currentCount);
+            console.log("Percentage Difference:", percentageDifference);
+
+            // Update the UI
+            document.querySelector("#total-expenses-percentage").textContent = `${percentageDifference}%`;
+
+        } else {
+            alert('Failed to fetch total expenses percentage.');
+        }
+
+
+    } catch (error) {
+        console.error(error);
+        alert('An error occurred while fetching new patients count.');
     }
 }
