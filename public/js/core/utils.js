@@ -238,6 +238,42 @@ export const UTILS = {
         };
     },
 
+    // Get the previous year month with dates
+    getPreviousYearMonthWithDates: () => {
+        const currentDate = new Date();
+
+        // Calculate the previous month, considering the transition to a previous year
+        const previousMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+        const year = previousMonth.getMonth() === 0 ? currentDate.getFullYear() - 1 : currentDate.getFullYear();
+        const month = previousMonth.getMonth() + 1;
+
+        const formattedMonth = month < 10 ? "0" + month : month;
+
+        // Get the starting date of the previous month
+        const startDate = new Date(year, month - 1, 1).toISOString().slice(0, 10);
+
+        // Get the ending date of the previous month
+        const endDate = new Date(year, month, 0).toISOString().slice(0, 10);
+
+        return {
+            previousYearMonth: year + "-" + formattedMonth,
+            startDate,
+            endDate,
+        };
+    },
+
+
+    // Calculate percentage difference
+    calculatePercentageDifference: (previousValue, currentValue) => {
+        if (previousValue === 0) {
+            return currentValue === 0 ? 0 : 100; // Avoid division by zero
+        }
+
+        // Calculate the percentage difference and limit it to two decimal places
+        const percentageDifference = ((currentValue - previousValue) / Math.abs(previousValue)) * 100;
+        return parseFloat(percentageDifference.toFixed(2));
+    },
+
     APIStatus: {
         bannerTimeout: null,
         isApiRunning: false,
