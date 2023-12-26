@@ -605,16 +605,16 @@ export const API = {
     analytics: {
         // Patients
         patients: {
-            // Fetch new patients number for this month
+            // Fetch new patients number for month
             // GET api/v1/analytics/patients/new/:month
-            fetchNewPatientsCountForCurrentMonth: async (month) => {
+            fetchNewPatientsCountForMonth: async (month) => {
                 const endpoint = `${API.BACKEND_BASE_API_URI}/analytics/patients/new/${month}`;
                 return await API.makeGetRequest(endpoint);
             },
 
-            // Fetch repeat patients number for this month
+            // Fetch repeat patients number for month
             // GET api/v1/analytics/patients/repeat/:month
-            fetchRepeatPatientsCountForCurrentMonth: async (month) => {
+            fetchRepeatPatientsCountForMonth: async (month) => {
                 const endpoint = `${API.BACKEND_BASE_API_URI}/analytics/patients/repeat/${month}`;
                 return await API.makeGetRequest(endpoint);
             },

@@ -55,10 +55,7 @@ const {
     fetchIncome,
     createExpenseRecord,
     fetchExpenses,
-    fetchNewPatientsCountForCurrentMonth,
-    fetchRepeatPatientsCountForCurrentMonth,
-    fetchNewPatientsCountForPreviousMonth,
-    fetchRepeatPatientsCountForPreviousMonth,
+    fetchPatientsCountForDateRange,
 } = require("../controllers/apiController");
 
 router.get("/status", checkAPIStatus);
@@ -140,10 +137,6 @@ router.post("/finance/expenses", createExpenseRecord);
 router.get("/finance/expenses", fetchExpenses);
 
 
-router.get("/analytics/patients/new/:month", fetchNewPatientsCountForCurrentMonth);
-router.get("/analytics/patients/repeat/:month", fetchRepeatPatientsCountForCurrentMonth);
-
-router.get("/analytics/patients/new/previous-month", fetchNewPatientsCountForPreviousMonth);
-router.get("/analytics/patients/repeat/previous-month", fetchRepeatPatientsCountForPreviousMonth);
+router.get("/analytics/patients/:countType/:startDate/:endDate", fetchPatientsCountForDateRange);
 
 module.exports = router;
