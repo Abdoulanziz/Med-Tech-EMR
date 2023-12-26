@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Update repeat patients count
     updateRepeatPatientsCount();
 
+    // Update repeat patients percentage count
+    updateRepeatPatientsPercentageSinceLastMonth();
+
     // Load income data
     loadIncomeData();
 
@@ -306,19 +309,12 @@ async function updateNewPatientsPercentageSinceLastMonth() {
         const previousResponse = await API.analytics.patients.fetchNewPatientsCountForMonth(previousStartDate, previousEndDate);
         const previousCount = await previousResponse.count;
 
-
-        console.log("current: ", currentCount);
-        console.log("previous: ", previousCount);
-
-        
-
         // Check if both requests were successful
         if (currentResponse.status === 'success' && previousResponse.status === 'success') {
             
             // Calculate the percentage difference
             const percentageDifference = UTILS.calculatePercentageDifference(previousCount, currentCount);
             console.log("Percentage Difference:", percentageDifference);
-
 
             // Update the UI
             document.querySelector("#new-patients-percentage-count").textContent = `${percentageDifference}%`;
@@ -356,5 +352,44 @@ async function updateRepeatPatientsCount() {
     } catch (error) {
         console.error(error);
         alert('An error occurred while fetching repeat patients count.');
+    }
+}
+
+// Update repeat patients percentage since last month
+async function updateRepeatPatientsPercentageSinceLastMonth() {
+    try {
+        // Get current year month dates
+        const { currentYearMonth, startDate: currentStartDate, endDate: currentEndDate } = UTILS.getCurrentYearMonthWithDates();
+
+        // Get previous year month dates
+        const { previousYearMonth, startDate: previousStartDate, endDate: previousEndDate } = UTILS.getPreviousYearMonthWithDates();
+
+
+        // Make GET request to fetch new patients count
+        const currentResponse = await API.analytics.patients.fetchRepeatPatientsCountForMonth(currentStartDate, currentEndDate);
+        const currentCount = await currentResponse.count;
+
+        // Make GET request to fetch new patients count
+        const previousResponse = await API.analytics.patients.fetchRepeatPatientsCountForMonth(previousStartDate, previousEndDate);
+        const previousCount = await previousResponse.count;
+
+        // Check if both requests were successful
+        if (currentResponse.status === 'success' && previousResponse.status === 'success') {
+            
+            // Calculate the percentage difference
+            const percentageDifference = UTILS.calculatePercentageDifference(previousCount, currentCount);
+            console.log("Percentage Difference:", percentageDifference);
+
+            // Update the UI
+            document.querySelector("#repeat-patients-percentage-count").textContent = `${percentageDifference}%`;
+
+        } else {
+            alert('Failed to fetch patients count data.');
+        }
+
+
+    } catch (error) {
+        console.error(error);
+        alert('An error occurred while fetching new patients count.');
     }
 }

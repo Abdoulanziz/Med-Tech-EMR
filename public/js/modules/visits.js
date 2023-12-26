@@ -48,8 +48,8 @@ async function loadAllVisits() {
         rowCallback: function(row, data, index) {
             const rowDataString = JSON.stringify(data);
 
-            const viewVisitCta = row.cells[6].querySelectorAll("button")[0];
-            const editVisitCta = row.cells[6].querySelectorAll("button")[1];
+            const editVisitCta = row.cells[6].querySelectorAll("button")[0];
+            const viewVisitCta = row.cells[6].querySelectorAll("button")[1];
 
             // Edit
             editVisitCta.dataset.patient = rowDataString;
@@ -166,8 +166,8 @@ async function loadAllVisits() {
                 render: function (data, type, row, meta) {
                     return `
                     <td>
-                        <button class="btn" style="background-color: orange;padding-inline: .6rem;border-radius: 0;font-size: 12px;"> <i class="ti-trash"></i> View </button>
                         <button class="btn" style="background-color: #1da1f2;padding-inline: .6rem;border-radius: 0;font-size: 12px;"> <i class="ti-pencil"></i> Update </button>
+                        <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;"> <i class="ti-arrow-right"></i> View Details </button>
                     </td>
                     `;
                 },
