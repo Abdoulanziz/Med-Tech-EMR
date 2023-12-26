@@ -262,7 +262,6 @@ export const UTILS = {
         };
     },
 
-
     // Calculate percentage difference
     calculatePercentageDifference: (previousValue, currentValue) => {
         if (previousValue === 0) {
@@ -288,6 +287,100 @@ export const UTILS = {
         const formattedAmount = decimalPart ? `${formattedIntegerPart}.${decimalPart}` : formattedIntegerPart;
 
         return `UGX ${formattedAmount}`;
+    },
+
+    // Create summary chart
+    createSummaryChart: (title='', type='bar', labels=[], mdata=[], canvasId) => {
+        if(labels.length == 0 && mdata.length == 0) return;
+        
+        const data = {
+        labels: labels,
+        datasets: [{
+            label: title,
+            backgroundColor: '#b297f1',
+            borderColor: '#b297f1',
+            data: mdata,
+        }]
+        };
+
+        const config = {
+        type: type,
+        data: data,
+        options: {
+            scales: {
+                y: {
+                    startAtZero: true
+                }
+            }
+        }
+        };
+
+        // Render chart
+        const chart = new Chart(
+            document.getElementById(canvasId),
+            config
+        );
+        return chart;
+    },
+
+    // Handle filter change events for income summary chat
+    handleFilterChangeForIncomeSummaryChart: (filterType, chart, chartId) => {
+        const chartTitle = document.querySelector(`#${chartId}-title`);
+
+        switch (filterType) {
+            case 'day':
+                chartTitle.textContent = "Day's Income";
+                chart.destroy();
+                chart = UTILS.createSummaryChart('Durations', 'bar', ['Morning', 'Afternoon', 'Evening'], [80, 100, 46], chartId);
+                break;
+            case 'week':
+                chartTitle.textContent = "Week's Income";
+                chart.destroy();
+                chart = UTILS.createSummaryChart('Days', 'bar', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [80, 100, 46, 39, 57, 25, 66], chartId);
+                break;
+            case 'month':
+                chartTitle.textContent = "Month's Income";
+                chart.destroy();
+                chart = UTILS.createSummaryChart('Weeks', 'bar', ['Week1', 'Week2', 'Week3', 'Week4'], [80, 100, 46, 39], chartId);
+                break;
+            case 'year':
+                chartTitle.textContent = "Year's Income";
+                chart.destroy();
+                chart = UTILS.createSummaryChart('Months', 'bar', ['Quarter1', 'Quarter2', 'Quarter3', 'Quarter4'], [80, 46, 39, 60], chartId);
+                break;
+            default:
+                break;
+        }
+    },
+
+    // Handle filter change events for expenses summary chat
+    handleFilterChangeForExpensesSummaryChart: (filterType, chart, chartId) => {
+        const chartTitle = document.querySelector(`#${chartId}-title`);
+
+        switch (filterType) {
+            case 'day':
+                chartTitle.textContent = "Day's Expenses";
+                chart.destroy();
+                chart = UTILS.createSummaryChart('Durations', 'line', ['Morning', 'Afternoon', 'Evening'], [80000, 1000000, 460000], chartId);
+                break;
+            case 'week':
+                chartTitle.textContent = "Week's Expenses";
+                chart.destroy();
+                chart = UTILS.createSummaryChart('Days', 'line', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [80000, 1000000, 460000, 0, 5700000, 0, 0], chartId);
+                break;
+            case 'month':
+                chartTitle.textContent = "Month's Expenses";
+                chart.destroy();
+                chart = UTILS.createSummaryChart('Weeks', 'line', ['Week1', 'Week2', 'Week3', 'Week4'], [80000, 1000000, 460000, 5700000], chartId);
+                break;
+            case 'year':
+                chartTitle.textContent = "Year's Expenses";
+                chart.destroy();
+                chart = UTILS.createSummaryChart('Months', 'line', ['Quarter1', 'Quarter2', 'Quarter3', 'Quarter4'], [80000, 1000000, 5700000, 7000000], chartId);
+                break;
+            default:
+                break;
+        }
     },
 
     APIStatus: {

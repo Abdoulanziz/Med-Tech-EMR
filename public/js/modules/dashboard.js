@@ -38,6 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle create expense record
     handleCreateExpenseRecordForm();
+
+    // Load income summary chart
+    loadIncomeSummaryChart();
+
+    // Load expenses summary chart
+    loadExpensesSummaryChart();
 });
 
 async function loadIncomeData() {
@@ -260,6 +266,12 @@ async function handleCreateExpenseRecordForm() {
     
                     // Reload the expenses table
                     loadExpensesData();
+
+                    // Update total expenses
+                    updateTotalExpenses();
+
+                    // Update total expenses percentage
+                    updateTotalExpensesPercentageSinceLastMonth();
     
                 } else {
                     alert('Failed to create expense record. Please check the form data.');
@@ -326,7 +338,6 @@ async function updateNewPatientsPercentageSinceLastMonth() {
             
             // Calculate the percentage difference
             const percentageDifference = UTILS.calculatePercentageDifference(previousCount, currentCount);
-            console.log("Percentage Difference:", percentageDifference);
 
             // Update the UI
             document.querySelector("#new-patients-percentage-count").textContent = `${percentageDifference}%`;
@@ -390,7 +401,6 @@ async function updateRepeatPatientsPercentageSinceLastMonth() {
             
             // Calculate the percentage difference
             const percentageDifference = UTILS.calculatePercentageDifference(previousCount, currentCount);
-            console.log("Percentage Difference:", percentageDifference);
 
             // Update the UI
             document.querySelector("#repeat-patients-percentage-count").textContent = `${percentageDifference}%`;
@@ -454,7 +464,6 @@ async function updateTotalIncomePercentageSinceLastMonth() {
             
             // Calculate the percentage difference
             const percentageDifference = UTILS.calculatePercentageDifference(previousCount, currentCount);
-            console.log("Percentage Difference:", percentageDifference);
 
             // Update the UI
             document.querySelector("#total-income-percentage").textContent = `${percentageDifference}%`;
@@ -518,7 +527,6 @@ async function updateTotalExpensesPercentageSinceLastMonth() {
             
             // Calculate the percentage difference
             const percentageDifference = UTILS.calculatePercentageDifference(previousCount, currentCount);
-            console.log("Percentage Difference:", percentageDifference);
 
             // Update the UI
             document.querySelector("#total-expenses-percentage").textContent = `${percentageDifference}%`;
@@ -532,4 +540,30 @@ async function updateTotalExpensesPercentageSinceLastMonth() {
         console.error(error);
         alert('An error occurred while fetching new patients count.');
     }
+}
+
+// Load charts
+async function loadIncomeSummaryChart() {
+    // Initial chart setup
+    let chart = UTILS.createSummaryChart("Week's Income", 'bar', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [80, 100, 46, 39, 57, 25, 66], 'income-summary-chart');
+
+    // Filter change event handling
+    const filterSelectLeft = document.querySelector("#income-summary-chart-filter-select");
+    filterSelectLeft.addEventListener("change", (event) => {
+        const selectedFilter = event.target.value;
+        UTILS.handleFilterChangeForIncomeSummaryChart(selectedFilter, chart, 'income-summary-chart');
+    });
+}
+
+// Load charts
+async function loadExpensesSummaryChart() {
+    // Initial chart setup
+    let chart = UTILS.createSummaryChart("Week's Expenses", 'line', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [80000, 1000000, 460000, 0, 5700000, 0, 0], 'expenses-summary-chart');
+
+    // Filter change event handling
+    const filterSelectLeft = document.querySelector("#expenses-summary-chart-filter-select");
+    filterSelectLeft.addEventListener("change", (event) => {
+        const selectedFilter = event.target.value;
+        UTILS.handleFilterChangeForExpensesSummaryChart(selectedFilter, chart, 'expenses-summary-chart');
+    });
 }
