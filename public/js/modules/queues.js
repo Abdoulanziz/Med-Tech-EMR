@@ -108,7 +108,7 @@ async function loadAllPatientsOnQueue() {
             {
                 targets: 1,
                 render: function(data, type, row, meta) {
-                    return data.patientFullName;
+                    return '<span style="color: #525f7f;">' + data.patientFullName + '</span>';
                 }
             },
             {
@@ -129,20 +129,16 @@ async function loadAllPatientsOnQueue() {
                 render: function(data, type, row, meta) {
                     const status = data.queueStatus.toLowerCase();
                     let color;
-                    let backgroundColor;
 
-                    if (status === 'scheduled') {
-                        color = 'grey';
-                        backgroundColor = '#f4f4ea';
-                    } else if (status === 'completed') {
+                    if (status === 'completed') {
                         color = 'yellowgreen';
-                        backgroundColor = '#f3fed2';
-                    } else {
+                    } else if(status === 'canceled') {
                         color = 'orange';
-                        backgroundColor = '#fcf1dd';
+                    } else {
+                        color = 'grey';
                     }
+                    return '<span class="td-status"><span class="td-status-dot" style="background-color: ' + color + ';"></span>'+ data.queueStatus.charAt(0).toUpperCase() + data.queueStatus.slice(1) +'</span>';
 
-                    return '<span style="font-weight: bold;font-size: 10px;display: block;inline-size: 80%;border-radius:6px;padding: .4rem .6rem;color: ' + color + ';background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
                 }
             },
             {
@@ -157,7 +153,7 @@ async function loadAllPatientsOnQueue() {
                 render: function (data, type, row, meta) {
                     return `
                     <td style="border: 1px solid #ddd;">
-                        <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">View More </button>
+                        <button class="btn table-btn">View More </button>
                     </td>
                     `;
                 }
@@ -252,7 +248,7 @@ async function loadSinglePatientVisits(patientId) {
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return data.doctorFullName;
+                    return '<span style="color: #525f7f;">' + data.doctorFullName + '</span>';
                 },
             },
             {
@@ -269,20 +265,16 @@ async function loadSinglePatientVisits(patientId) {
                 render: function(data, type, row, meta) {
                     const status = data.visitStatus.toLowerCase();
                     let color;
-                    let backgroundColor;
 
-                    if (status === 'scheduled') {
-                        color = 'grey';
-                        backgroundColor = '#f4f4ea';
-                    } else if (status === 'completed') {
+                    if (status === 'completed') {
                         color = 'yellowgreen';
-                        backgroundColor = '#f3fed2';
-                    } else {
+                    } else if(status === 'canceled') {
                         color = 'orange';
-                        backgroundColor = '#fcf1dd';
+                    } else {
+                        color = 'grey';
                     }
+                    return '<span class="td-status"><span class="td-status-dot" style="background-color: ' + color + ';"></span>'+ data.visitStatus.charAt(0).toUpperCase() + data.visitStatus.slice(1) +'</span>';
 
-                    return '<span style="font-weight: bold;font-size: 10px;display: block;inline-size: 50%;border-radius:6px;padding: .4rem .6rem;color: ' + color + ';background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
                 }
             },
             {
@@ -290,7 +282,7 @@ async function loadSinglePatientVisits(patientId) {
                 render: function (data, type, row, meta) {
                     return `
                     <td style="border: 1px solid #ddd;">
-                        <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Work on Patient  <i class="ti-arrow-right"></i> </button>
+                        <button class="btn table-btn">Work on Patient  <i class="ti-arrow-right"></i> </button>
                     </td>
                     `;
                 },
@@ -602,7 +594,7 @@ async function loadSinglePatientVisitHistory(visitId) {
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return '<span>' + data.requestName + '</span>';
+                    return '<span style="color: #525f7f;">' + data.requestName + '</span>';
                 },
             },
             {
@@ -611,7 +603,7 @@ async function loadSinglePatientVisitHistory(visitId) {
                     const originalDate = data.requestCreatedAt;
                     const dateObj = new Date(originalDate);
                     const formattedDate = dateObj.toISOString().split('T')[0];
-                    return '<span>' + formattedDate + '</span>';
+                    return '<span style="color: #525f7f;">' + formattedDate + '</span>';
                 }
             },
             {
@@ -619,20 +611,16 @@ async function loadSinglePatientVisitHistory(visitId) {
                 render: function(data, type, row, meta) {
                     const status = data.requestStatus.toLowerCase();
                     let color;
-                    let backgroundColor;
 
-                    if (status === 'pending') {
-                        color = 'grey';
-                        backgroundColor = '#f4f4ea';
-                    } else if (status === 'complete') {
+                    if (status === 'complete') {
                         color = 'yellowgreen';
-                        backgroundColor = '#f3fed2';
-                    } else {
+                    } else if(status === 'canceled') {
                         color = 'orange';
-                        backgroundColor = '#fcf1dd';
+                    } else {
+                        color = 'grey';
                     }
+                    return '<span class="td-status"><span class="td-status-dot" style="background-color: ' + color + ';"></span>'+ data.requestStatus.charAt(0).toUpperCase() + data.requestStatus.slice(1) +'</span>';
 
-                    return '<span style="font-weight: bold;font-size: 10px;display: block;inline-size: 50%;border-radius:6px;padding: .4rem .6rem;color: ' + color + ';background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
                 }
             },
             {
@@ -641,7 +629,7 @@ async function loadSinglePatientVisitHistory(visitId) {
                     if(data.requestName.toLowerCase() == "allergy" || data.requestName.toLowerCase() == "triage"){
                         return `
                             <td style="border: 1px solid #ddd;">
-                                <button class="btn view-request" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Edit Request  <i class="ti-arrow-right"></i> </button>
+                                <button class="btn table-btn">Edit Request  <i class="ti-arrow-right"></i> </button>
                             </td>
                         `;
                     }else{
@@ -650,7 +638,7 @@ async function loadSinglePatientVisitHistory(visitId) {
 
                         return `
                             <td style="border: 1px solid #ddd;">
-                                <button class="btn view-request" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Edit Request  <i class="ti-arrow-right"></i> </button>
+                                <button class="btn table-btn">Edit Request  <i class="ti-arrow-right"></i> </button>
                                 <button ${isDisabled ? "disabled" : ""} class="btn view-results" style="background-color: ${buttonBackgroundColor};padding-inline: .6rem;border-radius: 0;font-size: 12px;${isDisabled ? "cursor: not-allowed;" : ""}">View Report  <i style="${isDisabled ? "opacity: 0.5;" : ""}" class="ti-arrow-right"></i> </button>
                             </td>
                         `;
@@ -778,7 +766,14 @@ async function displaySelectedPatientBills(divId) {
             billContainer.appendChild(serviceElement);
         });
 
-        document.querySelector(".bill-content").querySelector("h2").textContent = `UGX ${billToDisplay}`;
+        const h2Element = document.querySelector(".bill-content h2");
+
+        h2Element.classList.toggle("settled", billToDisplay === 0);
+        h2Element.classList.toggle("un-settled", billToDisplay !== 0);
+
+        h2Element.textContent = `UGX ${billToDisplay}`;
+
+        // document.querySelector(".bill-content").querySelector("h2").textContent = `UGX ${billToDisplay}`;
     }
 }
 

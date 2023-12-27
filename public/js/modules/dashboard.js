@@ -640,7 +640,6 @@ async function handleFilterChangeForIncomeSummaryChart(filterType, chartId) {
     }
 }
 
-
 // Handle filter change events for expenses summary chat
 async function handleFilterChangeForExpensesSummaryChart(filterType, chartId) {
     const chartTitle = document.querySelector(`#${chartId}-title`);

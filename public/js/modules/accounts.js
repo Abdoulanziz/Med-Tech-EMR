@@ -135,20 +135,16 @@ async function loadAllUsers() {
                 targets: 3,
                 render: function(data, type, row, meta) {
                     const status = data.userAccountStatus.toLowerCase();
-                    let backgroundColor;
                     let color;
 
                     if (status === 'active') {
                         color = 'yellowgreen';
-                        backgroundColor = '#f3fed2';
                     } else if(status === 'suspended') {
                         color = 'orange';
-                        backgroundColor = '#fcf1dd';
                     } else {
                         color = 'grey';
-                        backgroundColor = '#f4f4ea';
                     }
-                    return '<span style="font-size: 10px;display: block;inline-size: 50%;border-radius:6px;padding: .4rem .6rem;color: #fff;color: ' + color + ';background-color: ' + backgroundColor + ';">' + data.userAccountStatus.toUpperCase() + '</span>';
+                    return '<span class="td-status"><span class="td-status-dot" style="background-color: ' + color + ';"></span>'+ data.userAccountStatus.charAt(0).toUpperCase() + data.userAccountStatus.slice(1) +'</span>';
 
                 }
             },
@@ -158,16 +154,16 @@ async function loadAllUsers() {
                     let ctas = "";
                     if(data.userProfileCompletionStatus === "incomplete"){
                         ctas += `
-                        <button class="btn" style="background-color: #ffffff;color: #8e8d8d;border: 1px solid #f2f2f2;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Create Profile </button>
+                        <button class="btn table-btn">Create Profile </button>
                         `;
                     }else {
                         ctas += `
-                        <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Update Profile </button>
+                        <button class="btn table-btn">Update Profile </button>
                         `;
                     }
 
                     ctas += `
-                        <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Update Roles </button>
+                        <button class="btn table-btn">Update Roles </button>
                         `;
 
                     return `

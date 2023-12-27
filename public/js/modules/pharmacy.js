@@ -78,7 +78,7 @@ async function loadAllPatientsOnQueue() {
             {
                 targets: 1,
                 render: function(data, type, row, meta) {
-                    return data.patientFullName;
+                    return '<span style="color: #525f7f;">' + data.patientFullName + '</span>';
                 }
             },
             {
@@ -99,26 +99,22 @@ async function loadAllPatientsOnQueue() {
                 render: function(data, type, row, meta) {
                     const status = data.queueStatus.toLowerCase();
                     let color;
-                    let backgroundColor;
 
-                    if (status === 'scheduled') {
-                        color = 'grey';
-                        backgroundColor = '#f4f4ea';
-                    } else if (status === 'completed') {
+                    if (status === 'completed') {
                         color = 'yellowgreen';
-                        backgroundColor = '#f3fed2';
-                    } else {
+                    } else if(status === 'canceled') {
                         color = 'orange';
-                        backgroundColor = '#fcf1dd';
+                    } else {
+                        color = 'grey';
                     }
+                    return '<span class="td-status"><span class="td-status-dot" style="background-color: ' + color + ';"></span>'+ data.queueStatus.charAt(0).toUpperCase() + data.queueStatus.slice(1) +'</span>';
 
-                    return '<span style="font-weight: bold;font-size: 10px;display: block;inline-size: 80%;border-radius:6px;padding: .4rem .6rem;color: ' + color + ';background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
                 }
             },
             {
                 targets: 5,
                 render: function(data, type, row, meta) {
-                    return data.doctorFullName;
+                    return '<span style="color: #525f7f;">' + data.doctorFullName + '</span>';
                 }
             },
             
@@ -127,7 +123,7 @@ async function loadAllPatientsOnQueue() {
                 render: function (data, type, row, meta) {
                     return `
                     <td>
-                        <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">View More </button>
+                        <button class="btn table-btn">View More </button>
                     </td>
                     `;
                 }
@@ -222,7 +218,7 @@ async function loadSinglePatientVisits(patientId) {
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return data.doctorFullName;
+                    return '<span style="color: #525f7f;">' + data.doctorFullName + '</span>';
                 },
             },
             {
@@ -239,20 +235,16 @@ async function loadSinglePatientVisits(patientId) {
                 render: function(data, type, row, meta) {
                     const status = data.visitStatus.toLowerCase();
                     let color;
-                    let backgroundColor;
 
-                    if (status === 'scheduled') {
-                        color = 'grey';
-                        backgroundColor = '#f4f4ea';
-                    } else if (status === 'completed') {
+                    if (status === 'completed') {
                         color = 'yellowgreen';
-                        backgroundColor = '#f3fed2';
-                    } else {
+                    } else if(status === 'canceled') {
                         color = 'orange';
-                        backgroundColor = '#fcf1dd';
+                    } else {
+                        color = 'grey';
                     }
+                    return '<span class="td-status"><span class="td-status-dot" style="background-color: ' + color + ';"></span>'+ data.visitStatus.charAt(0).toUpperCase() + data.visitStatus.slice(1) +'</span>';
 
-                    return '<span style="font-weight: bold;font-size: 10px;display: block;inline-size: 50%;border-radius:6px;padding: .4rem .6rem;color: ' + color + ';background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
                 }
             },
             {
@@ -260,7 +252,7 @@ async function loadSinglePatientVisits(patientId) {
                 render: function (data, type, row, meta) {
                     return `
                     <td>
-                        <button class="btn" style="background-color: #8e8d8d;padding-inline: .6rem;border-radius: 0;font-size: 12px;">Work on Patient  <i class="ti-arrow-right"></i> </button>
+                        <button class="btn table-btn">Work on Patient  <i class="ti-arrow-right"></i> </button>
                     </td>
                     `;
                 },
@@ -327,7 +319,7 @@ async function loadSinglePatientVisitPrescriptions(visitId) {
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return '<span>' + `${data.medicineName} (${data.medicineDosage})` + '</span>';
+                    return '<span style="color: #525f7f;">' + `${data.medicineName} (${data.medicineDosage})` + '</span>';
                 },
             },
             {
@@ -455,7 +447,12 @@ async function displaySelectedPatientBills(divId) {
             billContainer.appendChild(serviceElement);
         });
 
-        document.querySelector(".bill-content").querySelector("h2").textContent = `UGX ${billToDisplay}`;
+        const h2Element = document.querySelector(".bill-content h2");
+
+        h2Element.classList.toggle("settled", billToDisplay === 0);
+        h2Element.classList.toggle("un-settled", billToDisplay !== 0);
+
+        h2Element.textContent = `UGX ${billToDisplay}`;
     }
 }
 
