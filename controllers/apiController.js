@@ -3088,6 +3088,169 @@ const fetchExpensesByDateRange = async (req, res) => {
 };
 
 
+const fetchIncomeByFilterTypeAndByDateRange = async (req, res) => {
+  try {
+    const { startDate, endDate } = req.params;
+    let result;
+
+    // Ensure proper timezone handling
+    const startDateTime = new Date(`${startDate}T00:00:00Z`);
+    const endDateTime = new Date(`${endDate}T23:59:59Z`); // End of the selected day
+
+    switch (req.query.filterType) {
+      case 'day':
+        // Modify the query to fetch income by day
+        result = await fetchIncomeByDay(startDateTime, endDateTime);
+        break;
+      case 'week':
+        // Modify the query to fetch income by week
+        result = await fetchIncomeByWeek(startDateTime, endDateTime);
+        break;
+      case 'month':
+        // Modify the query to fetch income by month
+        result = await fetchIncomeByMonth(startDateTime, endDateTime);
+        break;
+      case 'year':
+        // Modify the query to fetch income by year
+        result = await fetchIncomeByYear(startDateTime, endDateTime);
+        break;
+      default:
+        break;
+    }
+
+    return res.status(200).json({
+      sum: result || 0, // If there is no income, return 0
+      status: 'success',
+    });
+  } catch (error) {
+    console.error('Error fetching sum of income amounts for date range:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// // Helper functions for fetching income based on different time intervals
+// const fetchIncomeByDay = async (startDateTime, endDateTime) => {
+//   return await Income.sum('amount', {
+//     where: {
+//       createdAt: {
+//         [Op.between]: [startDateTime, endDateTime],
+//       },
+//     },
+//   });
+// };
+
+// const fetchIncomeByWeek = async (startDateTime, endDateTime) => {
+//   // Implement logic to fetch income by week
+//   // You may use a library like 'date-fns' to work with weeks
+//   // Example: dateFns.getISOWeek(new Date())
+// };
+
+// const fetchIncomeByMonth = async (startDateTime, endDateTime) => {
+//   // Implement logic to fetch income by month
+//   // Example: startDateTime.getMonth()
+// };
+
+// const fetchIncomeByYear = async (startDateTime, endDateTime) => {
+//   // Implement logic to fetch income by year
+//   // Example: startDateTime.getFullYear()
+// };
+
+
+const fetchIncomeByDay = async (startDateTime, endDateTime) => {
+  // Example: Fetch income data by day
+  const dayData = await Income.findAll({
+    attributes: [
+      [sequelize.fn('date_trunc', 'day', sequelize.col('createdAt')), 'day'],
+      [sequelize.fn('sum', sequelize.col('amount')), 'sum'],
+    ],
+    where: {
+      createdAt: {
+        [Op.between]: [startDateTime, endDateTime],
+      },
+    },
+    group: [sequelize.fn('date_trunc', 'day', sequelize.col('createdAt'))],
+    raw: true,
+  });
+
+  // Transform the data to match the UI requirements
+  const labels = dayData.map((data) => data.day);
+  const values = dayData.map((data) => data.sum);
+
+  return { labels, values };
+};
+
+const fetchIncomeByWeek = async (startDateTime, endDateTime) => {
+  // Example: Fetch income data by week
+  const weekData = await Income.findAll({
+    attributes: [
+      [sequelize.fn('date_trunc', 'week', sequelize.col('createdAt')), 'week'],
+      [sequelize.fn('sum', sequelize.col('amount')), 'sum'],
+    ],
+    where: {
+      createdAt: {
+        [Op.between]: [startDateTime, endDateTime],
+      },
+    },
+    group: [sequelize.fn('date_trunc', 'week', sequelize.col('createdAt'))],
+    raw: true,
+  });
+
+  // Transform the data to match the UI requirements
+  const labels = weekData.map((data) => data.week);
+  const values = weekData.map((data) => data.sum);
+
+  return { labels, values };
+};
+
+const fetchIncomeByMonth = async (startDateTime, endDateTime) => {
+  // Example: Fetch income data by month
+  const monthData = await Income.findAll({
+    attributes: [
+      [sequelize.fn('date_trunc', 'month', sequelize.col('createdAt')), 'month'],
+      [sequelize.fn('sum', sequelize.col('amount')), 'sum'],
+    ],
+    where: {
+      createdAt: {
+        [Op.between]: [startDateTime, endDateTime],
+      },
+    },
+    group: [sequelize.fn('date_trunc', 'month', sequelize.col('createdAt'))],
+    raw: true,
+  });
+
+  // Transform the data to match the UI requirements
+  const labels = monthData.map((data) => data.month);
+  const values = monthData.map((data) => data.sum);
+
+  return { labels, values };
+};
+
+const fetchIncomeByYear = async (startDateTime, endDateTime) => {
+  // Example: Fetch income data by year
+  const yearData = await Income.findAll({
+    attributes: [
+      [sequelize.fn('date_trunc', 'year', sequelize.col('createdAt')), 'year'],
+      [sequelize.fn('sum', sequelize.col('amount')), 'sum'],
+    ],
+    where: {
+      createdAt: {
+        [Op.between]: [startDateTime, endDateTime],
+      },
+    },
+    group: [sequelize.fn('date_trunc', 'year', sequelize.col('createdAt'))],
+    raw: true,
+  });
+
+  // Transform the data to match the UI requirements
+  const labels = yearData.map((data) => data.year);
+  const values = yearData.map((data) => data.sum);
+
+  return { labels, values };
+};
+
+
+
+
 
 
 

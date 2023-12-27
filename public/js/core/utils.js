@@ -289,6 +289,40 @@ export const UTILS = {
         return `UGX ${formattedAmount}`;
     },
 
+    // Create summary chart
+    createSummaryChart(title='', type='bar', labels=[], mdata=[], canvasId) {
+        if(labels.length == 0 && mdata.length == 0) return;
+        
+        const data = {
+        labels: labels,
+        datasets: [{
+            label: title,
+            backgroundColor: '#b297f1',
+            borderColor: '#b297f1',
+            data: mdata,
+        }]
+        };
+
+        const config = {
+        type: type,
+        data: data,
+        options: {
+            scales: {
+                y: {
+                    startAtZero: true
+                }
+            }
+        }
+        };
+
+        // Render chart
+        const chart = new Chart(
+            document.getElementById(canvasId),
+            config
+        );
+        return chart;
+    },
+
     APIStatus: {
         bannerTimeout: null,
         isApiRunning: false,

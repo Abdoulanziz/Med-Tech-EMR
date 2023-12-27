@@ -542,40 +542,6 @@ async function updateTotalExpensesPercentageSinceLastMonth() {
     }
 }
 
-// Create summary chart
-async function createSummaryChart(title='', type='bar', labels=[], mdata=[], canvasId) {
-    if(labels.length == 0 && mdata.length == 0) return;
-    
-    const data = {
-    labels: labels,
-    datasets: [{
-        label: title,
-        backgroundColor: '#b297f1',
-        borderColor: '#b297f1',
-        data: mdata,
-    }]
-    };
-
-    const config = {
-    type: type,
-    data: data,
-    options: {
-        scales: {
-            y: {
-                startAtZero: true
-            }
-        }
-    }
-    };
-
-    // Render chart
-    const chart = new Chart(
-        document.getElementById(canvasId),
-        config
-    );
-    return chart;
-}
-
 // Handle filter change events for income summary chat
 async function handleFilterChangeForIncomeSummaryChart(filterType, chartId) {
     const chartTitle = document.querySelector(`#${chartId}-title`);
@@ -589,19 +555,19 @@ async function handleFilterChangeForIncomeSummaryChart(filterType, chartId) {
     switch (filterType) {
         case 'day':
             chartTitle.textContent = "Day's Income";
-            createSummaryChart('Durations', 'bar', ['Morning', 'Afternoon', 'Evening'], [80, 100, 46], chartId);
+            UTILS.createSummaryChart('Durations', 'bar', ['Morning', 'Afternoon', 'Evening'], [80, 100, 46], chartId);
             break;
         case 'week':
             chartTitle.textContent = "Week's Income";
-            createSummaryChart('Days', 'bar', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [80, 100, 46, 39, 57, 25, 66], chartId);
+            UTILS.createSummaryChart('Days', 'bar', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [80, 100, 46, 39, 57, 25, 66], chartId);
             break;
         case 'month':
             chartTitle.textContent = "Month's Income";
-            createSummaryChart('Weeks', 'bar', ['Week1', 'Week2', 'Week3', 'Week4'], [80, 100, 46, 39], chartId);
+            UTILS.createSummaryChart('Weeks', 'bar', ['Week1', 'Week2', 'Week3', 'Week4'], [80, 100, 46, 39], chartId);
             break;
         case 'year':
             chartTitle.textContent = "Year's Income";
-            createSummaryChart('Months', 'bar', ['Quarter1', 'Quarter2', 'Quarter3', 'Quarter4'], [80, 46, 39, 60], chartId);
+            UTILS.createSummaryChart('Months', 'bar', ['Quarter1', 'Quarter2', 'Quarter3', 'Quarter4'], [80, 46, 39, 60], chartId);
             break;
         default:
             break;
@@ -621,19 +587,19 @@ async function handleFilterChangeForExpensesSummaryChart(filterType, chartId) {
     switch (filterType) {
         case 'day':
             chartTitle.textContent = "Day's Expenses";
-            createSummaryChart('Durations', 'line', ['Morning', 'Afternoon', 'Evening'], [80000, 1000000, 460000], chartId);
+            UTILS.createSummaryChart('Durations', 'line', ['Morning', 'Afternoon', 'Evening'], [80000, 1000000, 460000], chartId);
             break;
         case 'week':
             chartTitle.textContent = "Week's Expenses";
-            createSummaryChart('Days', 'line', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [80000, 1000000, 460000, 0, 5700000, 0, 0], chartId);
+            UTILS.createSummaryChart('Days', 'line', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [80000, 1000000, 460000, 0, 5700000, 0, 0], chartId);
             break;
         case 'month':
             chartTitle.textContent = "Month's Expenses";
-            createSummaryChart('Weeks', 'line', ['Week1', 'Week2', 'Week3', 'Week4'], [80000, 1000000, 460000, 5700000], chartId);
+            UTILS.createSummaryChart('Weeks', 'line', ['Week1', 'Week2', 'Week3', 'Week4'], [80000, 1000000, 460000, 5700000], chartId);
             break;
         case 'year':
             chartTitle.textContent = "Year's Expenses";
-            createSummaryChart('Months', 'line', ['Quarter1', 'Quarter2', 'Quarter3', 'Quarter4'], [80000, 1000000, 5700000, 7000000], chartId);
+            UTILS.createSummaryChart('Months', 'line', ['Quarter1', 'Quarter2', 'Quarter3', 'Quarter4'], [80000, 1000000, 5700000, 7000000], chartId);
             break;
         default:
             break;
@@ -643,7 +609,7 @@ async function handleFilterChangeForExpensesSummaryChart(filterType, chartId) {
 // Load charts
 async function loadIncomeSummaryChart() {
     // Initial chart setup
-    createSummaryChart("Week's Income", 'bar', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [80, 100, 46, 39, 57, 25, 66], 'income-summary-chart');
+    UTILS.createSummaryChart("Week's Income", 'bar', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [80, 100, 46, 39, 57, 25, 66], 'income-summary-chart');
 
     // Filter change event handling
     const filterSelectLeft = document.querySelector("#income-summary-chart-filter-select");
@@ -656,7 +622,7 @@ async function loadIncomeSummaryChart() {
 // Load charts
 async function loadExpensesSummaryChart() {
     // Initial chart setup
-    createSummaryChart("Week's Expenses", 'line', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [80000, 1000000, 460000, 0, 5700000, 0, 0], 'expenses-summary-chart');
+    UTILS.createSummaryChart("Week's Expenses", 'line', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [80000, 1000000, 460000, 0, 5700000, 0, 0], 'expenses-summary-chart');
 
     // Filter change event handling
     const filterSelectLeft = document.querySelector("#expenses-summary-chart-filter-select");
