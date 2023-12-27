@@ -59,6 +59,7 @@ const {
     fetchIncomeByDateRange,
     fetchExpensesByDateRange,
     fetchIncomeByFilterTypeAndByDateRange,
+    fetchExpensesByFilterTypeAndByDateRange,
 } = require("../controllers/apiController");
 
 router.get("/status", checkAPIStatus);
@@ -145,5 +146,6 @@ router.get("/analytics/income/:startDate/:endDate", fetchIncomeByDateRange);
 router.get("/analytics/expenses/:startDate/:endDate", fetchExpensesByDateRange);
 
 router.get("/analytics/income/:filterType/:startDate/:endDate", fetchIncomeByFilterTypeAndByDateRange);
+router.get("/analytics/expenses/:filterType/:startDate/:endDate", fetchExpensesByFilterTypeAndByDateRange);
 
 module.exports = router;

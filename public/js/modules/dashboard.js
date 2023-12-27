@@ -542,6 +542,54 @@ async function updateTotalExpensesPercentageSinceLastMonth() {
     }
 }
 
+// Load income chart
+async function loadIncomeSummaryChart() {
+    try {
+        // Initial chart setup
+        // Get current year month dates
+        const { currentYearMonth, startDate: currentStartDate, endDate: currentEndDate } = UTILS.getCurrentYearMonthWithDates();
+
+        const response = await API.analytics.income.fetchIncomeByFilterTypeAndByDateRange("week", currentStartDate, currentEndDate);
+        const { labels, values } = await response.data;
+
+        UTILS.createSummaryChart("Week's Income", 'bar', labels, values, 'income-summary-chart');
+
+        // Filter change event handling
+        const filterSelectLeft = document.querySelector("#income-summary-chart-filter-select");
+        filterSelectLeft.addEventListener("change", (event) => {
+            const selectedFilter = event.target.value;
+            handleFilterChangeForIncomeSummaryChart(selectedFilter, 'income-summary-chart');
+        });
+    } catch (error) {
+        
+    }
+    
+}
+
+// Load expenses chart
+async function loadExpensesSummaryChart() {
+    try {
+        // Initial chart setup
+        // Get current year month dates
+        const { currentYearMonth, startDate: currentStartDate, endDate: currentEndDate } = UTILS.getCurrentYearMonthWithDates();
+
+        const response = await API.analytics.expenses.fetchExpensesByFilterTypeAndByDateRange("week", currentStartDate, currentEndDate);
+        const { labels, values } = await response.data;
+
+        UTILS.createSummaryChart("Week's Expenses", 'line', labels, values, 'expenses-summary-chart');
+
+        // Filter change event handling
+        const filterSelectLeft = document.querySelector("#expenses-summary-chart-filter-select");
+        filterSelectLeft.addEventListener("change", (event) => {
+            const selectedFilter = event.target.value;
+            handleFilterChangeForExpensesSummaryChart(selectedFilter, 'expenses-summary-chart');
+        });
+    } catch (error) {
+        
+    }
+    
+}
+
 // Handle filter change events for income summary chat
 async function handleFilterChangeForIncomeSummaryChart(filterType, chartId) {
     const chartTitle = document.querySelector(`#${chartId}-title`);
@@ -552,82 +600,93 @@ async function handleFilterChangeForIncomeSummaryChart(filterType, chartId) {
         existingChart.destroy();
     }
 
-    switch (filterType) {
-        case 'day':
-            chartTitle.textContent = "Day's Income";
-            UTILS.createSummaryChart('Durations', 'bar', ['Morning', 'Afternoon', 'Evening'], [80, 100, 46], chartId);
-            break;
-        case 'week':
-            chartTitle.textContent = "Week's Income";
-            UTILS.createSummaryChart('Days', 'bar', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [80, 100, 46, 39, 57, 25, 66], chartId);
-            break;
-        case 'month':
-            chartTitle.textContent = "Month's Income";
-            UTILS.createSummaryChart('Weeks', 'bar', ['Week1', 'Week2', 'Week3', 'Week4'], [80, 100, 46, 39], chartId);
-            break;
-        case 'year':
-            chartTitle.textContent = "Year's Income";
-            UTILS.createSummaryChart('Months', 'bar', ['Quarter1', 'Quarter2', 'Quarter3', 'Quarter4'], [80, 46, 39, 60], chartId);
-            break;
-        default:
-            break;
+    // Get current year month dates
+    const { currentYearMonth, startDate: currentStartDate, endDate: currentEndDate } = UTILS.getCurrentYearMonthWithDates();
+
+    let labels, values;
+
+    try {
+        switch (filterType) {
+            case 'day':
+                chartTitle.textContent = "Day's Income";
+                const dayResponse = await API.analytics.income.fetchIncomeByFilterTypeAndByDateRange("day", currentStartDate, currentEndDate);
+                ({ labels, values } = dayResponse.data);
+                UTILS.createSummaryChart('Durations', 'bar', labels, values, chartId);
+                break;
+            case 'week':
+                chartTitle.textContent = "Week's Income";
+                const weekResponse = await API.analytics.income.fetchIncomeByFilterTypeAndByDateRange("week", currentStartDate, currentEndDate);
+                ({ labels, values } = weekResponse.data);
+                UTILS.createSummaryChart('Days', 'bar', labels, values, chartId);
+                break;
+            case 'month':
+                chartTitle.textContent = "Month's Income";
+                const monthResponse = await API.analytics.income.fetchIncomeByFilterTypeAndByDateRange("month", currentStartDate, currentEndDate);
+                ({ labels, values } = monthResponse.data);
+                UTILS.createSummaryChart('Weeks', 'bar', labels, values, chartId);
+                break;
+            case 'year':
+                chartTitle.textContent = "Year's Income";
+                const yearResponse = await API.analytics.income.fetchIncomeByFilterTypeAndByDateRange("year", currentStartDate, currentEndDate);
+                ({ labels, values } = yearResponse.data);
+                UTILS.createSummaryChart('Months', 'bar', labels, values, chartId);
+                break;
+            default:
+                break;
+        }
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        // Handle the error as needed
     }
 }
+
 
 // Handle filter change events for expenses summary chat
 async function handleFilterChangeForExpensesSummaryChart(filterType, chartId) {
     const chartTitle = document.querySelector(`#${chartId}-title`);
-    
+
     // Check if chart with specific ID exists and destroy it
     const existingChart = Chart.getChart(chartId);
     if (existingChart) {
         existingChart.destroy();
     }
 
-    switch (filterType) {
-        case 'day':
-            chartTitle.textContent = "Day's Expenses";
-            UTILS.createSummaryChart('Durations', 'line', ['Morning', 'Afternoon', 'Evening'], [80000, 1000000, 460000], chartId);
-            break;
-        case 'week':
-            chartTitle.textContent = "Week's Expenses";
-            UTILS.createSummaryChart('Days', 'line', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [80000, 1000000, 460000, 0, 5700000, 0, 0], chartId);
-            break;
-        case 'month':
-            chartTitle.textContent = "Month's Expenses";
-            UTILS.createSummaryChart('Weeks', 'line', ['Week1', 'Week2', 'Week3', 'Week4'], [80000, 1000000, 460000, 5700000], chartId);
-            break;
-        case 'year':
-            chartTitle.textContent = "Year's Expenses";
-            UTILS.createSummaryChart('Months', 'line', ['Quarter1', 'Quarter2', 'Quarter3', 'Quarter4'], [80000, 1000000, 5700000, 7000000], chartId);
-            break;
-        default:
-            break;
+    // Get current year month dates
+    const { currentYearMonth, startDate: currentStartDate, endDate: currentEndDate } = UTILS.getCurrentYearMonthWithDates();
+
+    let labels, values;
+
+    try {
+        switch (filterType) {
+            case 'day':
+                chartTitle.textContent = "Day's Expenses";
+                const dayResponse = await API.analytics.expenses.fetchExpensesByFilterTypeAndByDateRange("day", currentStartDate, currentEndDate);
+                ({ labels, values } = dayResponse.data);
+                UTILS.createSummaryChart('Durations', 'line', labels, values, chartId);
+                break;
+            case 'week':
+                chartTitle.textContent = "Week's Expenses";
+                const weekResponse = await API.analytics.expenses.fetchExpensesByFilterTypeAndByDateRange("week", currentStartDate, currentEndDate);
+                ({ labels, values } = weekResponse.data);
+                UTILS.createSummaryChart('Days', 'line', labels, values, chartId);
+                break;
+            case 'month':
+                chartTitle.textContent = "Month's Expenses";
+                const monthResponse = await API.analytics.expenses.fetchExpensesByFilterTypeAndByDateRange("month", currentStartDate, currentEndDate);
+                ({ labels, values } = monthResponse.data);
+                UTILS.createSummaryChart('Weeks', 'line', labels, values, chartId);
+                break;
+            case 'year':
+                chartTitle.textContent = "Year's Expenses";
+                const yearResponse = await API.analytics.expenses.fetchExpensesByFilterTypeAndByDateRange("year", currentStartDate, currentEndDate);
+                ({ labels, values } = yearResponse.data);
+                UTILS.createSummaryChart('Months', 'line', labels, values, chartId);
+                break;
+            default:
+                break;
+        }
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        // Handle the error as needed
     }
-}
-
-// Load charts
-async function loadIncomeSummaryChart() {
-    // Initial chart setup
-    UTILS.createSummaryChart("Week's Income", 'bar', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [80, 100, 46, 39, 57, 25, 66], 'income-summary-chart');
-
-    // Filter change event handling
-    const filterSelectLeft = document.querySelector("#income-summary-chart-filter-select");
-    filterSelectLeft.addEventListener("change", (event) => {
-        const selectedFilter = event.target.value;
-        handleFilterChangeForIncomeSummaryChart(selectedFilter, 'income-summary-chart');
-    });
-}
-
-// Load charts
-async function loadExpensesSummaryChart() {
-    // Initial chart setup
-    UTILS.createSummaryChart("Week's Expenses", 'line', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [80000, 1000000, 460000, 0, 5700000, 0, 0], 'expenses-summary-chart');
-
-    // Filter change event handling
-    const filterSelectLeft = document.querySelector("#expenses-summary-chart-filter-select");
-    filterSelectLeft.addEventListener("change", (event) => {
-        const selectedFilter = event.target.value;
-        handleFilterChangeForExpensesSummaryChart(selectedFilter, 'expenses-summary-chart');
-    });
 }

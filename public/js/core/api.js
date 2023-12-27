@@ -630,6 +630,13 @@ export const API = {
                 return await API.makeGetRequest(endpoint);
             },
 
+            // Fetch filtered income
+            // GET api/v1/analytics/income/:filterType/:startDate/:endDate
+            fetchIncomeByFilterTypeAndByDateRange: async (filterType, startDate, endDate) => {
+                const endpoint = `${API.BACKEND_BASE_API_URI}/analytics/income/${filterType}/${startDate}/${endDate}`;
+                return await API.makeGetRequest(endpoint);
+            },
+
         },
 
         // Expenses
@@ -638,6 +645,13 @@ export const API = {
             // GET api/v1/analytics/expenses/:startDate/:endDate
             fetchExpensesByDateRange: async (startDate, endDate) => {
                 const endpoint = `${API.BACKEND_BASE_API_URI}/analytics/expenses/${startDate}/${endDate}`;
+                return await API.makeGetRequest(endpoint);
+            },
+
+            // Fetch filtered expenses
+            // GET api/v1/analytics/expenses/:filterType/:startDate/:endDate
+            fetchExpensesByFilterTypeAndByDateRange: async (filterType, startDate, endDate) => {
+                const endpoint = `${API.BACKEND_BASE_API_URI}/analytics/expenses/${filterType}/${startDate}/${endDate}`;
                 return await API.makeGetRequest(endpoint);
             },
 

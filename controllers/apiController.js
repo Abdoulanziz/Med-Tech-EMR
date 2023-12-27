@@ -3119,11 +3119,51 @@ const fetchIncomeByFilterTypeAndByDateRange = async (req, res) => {
     }
 
     return res.status(200).json({
-      sum: result || 0, // If there is no income, return 0
+      data: result || 0, // If there is no income, return 0
       status: 'success',
     });
   } catch (error) {
-    console.error('Error fetching sum of income amounts for date range:', error);
+    console.error('Error fetching data:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+const fetchExpensesByFilterTypeAndByDateRange = async (req, res) => {
+  try {
+    const { filterType, startDate, endDate } = req.params;
+    let result;
+
+    // Ensure proper timezone handling
+    const startDateTime = new Date(`${startDate}T00:00:00Z`);
+    const endDateTime = new Date(`${endDate}T23:59:59Z`); // End of the selected day
+
+    switch (filterType) {
+      case 'day':
+        // Modify the query to fetch expenses by day
+        result = await fetchExpensesByDay(startDateTime, endDateTime);
+        break;
+      case 'week':
+        // Modify the query to fetch expenses by week
+        result = await fetchExpensesByWeek(startDateTime, endDateTime);
+        break;
+      case 'month':
+        // Modify the query to fetch expenses by month
+        result = await fetchExpensesByMonth(startDateTime, endDateTime);
+        break;
+      case 'year':
+        // Modify the query to fetch expenses by year
+        result = await fetchExpensesByYear(startDateTime, endDateTime);
+        break;
+      default:
+        break;
+    }
+
+    return res.status(200).json({
+      data: result || 0, // If there is no expenses, return 0
+      status: 'success',
+    });
+  } catch (error) {
+    console.error('Error fetching data:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -3141,6 +3181,35 @@ const fetchIncomeByDay = async (startDateTime, endDateTime) => {
       },
     },
     group: [Income.sequelize.fn('date_trunc', 'hour', Income.sequelize.col('created_at'))],
+    raw: true,
+  });
+
+  // Create an object to store sums for each time of day
+  const timeSums = {};
+  timeData.forEach((data) => {
+    const timeLabel = getTimeOfDay(data.hour);
+    timeSums[timeLabel] = data.sum;
+  });
+
+  // Generate labels and values
+  const labels = ['Morning', 'Afternoon', 'Evening'];
+  const values = labels.map((timeLabel) => timeSums[timeLabel] || 0);
+
+  return { labels, values };
+};
+
+const fetchExpensesByDay = async (startDateTime, endDateTime) => {
+  const timeData = await Expense.findAll({
+    attributes: [
+      [Expense.sequelize.fn('date_trunc', 'hour', Expense.sequelize.col('created_at')), 'hour'],
+      [Expense.sequelize.fn('sum', Expense.sequelize.col('amount')), 'sum'],
+    ],
+    where: {
+      createdAt: {
+        [Op.between]: [startDateTime, endDateTime],
+      },
+    },
+    group: [Expense.sequelize.fn('date_trunc', 'hour', Expense.sequelize.col('created_at'))],
     raw: true,
   });
 
@@ -3184,6 +3253,35 @@ const fetchIncomeByWeek = async (startDateTime, endDateTime) => {
       },
     },
     group: [Income.sequelize.fn('date_trunc', 'day', Income.sequelize.col('created_at'))],
+    raw: true,
+  });
+
+  // Create an object to store sums for each day
+  const daySums = {};
+  dayData.forEach((data) => {
+    const dayLabel = getDayOfWeek(data.day);
+    daySums[dayLabel] = data.sum;
+  });
+
+  // Generate labels and values
+  const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const values = labels.map((dayLabel) => daySums[dayLabel] || 0);
+
+  return { labels, values };
+};
+
+const fetchExpensesByWeek = async (startDateTime, endDateTime) => {
+  const dayData = await Expense.findAll({
+    attributes: [
+      [Expense.sequelize.fn('date_trunc', 'day', Expense.sequelize.col('created_at')), 'day'],
+      [Expense.sequelize.fn('sum', Expense.sequelize.col('amount')), 'sum'],
+    ],
+    where: {
+      createdAt: {
+        [Op.between]: [startDateTime, endDateTime],
+      },
+    },
+    group: [Expense.sequelize.fn('date_trunc', 'day', Expense.sequelize.col('created_at'))],
     raw: true,
   });
 
@@ -3253,6 +3351,49 @@ const fetchIncomeByMonth = async (startDateTime, endDateTime) => {
   return { labels, values };
 };
 
+const fetchExpensesByMonth = async (startDateTime, endDateTime) => {
+  const weekData = await Expense.findAll({
+    attributes: [
+      [Expense.sequelize.fn('date_trunc', 'week', Expense.sequelize.col('created_at')), 'week'],
+      [Expense.sequelize.fn('sum', Expense.sequelize.col('amount')), 'sum'],
+    ],
+    where: {
+      createdAt: {
+        [Op.between]: [startDateTime, endDateTime],
+      },
+    },
+    group: [Expense.sequelize.fn('date_trunc', 'week', Expense.sequelize.col('created_at'))],
+    raw: true,
+  });
+
+  // Create an object to store sums for each week
+  const weekSums = {};
+  weekData.forEach((data) => {
+    const weekLabel = `Week${getISOWeek(data.week)}`;
+    weekSums[weekLabel] = data.sum;
+  });
+
+  // Generate labels and values
+  const labels = [];
+  const values = [];
+
+  // Get the first and last week dates
+  const startDate = new Date(startDateTime);
+  const endDate = new Date(endDateTime);
+
+  // Iterate over each week within the date range
+  while (startDate <= endDate) {
+    const weekLabel = `Week${getISOWeek(startDate)}`;
+    labels.push(weekLabel);
+    values.push(weekSums[weekLabel] || 0);
+
+    // Move to the next week
+    startDate.setDate(startDate.getDate() + 7);
+  }
+
+  return { labels, values };
+};
+
 
 // Get ISO week number
 function getISOWeek(date) {
@@ -3276,6 +3417,35 @@ const fetchIncomeByYear = async (startDateTime, endDateTime) => {
       },
     },
     group: [Income.sequelize.fn('date_trunc', 'quarter', Income.sequelize.col('created_at'))],
+    raw: true,
+  });
+
+  // Create an object to store sums for each quarter
+  const quarterSums = {};
+  quarterData.forEach((data) => {
+    const quarterLabel = getQuarter(data.quarter);
+    quarterSums[quarterLabel] = data.sum;
+  });
+
+  // Generate labels and values
+  const labels = ['Quarter1', 'Quarter2', 'Quarter3', 'Quarter4'];
+  const values = labels.map((quarterLabel) => quarterSums[quarterLabel] || 0);
+
+  return { labels, values };
+};
+
+const fetchExpensesByYear = async (startDateTime, endDateTime) => {
+  const quarterData = await Expense.findAll({
+    attributes: [
+      [Expense.sequelize.fn('date_trunc', 'quarter', Expense.sequelize.col('created_at')), 'quarter'],
+      [Expense.sequelize.fn('sum', Expense.sequelize.col('amount')), 'sum'],
+    ],
+    where: {
+      createdAt: {
+        [Op.between]: [startDateTime, endDateTime],
+      },
+    },
+    group: [Expense.sequelize.fn('date_trunc', 'quarter', Expense.sequelize.col('created_at'))],
     raw: true,
   });
 
@@ -3373,4 +3543,5 @@ module.exports = {
   fetchIncomeByDateRange,
   fetchExpensesByDateRange,
   fetchIncomeByFilterTypeAndByDateRange,
+  fetchExpensesByFilterTypeAndByDateRange,
 };
