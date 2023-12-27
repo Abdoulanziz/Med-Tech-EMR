@@ -639,7 +639,7 @@ async function loadSinglePatientVisitHistory(visitId) {
                         return `
                             <td style="border: 1px solid #ddd;">
                                 <button class="btn table-btn">Edit Request  <i class="ti-arrow-right"></i> </button>
-                                <button ${isDisabled ? "disabled" : ""} class="btn view-results" style="background-color: ${buttonBackgroundColor};padding-inline: .6rem;border-radius: 0;font-size: 12px;${isDisabled ? "cursor: not-allowed;" : ""}">View Report  <i style="${isDisabled ? "opacity: 0.5;" : ""}" class="ti-arrow-right"></i> </button>
+                                <button ${isDisabled ? "disabled" : ""} class="btn table-btn" style="${isDisabled ? "cursor: not-allowed;" : ""}">View Report  <i style="${isDisabled ? "opacity: 0.5;" : ""}" class="ti-arrow-right"></i> </button>
                             </td>
                         `;
                     }
@@ -773,7 +773,6 @@ async function displaySelectedPatientBills(divId) {
 
         h2Element.textContent = `UGX ${billToDisplay}`;
 
-        // document.querySelector(".bill-content").querySelector("h2").textContent = `UGX ${billToDisplay}`;
     }
 }
 
