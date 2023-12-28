@@ -8,7 +8,7 @@
 
   --font-poppins: "Poppins", sans-serif;
   --font-tilt-neon: "Tilt Neon", sans-serif;
-  /* --font-tilt-neon: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; */
+  /* --font-sys-default: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; */
 
 
   --z-index-100: 100;
@@ -389,6 +389,86 @@ a {
 
 .dropdown-menu .dropdown-items #last-login-value {
   font-family: var(--font-tilt-neon);
+}
+
+.settings-card {
+  background-color: #ffffff;
+  padding-block: 1rem;
+  box-shadow: 0px 3px 3px -1px rgba(10,22,70,.1), 0px 0px 1px 0px rgba(10,22,70,.06) !important;
+  background-clip: border-box;
+  border: 1px solid #eceef3;
+  border-radius: 0.75rem;
+}
+
+.settings-card .card-header {
+  padding-inline:  1.6rem;
+  padding-block-end: 1rem;
+  margin-block: .6rem;
+  border-block-end: 1px solid #efefef;
+  font-weight: normal !important;
+  font-size: 19px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #6d6c6c;
+}
+
+.settings-card-body {
+  padding-inline:  1.6rem;
+}
+
+.settings-checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.settings-checkbox input[type="checkbox"] {
+  block-size: 2.2rem; /* Increase the height of the checkbox */
+}
+
+.settings-checkbox input[type="checkbox"].switch {
+  overflow: hidden;
+  border: 0;
+  border-radius: 3rem; /* Increase the border-radius for a rounder shape */
+  inline-size: 4rem; /* Increase the width of the checkbox */
+  appearance: none;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  margin: 0;
+  position: relative;
+  border: 1px solid #d1d5db;
+  transition: 0.2s ease-in;
+  cursor: pointer;
+}
+
+.settings-checkbox input[type="checkbox"].switch:before {
+  content: "";
+  inline-size: 1.8rem; /* Increase the width of the inner circle */
+  block-size: 1.8rem; /* Increase the height of the inner circle */
+  transform: translatex(0);
+  position: absolute;
+  border-radius: 50%;
+  margin: 0 0 0 0.25rem; /* Adjust the margin for equal spacing on both sides */
+  background: #d1d5db;
+  transition: 0.2s ease-in;
+}
+
+.settings-checkbox input[type="checkbox"].switch:checked {
+  background: yellowgreen;
+  border-color: rgb(122, 168, 31);
+}
+
+.settings-checkbox input[type="checkbox"].switch:checked:before {
+  transform: translatex(100%);
+  background: #fff;
+}
+
+.settings-checkbox label {
+  cursor: pointer;
+  color: #a3a4a7;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 400;
+  margin: 0 0 0 1.25rem; /* Increase the left margin for better spacing */
+  font-size: 1rem; /* Optionally increase the font size */
 }
 /* Logout dropdown */
 

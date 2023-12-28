@@ -117,52 +117,133 @@
                     </div>
                     <div class="section-body" style="padding-block-start: .8rem;">
                         <style>
+                        .details-card {
+                            background-color: #ffffff;
+                            border-radius: 8px;
+                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                            padding: 20px;
+                            max-width: 600px;
+                            margin: 0 auto;
+                        }
 
-                            
-                        </style>
+                        .details-card-header {
+                            border-bottom: 1px solid #e0e0e0;
+                            margin-bottom: 20px;
+                            padding-bottom: 10px;
+                        }
 
-                        <div class="details-card">
-                            <div class="details-card-header">
-                                <h3 class="card-header">Facility Preferences</h3>
-                            </div>
+                        .card-header {
+                            color: #333;
+                            font-size: 1.8rem;
+                            margin: 0;
+                        }
 
-                            <div class="details-card-body settings-card-body">
-                                <div class="settings-card mb-10" style="box-shadow: none !important;">
-                                    <div class="settings-card-header">
-                                        <h3 class="card-header">Profile Information</h3>
-                                    </div>
+                        .details-card-body form {
+                            max-width: 500px;
+                            margin: 0 auto;
+                        }
 
-                                    <div class="settings-card-body">
-                                        <form class="settings-form">
-                                            <div class="form-group">
-                                                <label for="hospital-name">Hospital Name</label>
-                                                <input type="text" id="hospital-name" name="hospital-name" placeholder="Enter hospital name" required>
-                                            </div>
+                        .form-group {
+                            margin-bottom: 24px;
+                        }
 
-                                            <div class="form-group">
-                                                <label for="hospital-address">Address</label>
-                                                <input type="text" id="hospital-address" name="hospital-address" placeholder="Enter hospital address" required>
-                                            </div>
+                        label {
+                            display: block;
+                            font-weight: 600;
+                            margin-bottom: 8px;
+                            color: #333;
+                        }
 
-                                            <div class="form-group">
-                                                <label for="contact-email">Contact Email</label>
-                                                <input type="text" id="contact-email" name="contact-email" placeholder="Enter contact email" required>
-                                            </div>
+                        input[type="text"],
+                        textarea,
+                        input[type="file"] {
+                            width: 100%;
+                            padding: 12px;
+                            border: 1px solid #ccc;
+                            border-radius: 6px;
+                            box-sizing: border-box;
+                            margin-top: 6px;
+                            font-size: 16px;
+                        }
 
-                                            <div class="form-group">
-                                                <label for="phone-number">Phone Number</label>
-                                                <input type="text" id="phone-number" name="phone-number" placeholder="Enter phone number" required>
-                                            </div>
+                        textarea {
+                            resize: vertical;
+                        }
 
-                                            <div class="form-group">
-                                                <label for="logo-upload">Upload Hospital Logo</label>
-                                                <input type="file" id="logo-upload" name="logo-upload" accept="image/*">
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                        button {
+                            background-color: #4caf50;
+                            color: #fff;
+                            padding: 12px 20px;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-size: 18px;
+                            transition: background-color 0.3s;
+                        }
+
+                        button:hover {
+                            background-color: #45a049;
+                        }
+
+                        .current-logo {
+                            max-width: 100%;
+                            height: auto;
+                            margin-top: 12px;
+                            border-radius: 6px;
+                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                        }
+                    </style>
+
+                    <div class="details-card">
+                        <div class="details-card-header">
+                            <h3 class="card-header">Facility Profile</h3>
                         </div>
+
+                        <div class="details-card-body">
+                            <form>
+                                <!-- Hospital Name -->
+                                <div class="form-group">
+                                    <label for="hospital-name">Hospital Name</label>
+                                    <input type="text" id="hospital-name" name="hospital-name" placeholder="Enter hospital name" required>
+                                </div>
+
+                                <!-- Address -->
+                                <div class="form-group">
+                                    <label for="hospital-address">Address</label>
+                                    <textarea id="hospital-address" name="hospital-address" placeholder="Enter hospital address" required></textarea>
+                                </div>
+
+                                <!-- Contact Email -->
+                                <div class="form-group">
+                                    <label for="contact-email">Contact Email</label>
+                                    <input type="text" id="contact-email" name="contact-email" placeholder="Enter contact email" required>
+                                </div>
+
+                                <!-- Phone Number -->
+                                <div class="form-group">
+                                    <label for="phone-number">Phone Number</label>
+                                    <input type="text" id="phone-number" name="phone-number" placeholder="Enter phone number" required>
+                                </div>
+
+                                <!-- Logo Upload -->
+                                <div class="form-group">
+                                    <label for="logo-upload">Upload Hospital Logo</label>
+                                    <input type="file" id="logo-upload" name="logo-upload" accept="image/*">
+                                </div>
+
+                                <!-- Display Hospital Logo -->
+                                <div class="form-group">
+                                    <label>Current Logo</label>
+                                    <img src="path/to/current-logo.jpg" alt="Hospital Logo" class="current-logo">
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="form-group">
+                                    <button type="submit">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
 
 
 
@@ -188,11 +269,11 @@
                     <div class="section-body" style="padding-block-start: .8rem;">
                         <div class="details-card mb-5">
                             <div class="details-card-header">
-                                <h3 class="card-header">System Preferences</h3>
+                                <h3 class="card-header">Facility Preferences</h3>
                             </div>
 
                             <div class="details-card-body">
-                                <div class="settings-card mb-10" style="box-shadow: none !important;">
+                                <div class="settings-card mb-5" style="box-shadow: none !important;">
                                     <div class="settings-card-header">
                                         <h3 class="card-header">Appointment Reminders</h3>
                                     </div>
@@ -205,7 +286,7 @@
                                     </div>
                                 </div>
 
-                                <div class="settings-card mb-10" style="box-shadow: none !important;">
+                                <div class="settings-card mb-5" style="box-shadow: none !important;">
                                     <div class="settings-card-header">
                                         <h3 class="card-header">Inventory Alerts</h3>
                                     </div>
