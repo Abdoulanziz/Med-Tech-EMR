@@ -297,8 +297,8 @@ export const UTILS = {
         labels: labels,
         datasets: [{
             label: title,
-            backgroundColor: '#b297f1',
-            borderColor: '#b297f1',
+            backgroundColor: 'yellowgreen',
+            borderColor: 'yellowgreen',
             data: mdata,
         }]
         };
