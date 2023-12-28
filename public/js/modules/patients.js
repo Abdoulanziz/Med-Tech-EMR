@@ -240,13 +240,13 @@ async function displaySelectedPatientDetails(divID, data, callback) {
         const patientName = div.querySelector("#patient-name");
         const contactNumber = div.querySelector("#contact-number");
         const dateOfBirth = div.querySelector("#date-of-birth");
-        const gender = div.querySelector("#gender");
         const age = div.querySelector("#age");
+        const email = div.querySelector("#email");
 
         patientName.textContent = `${selectedPatient.firstName} ${selectedPatient.lastName}`;
         contactNumber.textContent = selectedPatient.contactNumber;
         dateOfBirth.textContent = selectedPatient.dateOfBirth;
-        // gender.textContent = selectedPatient.gender.charAt(0).toUpperCase() + selectedPatient.gender.slice(1).toLowerCase();
+        email.textContent = selectedPatient.emailAddress || "Not provided";
         age.textContent = new Date().getFullYear() - new Date(selectedPatient.dateOfBirth).getFullYear();
     }
 
