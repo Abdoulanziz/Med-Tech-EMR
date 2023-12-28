@@ -91,7 +91,7 @@ async function loadIncomeData() {
             {
                 targets: 2,
                 render: function (data, type, row, meta) {
-                    return data.amount;
+                    return '<span style="color: #525f7f;">' + data.amount + '</span>';
                 },
             },
             {
@@ -184,7 +184,7 @@ async function loadExpensesData() {
             {
                 targets: 2,
                 render: function (data, type, row, meta) {
-                    return data.amount;
+                    return '<span style="color: #525f7f;">' + data.amount + '</span>';
                 },
             },
             {

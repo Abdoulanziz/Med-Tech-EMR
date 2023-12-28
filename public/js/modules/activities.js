@@ -54,7 +54,7 @@ async function loadAuditLogs() {
             {
                 targets: 1,
                 render: function(data, type, row, meta) {
-                    return data.username;
+                    return '<span style="color: #525f7f;">' + data.username + '</span>';
                 }
             },
             {
@@ -81,7 +81,7 @@ async function loadAuditLogs() {
             {
                 targets: 3,
                 render: function (data, type, row, meta) {
-                    return data.auditLogEntity;
+                    return '<span style="color: #525f7f;">' + data.auditLogEntity + '</span>';
                 },
             },
             {

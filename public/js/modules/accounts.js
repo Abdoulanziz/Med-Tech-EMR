@@ -52,7 +52,7 @@ async function loadAllUsers() {
 
                 // Trigger create modal
                 if(data.userProfileCompletionStatus === "incomplete"){
-                    const createDoctorProfileCta = row.cells[4].querySelectorAll("button")[0];
+                    const createDoctorProfileCta = row.cells[5].querySelectorAll("button")[0];
                     createDoctorProfileCta.style.cursor = "pointer";
                     createDoctorProfileCta.classList.add("modal-trigger");
                     createDoctorProfileCta.dataset.modal = "create-doctor-profile-modal";
@@ -65,7 +65,7 @@ async function loadAllUsers() {
 
                 // Trigger update modal
                 if(data.userProfileCompletionStatus === "complete"){
-                    const updateDoctorProfileCta = row.cells[4].querySelectorAll("button")[0];
+                    const updateDoctorProfileCta = row.cells[5].querySelectorAll("button")[0];
                     updateDoctorProfileCta.style.cursor = "pointer";
                     updateDoctorProfileCta.classList.add("modal-trigger");
                     updateDoctorProfileCta.dataset.modal = "update-doctor-profile-modal";
@@ -102,7 +102,7 @@ async function loadAllUsers() {
 
             // Nurse
             if(data.userRole === "nurse"){
-                const createNurseProfileCta = row.cells[4].querySelectorAll("button")[0];
+                const createNurseProfileCta = row.cells[5].querySelectorAll("button")[0];
                 createNurseProfileCta.style.cursor = "pointer";
                 createNurseProfileCta.classList.add("modal-trigger");
                 createNurseProfileCta.dataset.modal = "create-nurse-profile-modal";
@@ -122,7 +122,7 @@ async function loadAllUsers() {
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return '<span>' + data.username + '</span>';
+                    return '<span style="color: #525f7f;">' + data.username + '</span>';
                 },
             },
             {
@@ -150,6 +150,12 @@ async function loadAllUsers() {
             },
             {
                 targets: 4,
+                render: function(data, type, row, meta) {
+                    return '<span>' + data.userProfileCompletionStatus.charAt(0).toUpperCase() + data.userProfileCompletionStatus.slice(1) + '</span>';
+                }
+            },
+            {
+                targets: 5,
                 render: function (data, type, row, meta) {
                     let ctas = "";
                     if(data.userProfileCompletionStatus === "incomplete"){
@@ -171,15 +177,6 @@ async function loadAllUsers() {
                             ${ctas}
                         </td>
                     `;
-                }
-            },
-            {
-                targets: 5,
-                render: function(data, type, row, meta) {
-                    const originalDate = data.createdAt;
-                    const dateObj = new Date(originalDate);
-                    const formattedDate = dateObj.toISOString().split('T')[0];
-                    return '<span>' + formattedDate + '</span>';
                 }
             },
             {
