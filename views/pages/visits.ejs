@@ -123,9 +123,9 @@
                                         <div class="dropdown-menu" id="dropdown-menu">
                                             <ul class="dropdown-items">
                                                 <li class="dropdown-item header">
-                                                    <span id="user-fullname-label"><%= data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1) %></span>
+                                                    <span id="last-label">Last login:</span>
                                                     <br>
-                                                    <small id="user-email-label">admin@coire.live</small>
+                                                    <small id="last-login-value"><%= data.user.lastLogin ? new Date(data.user.lastLogin).toLocaleString() : 'N/A' %></small>
                                                 </li>
                                                 <li class="dropdown-item"><i class="ti-settings"></i> <a href="#">Settings</a></li>
                                                 <li class="dropdown-item"><i class="ti-user"></i> <a href="#">My Profile</a></li>

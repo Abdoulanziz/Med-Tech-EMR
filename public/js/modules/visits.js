@@ -356,20 +356,16 @@ async function loadSinglePatientVisitHistory(visitId) {
                 render: function(data, type, row, meta) {
                     const status = data.requestStatus.toLowerCase();
                     let color;
-                    let backgroundColor;
 
-                    if (status === 'pending') {
-                        color = 'grey';
-                        backgroundColor = '#f4f4ea';
-                    } else if (status === 'complete') {
+                    if (status === 'complete') {
                         color = 'yellowgreen';
-                        backgroundColor = '#f3fed2';
-                    } else {
+                    } else if(status === 'canceled') {
                         color = 'orange';
-                        backgroundColor = '#fcf1dd';
+                    } else {
+                        color = 'grey';
                     }
+                    return '<span class="td-status"><span class="td-status-dot" style="background-color: ' + color + ';"></span>'+ data.requestStatus.charAt(0).toUpperCase() + data.requestStatus.slice(1) +'</span>';
 
-                    return '<span style="font-weight: bold;font-size: 10px;display: block;inline-size: 50%;border-radius:6px;padding: .4rem .6rem;color: ' + color + ';background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
                 }
             },
             {

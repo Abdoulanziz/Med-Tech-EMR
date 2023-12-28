@@ -383,11 +383,11 @@ a {
   font-family: var(--font-tilt-neon);
 }
 
-.dropdown-menu .dropdown-items #user-fullname-label {
+.dropdown-menu .dropdown-items #last-login-label {
   font-family: var(--font-tilt-neon);
 }
 
-.dropdown-menu .dropdown-items #user-email-label {
+.dropdown-menu .dropdown-items #last-login-value {
   font-family: var(--font-tilt-neon);
 }
 /* Logout dropdown */

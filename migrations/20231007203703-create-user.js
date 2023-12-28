@@ -38,6 +38,11 @@ module.exports = {
         defaultValue: 'suspended',
         allowNull: false,
       },
+      last_login: {
+        type: Sequelize.DATE,
+        field: 'last_login',
+        allowNull: true,
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE
