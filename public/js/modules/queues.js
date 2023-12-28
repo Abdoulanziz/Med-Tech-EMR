@@ -746,7 +746,7 @@ async function displaySelectedPatientBills(divId) {
             const template = `
             <li class="service ${billItem.paymentStatus === "paid" ? 'paid' : 'unpaid'}">
                 <div class="li-left">
-                    <p>${billItem.requestName} (UGX ${billItem.requestFees})</p>
+                    <p>${billItem.requestName} (${UTILS.formatAmountWithCommas(billItem.requestFees)})</p>
                 </div>
                 <div class="li-right">
                     ${billItem.paymentStatus === "paid" ? '<img src="/assets/svg/check.png" alt="remove service icon">' : ''}
@@ -771,7 +771,7 @@ async function displaySelectedPatientBills(divId) {
         h2Element.classList.toggle("settled", billToDisplay === 0);
         h2Element.classList.toggle("un-settled", billToDisplay !== 0);
 
-        h2Element.textContent = `UGX ${billToDisplay}`;
+        h2Element.textContent = `${UTILS.formatAmountWithCommas(billToDisplay)}`;
 
     }
 }
