@@ -63,7 +63,23 @@ const createFacility = async (req, res) => {
 
 // Fetch facility by id
 const fetchFacilityById = async (req, res) => {
+  try {
+    const facilityId = req.params.id;
 
+    if (facilityId) {
+      // If facilityId is provided, fetch the specific facility by ID
+      const facility = await Facility.findOne({where: {facilityId}});
+
+      if (!facility) {
+        return res.status(404).json({ message: 'Facility not found' });
+      }
+      return res.status(200).json({data: facility});
+    }
+
+  } catch (error) {
+    console.error('Error fetching facility:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
 }
 
 // Create a new user
