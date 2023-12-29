@@ -104,6 +104,40 @@ export const API = {
     },
 
 
+    // Facilities
+    facilities: {
+        // Create facility POST api/v1/facilities
+        create: async (facility, fromFormData) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/facilities`;
+            return await API.makePostRequest(endpoint, facility, fromFormData);
+        },
+
+        // Fetch all facilities GET api/v1/facilities
+        fetch: async () => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/facilities`;
+            return await API.makeGetRequest(endpoint);
+        },
+
+        // Fetch single facility GET api/v1/facilities/:id
+        fetchById: async (id) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/facilities/${id}`;
+            return await API.makeGetRequest(endpoint);
+        },
+
+        // Update facility POST api/v1/facilities/:id
+        update: async (id) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/facilities/${id}`;
+            return await API.makePatchRequest(endpoint, id);
+        },
+
+        // Delete facility POST api/v1/facilities/:id
+        delete: async (id) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/facilities/${id}`;
+            return await API.makePostRequest(endpoint, id);
+        },
+    },
+
+
     // Patients 
     patients: {
         // Create patient POST api/v1/patients

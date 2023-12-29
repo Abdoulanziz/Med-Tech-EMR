@@ -262,6 +262,16 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       }),
+
+      queryInterface.changeColumn('facility_settings', 'facility_id', {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'facilities',
+          key: 'facility_id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      }),
     ]);
   },
 
@@ -293,6 +303,7 @@ module.exports = {
       queryInterface.removeColumn('income', 'patient_id'),
       queryInterface.removeColumn('income', 'user_id'),
       queryInterface.removeColumn('expenses', 'user_id'),
+      queryInterface.removeColumn('facility_settings', 'facility_id'),
     ]);
   },
 };

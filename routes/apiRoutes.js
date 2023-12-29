@@ -3,6 +3,8 @@ const router = express.Router();
 
 const { 
     checkAPIStatus,
+    createFacility,
+    fetchFacilityById,
     createUser,
     createDoctor, 
     fetchDoctorByUserId,
@@ -63,6 +65,9 @@ const {
 } = require("../controllers/apiController");
 
 router.get("/status", checkAPIStatus);
+
+router.post("/facilities", createFacility);
+router.get("/facilities/:id", fetchFacilityById);
 
 router.post("/users", createUser);
 router.get("/users", fetchUsers);

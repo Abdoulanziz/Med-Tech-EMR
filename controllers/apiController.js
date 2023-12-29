@@ -4,6 +4,8 @@ const models = require('../models');
 const sse = require('../middlewares/sse');
 
 const { 
+  Facility,
+  FacilitySetting,
   User,
   Patient,
   Doctor,
@@ -34,6 +36,35 @@ const createAuditLog = require('../middlewares/auditLogger');
 const checkAPIStatus = (req, res) => {
   res.status(200).json({ message: "The backend API is running" });
 };
+
+// Create a new facility
+const createFacility = async (req, res) => {
+  try {
+    // Extract user data from the request body
+    const { facilityName, facilityAddress, contactEmail, phoneNumber, facilityLogo } = req.body;
+
+    // Create a new facility record in the database
+    const newFacility = await Facility.create({ facilityName, facilityAddress, contactEmail, phoneNumber, facilityLogo: "/uploads/logos" });
+
+    // Create an audit log
+    await createAuditLog('Facility', newFacility.facilityId, 'CREATE', {}, newFacility.dataValues, req.session.user.userId);
+
+    // Respond with the newly created facility object
+    return res.status(201).json({ status: 'success', message: 'Facility record created successfully', data: newFacility });
+
+  } catch (error) {
+    // Log out the error to the console
+    console.error('Error creating facility:', error);
+
+    // Respond with the error to the client
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Fetch facility by id
+const fetchFacilityById = async (req, res) => {
+
+}
 
 // Create a new user
 const createUser = async (req, res) => {
@@ -3487,6 +3518,8 @@ function getQuarter(date) {
 
 module.exports = { 
   checkAPIStatus, 
+  createFacility,
+  fetchFacilityById,
   createUser, 
   createDoctor, 
   fetchDoctorByUserId,
