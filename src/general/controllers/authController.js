@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const { User } = require('../models');
 const { Role } = require('../models');
 
-const createAuditLog = require('../middlewares/auditLogger');
+const createAuditLog = require('../../common/middlewares/auditLogger');
 
 
 const renderIndex = (req, res) => {

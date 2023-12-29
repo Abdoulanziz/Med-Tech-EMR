@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 
-const { requireLogin } = require("../middlewares/auth");
+const { requireLogin } = require("../../common/middlewares/auth");
 const { renderPatients, renderVisits, renderQueues, renderLab, renderPharmacy } = require("../controllers/pageController");
 
 const { registerSSE } = require("../controllers/sseController");

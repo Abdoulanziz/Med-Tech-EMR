@@ -1,4 +1,4 @@
-const sse = require('../middlewares/sse');
+const sse = require('../../common/middlewares/sse');
 
 const registerSSE = (req, res) => {
     sse.addSSEConnection(res);

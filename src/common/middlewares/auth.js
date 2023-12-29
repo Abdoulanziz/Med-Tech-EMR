@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User } = require('../../general/models');
 
 const requireLogin = (req, res, next) => {
   if (req.session.user) {

@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const Sequelize = require('sequelize');
 const models = require('../models');
-const sse = require('../middlewares/sse');
+const sse = require('../../common/middlewares/sse');
 
 const { 
   Facility,
@@ -30,7 +30,7 @@ const {
 
 
 const Op = Sequelize.Op;
-const createAuditLog = require('../middlewares/auditLogger');
+const createAuditLog = require('../../common/middlewares/auditLogger');
 
 // Check API status
 const checkAPIStatus = (req, res) => {

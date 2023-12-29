@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { requireLogin, checkUserRoleId } = require("../middlewares/auth");
+const { requireLogin, checkUserRoleId } = require("../../common/middlewares/auth");
 const { renderDashboard, renderAccounts, renderActivities, renderInventory, renderReports, renderSettings } = require("../controllers/adminController");
 
 // TODO: moveRoleId to .env

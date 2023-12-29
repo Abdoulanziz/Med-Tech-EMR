@@ -1,4 +1,4 @@
-const {AuditLog} = require('../models');
+const {AuditLog} = require('../../general/models');
 
 async function createAuditLog(entityName, entityId, action, oldValue, newValue, userId, shouldRecordLog = true) {
   try {

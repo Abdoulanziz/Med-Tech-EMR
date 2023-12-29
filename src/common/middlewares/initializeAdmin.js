@@ -1,6 +1,6 @@
 require("dotenv").config();
 const bcrypt = require('bcrypt');
-const { User } = require('../models');
+const { User } = require('../../general/models');
 
 const { ADMIN_USERNAME, ADMIN_PASSWORD } = process.env;
 

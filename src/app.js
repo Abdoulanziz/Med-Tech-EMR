@@ -8,7 +8,7 @@ const session = require("express-session");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const sequelize = require('../config/database');
 
-const initializeAdmin = require('../middlewares/initializeAdmin');
+const initializeAdmin = require('./common/middlewares/initializeAdmin');
 
 const app = express();
 
@@ -16,8 +16,8 @@ app.use(cors());
 app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "../public")));
-app.use(express.static(path.join(__dirname, "../uploads")));
+app.use(express.static(path.join(__dirname, "./general/public")));
+app.use(express.static(path.join(__dirname, "./general/uploads")));
 
 
 const { PORT, SESSION_SECRET } = process.env;
@@ -62,9 +62,9 @@ sequelize
 });
 
 
-app.use("/", require("../routes/authRoutes"));
-app.use("/auth", require("../routes/authRoutes"));
-app.use("/admin", require("../routes/adminRoutes"));
-app.use("/page", require("../routes/pageRoutes"));
-app.use("/api/v1/", require("../routes/apiRoutes"));
+app.use("/", require("./general/routes/authRoutes"));
+app.use("/auth", require("./general/routes/authRoutes"));
+app.use("/admin", require("./general/routes/adminRoutes"));
+app.use("/page", require("./general/routes/pageRoutes"));
+app.use("/api/v1/", require("./general/routes/apiRoutes"));
 app.use("*", (req, res) => res.redirect("/"));
