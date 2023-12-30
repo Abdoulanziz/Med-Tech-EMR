@@ -1,13 +1,13 @@
 {
-  "name": "api",
+  "name": "med-tech-emr",
   "version": "1.0.0",
-  "description": "",
+  "description": "Electronic Medical Records system",
   "main": "app.js",
   "scripts": {
     "dev": "nodemon ./src/app.js",
     "start": "node ./src/app.js"
   },
-  "author": "",
+  "author": "Abdoulanziz Ally <abdoulanzizally@coire.live> (https://coire.live)",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
