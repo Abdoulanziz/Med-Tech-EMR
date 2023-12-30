@@ -23,7 +23,7 @@ async function initializeAdmin() {
     await User.create({
       username: adminUsername,
       password: hashedPassword,
-      roleId: 1,
+      roleId: 2,
       accountStatus: "active"
     });
 

@@ -7,7 +7,7 @@ module.exports = {
     return queryInterface.bulkInsert('doctors', [
       {
         doctor_uuid: uuidv4(),
-        user_id: 3,
+        user_id: 2,
         first_name: 'Caxton',
         last_name: 'Mulondo',
         date_of_birth: '1990-01-01',
