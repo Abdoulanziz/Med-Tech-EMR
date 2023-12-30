@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Med Tech - EMR</title>
+
+
+    <link rel="shortcut icon" href="/assets/svg/favicon.ico" type="image/x-icon"/>
+
+    <link rel="stylesheet" href="/assets/css/utils.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/table.min.css">
+    <link rel="stylesheet" href="/assets/icons/themify-icons.css">
+
+    <script src="/js/libraries/jquery-3.5.1.js"></script>
+    <script src="/js/libraries/jquery.dataTables.min.js"></script>
+
+    <script src="/js/libraries/chart.js"></script>
+    <script src="/js/libraries/jspdf.min.js"></script>
+
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-logo">
+                    <img src="/assets/svg/512x512.png" alt="" class="app-logo">
+                    <span style="margin-inline-start: .6rem;color: #fff;font-family: 'Tilt Neon';font-weight: bolder;font-size: 27px;"><span style="color: rgb(0, 208, 255);">Med</span> <span style="color: yellowgreen;">Tech</span></span>
+                </div>
+                <ul class="sidebar-menu">
+                    <li class="menu-item">
+                        <a href="/page/patients">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/patients.png" alt="" class="icon"><span class="text">Patients</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="/page/visits">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/visits.png" alt="" class="icon"><span class="text">Visits</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/page/queues">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/doctor.png" alt="" class="icon"><span class="text">Queue</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/page/dental">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/dental.png" alt="" class="icon"><span class="text">Dental</span></span>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main section -->
+            <div class="content">
+
+                <!-- Navbar -->
+                <div class="navbar">
+                    <nav>
+                        <ul class="nav-links flex">
+                            <img src="/assets/svg/cancel.png" alt="" id="sidebar-toggler" class="sidebar-toggler" style="block-size: 32px;inline-size: 32px;">
+                            <div class="nav-badges flex">
+                                <div class="user-badge flex">
+                                    <h4 class="user-name"><%= data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1) %></h4>
+                                    <div class="user-avatar dropdown">
+                                        <div class="dropdown-avatar flex">
+                                            <img src="/assets/img/profiledefault.png" alt="user avatar" class="avatar">
+                                            <i class="ti-angle-down" id="toggle-dropdown"></i>
+                                        </div>
+                                        <div class="dropdown-menu" id="dropdown-menu">
+                                            <ul class="dropdown-items">
+                                                <li class="dropdown-item header">
+                                                    <span id="last-label">Last login:</span>
+                                                    <br>
+                                                    <small id="last-login-value"><%= data.user.lastLogin ? new Date(data.user.lastLogin).toLocaleString() : 'N/A' %></small>
+                                                </li>
+                                                <li class="dropdown-item"><i class="ti-settings"></i> <a href="#">Settings</a></li>
+                                                <li class="dropdown-item"><i class="ti-user"></i> <a href="#">My Profile</a></li>
+                                                <li class="dropdown-item"><i class="ti-info-alt"></i> <a href="#">About</a></li>
+                                                <li class="dropdown-item footer" id="signout-cta"><span>Sign Out</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ul>
+                    </nav>
+                </div>
+
+                <!-- Section 00 -->
+                <div class="sections br-0 inview" id="section_00">
+                    <div class="section-header flex">
+                        <div class="flex left">
+                            <div class="breadcrumb">
+                                <span class="current">Visits</span>
+                            </div>
+                        </div>
+                        <!-- <div class="ctas">
+                            <button class="btn section-header-cta modal-trigger" id="open-create-patient-modal-btn" data-modal="create-patient-modal"> <i class="ti-plus"></i> Create Patient</button>
+                        </div> -->
+                    </div>
+                    <div class="section-body" style="padding-block-start: .8rem;">
+
+                        <div class="details-card">
+                            <div class="details-card-header">
+                                <h3 class="card-header">All Patient Visits</h3>
+                            </div>
+
+                            <div class="details-card-body">
+                                <div class="filter-section">
+                                    <div class="filters">
+                                        <div class="filters-wrapper">
+                                            <i class="ti-filter filter-icon"></i>
+                                            <div class="date-range-picker flex">
+                                                <div class="form-group flex">
+                                                    <label for="min-date">From:</label>
+                                                    <input type="date" name="from" id="min-date" class="date-range-filter">
+                                                </div>
+                                                <div class="form-group flex">
+                                                    <label for="max-date">To:</label>
+                                                    <input type="date" name="to" id="max-date" class="date-range-filter">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="filters-ctas">
+                                            <img src="/assets/filters-ctas/pdf.png" alt="pdf icon" title="Download as PDF">
+                                            <img src="/assets/filters-ctas/csv.png" alt="csv icon" title="Download as CSV">
+                                            <img src="/assets/filters-ctas/xls.png" alt="xls icon" title="Download as XLS">
+                                            <img src="/assets/filters-ctas/printer.png" alt="printer icon" title="Print">
+                                        </div>
+                                    </div>
+                                </div>
+                                <table id="all-visits-table" class="display" style="width:100%;margin-top:.5rem;">
+                                    <thead>
+                                        <tr>
+                                            <th>#ID</th>
+                                            <th>Patient Name</th>
+                                            <th>To See Doctor</th>
+                                            <th>Reason</th>
+                                            <th>Visit Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                            <th>Created At</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 01 -->
+                <div class="sections br-0" id="section_01">
+                    <div class="section-header flex">
+                        <div class="flex left">
+                            <div class="breadcrumb">
+                                <a href="#" class="section-toggler" data-section="section_00">Visits</a>
+                                <span class="separator">/</span>
+                                <a href="#" class="current">Medical History</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-body" style="padding-block-start: .8rem;">
+                        <div class="grid info">
+                            <div class="info-wrapper">
+                                <h2 class="special-heading">Personal Information</h2>
+                                <div class="patient-details" id="patient-info-section_01" style="padding: 0;">
+                                    <div class="patient-info" style="padding: 0;">
+                                        <div class="patient-info-wrapper">
+                                            <div class="left">
+                                                <img src="/assets/img/profiledefault.png" alt="user" width="100">
+                                                <h4 id="patient-name"></h4>
+                                            </div>
+                                            <div class="right">
+                                                <div class="info">
+                                                    <h3>Patient Info</h3>
+                                                    <div class="info-data">
+                                                        <div class="data">
+                                                            <h4>Email</h4>
+                                                            <p id="email">Not provided</p>
+                                                        </div>
+                                                        <div class="data">
+                                                            <h4>Phone</h4>
+                                                            <p id="contact-number"></p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="info-data">
+                                                        <div class="data">
+                                                            <h4>Date of Birth</h4>
+                                                            <p id="date-of-birth"></p>
+                                                        </div>
+                                                        <div class="data">
+                                                            <h4>Age</h4>
+                                                            <p id="age"></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-wrapper">
+                                <h2 class="special-heading">Special Documents</h2>
+                                <div class="documents flex" id="special-documents-01">
+                                    <div class="file-upload-container flex" id="file-drop-area">
+                                        <div>
+                                            <label for="file-input" class="file-label">Drag & Drop or Click to Upload</label>
+                                            <input type="file" id="file-input" class="file-input" accept=".pdf, .doc, .docx, .jpg, .png" onchange="displayFileName()">
+                                            <p class="selected-file" id="selected-file"></p> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="details-card">
+                            <div class="details-card-header">
+                                <h3 class="card-header">Medical History</h3>
+                            </div>
+
+                            <div class="details-card-body">
+                                <table id="single-patient-visit-records" class="display" style="width:100%;margin-top:.5rem;">
+                                    <thead>
+                                        <tr>
+                                            <th>#ID</th>
+                                            <th>Test Name</th>
+                                            <th>Visit Date</th>
+                                            <th>Status</th>
+                                            <th>Created At</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <!-- Bottom banner -->
+                <div class="bottom-banner">
+                    <div class="banner-content">
+                        <div class="banner-content-left">
+                            <span class="logged-in-as-label">Logged in as: <span class="logged-in-as-value"> <%= data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1) %> </span></span>
+                        </div>
+                        <div class="banner-content-right">
+                            <span class="system-version-label">System version: <span class="system-version-value"> 1.0.0 </span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit visit modal -->
+            <div id="edit-visit-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="edit-visit-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Edit Visit</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="modal-form-body">
+                            <div class="form-section">
+                                <h2>Visit Information</h2>
+                                <div class="form-group">
+                                    <label for="category">Visit Category:</label>
+                                    <select id="category" class="form-control" name="visitCategoryId" required>
+                                        <option value="1">Consultation</option>
+                                        <option value="2">Treatment</option>
+                                        <option value="3">Other</option>
+                                    </select>
+                                </div>
+    
+                                <div class="form-group">
+                                    <label for="doctor-id">To See Doctor:</label>
+                                    <select id="doctor-id" class="form-control" name="doctorId" required>
+                                        <option value="1">Caxton Mulondo</option>
+                                        <option value="2">John North</option>
+                                        <option value="3">Abdoulanziz Ally</option>
+                                    </select>
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="visit-date">Date:</label>
+                                    <input type="date" class="form-control" id="visit-date" name="visitDate" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="visit-status">Status:</label>
+                                    <select id="visit-status" class="form-control" name="visitStatus" required>
+                                        <option value="Scheduled">Scheduled</option>
+                                        <option value="Canceled">Canceled</option>
+                                        <option value="Completed">Completed</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <!-- Services payment modal -->
+            <div id="services-payment-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="services-payment-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Receive Payment</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="services-payment-form-body">
+                            <style>
+                                .container {
+                                    width: 80%;
+                                    margin: 0 auto;
+                                }
+
+                                .table {
+                                    width: 100%;
+                                    border-collapse: collapse;
+                                }
+
+                                .table th,
+                                .table td {
+                                    padding: 5px;
+                                    border: 1px solid #ccc;
+                                    text-align: left;
+                                }
+
+                                .table th {
+                                    background-color: #eee;
+                                }
+
+                                .total {
+                                    text-align: right;
+                                    font-weight: bold;
+                                }
+
+                                .checkout-button {
+                                    background-color: #007bff;
+                                    color: white;
+                                    padding: 10px 20px;
+                                    border: none;
+                                    cursor: pointer;
+                                }
+
+                                #select-all {
+                                    cursor: pointer;
+                                }
+                            </style>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="select-all"></th>
+                                        <th>Service Name</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="services-payment-table-body">
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2" class="total">Total</td>
+                                        <td class="total-value">0</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="submit" id="update-services-payment-status-btn"> Process</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <script src="/js/libraries/moment.min.js"></script>
+
+    <!-- Load modules -->
+    <script type="module" src="/js/core/ui.js"></script>
+    <script type="module" src="/js/modules/visits.js"></script>
+
+    <script>
+         // Display the selected file name when a file is chosen
+        function displayFileName() {
+            const fileInput = document.querySelector('#file-input');
+            const selectedFile = document.querySelector('#selected-file');
+
+            if (fileInput.files.length > 0) {
+                selectedFile.textContent = 'Selected File: ' + fileInput.files[0].name;
+            } else {
+                selectedFile.textContent = '';
+            }
+        }
+
+
+        // Enable drag and drop functionality
+        const fileDropArea = document.querySelector('#file-drop-area');
+        fileDropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.add('file-upload-container-active');
+        });
+
+
+        fileDropArea.addEventListener('dragleave', () => {
+            fileDropArea.classList.remove('file-upload-container-active');
+        });
+
+
+        fileDropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.remove('file-upload-container-active');
+            const fileInput = document.querySelector('#file-input');
+            fileInput.files = e.dataTransfer.files;
+            displayFileName();
+        });
+    </script>
+    
+</body>
+</html>

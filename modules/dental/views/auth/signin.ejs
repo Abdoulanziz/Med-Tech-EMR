@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Med Tech - ERM</title>
+
+
+    <link rel="shortcut icon" href="/assets/svg/favicon.ico" type="image/x-icon"/>
+
+    <link rel="stylesheet" href="/assets/css/utils.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/icons/themify-icons.css">
+
+    <style>
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+  
+        .spinner {
+          border: 4px solid rgba(0, 0, 0, 1);
+          border-left-color: var(--primary-color);
+          border-radius: 50%;
+          inline-size: 15px;
+          block-size: 15px;
+          animation: spin 1s linear infinite;
+          display: inline-block;
+          margin-right: 8px;
+          vertical-align: text-bottom;
+        }
+
+      </style>
+</head>
+
+<body style="background-color: var(--primary-color-dark);font-family: 'Tilt Neon';">
+    <div class="container flex">
+        <div class="auth flex">
+            <div class="auth-card card" style="background-color: var(--theme-color);color:#f0eeee;">
+                <div class="flex" style="margin-block-end: .4rem;">
+                    <img src="/assets/svg/auth.png" alt="" class="flex" style="inline-size: 80px;block-size: 80px;">
+                </div>
+                <div class="flex" style="margin-block-end: .4rem;text-align: center;">
+                    <span style="margin-inline-start: .6rem;color: #fff;font-family: 'Tilt Neon';font-weight: bolder;font-size: 24px;"><span style="color: rgb(0, 208, 255);">Med</span> <span style="color: yellowgreen;">Tech</span> <span style="color: orange;">ERM</span></span>
+                </div>
+                <h3 class="auth-card-title flex">Login</h3>
+                <form action="/auth/signin" method="POST" id="signin-form" class="auth-form">
+                    <div class="form-group flex">
+                        <label for="username">Username</label>
+                        <div class="flex" style="border:1px solid #0c4b71;border-radius: .2rem;background-color: #0c4b71;padding-block: 0;">
+                            <i class="ti-user" style="flex:1;padding: .4rem .8rem;background-color: #0c4b71;block-size: 100%;font-weight: 800;color: rgb(0, 208, 255);"></i>
+                            <input type="text" name="username" id="username" style="border: none; border-inline-start: 1px solid #0c4b71;border-radius: inherit;border-bottom-left-radius: 0;border-top-left-radius: 0;" required autocomplete="false">
+                        </div>
+                    </div>
+                    <div class="form-group flex">
+                        <label for="password">Password</label>
+                        <div class="flex" style="border:1px solid #0c4b71;border-radius: .2rem;background-color: #0c4b71;padding-block: 0;">
+                            <i class="ti-lock" style="flex:1;padding: .4rem .8rem;background-color: #0c4b71;block-size: 100%;font-weight: 800;color: rgb(0, 208, 255);"></i>
+                            <input type="password" name="password" id="password" style="border: none; border-inline-start: 1px solid #0c4b71;border-radius: inherit;border-bottom-left-radius: 0;border-top-left-radius: 0;" required autocomplete="false">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" id="signin-btn" style="margin-block-start: .4rem;">Sign In</button>
+                </form>
+                <div class="auth-card-actions">
+                    <h5 class="forgot-password">Forgotten password?</h5>
+                    <h6 class="request-password">Contact admin</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const username = document.querySelector("#username").value;
+            const password = document.querySelector("#password").value;
+            
+            const signinBtn = document.querySelector('#signin-btn');
+            
+            signinBtn.innerHTML = "Sign In";
+            signinBtn.style.opacity = "1";
+
+            signinBtn.addEventListener('click', async (event) => {
+                if(username.trim() != " " && password.trim() != " "){
+                    event.target.innerHTML = '<span class="spinner"></span>Wait...';
+                    event.target.style.opacity = ".6";
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

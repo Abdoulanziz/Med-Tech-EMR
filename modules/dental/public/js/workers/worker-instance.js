@@ -1,0 +1,1 @@
+export default new Worker("/js/workers/worker.js", { type: 'module' });
