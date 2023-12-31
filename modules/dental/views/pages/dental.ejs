@@ -925,6 +925,61 @@
                 </div>
             </div>
 
+                        <!-- Edit dental request modal -->
+            <div id="edit-patient-dental-service-request-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="edit-patient-dental-service-request-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Edit Dental Service Request</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="edit-patient-dental-service-request-form-body">
+                            <div class="form-section">
+                                <h2>Medical Information</h2>
+                                <div class="form-group">
+                                    <label for="tooth-type">Tooth Type:</label>
+                                    <select id="tooth-type" name="toothType">
+                                        <option value="Pre-molar">Pre Molar</option>
+                                        <option value="Molar">Molar Tooth</option>
+                                        <option value="Canine">Canine</option>
+                                        <option value="Incisor">Incisor</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="diagnosis">Diagnosis:</label>
+                                    <textarea id="diagnosis" name="diagnosis" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="procedure">Procedure:</label>
+                                    <textarea id="procedure" name="procedure" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="service-fee">Service Fee:</label>
+                                    <input type="text" id="service-fee" name="serviceFee" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="request-status">Service Request Status:</label>
+                                    <select id="request-status" class="form-control" name="requestStatus" required>
+                                        <option value="pending">Pending</option>
+                                        <option value="canceled">Canceled</option>
+                                        <option value="complete">Complete</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="submit">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div> 
+
         </div>
     </div>
 

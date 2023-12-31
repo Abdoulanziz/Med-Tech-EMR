@@ -299,19 +299,42 @@ async function loadSinglePatientVisitLabRequests(visitId) {
             { data : null }
         ],
         rowCallback: function(row, data, index) {
-            const rowDataObject = data;
 
-            // Check the specific request (Others)
-            const workOnTestCta = row.cells[4].querySelectorAll("button")[0];
-            workOnTestCta.style.cursor = "pointer";
-            workOnTestCta.classList.add("modal-trigger");
-            workOnTestCta.dataset.modal = "other-results-modal";
+            // Check
+            // Service
+            if(data.requestType.toLowerCase() === "service"){
 
-            UTILS.triggerModal(workOnTestCta, "modal", () => {
-                // Parse the diagnosisId to the form
-                document.querySelector("#other-results-form").dataset.requestId = rowDataObject.requestId;
-            });
+                // Dental service
+                if(data.requestName.toLowerCase() === "dental service"){
+                    // Edit Button
+                    const editRequestCta = row.cells[4].querySelectorAll("button")[0];
+                    editRequestCta.style.cursor = "pointer";
+                    editRequestCta.classList.add("modal-trigger");
+                    editRequestCta.dataset.modal = "edit-patient-dental-service-request-modal";
+
+
+                    UTILS.triggerModal(editRequestCta, "modal", () => {
+                        // Populate the form with the data
+                        populateFormWithData(
+                            "edit-patient-dental-service-request-modal",
+                            JSON.stringify(data),
+                            [
+                                "toothType",
+                                "diagnosis",
+                                "procedure",
+                                "serviceFee",
+                                "requestStatus"
+                            ]
+                        );
+
+                        // Callback to handle edit dental form
+                        handleEditPatientDentalServiceRequestForm(data.visitId, data.requestId);
+                    });
+                }
+
+            }
         
+            // General for everything - no if check
             const workOnReportCta = row.cells[4].querySelectorAll("button")[1];
             workOnReportCta.style.cursor = "pointer";
             workOnReportCta.classList.add("modal-trigger");
@@ -328,7 +351,7 @@ async function loadSinglePatientVisitLabRequests(visitId) {
                 const patientData = patient.data;
 
                 // // Trigger print lab report
-                // printLabReportForUrinalysisTest(patientData);
+                // printLabReportForOtherTest(patientData);
                 
             });
         },
@@ -342,7 +365,7 @@ async function loadSinglePatientVisitLabRequests(visitId) {
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return '<span>' + data.testName + '</span>';
+                    return '<span>' + data.requestName + '</span>';
                 },
             },
             {
@@ -376,7 +399,7 @@ async function loadSinglePatientVisitLabRequests(visitId) {
                 render: function (data, type, row, meta) {
                     return `
                     <td>
-                        <button class="btn table-btn">Work on Test </button>
+                        <button class="btn table-btn">View Request </button>
                         <button class="btn table-btn">Work on Report  <i class="ti-arrow-right"></i> </button>
                     </td>
                     `;
@@ -607,6 +630,125 @@ function displaySelectedPatientBillsPaymentModal(event) {
             });
 
             totalElement.textContent = `${total}`;
+        }
+    });
+}
+
+// Handle create patient dental service request form
+async function handlePatientDentalServiceRequestForm() {
+    const patientDentalServiceRequestForm = document.querySelector('#create-patient-dental-service-request-form');
+    patientDentalServiceRequestForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        // Get Id of selected visit
+        const selectedVisitId = UTILS.getSelectedVisitId();
+        if (! selectedVisitId) return;
+    
+        // Collect form data
+        const formData = new FormData(patientDentalServiceRequestForm);
+        formData.append('visitId', selectedVisitId);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+    
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(patientDentalServiceRequestForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to create a dental service request record
+                const response = await API.services.forDental.requests.create(URLEncodedData, true);
+    
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    patientDentalServiceRequestForm.reset();
+    
+                    // Remove form
+                    patientDentalServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+
+                    // Fetch the bills
+                    displaySelectedPatientBills("ongoing-services-02");
+    
+                    // Reload the requests table
+                    loadSinglePatientVisitHistory(selectedVisitId);
+    
+                } else {
+                    alert('Failed to create dental record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while creating the dental record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            patientDentalServiceRequestForm.reset();
+        });
+    });
+}
+
+// Handle edit patient dental service request form
+async function handleEditPatientDentalServiceRequestForm(visitId, requestId) {
+    const editPatientDentalServiceRequestForm = document.querySelector('#edit-patient-dental-service-request-form');
+    editPatientDentalServiceRequestForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        // Collect form data
+        const formData = new FormData(editPatientDentalServiceRequestForm);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(editPatientDentalServiceRequestForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API POST request to update a dental service request record
+                const response = await API.services.forDental.requests.update(requestId, URLEncodedData, true);
+
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    editPatientDentalServiceRequestForm.reset();
+    
+                    // Remove form
+                    editPatientDentalServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+
+                    // Reload the bills
+                    displaySelectedPatientBills("ongoing-services-02");
+    
+                    // Reload the requests table
+                    loadSinglePatientVisitLabRequests(visitId);
+    
+                } else {
+                    alert('Failed to edit dental service request record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while editing the dental service request record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            editPatientDentalServiceRequestForm.reset();
+        });
+    });
+}
+
+
+// Populate form with data (pre-fill the form)
+function populateFormWithData(formId, data, formFieldsNamesArray) {
+    // Parse the form id
+    const form = document.querySelector(`#${formId}`);
+    const parsedData = JSON.parse(data);
+
+    // Use the names of the fields not their ids
+    formFieldsNamesArray.forEach(fieldName => {
+        const field = form.querySelector(`[name=${fieldName}]`);
+        if (field) {
+            field.value = parsedData[fieldName] || null;
         }
     });
 }

@@ -1385,10 +1385,22 @@ const fetchClinicalRequestForDentalByVisitId = async (req, res) => {
     // Access the ClinicalRequestForDental's fields in each request result
     const requestsResults = result.rows.map((request) => ({
       // Extract fields from the 'ClinicalRequestForDental' model
-      testName: "Dental Service",
+
+      // Used on table
+      requestName: 'Dental Service',
+      requestFees: request.serviceFee,
       requestId: request.requestId,
       requestStatus: request.requestStatus,
       requestCreatedAt: request.createdAt,
+      requestType: 'service',
+
+      // Used on form
+      toothType: request.toothType,
+      diagnosis: request.diagnosis,
+      procedure: request.procedure,
+      serviceFee: request.serviceFee,
+      visitId: request.visitId,
+
     }));
 
     return res.status(200).json({
@@ -1413,6 +1425,7 @@ const updateClinicalRequestForDentalById = async (req, res) => {
     const diagnosis = req.body.diagnosis || null;
     const procedure = req.body.procedure || null;
     const serviceFee = req.body.serviceFee || null;
+    const requestStatus = req.body.requestStatus || null;
 
     const requestId = req.params.id;
 
@@ -1430,6 +1443,7 @@ const updateClinicalRequestForDentalById = async (req, res) => {
       diagnosis,
       procedure,
       serviceFee,
+      requestStatus,
       // visitId,
     });
 
@@ -1990,7 +2004,7 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
       requestName: 'Eye Service',
       requestFees: request.serviceFee,
       requestId: request.requestId,
-      requestStatus: "Pending",
+      requestStatus: request.requestStatus || "Pending",
       requestCreatedAt: request.createdAt,
       requestType: 'service',
 
@@ -2009,7 +2023,7 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
       requestName: 'Cardiology Service',
       requestFees: request.serviceFee,
       requestId: request.requestId,
-      requestStatus: "Pending",
+      requestStatus: request.requestStatus || "Pending",
       requestCreatedAt: request.createdAt,
       requestType: 'service',
 
@@ -2027,7 +2041,7 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
       requestName: 'Radiology Service',
       requestFees: request.serviceFee,
       requestId: request.requestId,
-      requestStatus: "Pending",
+      requestStatus: request.requestStatus || "Pending",
       requestCreatedAt: request.createdAt,
       requestType: 'service',
 
@@ -2045,7 +2059,7 @@ const fetchMedicalHistoryByVisitId = async (req, res) => {
       requestName: 'Dental Service',
       requestFees: request.serviceFee,
       requestId: request.requestId,
-      requestStatus: "Pending",
+      requestStatus: request.requestStatus || "Pending",
       requestCreatedAt: request.createdAt,
       requestType: 'service',
 
@@ -2142,7 +2156,7 @@ const fetchMedicalHistoryForDentalByVisitId = async (req, res) => {
       requestName: 'Dental Service',
       requestFees: request.serviceFee,
       requestId: request.requestId,
-      requestStatus: "Pending",
+      requestStatus: request.requestStatus || "Pending",
       requestCreatedAt: request.createdAt,
       requestType: 'service',
 
@@ -2589,51 +2603,6 @@ const fetchUnpaidBillsByVisitId = async (req, res) => {
     console.error('Error fetching bills:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
-  // try {
-
-  //   const visitId = req.params.visitId;
-
-  //   // Construct the Sequelize query
-  //   const queryOptions = {
-  //     where: { visit_id: visitId, payment_status: "unpaid" },
-  //     include: [
-  //       {
-  //         model: models.LabTest,
-  //         attributes: ['testName', 'testFees'],
-  //       },
-  //     ],
-  //   };
-
-  //   const result = await LabRequest.findAndCountAll(queryOptions);
-
-  //   // Access the lab test's fields in each request result
-  //   const requestsWithTestResults = result.rows.map((request) => ({
-  //     // Extract fields from the 'LabTest' model
-  //     requestId: request.requestId,
-  //     testName: request.LabTest.testName,
-  //     testFees: request.testFees || request.LabTest.testFees,
-  //   }));
-
-    
-
-  //   if (result) {
-  //     // Results found
-  //     return res.status(200).json({
-  //       status: 'success',
-  //       data: requestsWithTestResults,
-  //     });
-  //   } else {
-  //     // No result found
-  //     return res.status(404).json({
-  //       status: 'failure',
-  //       message: 'Diagnosis bill not found',
-  //     });
-  //   }
-
-  // } catch (error) {
-  //   console.error('Error fetching bills:', error);
-  //   return res.status(500).json({ message: 'Internal Server Error' });
-  // }
 };
 
 // Fetch tests
