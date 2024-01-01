@@ -46,9 +46,6 @@ const createFacility = async (req, res) => {
     // Create a new facility record in the database
     const newFacility = await Facility.create({ facilityName, facilityAddress, contactEmail, phoneNumber, facilityLogo: "/uploads/logos" });
 
-    // Create an audit log
-    await createAuditLog('Facility', newFacility.facilityId, 'CREATE', {}, newFacility.dataValues, req.session.user.userId);
-
     // Respond with the newly created facility object
     return res.status(201).json({ status: 'success', message: 'Facility record created successfully', data: newFacility });
 
@@ -958,8 +955,6 @@ const createTriage = async (req, res) => {
     const signsAndSymptoms = req.body.signsAndSymptoms || null;
     const injuryDetails = req.body.injuryDetails || null;
     const visitId = req.body.visitId || null;
-    // const userId = req.body.userId || null;
-
 
     const newTriage = await Triage.create({
       bloodPressure,
@@ -967,10 +962,11 @@ const createTriage = async (req, res) => {
       respiratoryRate,
       signsAndSymptoms,
       injuryDetails,
-      visitId,
-      // userId
+      visitId
     });
 
+    // Create an audit log
+    await createAuditLog('Triage', newTriage.triageId, 'CREATE', {}, newTriage.dataValues, req.session.user.userId);
 
     return res.status(201).json({ status: 'success', message: 'Triage record created successfully', data: newTriage });
   } catch (error) {
@@ -992,7 +988,6 @@ const updateTriageById = async (req, res) => {
 
     const triageId = req.params.id;
 
-
     // Check if the triage already exists in the database
     const existingTriage = await Triage.findOne({ where: { triageId } });
 
@@ -1006,8 +1001,7 @@ const updateTriageById = async (req, res) => {
       heartRate,
       respiratoryRate,
       signsAndSymptoms,
-      injuryDetails,
-      // visitId,
+      injuryDetails
     });
 
     // Create an audit log
@@ -1039,6 +1033,8 @@ const createAllergy = async (req, res) => {
       visitId,
     });
 
+    // Create an audit log
+    await createAuditLog('Allergy', newAllergy.allergyId, 'CREATE', {}, newAllergy.dataValues, req.session.user.userId);
 
     return res.status(201).json({ status: 'success', message: 'Allergy record created successfully', data: newAllergy });
   } catch (error) {
@@ -1066,8 +1062,7 @@ const updateAllergyById = async (req, res) => {
 
     // Update the allergy record in the database
     const updatedAllergy = await existingAllergy.update({
-      allergies,
-      // visitId,
+      allergies
     });
 
     // Create an audit log
@@ -1167,7 +1162,7 @@ const updateClinicalRequestForEyeById = async (req, res) => {
 
 
 
-// Middleware
+// Start middlewares
 const createIncomeRecord = async (patientId, amount, paymentMethod, narration, userId) => {
   try {
     const incomeRecord = await Income.create({
@@ -1203,16 +1198,13 @@ const createExpenseRecord = async (req, res) => {
       userId: req.session.user.userId,
     });
 
-    // Create an audit log
-    await createAuditLog('Expense', newExpenseRecord.expenseId, 'CREATE', {}, newExpenseRecord.dataValues, req.session.user.userId);
-
     return res.status(201).json({ status: 'success', message: 'Expense record created successfully', data: newExpenseRecord });
   } catch (error) {
     console.error('Error creating expense record:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
-
+// End middlewares
 
 
 
@@ -2662,7 +2654,7 @@ const createLabRequest = async (req, res) => {
   }
 };
 
-
+// Resume audit check
 // Update lab request
 const updateLabRequestById = async (req, res) => {
   try {

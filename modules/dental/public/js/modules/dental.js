@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+// Load all patients to queue
 async function loadAllPatientsOnQueue() {
     let allPatientsOnQueueTable;
     const apiEndpoint = `${UI.apiBaseURL}/queues`;
@@ -153,6 +154,7 @@ async function loadAllPatientsOnQueue() {
 
 };
 
+
 // Load patient to DOM
 async function loadSinglePatientVisits(patientId) {
     let allPatients;
@@ -262,6 +264,7 @@ async function loadSinglePatientVisits(patientId) {
 
 }
 
+
 // Load patient visit requests to DOM
 async function loadSinglePatientVisitLabRequests(visitId) {
     // Get Id of selected visit
@@ -272,7 +275,6 @@ async function loadSinglePatientVisitLabRequests(visitId) {
 
     let allPatients;
     const apiEndpoint = `${UI.apiBaseURL}/services/dental/requests/${selectedVisitId}`;
-    // const apiEndpoint = `${UI.apiBaseURL}/history-dental/${selectedVisitId}`;
     
 
     allPatients = $('#single-patient-visit-records').DataTable({
@@ -418,6 +420,7 @@ async function loadSinglePatientVisitLabRequests(visitId) {
     });
 
 }
+
 
 // Function to display selected patient details
 async function displaySelectedPatientDetails(divID, data, callback) {
@@ -631,62 +634,123 @@ function displaySelectedPatientBillsPaymentModal(event) {
 
             totalElement.textContent = `${total}`;
         }
+
+        function printReceipt() {
+            // Get the selected services and other necessary data
+            const checkedCheckboxes = document.querySelectorAll('.service-checkbox:checked');
+            const selectedServices = Array.from(checkedCheckboxes).map(checkbox => JSON.parse(checkbox.dataset.item));
+            const totalAmount = calculateTotalAmount(selectedServices);
+
+            // Create a receipt HTML
+            const receiptHTML = `
+                <div>
+                    <h2>Receipt</h2>
+                    <ul>
+                        ${selectedServices.map(service => `<li>${service.requestName}: ${service.requestFees}</li>`).join('')}
+                    </ul>
+                    <p>Total Amount: ${totalAmount}</p>
+                </div>
+            `;
+
+            // Open a new window for printing
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(receiptHTML);
+
+            // Print the receipt
+            printWindow.print();
+        }
+
+        function calculateTotalAmount(services) {
+            // Calculate and return the total amount from the selected services
+            return services.reduce((total, service) => total + parseFloat(service.requestFees), 0);
+        }
     });
 }
 
-// Handle create patient dental service request form
-async function handlePatientDentalServiceRequestForm() {
-    const patientDentalServiceRequestForm = document.querySelector('#create-patient-dental-service-request-form');
-    patientDentalServiceRequestForm.addEventListener('submit', (event) => {
-        event.preventDefault();
 
-        // Get Id of selected visit
-        const selectedVisitId = UTILS.getSelectedVisitId();
-        if (! selectedVisitId) return;
-    
-        // Collect form data
-        const formData = new FormData(patientDentalServiceRequestForm);
-        formData.append('visitId', selectedVisitId);
+// // Create receipt
+// async function createReceipt() {
+//     try {
+//         // Get id of selected visit
+//         const selectedVisitId = UTILS.getSelectedVisitId();
 
-        // URL encoded data
-        const URLEncodedData = new URLSearchParams(formData).toString();
-    
-        // Display a confirmation dialog
-        UTILS.showConfirmationModal(patientDentalServiceRequestForm, "Are you sure you want to save this record?", async () => {
-            try {
-                // Make an API POST request to create a dental service request record
-                const response = await API.services.forDental.requests.create(URLEncodedData, true);
-    
-                // Check if the request was successful
-                if (response.status === 'success') {
-    
-                    // Reset the form
-                    patientDentalServiceRequestForm.reset();
-    
-                    // Remove form
-                    patientDentalServiceRequestForm.parentElement.parentElement.classList.remove("inview");
+//         // Get patient id from visit id
+//         const fetchPatientRequest = await API.patients.fetchByVisitId(selectedVisitId);
+//         const patientData = fetchPatientRequest.data;
 
-                    // Fetch the bills
-                    displaySelectedPatientBills("ongoing-services-02");
-    
-                    // Reload the requests table
-                    loadSinglePatientVisitHistory(selectedVisitId);
-    
-                } else {
-                    alert('Failed to create dental record. Please check the form data.');
-                }
-            } catch (error) {
-                console.error(error);
-                alert('An error occurred while creating the dental record.');
-            }
-        }, () => {
-            // TODO: Run when cancelled
+//         if (fetchPatientRequest.status === 'success') {
+//             // Sample Receipt
+//             // Hospital Details
+//             const hospitalName = "Med Tech Hospital";
+//             const hospitalAddress = "Rwenzori Street, Kampala";
+//             const hospitalContact = "Phone: +256 782 615 136";
 
-            // Reset the form
-            patientDentalServiceRequestForm.reset();
-        });
-    });
-}
+//             // Patient Details
+//             const patientName = `${patientData.firstName} ${patientData.lastName}`;
+//             const patientDOB = patientData.dateOfBirth;
+//             const patientAge = new Date().getFullYear() - new Date(patientData.dateOfBirth).getFullYear();
+//             const patientGender = patientData.gender.charAt(0).toUpperCase() + patientData.gender.slice(1);
+
+//             // Report editor
+//             const editor = tinymce.get("other-lab-report");
+
+//             const reportHTML = `
+//                 <div style="background-color: #ffffff; border-radius: 0; padding-block: 30px;">
+//                     <div style="display: flex; justify-content: space-between;">
+//                         <div style="display: flex; align-items: center;">
+//                         <img src="../../assets/svg/512x512.png" style="inline-size: 60px; block-size: 60px;" />
+//                         <h2 style="color: #004080; font-weight: 600; margin-left: 20px;">${hospitalName}</h2>
+//                         </div>
+//                         <div style="text-align: right;">
+//                         <p style="color: #666; margin-bottom: 5px;">${hospitalAddress}</p>
+//                         <p style="color: #666; margin-bottom: 5px;">${hospitalContact}</p>
+//                         </div>
+//                     </div>
+//                     <hr style="border-top: 1px solid #ccc; margin-top: 20px; margin-bottom: 20px;">
+//                 </div>
+
+//                 <div style="background-color: #ffffff; padding: 15px; border-radius: 0;">
+//                     <h3 style="color: #004080; font-weight: 600; margin-bottom: 10px;">Patient Information</h3>
+//                     <ul style="list-style-type: none; padding: 0; margin: 0;">
+//                         <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Patient Name:</span> ${patientName}</li>
+//                         <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Date of Birth:</span> ${patientDOB}</li>
+//                         <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Age:</span> ${patientAge}</li>
+//                         <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Gender:</span> ${patientGender}</li>
+//                     </ul>
+//                 </div>  
+
+//                 <div>
+//                     <br/>
+//                     <p>Interpretation of the CBC results should be conducted in consultation with a healthcare professional. The reference ranges provided in the report are essential for assessing whether the patient's blood parameters fall within the expected values.</p>
+//                     <br/>
+//                     <p>Further clinical evaluation and follow-up may be required based on these findings. Please do not hesitate to contact our medical team at ${hospitalContact} for any additional information or to schedule a consultation.</p>
+//                 </div>
+                            
+//             `;
+
+//             // Check if the request was successful
+//             // if (fetchUrinalysisResultsRequest.status === 'success') {
+//             if (true) {
+//                 editor.setContent(reportHTML);
+//             } else {
+//                 editor.setContent("");
+//             }
+//         } else {
+//             console.error(error);
+//             alert('An error occurred while fetching the patient info.');
+//         }
+//     } catch (error) {
+//         console.error(error);
+//         alert('An error occurred while generating the other lab report.');
+//     }
+// }
+
+
+// // Print receipt
+// async function printReceipt() {
+
+// }
+
 
 // Handle edit patient dental service request form
 async function handleEditPatientDentalServiceRequestForm(visitId, requestId) {
@@ -753,6 +817,8 @@ function populateFormWithData(formId, data, formFieldsNamesArray) {
     });
 }
 
+
+// Setup editor
 function setupOtherLabReportTinymce() {
     tinymce.init({
         selector: "#other-lab-report",
@@ -763,6 +829,7 @@ function setupOtherLabReportTinymce() {
         }
     });
 }
+
 
 // Generate Other lab report
 async function generateLabReportForOtherTest(formId, labRequestId) {
