@@ -30,3 +30,18 @@ npx sequelize-cli db:seed:all
 ```bash
 npm run dev
 ```
+
+
+## Drop Tables [During development] on PG Admin
+
+```sql
+DO $$ 
+DECLARE 
+    current_table_name text; 
+BEGIN 
+    FOR current_table_name IN (SELECT table_name FROM information_schema.tables WHERE table_schema = 'public') 
+    LOOP 
+        EXECUTE 'DROP TABLE IF EXISTS ' || current_table_name || ' CASCADE'; 
+    END LOOP; 
+END $$;
+```

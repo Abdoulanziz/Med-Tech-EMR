@@ -1383,9 +1383,6 @@ async function generateLabReportForOtherTest(formId, labRequestId) {
         const patientData = fetchPatientRequest.data;
 
         if (fetchPatientRequest.status === 'success') {
-            // Make an API POST request to create a triage record
-            // const fetchUrinalysisResultsRequest = await API.results.urinalysis.fetchByRequestId(labRequestId);
-
             // Sample CBC Test Report
             // Hospital Details
             const hospitalName = "Med Tech Hospital";
@@ -1398,32 +1395,6 @@ async function generateLabReportForOtherTest(formId, labRequestId) {
             const patientAge = new Date().getFullYear() - new Date(patientData.dateOfBirth).getFullYear();
             const patientGender = patientData.gender.charAt(0).toUpperCase() + patientData.gender.slice(1);
 
-            // const {
-            //     appearance,
-            //     glucose,
-            //     ketone,
-            //     blood,
-            //     ph,
-            //     protein,
-            //     nitrites,
-            //     leucocytes,
-            //     urobilinogen,
-            //     bilirubin,
-            //     specificGravity,
-            //     rbc,
-            //     pusCells,
-            //     epithelialCells,
-            //     cast,
-            //     wbc,
-            //     parasite,
-            //     crystals,
-            //     tVaginalis,
-            //     yeastCells,
-            //     requestId,
-            //     comment,
-            // } = fetchUrinalysisResultsRequest.data;
-
-            // Report editor
             const editor = tinymce.get("other-lab-report");
 
 
@@ -1461,13 +1432,8 @@ async function generateLabReportForOtherTest(formId, labRequestId) {
                             
             `;
 
-            // Check if the request was successful
-            // if (fetchUrinalysisResultsRequest.status === 'success') {
-            if (true) {
-                editor.setContent(reportHTML);
-            } else {
-                editor.setContent("");
-            }
+            editor.setContent(reportHTML);
+            
         } else {
             console.error(error);
             alert('An error occurred while fetching the patient info.');

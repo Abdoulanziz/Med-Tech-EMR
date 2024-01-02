@@ -8,7 +8,7 @@
 
   --font-poppins: "Poppins", sans-serif;
   --font-tilt-neon: "Tilt Neon", sans-serif;
-  /* --font-sys-default: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; */
+  --font-sys-default: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
 
   --z-index-100: 100;
@@ -28,7 +28,7 @@ body {
 body {
   color: var(--text-grey);
   background: var(--brand-secondary);
-  font-family: var(--font-quicksand);
+  font-family: var(--font-sys-default);
   line-height: 1.6;
   overflow-x: hidden;
   position: relative;
