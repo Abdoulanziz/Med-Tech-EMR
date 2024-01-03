@@ -513,59 +513,264 @@ function displaySelectedPatientBillsPaymentModal(event) {
             const updateServicesPaymentStatusBtn = document.querySelector("#update-services-payment-status-btn");
             updateServicesPaymentStatusBtn.addEventListener("click", async (event) => {
                 event.preventDefault();
-                const checkedCheckboxes = document.querySelectorAll('.service-checkbox:checked');
+                const servicesPaymentForm = document.querySelector('#services-payment-form');
 
-                const updatePaymentStatusPromises = [];
+                // Display a confirmation dialog
+                UTILS.showConfirmationModal(servicesPaymentForm, "Are you sure you want to save this record?", async () => {
+                    try {
+                        const checkedCheckboxes = document.querySelectorAll('.service-checkbox:checked');
 
-                for (const checkbox of checkedCheckboxes) {
-                    // Update Eye Service
-                    if(JSON.parse(checkbox.dataset.item).requestName === "Eye Service") {
-                        const requestId = JSON.parse(checkbox.dataset.item).requestId;
-                        updatePaymentStatusPromises.push(API.services.forEye.requests.updatePaymentStatus(requestId, "paid"));
+                        const updatePaymentStatusPromises = [];
+
+                        for (const checkbox of checkedCheckboxes) {
+                            // Update Eye Service
+                            if(JSON.parse(checkbox.dataset.item).requestName === "Eye Service") {
+                                const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                                updatePaymentStatusPromises.push(API.services.forEye.requests.updatePaymentStatus(requestId, "paid"));
+                            }
+
+                            // Update Dental Service
+                            else if(JSON.parse(checkbox.dataset.item).requestName === "Dental Service") {
+                                const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                                updatePaymentStatusPromises.push(API.services.forDental.requests.updatePaymentStatus(requestId, "paid"));
+                            }
+
+                            // Update Cardiolody Service
+                            else if(JSON.parse(checkbox.dataset.item).requestName === "Cardiology Service") {
+                                const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                                updatePaymentStatusPromises.push(API.services.forCardiology.requests.updatePaymentStatus(requestId, "paid"));
+                            }
+
+                            // Update Radiology Service
+                            else if(JSON.parse(checkbox.dataset.item).requestName === "Radiology Service") {
+                                const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                                updatePaymentStatusPromises.push(API.services.forRadiology.requests.updatePaymentStatus(requestId, "paid"));
+                            }
+
+                            // Update Lab Tests
+                            else {
+                                const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                                updatePaymentStatusPromises.push(API.requests.updatePaymentStatus(requestId, "paid"));
+                            }
+
+                        }
+
+                        try {
+                            const responses = await Promise.all(updatePaymentStatusPromises);
+
+                            // Extract the data from each response
+                            const data = responses.map(response => response.data);
+
+                            // Remove modal
+                            document.querySelector("#services-payment-modal").classList.remove("inview");
+
+                            // Fetch the bills
+                            displaySelectedPatientBills("ongoing-services-02");
+                        } catch (error) {
+                            console.error('Error updating payment status:', error);
+                        }
+                    }  catch (error) {
+                        console.error(error);
+                        alert('An error occurred while performing action.');
                     }
+                }, () => {
+                    // TODO: Run when cancelled
 
-                    // Update Dental Service
-                    else if(JSON.parse(checkbox.dataset.item).requestName === "Dental Service") {
-                        const requestId = JSON.parse(checkbox.dataset.item).requestId;
-                        updatePaymentStatusPromises.push(API.services.forDental.requests.updatePaymentStatus(requestId, "paid"));
-                    }
+                    // Reset the form
+                    servicesPaymentForm.reset();
+                });
 
-                    // Update Cardiolody Service
-                    else if(JSON.parse(checkbox.dataset.item).requestName === "Cardiology Service") {
-                        const requestId = JSON.parse(checkbox.dataset.item).requestId;
-                        updatePaymentStatusPromises.push(API.services.forCardiology.requests.updatePaymentStatus(requestId, "paid"));
-                    }
 
-                    // Update Radiology Service
-                    else if(JSON.parse(checkbox.dataset.item).requestName === "Radiology Service") {
-                        const requestId = JSON.parse(checkbox.dataset.item).requestId;
-                        updatePaymentStatusPromises.push(API.services.forRadiology.requests.updatePaymentStatus(requestId, "paid"));
-                    }
+                // Touch
 
-                    // Update Lab Tests
-                    else {
-                        const requestId = JSON.parse(checkbox.dataset.item).requestId;
-                        updatePaymentStatusPromises.push(API.requests.updatePaymentStatus(requestId, "paid"));
-                    }
 
-                }
-
-                try {
-                    const responses = await Promise.all(updatePaymentStatusPromises);
-
-                    // Extract the data from each response
-                    const data = responses.map(response => response.data);
-
-                    // Remove modal
-                    document.querySelector("#services-payment-modal").classList.remove("inview");
-
-                    // Fetch the bills
-                    displaySelectedPatientBills("ongoing-services-02");
-                } catch (error) {
-                    console.error('Error updating payment status:', error);
-                }
+                
 
             });
+
+            // Pay and print receipt
+            const updateServicesPaymentStatusAndPrintReceiptBtn = document.querySelector("#update-services-payment-status-and-print-receipt-btn");
+            updateServicesPaymentStatusAndPrintReceiptBtn.addEventListener("click", async (event) => {
+                event.preventDefault();
+                const servicesPaymentForm = document.querySelector('#services-payment-form');
+
+                // Display a confirmation dialog
+                UTILS.showConfirmationModal(servicesPaymentForm, "Are you sure you want to save this record?", async () => {
+                    try {
+                        const checkedCheckboxes = document.querySelectorAll('.service-checkbox:checked');
+
+                        const updatePaymentStatusPromises = [];
+
+                        for (const checkbox of checkedCheckboxes) {
+                            // Update Eye Service
+                            if(JSON.parse(checkbox.dataset.item).requestName === "Eye Service") {
+                                const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                                updatePaymentStatusPromises.push(API.services.forEye.requests.updatePaymentStatus(requestId, "paid"));
+                            }
+
+                            // Update Dental Service
+                            else if(JSON.parse(checkbox.dataset.item).requestName === "Dental Service") {
+                                const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                                updatePaymentStatusPromises.push(API.services.forDental.requests.updatePaymentStatus(requestId, "paid"));
+                            }
+
+                            // Update Cardiolody Service
+                            else if(JSON.parse(checkbox.dataset.item).requestName === "Cardiology Service") {
+                                const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                                updatePaymentStatusPromises.push(API.services.forCardiology.requests.updatePaymentStatus(requestId, "paid"));
+                            }
+
+                            // Update Radiology Service
+                            else if(JSON.parse(checkbox.dataset.item).requestName === "Radiology Service") {
+                                const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                                updatePaymentStatusPromises.push(API.services.forRadiology.requests.updatePaymentStatus(requestId, "paid"));
+                            }
+
+                            // Update Lab Tests
+                            else {
+                                const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                                updatePaymentStatusPromises.push(API.requests.updatePaymentStatus(requestId, "paid"));
+                            }
+
+                        }
+
+                        try {
+                            const responses = await Promise.all(updatePaymentStatusPromises);
+
+                            // Extract the data from each response
+                            const data = responses.map(response => response.data);
+
+                            // Remove modal
+                            document.querySelector("#services-payment-modal").classList.remove("inview");
+
+                            // Fetch the bills
+                            displaySelectedPatientBills("ongoing-services-02");
+
+                            // Print the receipt
+                            printReceipt();
+                        } catch (error) {
+                            console.error('Error updating payment status:', error);
+                        }
+                    }  catch (error) {
+                        console.error(error);
+                        alert('An error occurred while performing action.');
+                    }
+                }, () => {
+                    // TODO: Run when cancelled
+
+                    // Reset the form
+                    servicesPaymentForm.reset();
+                });
+            });
+
+            function updateTotalFeesForSelectedLabTests() {
+                let total = 0;
+
+                serviceCheckboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        // Assuming `item.testFees` represents the price of the service
+                        const price = parseInt(checkbox.parentNode.parentNode.querySelector('td:nth-child(3)').textContent);
+                        total += price;
+                    }
+                });
+
+                totalElement.textContent = `${total}`;
+            }
+
+            async function printReceipt() {
+                // Get the selected services and other necessary data
+                const checkedCheckboxes = document.querySelectorAll('.service-checkbox:checked');
+                const selectedServices = Array.from(checkedCheckboxes).map(checkbox => JSON.parse(checkbox.dataset.item));
+                const totalAmount = calculateTotalAmount(selectedServices);
+
+                // Get patient id from visit id
+                const fetchPatientRequest = await API.patients.fetchByVisitId(selectedVisitId);
+                const patientData = fetchPatientRequest.data;
+
+                if (fetchPatientRequest.status === 'success') {
+                    // Hospital Details
+                    const hospitalName = "Med Tech Hospital";
+                    const hospitalAddress = "Rwenzori Street, Kampala";
+                    const hospitalContact = "Phone: +256 782 615 136";
+
+                    // Patient Details
+                    const patientName = `${patientData.firstName} ${patientData.lastName}`;
+                    const patientDOB = patientData.dateOfBirth;
+                    const patientAge = new Date().getFullYear() - new Date(patientData.dateOfBirth).getFullYear();
+                    const patientGender = patientData.gender.charAt(0).toUpperCase() + patientData.gender.slice(1);
+
+
+                    const receiptHTML = `
+                        <div style="background-color: #ffffff; border-radius: 0; padding-block: 30px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <div style="display: flex; align-items: center;">
+                                <img src="../../assets/svg/512x512.png" style="inline-size: 60px; block-size: 60px;" />
+                                <h2 style="color: #004080; font-weight: 600; margin-left: 20px;">${hospitalName}</h2>
+                                </div>
+                                <div style="text-align: right;">
+                                <p style="color: #666; margin-bottom: 5px;">${hospitalAddress}</p>
+                                <p style="color: #666; margin-bottom: 5px;">${hospitalContact}</p>
+                                </div>
+                            </div>
+                            <hr style="border-top: 1px solid #ccc; margin-top: 20px; margin-bottom: 20px;">
+                        </div>
+
+                        <div style="background-color: #ffffff; padding: 15px; border-radius: 0;">
+                            <h3 style="color: #004080; font-weight: 600; margin-bottom: 10px;">Patient Information</h3>
+                            <ul style="list-style-type: none; padding: 0; margin: 0;">
+                                <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Patient Name:</span> ${patientName}</li>
+                                <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Date of Birth:</span> ${patientDOB}</li>
+                                <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Age:</span> ${patientAge}</li>
+                                <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Gender:</span> ${patientGender}</li>
+                            </ul>
+                        </div> 
+                        <h2 style="text-align: center; color: #333;">Receipt</h2>
+                        <div style="inline-size: 100%;margin-inline-end: 1.2rem;">
+                            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                                <thead>
+                                    <tr>
+                                        <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;">Service</th>
+                                        <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;">Quantity</th>
+                                        <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;">Fees</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${selectedServices.map(service => `
+                                        <tr>
+                                            <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">${service.requestName}</td>
+                                            <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">1</td>
+                                            <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">${UTILS.formatAmountWithCommas(service.requestFees)}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                            <p style="text-align: right; font-weight: bold; margin-top: 20px;">Total Amount: ${UTILS.formatAmountWithCommas(totalAmount)}</p>
+                        </div>
+                                    
+                    `;
+
+                    // Open a new window for printing
+                    const printWindow = window.open('', 'PrintWindow');
+                    printWindow.document.write(receiptHTML);
+
+                    // Print the receipt
+                    printWindow.print();
+
+                    // Close print window
+                    window.addEventListener('afterprint', () => {
+                        printWindow.close();
+                    });
+
+                } else {
+                    console.error(error);
+                    alert('An error occurred while fetching the patient info.');
+                }
+            }
+
+            function calculateTotalAmount(services) {
+                // Calculate and return the total amount from the selected services
+                return services.reduce((total, service) => total + parseFloat(service.requestFees), 0);
+            }
         })();
 
         function updateTotalFeesForSelectedLabTests() {

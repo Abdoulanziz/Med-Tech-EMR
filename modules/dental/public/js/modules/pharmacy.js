@@ -516,72 +516,100 @@ function displaySelectedPatientBillsPaymentModal(event) {
             const updateServicesPaymentStatusBtn = document.querySelector("#update-services-payment-status-btn");
             updateServicesPaymentStatusBtn.addEventListener("click", async (event) => {
                 event.preventDefault();
-                const checkedCheckboxes = document.querySelectorAll('.service-checkbox:checked');
+                const servicesPaymentForm = document.querySelector('#services-payment-form');
 
-                const updatePaymentStatusPromises = [];
+                // Display a confirmation dialog
+                UTILS.showConfirmationModal(servicesPaymentForm, "Are you sure you want to save this record?", async () => {
+                    try {
+                        const checkedCheckboxes = document.querySelectorAll('.service-checkbox:checked');
 
-                for (const checkbox of checkedCheckboxes) {
-                    // Update Dental Service
-                    if(JSON.parse(checkbox.dataset.item).requestName === "Dental Service") {
-                        const requestId = JSON.parse(checkbox.dataset.item).requestId;
-                        updatePaymentStatusPromises.push(API.services.forDental.requests.updatePaymentStatus(requestId, "paid"));
+                        const updatePaymentStatusPromises = [];
+
+                        for (const checkbox of checkedCheckboxes) {
+                            // Update Dental Service
+                            if(JSON.parse(checkbox.dataset.item).requestName === "Dental Service") {
+                                const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                                updatePaymentStatusPromises.push(API.services.forDental.requests.updatePaymentStatus(requestId, "paid"));
+                            }
+
+                        }
+
+                        try {
+                            const responses = await Promise.all(updatePaymentStatusPromises);
+
+                            // Extract the data from each response
+                            const data = responses.map(response => response.data);
+
+                            // Remove modal
+                            document.querySelector("#services-payment-modal").classList.remove("inview");
+
+                            // Fetch the bills
+                            displaySelectedPatientBills("ongoing-services-02");
+                        } catch (error) {
+                            console.error('Error updating payment status:', error);
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        alert('An error occurred while performing action.');
                     }
+                }, () => {
+                    // TODO: Run when cancelled
 
-                }
-
-                try {
-                    const responses = await Promise.all(updatePaymentStatusPromises);
-
-                    // Extract the data from each response
-                    const data = responses.map(response => response.data);
-
-                    // Remove modal
-                    document.querySelector("#services-payment-modal").classList.remove("inview");
-
-                    // Fetch the bills
-                    displaySelectedPatientBills("ongoing-services-02");
-                } catch (error) {
-                    console.error('Error updating payment status:', error);
-                }
-
+                    // Reset the form
+                    servicesPaymentForm.reset();
+                });
             });
 
             // Pay and print receipt
             const updateServicesPaymentStatusAndPrintReceiptBtn = document.querySelector("#update-services-payment-status-and-print-receipt-btn");
             updateServicesPaymentStatusAndPrintReceiptBtn.addEventListener("click", async (event) => {
                 event.preventDefault();
-                const checkedCheckboxes = document.querySelectorAll('.service-checkbox:checked');
+                const servicesPaymentForm = document.querySelector('#services-payment-form');
 
-                const updatePaymentStatusPromises = [];
+                // Display a confirmation dialog
+                UTILS.showConfirmationModal(servicesPaymentForm, "Are you sure you want to save this record?", async () => {
+                    try {
+                        const checkedCheckboxes = document.querySelectorAll('.service-checkbox:checked');
 
-                for (const checkbox of checkedCheckboxes) {
-                    // Update Dental Service
-                    if(JSON.parse(checkbox.dataset.item).requestName === "Dental Service") {
-                        const requestId = JSON.parse(checkbox.dataset.item).requestId;
-                        updatePaymentStatusPromises.push(API.services.forDental.requests.updatePaymentStatus(requestId, "paid"));
+                        const updatePaymentStatusPromises = [];
+
+                        for (const checkbox of checkedCheckboxes) {
+                            // Update Dental Service
+                            if(JSON.parse(checkbox.dataset.item).requestName === "Dental Service") {
+                                const requestId = JSON.parse(checkbox.dataset.item).requestId;
+                                updatePaymentStatusPromises.push(API.services.forDental.requests.updatePaymentStatus(requestId, "paid"));
+                            }
+
+                        }
+
+                        try {
+                            const responses = await Promise.all(updatePaymentStatusPromises);
+
+                            // Extract the data from each response
+                            const data = responses.map(response => response.data);
+
+                            // Remove modal
+                            document.querySelector("#services-payment-modal").classList.remove("inview");
+
+                            // Fetch the bills
+                            displaySelectedPatientBills("ongoing-services-02");
+
+                            // Print the receipt
+                            printReceipt();
+
+                        } catch (error) {
+                            console.error('Error updating payment status:', error);
+                        }
+                    }  catch (error) {
+                        console.error(error);
+                        alert('An error occurred while performing action.');
                     }
+                }, () => {
+                    // TODO: Run when cancelled
 
-                }
-
-                try {
-                    const responses = await Promise.all(updatePaymentStatusPromises);
-
-                    // Extract the data from each response
-                    const data = responses.map(response => response.data);
-
-                    // Remove modal
-                    document.querySelector("#services-payment-modal").classList.remove("inview");
-
-                    // Fetch the bills
-                    displaySelectedPatientBills("ongoing-services-02");
-
-                    // Print the receipt
-                    printReceipt();
-
-                } catch (error) {
-                    console.error('Error updating payment status:', error);
-                }
-
+                    // Reset the form
+                    servicesPaymentForm.reset();
+                });
             });
 
             function updateTotalFeesForSelectedLabTests() {
@@ -644,32 +672,48 @@ function displaySelectedPatientBillsPaymentModal(event) {
                                 <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Age:</span> ${patientAge}</li>
                                 <li style="margin-bottom: 5px;"><span style="font-weight: bold;">Gender:</span> ${patientGender}</li>
                             </ul>
-                        </div>  
-
-                        <div>
-                            <h2>Receipt</h2>
-                            <ul>
-                                ${selectedServices.map(service => `<li>${service.requestName}: ${service.requestFees}</li>`).join('')}
-                            </ul>
-                            <p>Total Amount: ${totalAmount}</p>
+                        </div> 
+                        <h2 style="text-align: center; color: #333;">Receipt</h2>
+                        <div style="inline-size: 100%;margin-inline-end: 1.2rem;">
+                            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                                <thead>
+                                    <tr>
+                                        <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;">Service</th>
+                                        <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;">Quantity</th>
+                                        <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;">Fees</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${selectedServices.map(service => `
+                                        <tr>
+                                            <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">${service.requestName}</td>
+                                            <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">1</td>
+                                            <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">${UTILS.formatAmountWithCommas(service.requestFees)}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                            <p style="text-align: right; font-weight: bold; margin-top: 20px;">Total Amount: ${UTILS.formatAmountWithCommas(totalAmount)}</p>
                         </div>
                                     
                     `;
 
                     // Open a new window for printing
-                    const printWindow = window.open('', '_blank');
+                    const printWindow = window.open('', 'PrintWindow');
                     printWindow.document.write(receiptHTML);
 
                     // Print the receipt
                     printWindow.print();
 
+                    // Close print window
+                    window.addEventListener('afterprint', () => {
+                        printWindow.close();
+                    });
+
                 } else {
                     console.error(error);
                     alert('An error occurred while fetching the patient info.');
                 }
-
-
-                
             }
 
             function calculateTotalAmount(services) {
