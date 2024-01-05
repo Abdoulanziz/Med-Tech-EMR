@@ -42,6 +42,7 @@ async function loadAllPatients() {
         searching: true,
         filter:true,
         destroy: true,
+        order: [[0, 'desc']],
 
         // Make the API request
         ajax: {

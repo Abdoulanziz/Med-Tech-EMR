@@ -443,17 +443,18 @@ const fetchPatients = async (req, res) => {
     // Define the column mappings for sorting
     const columnMappings = {
       0: 'patient_id', // Map column 0 to the 'id' column
-      // Add mappings for other columns as needed
+      6: 'created_at',
     };
 
     // Check if the column index is valid and get the column name
     const columnData = columnMappings[orderColumnIndex];
+
     if (columnData) {
       sort.push([columnData, orderDirection]);
+    } else {
+      // If no valid column mapping is found, set default sorting by 'created_at' in descending order
+      sort.push(['created_at', 'desc']);
     }
-
-    // Add sorting by createdAt in descending order (latest first)
-    // sort.push(['id', 'desc']); // This line will sort by createdAt in descending order
 
     // Construct the Sequelize query
     const queryOptions = {
