@@ -765,7 +765,7 @@ const fetchVisitsByPatientId = async (req, res) => {
 
     // Define the column mappings for sorting
     const columnMappings = {
-      0: 'patient_id', // Map column 0 to the 'id' column
+      0: 'visit_id', // Map column 0 to the 'id' column
       // Add mappings for other columns as needed
     };
 
