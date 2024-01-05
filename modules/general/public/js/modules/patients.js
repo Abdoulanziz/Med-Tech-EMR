@@ -267,6 +267,7 @@ async function loadSinglePatientVists(patientId) {
         searching: true,
         filter:true,
         destroy: true,
+        order: [[0, 'desc']],
 
         ajax: {
             url: apiEndpoint,

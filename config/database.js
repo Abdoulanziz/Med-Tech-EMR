@@ -6,7 +6,12 @@ const { NODE_ENV, DATABASE_URL } = process.env;
 
 let sequelize;
 
-if(NODE_ENV == "production") {
+if(NODE_ENV == "production") { 
+  // Log out node env
+  console.log("^^^^^^^^^^^^^^^^^^^^^");
+  console.log("NODE_ENV: ", NODE_ENV);
+  console.log("^^^^^^^^^^^^^^^^^^^^^");
+
   // For production, use the DATABASE_URL environment variable
 
   // Set up SSL options
@@ -22,7 +27,12 @@ if(NODE_ENV == "production") {
       }
     }
   });
-} else {
+} else { 
+  // Log out node env
+  console.log("^^^^^^^^^^^^^^^^^^^^^");
+  console.log("NODE_ENV: ", NODE_ENV);
+  console.log("^^^^^^^^^^^^^^^^^^^^^");
+
   // For development and test environments, use config.json
   const nodeEnv = NODE_ENV || 'development';
   const config = require('./config.json')[nodeEnv];

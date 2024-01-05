@@ -54,7 +54,8 @@ sequelize
   sessionStore
   .sync()
   .then(() => {
-    app.listen(port, () => {
+    // Remove '0.0.0.0' in production
+    app.listen(port, '0.0.0.0', () => {
       initializeAdmin();
       console.log(`Server running on port ${port}`);
     });

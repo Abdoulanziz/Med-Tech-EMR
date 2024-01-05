@@ -27,6 +27,7 @@ async function loadAllPatientsOnQueue() {
         searching: true,
         filter:true,
         destroy: true,
+        order: [[0, 'desc']],
 
         ajax: {
             url: apiEndpoint,
@@ -167,6 +168,7 @@ async function loadSinglePatientVisits(patientId) {
         searching: true,
         filter:true,
         destroy: true,
+        order: [[0, 'desc']],
         ajax: {
             url: apiEndpoint,
             dataSrc: "data",
@@ -284,6 +286,7 @@ async function loadSinglePatientVisitLabRequests(visitId) {
         searching: true,
         filter:true,
         destroy: true,
+        order: [[0, 'desc']],
         ajax: {
             url: apiEndpoint,
             dataSrc: "data",

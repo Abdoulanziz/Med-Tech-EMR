@@ -26,6 +26,7 @@ async function loadAllVisits() {
         searching: true,
         filter:true,
         destroy: true,
+        order: [[0, 'desc']],
 
         ajax: {
             url: apiEndpoint,
@@ -310,6 +311,7 @@ async function loadSinglePatientVisitHistory(visitId) {
         searching: true,
         filter:true,
         destroy: true,
+        order: [[0, 'desc']],
 
         ajax: {
             url: apiEndpoint,
