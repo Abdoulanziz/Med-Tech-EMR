@@ -529,7 +529,6 @@ async function displaySelectedPatientBills(divId) {
     }
 }
 
-
 // Display receive services payment modal
 function displaySelectedPatientBillsPaymentModal(event) {
     const trigger = document.querySelector("#ongoing-services-02");
@@ -812,7 +811,6 @@ function displaySelectedPatientBillsPaymentModal(event) {
     });
 }
 
-
 // Handle create patient dental service request form
 async function handlePatientDentalServiceRequestForm() {
     const patientDentalServiceRequestForm = document.querySelector('#create-patient-dental-service-request-form');
@@ -915,7 +913,6 @@ async function handleEditPatientDentalServiceRequestForm(visitId, requestId) {
         });
     });
 }
-
 
 // Populate form with data (pre-fill the form)
 function populateFormWithData(formId, data, formFieldsNamesArray) {

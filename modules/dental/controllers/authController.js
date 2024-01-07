@@ -35,7 +35,6 @@ const handleSignin = async (req, res) => {
 
       // Update lastLogin field
       await user.update({ lastLogin: new Date() });
-      console.log(user)
 
       // Include lastLogin in the session user data
       req.session.user = {
@@ -60,11 +59,16 @@ const handleSignin = async (req, res) => {
 
 
 const handleSignout = (req, res) => {
-  req.session.destroy((error) => {
+  const user = req.session.user;
+
+  req.session.destroy(async (error) => {
     if (error) {
       console.error("Signout error:", error);
       res.status(500).json({ success: false, message: "Signout error" });
     } else {
+      // Create an audit log
+      await createAuditLog('User', user.userId, 'SIGNOUT', {}, {}, user.userId);
+
       res.clearCookie("mis.connect.sid", { path: "/", expires: new Date(1) });
       res.status(200).json({ success: true });
     }

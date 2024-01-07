@@ -23,6 +23,7 @@ async function loadAuditLogs() {
         searching: true,
         filter:true,
         destroy: true,
+        order: [[0, 'desc']],
 
         ajax: {
             url: apiEndpoint,
@@ -46,9 +47,7 @@ async function loadAuditLogs() {
                 targets: 0,
                 render: function(data, type, row, meta) {
                     const auditLogDate = data.auditLogCreatedAt;
-                    const dateObj = new Date(auditLogDate);
-                    const formattedDate = dateObj.toISOString().split('T')[0];
-                    return '<span>' + formattedDate + '</span>';
+                    return '<span>' + new Date(auditLogDate).toLocaleString() + '</span>';
                 }
             },
             {
