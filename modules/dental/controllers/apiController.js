@@ -2963,13 +2963,12 @@ const fetchAuditLogs = async (req, res) => {
 
     const sort = [];
 
-    // if (searchValue) {
-    //   filter[Op.or] = [
-    //     { patientId: { [Op.iLike]: `%${searchValue}%` } },
-    //     // { lastName: { [Op.iLike]: `%${searchValue}%` } },
-    //     // Add more columns to search here as needed
-    //   ];
-    // }
+    if (searchValue) {
+      filter[Op.or] = [
+        { '$User.username$': { [Op.iLike]: `%${searchValue}%` } },
+        // Add more columns to search here as needed
+      ];
+    }
 
     if (minDate && maxDate) {
       filter.createdAt = {
