@@ -80,7 +80,7 @@ const handleSignin = async (req, res) => {
       // Create an audit log
       await createAuditLog('User', user.dataValues.userId, 'SIGNIN SUCCESSFUL', {}, user.dataValues, req.session.user.userId);
 
-      user.roleId === 1 ? res.redirect("/admin/dashboard") : res.redirect("/page/patients");
+      user.roleId === 2 ? res.redirect("/admin/dashboard") : res.redirect("/page/patients");
 
     } else {
       res.redirect("/auth/signin");
