@@ -125,10 +125,11 @@
 
 .navbar .nav-badges .user-badge.flex {
   color: #f3f3f3;
-  padding: .2rem .4rem;
+  padding: .2rem .8rem;
   border-radius: 1rem;
   border: 1px solid rgb(55, 55, 55);
   min-inline-size: 12.4rem;
+  inline-size: fit-content;
   justify-content: flex-end;
   gap: .6rem;
   background-color: #535353;
