@@ -688,32 +688,30 @@ table.dataTable .table-btn {
 }
 
 #api-status-check-banner.visible {
-  /* top: 0; */
   bottom: 0;
   opacity: 1;
 }
 
 .breadcrumb {
   font-family: Arial, sans-serif;
-  padding: 6px 15px;
-  border-radius: 6px;
-  border: 1px solid #eae9e9;
-  background-color: #9acd32; /*yellowgreen*/
-  background-color: #eff7df;
+  padding: 6px 0;
+  border-radius: 0;
 }
 
 .breadcrumb a {
   text-decoration: none;
-  color: #999;
+  color: #a0a0a0;
   transition: color 0.3s;
+  font-size: 18px;
+  font-family: var(--font-sys-default);
 }
 
 .breadcrumb a:hover {
-  color: yellowgreen;
+  color: #666;
 }
 
 .breadcrumb a.current {
-  color: yellowgreen;
+  color: #666;
 }
 
 .separator {
