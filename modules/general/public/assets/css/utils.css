@@ -282,7 +282,7 @@ a {
   z-index: 9999;
   display: none;
   box-shadow: 0 0 5px 1px rgba(0, 0, 0, .0975);
-  min-width: 12.5rem;
+  min-width: 15rem;
   height: auto;
   padding: 0 !important;
   margin: 0;
