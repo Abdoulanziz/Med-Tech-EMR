@@ -805,6 +805,15 @@ table.dataTable .table-btn {
   color: #bc9b6a;
 }
 
+.sidebar-toggler {
+  block-size: 35px;
+  inline-size: 35px;
+}
+
+.business-logo {
+  block-size: 35px;
+  inline-size: 35px;
+}
 
 
 @media screen and (max-width: 600px) {

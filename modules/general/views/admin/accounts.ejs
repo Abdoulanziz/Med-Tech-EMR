@@ -70,7 +70,10 @@
                 <div class="navbar">
                     <nav>
                         <ul class="nav-links flex">
-                            <img src="/assets/svg/cancel.svg" alt="" id="sidebar-toggler" class="sidebar-toggler" style="block-size: 32px;inline-size: 32px;">
+                            <div class="nav-left-items flex" style="gap: 1.4rem;">
+                                <img src="/assets/svg/cancel.svg" alt="" id="sidebar-toggler" class="sidebar-toggler">
+                                <img src="/assets/svg/business-logo.png" alt="" class="business-logo">
+                            </div>
                             <div class="nav-badges flex">
                                 <div class="user-badge flex">
                                     <h4 class="user-name">Logged in as: <%= data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1) %></h4>
