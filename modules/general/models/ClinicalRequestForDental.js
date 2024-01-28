@@ -35,9 +35,8 @@ module.exports = (sequelize, DataTypes) => {
       field: 'visit_id',
     },
     toothType: {
-      type: DataTypes.ENUM('Pre-molar', 'Molar', 'Incisor', 'Canine'),
+      type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 'Pre-molar',
       field: 'tooth_type',
     },
     diagnosis: {
@@ -46,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
       field: 'diagnosis',
     },
     procedure: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       allowNull: true,
       field: 'procedure',
     },

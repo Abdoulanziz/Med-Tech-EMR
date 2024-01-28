@@ -20,8 +20,7 @@ module.exports = {
         allowNull: false,
       },
       tooth_type: {
-        type: Sequelize.ENUM('Pre-molar', 'Molar', 'Incisor', 'Canine'),
-        defaultValue: 'Pre-molar',
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       diagnosis: {
@@ -29,7 +28,7 @@ module.exports = {
         allowNull: true,
       },
       procedure: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
         allowNull: true,
       },
       service_fee: {

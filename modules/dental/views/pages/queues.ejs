@@ -451,22 +451,204 @@
                             <div class="form-section">
                                 <h2>Medical Information</h2>
                                 <div class="form-group">
-                                    <label for="tooth-type">Tooth Type:</label>
+                                    <label for="tooth-type">Specific Tooth:</label>
                                     <select id="tooth-type" name="toothType">
-                                        <option value="Pre-molar">Pre Molar</option>
-                                        <option value="Molar">Molar Tooth</option>
-                                        <option value="Canine">Canine</option>
-                                        <option value="Incisor">Incisor</option>
+                                        <option value="18">18</option>
+                                        <option value="17">17</option>
+                                        <option value="16">16</option>
+                                        <option value="15">15</option>
+                                        <option value="14">14</option>
+                                        <option value="13">13</option>
+                                        <option value="12">12</option>
+                                        <option value="11">11</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                        <option value="24">24</option>
+                                        <option value="25">25</option>
+                                        <option value="26">26</option>
+                                        <option value="27">27</option>
+                                        <option value="28">28</option>
+                                        <option value="38">38</option>
+                                        <option value="37">37</option>
+                                        <option value="36">36</option>
+                                        <option value="35">35</option>
+                                        <option value="34">34</option>
+                                        <option value="33">33</option>
+                                        <option value="32">32</option>
+                                        <option value="31">31</option>
+                                        <option value="41">41</option>
+                                        <option value="42">42</option>
+                                        <option value="43">43</option>
+                                        <option value="44">44</option>
+                                        <option value="45">45</option>
+                                        <option value="46">46</option>
+                                        <option value="47">47</option>
+                                        <option value="48">48</option>
                                     </select>
                                 </div>
+
                                 <div class="form-group">
-                                    <label for="diagnosis">Diagnosis:</label>
-                                    <textarea id="diagnosis" name="diagnosis" class="form-control"></textarea>
+                                    <label for="procedure">Select Procedure:</label>
+                                    <select id="procedure" name="procedure">
+                                        
+                                        <!-- Oral Surgery -->
+                                        <optgroup label="Oral Surgery">
+                                            <option value="Simple extraction">Simple extraction</option>
+                                            <option value="Difficult extraction">Difficult extraction</option>
+                                            <option value="Frenectomy">Frenectomy</option>
+                                            <option value="Composite splinting">Composite splinting</option>
+                                            <option value="Archbar splinting">Archbar splinting</option>
+                                            <option value="MMF">MMF</option>
+                                            <option value="Surgical disimpaction">Surgical disimpaction</option>
+                                            <option value="Disimpaction">Disimpaction</option>
+                                            <option value="Simple excision">Simple excision</option>
+                                            <option value="Marsupialization">Marsupialization</option>
+                                            <option value="Apicectomy">Apicectomy</option>
+                                            <option value="Incision and drainage">Incision and drainage</option>
+                                            <option value="STS">STS</option>
+                                            <option value="Fistula closure">Fistula closure</option>
+                                            <option value="Root amputation">Root amputation</option>
+                                            <option value="Bone grafting">Bone grafting</option>
+                                            <option value="Biopsy">Biopsy</option>
+                                            <option value="Socket dressing">Socket dressing</option>
+                                            <option value="Operculectomy">Operculectomy</option>
+                                            <option value="Replantation of Avulsed tooth">Replantation of Avulsed tooth</option>
+                                        </optgroup>
+
+                                        <!-- Pediatrics -->
+                                        <optgroup label="Pediatrics">
+                                            <option value="Prophy">Prophy</option>
+                                            <option value="G.I filling">G.I filling</option>
+                                            <option value="Pulpotomy">Pulpotomy</option>
+                                            <option value="Pulpectomy">Pulpectomy</option>
+                                            <option value="Strip crowns">Strip crowns</option>
+                                            <option value="SS Crowns">SS Crowns</option>
+                                            <option value="Fluoride application">Fluoride application</option>
+                                            <option value="SDF application">SDF application</option>
+                                            <option value="Pits and fissure sealant">Pits and fissure sealant</option>
+                                            <option value="Amalgam filling">Amalgam filling</option>
+                                            <option value="Composite filling">Composite filling</option>
+                                            <option value="Space maintainers">Space maintainers</option>
+                                            <option value="Cyst exposure">Cyst exposure</option>
+                                        </optgroup>
+
+                                        <!-- Restorative -->
+                                        <optgroup label="Restorative">
+                                            <option value="TF">TF</option>
+                                            <option value="Direct pulp capping">Direct pulp capping</option>
+                                            <option value="Indirect pulp capping">Indirect pulp capping</option>
+                                            <option value="Amalgam">Amalgam</option>
+                                            <option value="GI">GI</option>
+                                            <option value="Composite">Composite</option>
+                                            <option value="Composite crown buildup">Composite crown buildup</option>
+                                            <option value="Composite veneers">Composite veneers</option>
+                                            <option value="Onlays">Onlays</option>
+                                            <option value="Inlays">Inlays</option>
+                                        </optgroup>
+
+                                        <!-- Prosthetics -->
+                                        <optgroup label="Prosthetics">
+                                            <option value="Crown">Crown</option>
+                                            <option value="Bridge">Bridge</option>
+                                            <option value="Partial denture">Partial denture</option>
+                                            <option value="Complete denture">Complete denture</option>
+                                            <option value="Flexible denture">Flexible denture</option>
+                                            <option value="Night guards">Night guards</option>
+                                            <option value="Obturator">Obturator</option>
+                                        </optgroup>
+
+                                        <!-- Endodontics -->
+                                        <optgroup label="Endodontics">
+                                            <option value="Root Canal-Anterior">Root Canal-Anterior</option>
+                                            <option value="Root Canal-Premolar">Root Canal-Premolar</option>
+                                            <option value="Root Canal-Molar">Root Canal-Molar</option>
+                                            <option value="Endo retreatment">Endo retreatment</option>
+                                            <option value="Post and Core">Post and Core</option>
+                                        </optgroup>
+
+                                        <!-- Periodontics -->
+                                        <optgroup label="Periodontics">
+                                            <option value="Simple Scaling and polishing">Simple Scaling and polishing</option>
+                                            <option value="Complex Scaling & Polishing">Complex Scaling & Polishing</option>
+                                            <option value="SRP">SRP</option>
+                                            <option value="Fluoride application">Fluoride application</option>
+                                            <option value="Teeth whitening">Teeth whitening</option>
+                                            <option value="Implants">Implants</option>
+                                            <option value="Sinus lifting">Sinus lifting</option>
+                                            <option value="Gingivectomy">Gingivectomy</option>
+                                            <option value="Gingivoplasty">Gingivoplasty</option>
+                                            <option value="Crown lengthening">Crown lengthening</option>
+                                        </optgroup>
+
+                                        <!-- Orthodontics -->
+                                        <optgroup label="Orthodontics">
+                                            <option value="Fixed orthodontics">Fixed orthodontics</option>
+                                            <option value="Removable appliance">Removable appliance</option>
+                                        </optgroup>
+
+                                    </select>
                                 </div>
+
+
                                 <div class="form-group">
-                                    <label for="procedure">Procedure:</label>
-                                    <textarea id="procedure" name="procedure" class="form-control"></textarea>
+                                    <label for="diagnosis">Select Diagnosis:</label>
+                                    <select id="diagnosis" name="diagnosis">
+                                        
+                                        <!-- Caries -->
+                                        <option value="Caries">Caries</option>
+
+                                        <!-- Periodontal Disease -->
+                                        <option value="Periodontal Disease">Periodontal Disease</option>
+
+                                        <!-- Gingivitis -->
+                                        <option value="Gingivitis">Gingivitis</option>
+
+                                        <!-- Tooth Abscess -->
+                                        <option value="Tooth Abscess">Tooth Abscess</option>
+
+                                        <!-- Malocclusion -->
+                                        <option value="Malocclusion">Malocclusion</option>
+
+                                        <!-- Tooth Sensitivity -->
+                                        <option value="Tooth Sensitivity">Tooth Sensitivity</option>
+
+                                        <!-- TMJ Disorder -->
+                                        <option value="TMJ Disorder">TMJ Disorder</option>
+
+                                        <!-- Oral Cancer -->
+                                        <option value="Oral Cancer">Oral Cancer</option>
+
+                                        <!-- Bruxism -->
+                                        <option value="Bruxism">Bruxism</option>
+
+                                        <!-- Impacted Tooth -->
+                                        <option value="Impacted Tooth">Impacted Tooth</option>
+
+                                        <!-- Temporomandibular Joint Disorders -->
+                                        <option value="Temporomandibular Joint Disorders">Temporomandibular Joint Disorders</option>
+
+                                        <!-- Dental Trauma -->
+                                        <option value="Dental Trauma">Dental Trauma</option>
+
+                                        <!-- Dental Erosion -->
+                                        <option value="Dental Erosion">Dental Erosion</option>
+
+                                        <!-- Tooth Fracture -->
+                                        <option value="Tooth Fracture">Tooth Fracture</option>
+
+                                        <!-- Enamel Hypoplasia -->
+                                        <option value="Enamel Hypoplasia">Enamel Hypoplasia</option>
+
+                                        <!-- Orthodontic Issues -->
+                                        <option value="Orthodontic Issues">Orthodontic Issues</option>
+
+                                        <!-- Other -->
+                                        <option value="Other">Other</option>
+
+                                    </select>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="service-fee">Service Fee:</label>
                                     <input type="text" id="service-fee" name="serviceFee" class="form-control" required>
