@@ -59,7 +59,7 @@ sequelize
     app.listen(port, '0.0.0.0', () => {
       initializeFacility();
       initializeAdmin();
-      console.log(`Server running on port ${port}`);
+      console.log(`Server running on http://localhost:${port}`);
     });
   })
   .catch((error) => {
