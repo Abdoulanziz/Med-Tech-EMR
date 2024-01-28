@@ -1,29 +1,29 @@
 import { UTILS } from "./utils.js";
 
 export const UI = {
-  // apiBaseURL: (window.location.hostname === 'localhost') ? "http://localhost:5000/api/v1" : "https://med-tech-demo.onrender.com/api/v1",
+  apiBaseURL: (window.location.hostname === 'localhost') ? "http://localhost:5000/api/v1" : "https://med-tech-demo.onrender.com/api/v1",
   
-  apiBaseURL: (() => {
-    if (typeof self !== 'undefined' && self.constructor && self.constructor.name === 'DedicatedWorkerGlobalScope') {
-      return false;
-    }
+  // apiBaseURL: (() => {
+  //   if (typeof self !== 'undefined' && self.constructor && self.constructor.name === 'DedicatedWorkerGlobalScope') {
+  //     return false;
+  //   }
 
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  //   const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-    const localIP = "192.168.8.101";
+  //   const localIP = "192.168.8.101";
 
-    let baseApiUri;
+  //   let baseApiUri;
 
-    if (isLocalhost) {
-      baseApiUri = `http://localhost:5000/api/v1`;
-    } else if (localIP) {
-      baseApiUri = `http://${localIP}:5000/api/v1`;
-    } else {
-      baseApiUri = `https://med-tech-demo.onrender.com/api/v1`;
-    }
+  //   if (isLocalhost) {
+  //     baseApiUri = `http://localhost:5000/api/v1`;
+  //   } else if (localIP) {
+  //     baseApiUri = `http://${localIP}:5000/api/v1`;
+  //   } else {
+  //     baseApiUri = `https://med-tech-demo.onrender.com/api/v1`;
+  //   }
 
-    return baseApiUri;
-  })(),
+  //   return baseApiUri;
+  // })(),
 
 
   PATH_TO_SOUND_FILE: "../assets/sound/sound.mp3",
