@@ -23,15 +23,15 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      contact_email: {
+      primary_email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      secondary_email: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       phone_number: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      facility_logo: {
         type: Sequelize.STRING,
         allowNull: false,
       },

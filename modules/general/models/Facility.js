@@ -34,20 +34,20 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         field: 'facility_address',
       },
-      contactEmail: {
+      primaryEmail: {
         type: DataTypes.STRING,
         allowNull: false,
-        field: 'contact_email',
+        field: 'primary_email',
+      },
+      secondaryEmail: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        field: 'secondary_email',
       },
       phoneNumber: {
         type: DataTypes.STRING,
         allowNull: false,
         field: 'phone_number',
-      },
-      facilityLogo: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        field: 'facility_logo',
       },
       createdAt: {
         type: DataTypes.DATE,

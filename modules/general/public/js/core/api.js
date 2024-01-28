@@ -144,16 +144,27 @@ export const API = {
             return await API.makeGetRequest(endpoint);
         },
 
-        // Update facility POST api/v1/facilities/:id
-        update: async (id) => {
+        // Update facility PUT api/v1/facilities/:id
+        update: async (id, data, fromFormData) => {
             const endpoint = `${API.BACKEND_BASE_API_URI}/facilities/${id}`;
-            return await API.makePatchRequest(endpoint, id);
+            return await API.makePutRequest(endpoint, data, fromFormData);
         },
 
         // Delete facility POST api/v1/facilities/:id
         delete: async (id) => {
             const endpoint = `${API.BACKEND_BASE_API_URI}/facilities/${id}`;
             return await API.makePostRequest(endpoint, id);
+        },
+
+        // Update facility settings PUT api/v1/facilities/:id/settings/:settingsId
+        updateFacilitySettingByFacilityIdAndFacilitySettingId: async (id, settingsId, value, fromFormData) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/facilities/${id}/settings/${settingsId}`;
+            return await API.makePutRequest(endpoint, value, fromFormData);
+        },
+
+        fetchFacilitySettingByFacilityIdAndFacilitySettingId: async (id, settingsId) => {
+            const endpoint = `${API.BACKEND_BASE_API_URI}/facilities/${id}/settings/${settingsId}`;
+            return await API.makeGetRequest(endpoint);
         },
     },
 

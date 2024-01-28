@@ -14,6 +14,7 @@ const { PORT, SESSION_SECRET, MODULE_NAME } = process.env;
 const port = PORT || 5050;
 const moduleName = MODULE_NAME || "general";
 
+const initializeFacility = require(`../modules/${moduleName}/middlewares/initializeFacility`);
 const initializeAdmin = require(`../modules/${moduleName}/middlewares/initializeAdmin`);
 
 const app = express();
@@ -56,6 +57,7 @@ sequelize
   .then(() => {
     // Remove '0.0.0.0' in production
     app.listen(port, '0.0.0.0', () => {
+      initializeFacility();
       initializeAdmin();
       console.log(`Server running on port ${port}`);
     });

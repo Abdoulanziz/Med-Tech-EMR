@@ -41,10 +41,13 @@ const checkAPIStatus = (req, res) => {
 const createFacility = async (req, res) => {
   try {
     // Extract user data from the request body
-    const { facilityName, facilityAddress, contactEmail, phoneNumber, facilityLogo } = req.body;
+    const { facilityName, facilityAddress, primaryEmail, secondaryEmail, phoneNumber } = req.body;
 
     // Create a new facility record in the database
-    const newFacility = await Facility.create({ facilityName, facilityAddress, contactEmail, phoneNumber, facilityLogo: "/uploads/logos" });
+    const newFacility = await Facility.create({ facilityName, facilityAddress, primaryEmail, secondaryEmail, phoneNumber });
+
+    // Create an audit log
+    await createAuditLog('Facility', newFacility.facilityId, 'CREATE', {}, newFacility.dataValues, req.session.user.userId);
 
     // Respond with the newly created facility object
     return res.status(201).json({ status: 'success', message: 'Facility record created successfully', data: newFacility });
@@ -70,7 +73,7 @@ const fetchFacilityById = async (req, res) => {
       if (!facility) {
         return res.status(404).json({ message: 'Facility not found' });
       }
-      return res.status(200).json({data: facility});
+      return res.status(200).json({status: "success", data: facility});
     }
 
   } catch (error) {
@@ -78,6 +81,123 @@ const fetchFacilityById = async (req, res) => {
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
+
+// Update an existing facility by id
+const updateFacilityById = async (req, res) => {
+  try {
+    const facilityId = req.params.id;
+
+    // Extract updated data from the request body
+    const { facilityName, facilityAddress, primaryEmail, secondaryEmail, phoneNumber } = req.body;
+
+    // Check if the facility exists
+    const existingFacility = await Facility.findOne({ where: { facilityId } });
+
+    if (!existingFacility) {
+      return res.status(404).json({ message: 'Facility not found' });
+    }
+
+    // Update the facility record in the database
+    await existingFacility.update({
+      facilityName,
+      facilityAddress,
+      primaryEmail,
+      secondaryEmail,
+      phoneNumber,
+    });
+
+    // Create an audit log
+    await createAuditLog(
+      'Facility',
+      existingFacility.facilityId,
+      'UPDATE',
+      existingFacility.dataValues,
+      existingFacility.dataValues,
+      req.session.user.userId
+    );
+
+    // Respond with the updated facility object
+    return res.status(200).json({ status: 'success', message: 'Facility record updated successfully', data: existingFacility });
+
+  } catch (error) {
+    // Log out the error to the console
+    console.error('Error updating facility:', error);
+
+    // Respond with the error to the client
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Update an existing facility settings by id
+const updateFacilitySettingByFacilityIdAndFacilitySettingId = async (req, res) => {
+  try {
+    const facilityId = req.params.id;
+    const facilitySettingId = req.params.settingsId;
+
+    // Extract updated data from the request body
+    const { settingValue } = req.body;
+
+
+    // Check if the facility exists
+    const existingFacilitySetting = await FacilitySetting.findOne({ where: { facilityId, facilitySettingId } });
+
+    if (!existingFacilitySetting) {
+      return res.status(404).json({ message: 'Facility setting not found' });
+    }
+
+    // Update the facility settings record in the database
+    await existingFacilitySetting.update({
+      facilitySettingValue: settingValue,
+    });
+
+    // Create an audit log
+    await createAuditLog(
+      'FacilitySetting',
+      existingFacilitySetting.facilitySettingId,
+      'UPDATE',
+      existingFacilitySetting.dataValues,
+      existingFacilitySetting.dataValues,
+      req.session.user.userId
+    );
+
+    // Respond with the updated facility setting object
+    return res.status(200).json({ status: 'success', message: 'Facility setting record updated successfully', data: existingFacilitySetting });
+
+  } catch (error) {
+    // Log out the error to the console
+    console.error('Error updating facility setting:', error);
+
+    // Respond with the error to the client
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
+// Fetch an existing facility settings by id
+const fetchFacilitySettingByFacilityIdAndFacilitySettingId = async (req, res) => {
+  try {
+    const facilityId = req.params.id;
+    const facilitySettingId = req.params.settingsId;
+
+    // Check if the facility setting exists
+    const existingFacilitySetting = await FacilitySetting.findOne({ 
+      where: { facilityId, facilitySettingId },
+    });
+
+    if (!existingFacilitySetting) {
+      return res.status(404).json({ message: 'Facility setting not found' });
+    }
+
+    // Respond with the facility setting object
+    return res.status(200).json({ status: 'success', data: existingFacilitySetting });
+
+  } catch (error) {
+    console.error('Error fetching facility setting:', error);
+
+    // Respond with the error to the client
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 
 // Create a new user
 const createUser = async (req, res) => {
@@ -3680,6 +3800,9 @@ module.exports = {
   checkAPIStatus, 
   createFacility,
   fetchFacilityById,
+  updateFacilityById,
+  updateFacilitySettingByFacilityIdAndFacilitySettingId,
+  fetchFacilitySettingByFacilityIdAndFacilitySettingId,
   createUser, 
   createDoctor, 
   fetchDoctorByUserId,

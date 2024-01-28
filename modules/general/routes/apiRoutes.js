@@ -5,6 +5,9 @@ const {
     checkAPIStatus,
     createFacility,
     fetchFacilityById,
+    updateFacilityById,
+    updateFacilitySettingByFacilityIdAndFacilitySettingId,
+    fetchFacilitySettingByFacilityIdAndFacilitySettingId,
     createUser,
     createDoctor, 
     fetchDoctorByUserId,
@@ -68,6 +71,9 @@ router.get("/status", checkAPIStatus);
 
 router.post("/facilities", createFacility);
 router.get("/facilities/:id", fetchFacilityById);
+router.put("/facilities/:id", updateFacilityById);
+router.put("/facilities/:id/settings/:settingsId", updateFacilitySettingByFacilityIdAndFacilitySettingId);
+router.get("/facilities/:id/settings/:settingsId", fetchFacilitySettingByFacilityIdAndFacilitySettingId);
 
 router.post("/users", createUser);
 router.get("/users", fetchUsers);
