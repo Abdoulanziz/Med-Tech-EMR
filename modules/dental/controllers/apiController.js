@@ -15,6 +15,7 @@ const {
   Allergy,
   ClinicalRequestForEye,
   ClinicalRequestForDental,
+  ClinicalProcedureForDental,
   ClinicalRequestForCardiology,
   ClinicalRequestForRadiology,
   LabTest,
@@ -1400,6 +1401,97 @@ const updateClinicalRequestForEyePaymentStatusById = async (req, res) => {
   }
 };
 
+// Create clinical procedure for dental
+const createClinicalProcedureForDental = async (req, res) => {
+  try {
+    const {
+      procedureName,
+      procedureCategory,
+      procedureFees
+    } = req.body;
+
+    const newClinicalProcedureForDental = await ClinicalProcedureForDental.create({
+      procedureName,
+      procedureCategory,
+      procedureFees
+    });
+
+    // Create an audit log
+    await createAuditLog('ClinicalProcedureForDental', newClinicalProcedureForDental.resultId, 'CREATE', {}, newClinicalProcedureForDental.dataValues, req.session.user.userId);
+
+    return res.status(201).json({ status: 'success', message: 'Clinical procedure for Dental created successfully', data: newClinicalProcedureForDental });
+  } catch (error) {
+    console.error('Error creating Clinical procedure for Dental:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Fetch clinical procedure for dental
+const fetchClinicalProceduresForDental = async (req, res) => {
+  try {
+    const draw = req.query.draw;
+    const start = parseInt(req.query.start);
+    const length = parseInt(req.query.length);
+    const searchValue = req.query.search.value;
+    const orderColumnIndex = req.query.order[0].column;
+    const orderDirection = req.query.order[0].dir;
+    const minDate = req.query.minDate;
+    const maxDate = req.query.maxDate;
+
+    const filter = {};
+    const sort = [];
+
+    if (searchValue) {
+      filter[Op.or] = [
+        { firstName: { [Op.iLike]: `%${searchValue}%` } },
+        { lastName: { [Op.iLike]: `%${searchValue}%` } },
+        // Add more columns to search here as needed
+      ];
+    }
+
+    if (minDate && maxDate) {
+      filter.createdAt = {
+        [Op.between]: [new Date(minDate), new Date(maxDate)],
+      };
+    }
+
+    // Define the column mappings for sorting
+    const columnMappings = {
+      0: 'procedure_id', // Map column 0 to the 'id' column
+      // Add mappings for other columns as needed
+    };
+
+    // Check if the column index is valid and get the column name
+    const columnData = columnMappings[orderColumnIndex];
+    if (columnData) {
+      sort.push([columnData, orderDirection]);
+    }
+
+    // Add sorting by createdAt in descending order (latest first)
+    // sort.push(['id', 'desc']); // This line will sort by createdAt in descending order
+
+    // Construct the Sequelize query
+    const queryOptions = {
+      where: filter,
+      offset: start,
+      limit: length,
+      order: sort,
+    };
+
+    const result = await ClinicalProcedureForDental.findAndCountAll(queryOptions);
+
+    return res.status(200).json({
+      draw: draw,
+      recordsTotal: result.count,
+      recordsFiltered: result.count,
+      data: result.rows,
+    });
+  } catch (error) {
+    console.error('Error fetching clinical procedures for dental:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 // Create clinical request for dental
 const createClinicalRequestForDental = async (req, res) => {
   try {
@@ -2726,7 +2818,7 @@ const fetchTests = async (req, res) => {
       data: result,
     });
   } catch (error) {
-    console.error('Error fetching patients:', error);
+    console.error('Error fetching tests:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -3827,6 +3919,8 @@ module.exports = {
   createClinicalRequestForEye,
   updateClinicalRequestForEyeById,
   updateClinicalRequestForEyePaymentStatusById,
+  createClinicalProcedureForDental,
+  fetchClinicalProceduresForDental,
   createClinicalRequestForDental,
   fetchClinicalRequestForDentalByVisitId,
   updateClinicalRequestForDentalById,

@@ -32,6 +32,8 @@ const {
     createClinicalRequestForEye,
     updateClinicalRequestForEyeById,
     updateClinicalRequestForEyePaymentStatusById,
+    createClinicalProcedureForDental,
+    fetchClinicalProceduresForDental,
     createClinicalRequestForDental,
     updateClinicalRequestForDentalById,
     updateClinicalRequestForDentalPaymentStatusById,
@@ -109,6 +111,9 @@ router.put("/allergies/:id", updateAllergyById);
 router.post("/services/eye/requests", createClinicalRequestForEye);
 router.put("/services/eye/requests/:id", updateClinicalRequestForEyeById);
 router.patch("/services/eye/requests/:id/payment-status/:status", updateClinicalRequestForEyePaymentStatusById);
+
+router.post("/services/dental/procedures", createClinicalProcedureForDental);
+router.get("/services/dental/procedures", fetchClinicalProceduresForDental);
 
 router.post("/services/dental/requests", createClinicalRequestForDental);
 router.get("/services/dental/requests/:visitId", fetchClinicalRequestForDentalByVisitId);
