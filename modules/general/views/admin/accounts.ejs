@@ -356,9 +356,58 @@
                                 <div class="form-group">
                                     <label for="role">Role:</label>
                                     <select id="role" class="form-control" name="roleId" required>
-                                        <option value="1">Admin</option>
-                                        <option value="2">Doctor</option>
-                                        <option value="3">Nurse</option>
+                                        <option value="2">Admin</option>
+                                        <option value="3">Doctor</option>
+                                        <option value="4">Nurse</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="submit">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div> 
+
+            <!-- Upate user roles modal -->
+            <div id="update-user-roles-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="update-user-roles-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions-admin/user.png" alt="" class="icon">
+                                <h2 class="title">Update User Roles</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="update-user-roles-form-body">
+                            <div class="form-section">
+                                <h2>Account Information</h2>
+                                <div class="form-group">
+                                    <label for="username">Username:</label>
+                                    <input type="text" id="username" name="username" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password:</label>
+                                    <input type="text" id="password" name="password" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="role">Role:</label>
+                                    <select id="role" class="form-control" name="roleId" required>
+                                        <option value="2">Admin</option>
+                                        <option value="3">Doctor</option>
+                                        <option value="4">Nurse</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="account-status">Account status:</label>
+                                    <select id="account-status" class="form-control" name="userAccountStatus" required>
+                                        <option value="suspended">Suspended</option>
+                                        <option value="active">Active</option>
                                     </select>
                                 </div>
                             </div>

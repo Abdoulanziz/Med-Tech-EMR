@@ -46,6 +46,7 @@ async function loadAllUsers() {
         ],
         rowCallback: function(row, data, index) {
             const userId = data.userId;
+            const rowDataString = JSON.stringify(data);
 
             // Doctor
             if(data.userRole === "doctor"){
@@ -110,7 +111,34 @@ async function loadAllUsers() {
                 UTILS.triggerModal(createNurseProfileCta, "modal", async () => {
                     // TODO: handleCreateNurseProfile()
                 });
-            }        
+            }
+            
+            // Update user roles
+            const updateUserRolesCta = row.cells[5].querySelectorAll("button")[1];
+            updateUserRolesCta.style.cursor = "pointer";
+            updateUserRolesCta.classList.add("modal-trigger");
+            updateUserRolesCta.dataset.modal = "update-user-roles-modal";
+
+            UTILS.triggerModal(updateUserRolesCta, "modal", async () => {
+
+                // Populate the form with the data
+                populateFormWithData(
+                    "update-user-roles-modal",
+                    // Local
+                    rowDataString,
+
+                    [
+                        "username",
+                        "password",
+                        "roleId",
+                        "userAccountStatus"
+                    ]
+                );
+
+
+                handleUpdateUserRolesForm(userId);
+            });
+
         },
         columnDefs: [
             {
@@ -258,6 +286,53 @@ async function handleCreateUserForm() {
 
             // Reset the form
             createUserForm.reset();
+        });
+    });
+}
+
+// Handle user roles update form
+async function handleUpdateUserRolesForm(userId) {
+    const updateUserRolesForm = document.querySelector('#update-user-roles-form');
+    updateUserRolesForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+    
+        // Collect form data
+        const formData = new FormData(updateUserRolesForm);
+
+        // URL encoded data
+        const URLEncodedData = new URLSearchParams(formData).toString();
+
+    
+        // Display a confirmation dialog
+        UTILS.showConfirmationModal(updateUserRolesForm, "Are you sure you want to save this record?", async () => {
+            try {
+                // Make an API PUT request to update a user record
+                const response = await API.users.update(userId, URLEncodedData, true);
+    
+                // Check if the request was successful
+                if (response.status === 'success') {
+    
+                    // Reset the form
+                    updateUserRolesForm.reset();
+    
+                    // Remove form
+                    updateUserRolesForm.parentElement.parentElement.classList.remove("inview");
+    
+                    // Reload the users table
+                    loadAllUsers();
+    
+                } else {
+                    alert('Failed to update user record. Please check the form data.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while updating the user record.');
+            }
+        }, () => {
+            // TODO: Run when cancelled
+
+            // Reset the form
+            updateUserRolesForm.reset();
         });
     });
 }

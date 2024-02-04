@@ -20,7 +20,7 @@ const handleSignin = async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    const user = await User.findOne({ where: { username }});
+    const user = await User.findOne({ where: { username, accountStatus: "active" }});
 
     if (!user) {
       res.redirect("/auth/signin");

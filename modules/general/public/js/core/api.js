@@ -419,10 +419,10 @@ export const API = {
             return await API.makeGetRequest(endpoint);
         },
 
-        // Update user POST api/v1/users/:id
-        update: async (id) => {
+        // Update user PUT api/v1/users/:id
+        update: async (id, data, fromFormData) => {
             const endpoint = `${API.BACKEND_BASE_API_URI}/users/${id}`;
-            return await API.makePatchRequest(endpoint, id);
+            return await API.makePutRequest(endpoint, data, fromFormData);
         },
 
         // Delete user POST api/v1/users/:id

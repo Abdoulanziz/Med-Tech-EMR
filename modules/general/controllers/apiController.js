@@ -234,6 +234,42 @@ const createUser = async (req, res) => {
   }
 };
 
+// Update a user
+const updateUser = async (req, res) => {
+  try {
+    // Extract user data from the request body
+    const { roleId, userAccountStatus } = req.body;
+    const userId = req.params.id;
+
+
+    // Check if the user already exists in the database
+    const existingUser = await User.findOne({ where: { userId } });
+
+    if (!existingUser) {
+      return res.status(400).json({ message: 'User does not exist' });
+    }
+
+    // Update the user record in the database
+    const updatedUser = await existingUser.update({
+      roleId,
+      accountStatus: userAccountStatus
+    });
+
+    // Create an audit log
+    await createAuditLog('User', userId, 'UPDATE', existingUser.dataValues, updatedUser.dataValues, req.session.user.userId);
+
+    // Respond with the updated user object
+    return res.status(200).json({ status: 'success', message: 'User record updated successfully', data: updatedUser });
+
+  } catch (error) {
+    // Log out the error to the console
+    console.error('Error updating user:', error);
+
+    // Respond with the error to the client
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 // Create a new doctor
 const createDoctor = async (req, res) => {
   try {
@@ -397,6 +433,8 @@ const fetchUsers = async (req, res) => {
       userAccountStatus: user.accountStatus,
       userProfileCompletionStatus: user.profileCompletionStatus,
       username: user.username,
+      password: user.password,
+      roleId: user.roleId,
       createdAt: user.createdAt,
     }));
 
@@ -3807,6 +3845,7 @@ module.exports = {
   updateFacilitySettingByFacilityIdAndFacilitySettingId,
   fetchFacilitySettingByFacilityIdAndFacilitySettingId,
   createUser, 
+  updateUser,
   createDoctor, 
   fetchDoctorByUserId,
   updateDoctor,

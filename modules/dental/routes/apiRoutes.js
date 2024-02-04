@@ -9,6 +9,7 @@ const {
     updateFacilitySettingByFacilityIdAndFacilitySettingId,
     fetchFacilitySettingByFacilityIdAndFacilitySettingId,
     createUser,
+    updateUser,
     createDoctor, 
     fetchDoctorByUserId,
     updateDoctor,
@@ -83,6 +84,7 @@ router.get("/facilities/:id/settings/:settingsId", fetchFacilitySettingByFacilit
 
 router.post("/users", createUser);
 router.get("/users", fetchUsers);
+router.put("/users/:id", updateUser);
 
 router.post("/doctors", createDoctor);
 router.get("/doctors/:id", fetchDoctorByUserId);
