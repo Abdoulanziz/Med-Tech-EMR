@@ -13,10 +13,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // Handle create patient dental service request
     handlePatientDentalServiceRequestForm();
 
+    // Populate dental procedures on create form
+    populateClinicalProceduresForDentalDropdownOnCreateForm();
 
-
-    populateClinicalProceduresForDentalDropdown();
-
+    // Populate dental procedures on edit form
+    populateClinicalProceduresForDentalDropdownOnEditForm();
 
     // SSE
     SSE.initializeSSE(`${window.location.origin}/page/sse`);
@@ -1406,10 +1407,55 @@ async function fetchClinicalProcedureNamesForDental() {
 }
 
 
-// Populate the dropdown list for clinical procedures
-async function populateClinicalProceduresForDentalDropdown() {
-    const dropdownList = document.querySelector("#procedure");
-    const serviceFeeInput = document.querySelector("#service-fee");
+// Populate the dropdown list for clinical procedures on create form
+async function populateClinicalProceduresForDentalDropdownOnCreateForm() {
+    const dropdownList = document.querySelector("#procedure-on-create-form");
+    const serviceFeeInput = document.querySelector("#dental-service-fee-on-create-form");
+
+    const procedureData = await fetchClinicalProcedureNamesForDental();
+
+    if (procedureData) {
+        const categories = {};
+
+        procedureData.forEach((procedure) => {
+            const capitalizedCategory = procedure.procedureCategory.charAt(0).toUpperCase() + procedure.procedureCategory.slice(1);
+
+            if (!categories[capitalizedCategory]) {
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = capitalizedCategory;
+                dropdownList.appendChild(optgroup);
+
+                categories[capitalizedCategory] = { optgroup, procedures: {} };
+            }
+
+            categories[capitalizedCategory].procedures[procedure.procedureName] = procedure.procedureFees;
+
+            const option = document.createElement('option');
+            option.className = 'dropdown-item';
+            option.textContent = procedure.procedureName;
+            option.value = procedure.procedureName;
+            categories[capitalizedCategory].optgroup.appendChild(option);
+        });
+
+        dropdownList.addEventListener('change', function () {
+            const selectedCategory = categories[dropdownList.options[dropdownList.selectedIndex].parentNode.label];
+            if (selectedCategory) {
+                const selectedProcedure = dropdownList.value;
+                const selectedProcedureFees = selectedCategory.procedures[selectedProcedure];
+
+                serviceFeeInput.value = selectedProcedureFees;
+            }
+        });
+
+        dropdownList.dispatchEvent(new Event('change'));
+    }
+}
+
+
+// Populate the dropdown list for clinical procedures on edit form
+async function populateClinicalProceduresForDentalDropdownOnEditForm() {
+    const dropdownList = document.querySelector("#procedure-on-edit-form");
+    const serviceFeeInput = document.querySelector("#dental-service-fee-on-edit-form");
 
     const procedureData = await fetchClinicalProcedureNamesForDental();
 

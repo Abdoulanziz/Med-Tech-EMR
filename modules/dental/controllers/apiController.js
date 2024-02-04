@@ -1682,7 +1682,6 @@ const updateClinicalRequestForDentalById = async (req, res) => {
     const diagnosis = req.body.diagnosis || null;
     const procedure = req.body.procedure || null;
     const serviceFee = req.body.serviceFee || null;
-    const requestStatus = req.body.requestStatus || null;
 
     const requestId = req.params.id;
 
@@ -1700,7 +1699,6 @@ const updateClinicalRequestForDentalById = async (req, res) => {
       diagnosis,
       procedure,
       serviceFee,
-      requestStatus,
       // visitId,
     });
 

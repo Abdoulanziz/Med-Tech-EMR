@@ -15,6 +15,7 @@ const {
   Allergy,
   ClinicalRequestForEye,
   ClinicalRequestForDental,
+  ClinicalProcedureForDental,
   ClinicalRequestForCardiology,
   ClinicalRequestForRadiology,
   LabTest,
@@ -1407,6 +1408,150 @@ const updateClinicalRequestForEyePaymentStatusById = async (req, res) => {
     }
   } catch (error) {
     console.error('Error updating Clinical Request For Eye payment status:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Create clinical procedure for dental
+const createClinicalProcedureForDental = async (req, res) => {
+  try {
+    const {
+      procedureName,
+      procedureCategory,
+      procedureFees
+    } = req.body;
+
+    const newClinicalProcedureForDental = await ClinicalProcedureForDental.create({
+      procedureName,
+      procedureCategory,
+      procedureFees
+    });
+
+    // Create an audit log
+    await createAuditLog('ClinicalProcedureForDental', newClinicalProcedureForDental.resultId, 'CREATE', {}, newClinicalProcedureForDental.dataValues, req.session.user.userId);
+
+    return res.status(201).json({ status: 'success', message: 'Clinical procedure for Dental created successfully', data: newClinicalProcedureForDental });
+  } catch (error) {
+    console.error('Error creating Clinical procedure for Dental:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Fetch clinical procedure for dental
+const fetchClinicalProceduresForDental = async (req, res) => {
+  try {
+    const draw = req.query.draw;
+    const start = parseInt(req.query.start);
+    const length = parseInt(req.query.length);
+    const searchValue = req.query.search.value;
+    const orderColumnIndex = req.query.order[0].column;
+    const orderDirection = req.query.order[0].dir;
+    const minDate = req.query.minDate;
+    const maxDate = req.query.maxDate;
+
+    const filter = {};
+    const sort = [];
+
+    if (searchValue) {
+      filter[Op.or] = [
+        { firstName: { [Op.iLike]: `%${searchValue}%` } },
+        { lastName: { [Op.iLike]: `%${searchValue}%` } },
+        // Add more columns to search here as needed
+      ];
+    }
+
+    if (minDate && maxDate) {
+      filter.createdAt = {
+        [Op.between]: [new Date(minDate), new Date(maxDate)],
+      };
+    }
+
+    // Define the column mappings for sorting
+    const columnMappings = {
+      0: 'procedure_id', // Map column 0 to the 'id' column
+      // Add mappings for other columns as needed
+    };
+
+    // Check if the column index is valid and get the column name
+    const columnData = columnMappings[orderColumnIndex];
+    if (columnData) {
+      sort.push([columnData, orderDirection]);
+    }
+
+    // Add sorting by createdAt in descending order (latest first)
+    // sort.push(['id', 'desc']); // This line will sort by createdAt in descending order
+
+    // Construct the Sequelize query
+    const queryOptions = {
+      where: filter,
+      offset: start,
+      limit: length,
+      order: sort,
+    };
+
+    const result = await ClinicalProcedureForDental.findAndCountAll(queryOptions);
+
+    return res.status(200).json({
+      draw: draw,
+      recordsTotal: result.count,
+      recordsFiltered: result.count,
+      data: result.rows,
+    });
+  } catch (error) {
+    console.error('Error fetching clinical procedures for dental:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Update a procedure
+const updateClinicalProcedureForDental = async (req, res) => {
+  try {
+    // Convert empty strings to null for nullable fields
+    const procedureName = req.body.procedureName || null;
+    const procedureCategory = req.body.procedureCategory || null;
+    const procedureFees = req.body.procedureFees || null;
+
+    const procedureId = req.params.id;
+
+    // Check if the procedure already exists in the database
+    const existingProcedure = await ClinicalProcedureForDental.findOne({ where: { procedureId } });
+
+    if (!existingProcedure) {
+      return res.status(400).json({ message: 'Procedure does not exist' });
+    }
+
+    // Update the procedure record in the database
+    const updatedProcedure = await existingProcedure.update({
+      procedureName,
+      procedureCategory,
+      procedureFees
+    });
+
+    // Create an audit log
+    await createAuditLog('ClinicalProcedureForDental', procedureId, 'UPDATE', existingProcedure.dataValues, updatedProcedure.dataValues, req.session.user.userId);
+
+    // Respond with the updated procedure object
+    return res.status(200).json({ status: 'success', message: 'Clinical procedure for dental record updated successfully', data: updatedProcedure });
+
+  } catch (error) {
+    // Log out the error to the console
+    console.error('Error updating procedure:', error);
+
+    // Respond with the error to the client
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Fetch clinical procedure names for dental
+const fetchClinicalProcedureNamesForDental = async (req, res) => {
+  try {
+    const result = await ClinicalProcedureForDental.findAndCountAll();
+
+    return res.status(200).json({
+      data: result,
+    });
+  } catch (error) {
+    console.error('Error fetching clincial procedure names for dental:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -3685,6 +3830,10 @@ module.exports = {
   createClinicalRequestForEye,
   updateClinicalRequestForEyeById,
   updateClinicalRequestForEyePaymentStatusById,
+  createClinicalProcedureForDental,
+  fetchClinicalProceduresForDental,
+  updateClinicalProcedureForDental,
+  fetchClinicalProcedureNamesForDental,
   createClinicalRequestForDental,
   updateClinicalRequestForDentalById,
   updateClinicalRequestForDentalPaymentStatusById,

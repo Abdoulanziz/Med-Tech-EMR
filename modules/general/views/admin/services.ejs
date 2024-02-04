@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Med Tech - EMR</title>
+
+
+    <link rel="shortcut icon" href="/assets/svg/favicon.ico" type="image/x-icon"/>
+
+    <link rel="stylesheet" href="/assets/css/utils.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <link rel="stylesheet" href="/assets/css/table.min.css">
+    <link rel="stylesheet" href="/assets/icons/themify-icons.css">
+
+    <script src="/js/libraries/jquery-3.5.1.js"></script>
+    <script src="/js/libraries/jquery.dataTables.min.js"></script>
+
+    <script src="/js/libraries/chart.js"></script>
+    <script src="/js/libraries/jspdf.min.js"></script>
+
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main">
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-logo">
+                    <img src="/assets/svg/512x512.png" alt="" class="app-logo">
+                    <span style="margin-inline-start: .6rem;color: #fff;font-family: 'Tilt Neon';font-weight: bolder;font-size: 27px;"><span style="color: rgb(0, 208, 255);">Med</span> <span style="color: yellowgreen;">Tech</span></span>
+                </div>
+                <ul class="sidebar-menu">
+                    <li class="menu-item">
+                        <a href="/admin/dashboard">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions-admin/dashboard.svg" alt="" class="icon"><span class="text">Dashboard</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="/admin/services">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions-admin/services.svg" alt="" class="icon"><span class="text">Services</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/admin/accounts">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions-admin/user.svg" alt="" class="icon"><span class="text">Users</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/admin/activities">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions-admin/activity.svg" alt="" class="icon"><span class="text">Activities</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/admin/settings">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions-admin/settings.svg" alt="" class="icon"><span class="text">Settings</span></span>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main section -->
+            <div class="content admin">
+
+                <!-- Navbar -->
+                <div class="navbar">
+                    <nav>
+                        <ul class="nav-links flex">
+                            <div class="nav-left-items flex" style="gap: 1.4rem;">
+                                <img src="/assets/svg/cancel.svg" alt="" id="sidebar-toggler" class="sidebar-toggler">
+                                <img src="/assets/svg/business-logo.png" alt="" class="business-logo">
+                            </div>
+                            <div class="nav-badges flex">
+                                <div class="user-badge flex">
+                                    <h4 class="user-name">Logged in as: <%= data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1) %></h4>
+                                    <div class="user-avatar dropdown">
+                                        <div class="dropdown-avatar flex">
+                                            <img src="/assets/img/profiledefault.png" alt="user avatar" class="avatar">
+                                            <i class="ti-angle-down" id="toggle-dropdown"></i>
+                                        </div>
+                                        <div class="dropdown-menu" id="dropdown-menu">
+                                            <ul class="dropdown-items">
+                                                <li class="dropdown-item header">
+                                                    <span id="last-label">Last login:</span>
+                                                    <br>
+                                                    <small id="last-login-value"><%= data.user.lastLogin ? new Date(data.user.lastLogin).toLocaleString() : 'N/A' %></small>
+                                                </li>
+                                                <li class="dropdown-item"><i class="ti-settings"></i> <a href="#">Settings</a></li>
+                                                <li class="dropdown-item"><i class="ti-user"></i> <a href="#">My Profile</a></li>
+                                                <li class="dropdown-item"><i class="ti-info-alt"></i> <a href="#">About</a></li>
+                                                <li class="dropdown-item footer" id="signout-cta"><span>Sign Out</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ul>
+                    </nav>
+                </div>
+
+                <!-- Section 00 -->
+                <div class="sections br-0 inview" id="section_00">
+                    <div class="section-header">
+
+                        <div class="section-header-top flex">
+                            <h2 class="section-header-title">Services</h2>
+                            <div class="ctas flex" style="gap: .8rem;">
+                                <div class="btn section-header-cta section-dropdown" data-menu="menu_00">
+                                    <div class="section-dropdown-cta">
+                                        <span>Dentistry <i class="ti-angle-down"></i> </span>
+                                    </div>
+                                    <div class="section-dropdown-menu" id="menu_00">
+                                        <ul class="section-dropdown-items">
+                                            <li class="section-dropdown-item modal-trigger" data-modal="create-procedure-record-modal"> <i class="ti-plus"></i> <span>Procedures</span></li>
+                                            <li class="section-dropdown-item" data-modal=""> <i class="ti-plus"></i> <span>Diagnosis</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-header-bottom">
+                            <div class="section-togglers">
+                                <span class="section-toggler active" data-section="section_00">Dental Services</span>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="section-body" style="padding-block-start: .8rem;">
+                        <div class="details-card">
+                            <div class="details-card-header">
+                                <h3 class="card-header">Procedure List</h3>
+                            </div>
+
+                            <div class="details-card-body">
+                                <div class="filter-section">
+                                    <div class="filters">
+                                        <div class="filters-wrapper">
+                                            <i class="ti-filter filter-icon"></i>
+                                            <div class="date-range-picker flex">
+                                                <div class="form-group flex">
+                                                    <label for="min-date">From:</label>
+                                                    <input type="date" name="from" id="min-date" class="date-range-filter">
+                                                </div>
+                                                <div class="form-group flex">
+                                                    <label for="max-date">To:</label>
+                                                    <input type="date" name="to" id="max-date" class="date-range-filter">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="filters-ctas">
+                                            <img src="/assets/filters-ctas/pdf.png" alt="pdf icon" title="Download as PDF">
+                                            <img src="/assets/filters-ctas/csv.png" alt="csv icon" title="Download as CSV">
+                                            <img src="/assets/filters-ctas/xls.png" alt="xls icon" title="Download as XLS">
+                                            <img src="/assets/filters-ctas/printer.png" alt="printer icon" title="Print">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <table id="dental-procedures-table" class="display" style="width:100%;margin-top:.5rem;">
+                                    <thead>
+                                        <tr>
+                                            <th>Service ID</th>
+                                            <th>Service Name</th>
+                                            <th>Service Fees</th>
+                                            <th>Actions</th>
+                                            <th>Created At</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom banner -->
+                <div class="bottom-banner">
+                    <div class="banner-content">
+                        <div class="banner-content-left">
+                            <span class="logged-in-as-label">Logged in as: <span class="logged-in-as-value"> <%= data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1) %> </span></span>
+                        </div>
+                        <div class="banner-content-right">
+                            <span class="system-version-label">System version: <span class="system-version-value"> 1.0.0 </span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Create procedure modal -->
+                <div id="create-procedure-record-modal" class="form-modal">
+                    <div class="form-modal-content">
+                        <form class="modal-form" id="create-procedure-record-form">
+                            <div class="form-modal-header flex">
+                                <div class="form-modal-header-left flex">
+                                <img src="/assets/actions-admin/services.svg" alt="" class="icon">
+                                    <h2 class="title">Create Procedure Record</h2>
+                                </div>
+                                <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                            </div>
+                
+                            <div class="modal-form-body" id="">
+                                <div class="form-section">
+                                    <h2>Information</h2>
+
+                                    <div class="form-group">
+                                        <label for="procedure-name">Procedure:</label>
+                                        <input type="text" class="form-control" id="procedure-name" name="procedureName" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="procedure-category">Procedure Category:</label>
+                                        <select id="procedure-category" class="form-control" name="procedureCategory" required>
+                                            <option value="oral surgery">Oral Surgery</option>
+                                            <option value="pediatrics">Pediatrics</option>
+                                            <option value="restorative">Restorative</option>
+                                            <option value="prosthetics">Prosthetics</option>
+                                            <option value="endodontics">Endodontics</option>
+                                            <option value="periodontics">Periodontics</option>
+                                            <option value="orthodontics">Orthodontics</option>
+                                        </select>
+                                    </div>
+        
+                                    <div class="form-group">
+                                        <label for="procedure-fees">Fees:</label>
+                                        <input type="text" class="form-control" id="procedure-fees" name="procedureFees">
+                                    </div>
+            
+                                </div>
+                            </div>
+                
+                            <div class="form-modal-footer flex">
+                                <button class="btn btn-primary" type="button">Cancel</button>
+                                <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Update procedure modal -->
+                <div id="update-procedure-record-modal" class="form-modal">
+                    <div class="form-modal-content">
+                        <form class="modal-form" id="update-procedure-record-form">
+                            <div class="form-modal-header flex">
+                                <div class="form-modal-header-left flex">
+                                <img src="/assets/actions-admin/services.svg" alt="" class="icon">
+                                    <h2 class="title">Update Procedure Record</h2>
+                                </div>
+                                <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                            </div>
+                
+                            <div class="modal-form-body" id="">
+                                <div class="form-section">
+                                    <h2>Information</h2>
+
+                                    <div class="form-group">
+                                        <label for="procedure-name">Procedure:</label>
+                                        <input type="text" class="form-control" id="procedure-name" name="procedureName" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="procedure-category">Procedure Category:</label>
+                                        <select id="procedure-category" class="form-control" name="procedureCategory" required>
+                                            <option value="oral surgery">Oral Surgery</option>
+                                            <option value="pediatrics">Pediatrics</option>
+                                            <option value="restorative">Restorative</option>
+                                            <option value="prosthetics">Prosthetics</option>
+                                            <option value="endodontics">Endodontics</option>
+                                            <option value="periodontics">Periodontics</option>
+                                            <option value="orthodontics">Orthodontics</option>
+                                        </select>
+                                    </div>
+        
+                                    <div class="form-group">
+                                        <label for="procedure-fees">Fees:</label>
+                                        <input type="text" class="form-control" id="procedure-fees" name="procedureFees">
+                                    </div>
+            
+                                </div>
+
+                                <div class="form-section">
+                                    <h2>Diagnosis</h2>
+
+                                    <div class="form-group">
+                                        <label for="procedure-diagnosis">Create diagnosis:</label>
+                                        <input type="text" class="form-control" id="procedure-diagnosis" name="procedureDiagnosis">
+                                    </div>
+            
+                                </div>
+                            </div>
+                
+                            <div class="form-modal-footer flex">
+                                <button class="btn btn-primary" type="button">Cancel</button>
+                                <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Create diagnosis modal -->
+                <div id="create-diagnosis-record-modal" class="form-modal">
+                    <div class="form-modal-content">
+                        <form class="modal-form" id="create-diagnosis-record-form">
+                            <div class="form-modal-header flex">
+                                <div class="form-modal-header-left flex">
+                                <img src="/assets/actions-admin/services.svg" alt="" class="icon">
+                                    <h2 class="title">Create Diagnosis Record</h2>
+                                </div>
+                                <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                            </div>
+                
+                            <div class="modal-form-body" id="">
+                                <div class="form-section">
+                                    <h2>Information</h2>
+        
+                                    <div class="form-group">
+                                        <label for="diagnosis-name">Diagnosis:</label>
+                                        <input type="text" class="form-control" id="diagnosis-name" name="diagnosisName" required>
+                                    </div>
+            
+                                </div>
+                            </div>
+                
+                            <div class="form-modal-footer flex">
+                                <button class="btn btn-primary" type="button">Cancel</button>
+                                <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/libraries/moment.min.js"></script>
+    <script src="/js/tinymce/js/tinymce/tinymce.min.js"></script>
+
+    <!-- Load modules -->
+    <script type="module" src="/js/core/ui.js"></script>
+    <script type="module" src="/js/modules/services.js"></script>
+</body>
+</html>

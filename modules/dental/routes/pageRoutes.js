@@ -7,11 +7,6 @@ const { renderPatients, renderVisits, renderQueues, renderDental, renderPharmacy
 
 const { registerSSE } = require("../controllers/sseController");
 
-// Route for SSE connections
-// router.get('/sse', (req, res) => {
-//   sse.addSSEConnection(res);
-// });
-
 router.get("/sse", registerSSE);
 
 router.get("/patients", requireLogin, renderPatients);

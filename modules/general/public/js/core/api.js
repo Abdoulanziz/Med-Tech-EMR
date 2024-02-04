@@ -515,6 +515,32 @@ export const API = {
 
         // For Dental
         forDental: {
+            // Procedures
+            procedures: {
+                // Add to procedures POST api/v1/services/dental/procedures
+                create: async (procedure, fromFormData) => {
+                    const endpoint = `${API.BACKEND_BASE_API_URI}/services/dental/procedures`;
+                    return await API.makePostRequest(endpoint, procedure, fromFormData);
+                },  
+                
+                // Fetch all procedures GET api/v1/services/dental/procedures
+                fetch: async () => {
+                    const endpoint = `${API.BACKEND_BASE_API_URI}/services/dental/procedures`;
+                    return await API.makeGetRequest(endpoint);
+                },
+
+                // Update procedure PUT api/v1/services/dental/procedures/:id
+                update: async (id, data, fromFormData) => {
+                    const endpoint = `${API.BACKEND_BASE_API_URI}/services/dental/procedures/${id}`;
+                    return await API.makePutRequest(endpoint, data, fromFormData);
+                },
+
+                // Fetch all procedure names GET api/v1/services/dental/procedures/names
+                fetchNames: async () => {
+                    const endpoint = `${API.BACKEND_BASE_API_URI}/services/dental/procedures/names`;
+                    return await API.makeGetRequest(endpoint);
+                },
+            },
             // Requests
             requests: {
                 // Add to requests POST api/v1/services/dental/requests
