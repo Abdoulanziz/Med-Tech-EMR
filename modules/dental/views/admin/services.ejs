@@ -216,8 +216,8 @@
                                     <h2>Information</h2>
 
                                     <div class="form-group">
-                                        <label for="procedureName">Procedure:</label>
-                                        <input type="text" class="form-control" id="procedureName" name="procedureName" required>
+                                        <label for="procedure-name">Procedure:</label>
+                                        <input type="text" class="form-control" id="procedure-name" name="procedureName" required>
                                     </div>
 
                                     <div class="form-group">
@@ -236,6 +236,66 @@
                                     <div class="form-group">
                                         <label for="procedure-fees">Fees:</label>
                                         <input type="text" class="form-control" id="procedure-fees" name="procedureFees">
+                                    </div>
+            
+                                </div>
+                            </div>
+                
+                            <div class="form-modal-footer flex">
+                                <button class="btn btn-primary" type="button">Cancel</button>
+                                <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Update procedure modal -->
+                <div id="update-procedure-record-modal" class="form-modal">
+                    <div class="form-modal-content">
+                        <form class="modal-form" id="update-procedure-record-form">
+                            <div class="form-modal-header flex">
+                                <div class="form-modal-header-left flex">
+                                <img src="/assets/actions-admin/services.svg" alt="" class="icon">
+                                    <h2 class="title">Update Procedure Record</h2>
+                                </div>
+                                <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                            </div>
+                
+                            <div class="modal-form-body" id="">
+                                <div class="form-section">
+                                    <h2>Information</h2>
+
+                                    <div class="form-group">
+                                        <label for="procedure-name">Procedure:</label>
+                                        <input type="text" class="form-control" id="procedure-name" name="procedureName" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="procedure-category">Procedure Category:</label>
+                                        <select id="procedure-category" class="form-control" name="procedureCategory" required>
+                                            <option value="oral surgery">Oral Surgery</option>
+                                            <option value="pediatrics">Pediatrics</option>
+                                            <option value="restorative">Restorative</option>
+                                            <option value="prosthetics">Prosthetics</option>
+                                            <option value="endodontics">Endodontics</option>
+                                            <option value="periodontics">Periodontics</option>
+                                            <option value="orthodontics">Orthodontics</option>
+                                        </select>
+                                    </div>
+        
+                                    <div class="form-group">
+                                        <label for="procedure-fees">Fees:</label>
+                                        <input type="text" class="form-control" id="procedure-fees" name="procedureFees">
+                                    </div>
+            
+                                </div>
+
+                                <div class="form-section">
+                                    <h2>Diagnosis</h2>
+
+                                    <div class="form-group">
+                                        <label for="procedure-diagnosis">Create diagnosis:</label>
+                                        <input type="text" class="form-control" id="procedure-diagnosis" name="procedureDiagnosis">
                                     </div>
             
                                 </div>

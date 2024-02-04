@@ -14,6 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
     handlePatientDentalServiceRequestForm();
 
 
+
+    populateClinicalProceduresForDentalDropdown();
+
+
     // SSE
     SSE.initializeSSE(`${window.location.origin}/page/sse`);
 
@@ -1390,3 +1394,58 @@ async function populateMedicinesDropdown() {
 }
 
 
+// Fetch clinical procedure names for dental data from the API
+async function fetchClinicalProcedureNamesForDental() {
+    try {
+        const response = await API.services.forDental.procedures.fetchNames();
+        const data = await response.data.rows;
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+
+// Populate the dropdown list for clinical procedures
+async function populateClinicalProceduresForDentalDropdown() {
+    const dropdownList = document.querySelector("#procedure");
+    const serviceFeeInput = document.querySelector("#service-fee");
+
+    const procedureData = await fetchClinicalProcedureNamesForDental();
+
+    if (procedureData) {
+        const categories = {};
+
+        procedureData.forEach((procedure) => {
+            const capitalizedCategory = procedure.procedureCategory.charAt(0).toUpperCase() + procedure.procedureCategory.slice(1);
+
+            if (!categories[capitalizedCategory]) {
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = capitalizedCategory;
+                dropdownList.appendChild(optgroup);
+
+                categories[capitalizedCategory] = { optgroup, procedures: {} };
+            }
+
+            categories[capitalizedCategory].procedures[procedure.procedureName] = procedure.procedureFees;
+
+            const option = document.createElement('option');
+            option.className = 'dropdown-item';
+            option.textContent = procedure.procedureName;
+            option.value = procedure.procedureName;
+            categories[capitalizedCategory].optgroup.appendChild(option);
+        });
+
+        dropdownList.addEventListener('change', function () {
+            const selectedCategory = categories[dropdownList.options[dropdownList.selectedIndex].parentNode.label];
+            if (selectedCategory) {
+                const selectedProcedure = dropdownList.value;
+                const selectedProcedureFees = selectedCategory.procedures[selectedProcedure];
+
+                serviceFeeInput.value = selectedProcedureFees;
+            }
+        });
+
+        dropdownList.dispatchEvent(new Event('change'));
+    }
+}

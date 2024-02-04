@@ -1492,6 +1492,59 @@ const fetchClinicalProceduresForDental = async (req, res) => {
   }
 };
 
+// Update a procedure
+const updateClinicalProcedureForDental = async (req, res) => {
+  try {
+    // Convert empty strings to null for nullable fields
+    const procedureName = req.body.procedureName || null;
+    const procedureCategory = req.body.procedureCategory || null;
+    const procedureFees = req.body.procedureFees || null;
+
+    const procedureId = req.params.id;
+
+    // Check if the procedure already exists in the database
+    const existingProcedure = await ClinicalProcedureForDental.findOne({ where: { procedureId } });
+
+    if (!existingProcedure) {
+      return res.status(400).json({ message: 'Procedure does not exist' });
+    }
+
+    // Update the procedure record in the database
+    const updatedProcedure = await existingProcedure.update({
+      procedureName,
+      procedureCategory,
+      procedureFees
+    });
+
+    // Create an audit log
+    await createAuditLog('ClinicalProcedureForDental', procedureId, 'UPDATE', existingProcedure.dataValues, updatedProcedure.dataValues, req.session.user.userId);
+
+    // Respond with the updated procedure object
+    return res.status(200).json({ status: 'success', message: 'Clinical procedure for dental record updated successfully', data: updatedProcedure });
+
+  } catch (error) {
+    // Log out the error to the console
+    console.error('Error updating procedure:', error);
+
+    // Respond with the error to the client
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Fetch clinical procedure names for dental
+const fetchClinicalProcedureNamesForDental = async (req, res) => {
+  try {
+    const result = await ClinicalProcedureForDental.findAndCountAll();
+
+    return res.status(200).json({
+      data: result,
+    });
+  } catch (error) {
+    console.error('Error fetching clincial procedure names for dental:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 // Create clinical request for dental
 const createClinicalRequestForDental = async (req, res) => {
   try {
@@ -3921,6 +3974,8 @@ module.exports = {
   updateClinicalRequestForEyePaymentStatusById,
   createClinicalProcedureForDental,
   fetchClinicalProceduresForDental,
+  updateClinicalProcedureForDental,
+  fetchClinicalProcedureNamesForDental,
   createClinicalRequestForDental,
   fetchClinicalRequestForDentalByVisitId,
   updateClinicalRequestForDentalById,
