@@ -10,7 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Load all patients
     loadAllVisits();
 
-    
+    // Populate doctors on update visit form
+    populateDoctorsDropdownOnUpdateVisitForm();
     
 });
 
@@ -60,22 +61,13 @@ async function loadAllVisits() {
 
             UTILS.triggerModal(editVisitCta, "modal", async() => {
 
-                // Fetch patient data (from API)
-                // const response = await API.visits.fetchById(data.visitId);
-                // const fetchedVisit = await response.data;
-
-
                 // Populate the form with the rowData
                 populateFormWithData(
                     "edit-visit-modal",
-                    // Local
                     rowDataString,
-
-                    // API
-                    // JSON.stringify(fetchedVisit),
                     [
                         "visitCategoryId",
-                        "doctorFullName",
+                        "doctorId",
                         "visitDate",
                         "visitStatus"
                     ]
@@ -206,6 +198,37 @@ async function loadAllVisits() {
     });
 
 };
+
+
+// Fetch docotrs data from the API
+async function fetchDoctors() {
+    try {
+        const response = await API.doctors.fetch();
+        const data = await response.data.rows;
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+// Populate the dropdown list for doctors on update visit form
+async function populateDoctorsDropdownOnUpdateVisitForm() {
+    const dropdownList = document.querySelector("#doctor-id-on-update-visit");
+
+    const doctorsData = await fetchDoctors();
+
+    if (doctorsData) {
+
+        doctorsData.forEach((doctor) => {
+            
+            const option = document.createElement('option');
+            option.className = 'dropdown-item';
+            option.textContent = `${doctor.firstName} ${doctor.lastName}`;
+            option.value = doctor.doctorId;
+            dropdownList.appendChild(option);
+        });
+    }
+}
 
 
 // Handle visit update form
@@ -392,97 +415,6 @@ async function loadSinglePatientVisitHistory(visitId) {
 
 }
 
-
-
-// // Load patient visit requests to DOM
-// async function loadSinglePatientVisitHistory(visitId) {
-//     // Get Id of selected visit
-//     const selectedVisitId = parseInt(visitId);
-
-//     // Persist Id of selected visit
-//     UTILS.setSelectedVisitId(selectedVisitId);
-
-//     let allPatients;
-//     const apiEndpoint = `${UI.apiBaseURL}/history/${selectedVisitId}`;
-
-//     allPatients = $('#single-patient-visit-records').DataTable({
-//         processing: true,
-//         serverSide: true,
-//         paging: true,
-//         searching: true,
-//         filter:true,
-//         destroy: true,
-
-//         ajax: {
-//             url: apiEndpoint,
-//             dataSrc: "data",
-//             data: function (d) {
-//                 d.minDate = $('#min-date').val();
-//                 d.maxDate = $('#max-date').val();
-//             },
-//         },  
-//         columns: [ 
-//             { data : null },
-//             { data : null },
-//             { data : null },
-//             { data : null },
-//             { data : null }
-//         ],
-//         rowCallback: function(row, data, index) {
-            
-//         },
-//         columnDefs: [
-//             {
-//                 targets: 0,
-//                 render: function(data, type, row, meta) {
-//                     return '<span>' + (meta.row + 1) + '</span>';
-//                 }
-//             },
-//             {
-//                 targets: 1,
-//                 render: function (data, type, row, meta) {
-//                     return '<span>' + data.testName + '</span>';
-//                 },
-//             },
-//             {
-//                 targets: 2,
-//                 render: function(data, type, row, meta) {
-//                     const originalDate = data.requestCreatedAt;
-//                     const dateObj = new Date(originalDate);
-//                     const formattedDate = dateObj.toISOString().split('T')[0];
-//                     return '<span>' + formattedDate + '</span>';
-//                 }
-//             },
-//             {
-//                 targets: 3,
-//                 render: function(data, type, row, meta) {
-//                     const status = data.requestStatus.toLowerCase();
-//                     let backgroundColor;
-
-//                     if (status === 'pending') {
-//                         backgroundColor = 'grey';
-//                     } else if (status === 'complete') {
-//                         backgroundColor = 'yellowgreen';
-//                     } else {
-//                         backgroundColor = 'orange';
-//                     }
-
-//                     return '<span style="font-size: 10px;display: block;inline-size: 50%;border-radius:6px;padding: .4rem .6rem;color: #fff;background-color: ' + backgroundColor + ';">' + status.toUpperCase() + '</span>';
-//                 }
-//             },
-//             {
-//                 targets: 4,
-//                 render: function(data, type, row, meta) {
-//                     const originalDate = data.requestCreatedAt;
-//                     const dateObj = new Date(originalDate);
-//                     const formattedDate = dateObj.toISOString().split('T')[0];
-//                     return '<span>' + formattedDate + '</span>';
-//                 }
-//             }
-//         ]  
-//     });
-
-// }
 
 // Function to display selected patient details
 async function displaySelectedPatientDetails(divID, data, callback) {

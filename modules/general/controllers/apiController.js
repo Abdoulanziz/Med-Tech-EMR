@@ -364,6 +364,20 @@ const updateDoctor = async (req, res) => {
   }
 };
 
+// Fetch doctors
+const fetchDoctors = async (req, res) => {
+  try {
+    const result = await Doctor.findAndCountAll();
+
+    return res.status(200).json({
+      data: result,
+    });
+  } catch (error) {
+    console.error('Error fetching doctors:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 // Fetch users
 const fetchUsers = async (req, res) => {
   try {
@@ -791,7 +805,7 @@ const fetchVisits = async (req, res) => {
       include: [
         {
           model: models.Doctor,
-          attributes: ['firstName', 'lastName'],
+          attributes: ['doctorId', 'firstName', 'lastName'],
         },
         {
           model: models.Patient,
@@ -805,6 +819,7 @@ const fetchVisits = async (req, res) => {
     // Access the doctor's fields in each visit result
     const visitsWithDoctorInfo = result.rows.map((visit) => ({
       // Extract fields from the 'doctor' association
+      doctorId: visit.Doctor.doctorId,
       doctorFullName: `${visit.Doctor.firstName} ${visit.Doctor.lastName}`,
       patientId: visit.Patient.patientId,
       patientFullName: `${visit.Patient.firstName} ${visit.Patient.lastName}`,
@@ -950,7 +965,7 @@ const fetchVisitsByPatientId = async (req, res) => {
       include: [
         {
           model: models.Doctor,
-          attributes: ['firstName', 'lastName'],
+          attributes: ['doctorId', 'firstName', 'lastName'],
         }
       ],
     };
@@ -960,6 +975,7 @@ const fetchVisitsByPatientId = async (req, res) => {
     // Access the doctor's fields in each visit result
     const visitsWithDoctorInfo = result.rows.map((visit) => ({
       // Extract fields from the 'doctor' association
+      doctorId: visit.Doctor.doctorId,
       doctorFullName: `${visit.Doctor.firstName} ${visit.Doctor.lastName}`,
       visitId: visit.visitId,
       visitCategoryId: visit.visitCategoryId,
@@ -3849,6 +3865,7 @@ module.exports = {
   createDoctor, 
   fetchDoctorByUserId,
   updateDoctor,
+  fetchDoctors,
   fetchUsers,
   createPatient, 
   updatePatient,

@@ -18,6 +18,7 @@ module.exports = {
         username: 'caxton',
         password: '$2b$10$BfxM7ko7ILI8XPfMA95WL.tTWsfuzV5L6cKfwc8K3RazQVCuywrAy',
         role_id: 3,
+        profile_completion_status: 'complete',
         created_at: new Date(),
         updated_at: new Date(),
       },

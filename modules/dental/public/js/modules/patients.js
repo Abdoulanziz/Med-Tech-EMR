@@ -13,6 +13,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Handle patient creation form
     handleCreatePatientForm();
 
+    // Populate doctors on create visit form
+    populateDoctorsDropdownOnCreateVisitForm();
+
+    // Populate doctors on update visit form
+    populateDoctorsDropdownOnUpdateVisitForm();
+
     // Handle visit creation from
     handleCreateVisitForm();
 
@@ -306,14 +312,10 @@ async function loadSinglePatientVists(patientId) {
                 // Populate the form with the rowData
                 populateFormWithData(
                     "edit-visit-modal",
-                    // Local
                     rowDataString,
-
-                    // API
-                    // JSON.stringify(fetchedVisit),
                     [
                         "visitCategoryId",
-                        "doctorFullName",
+                        "doctorId",
                         "visitDate",
                         "visitStatus"
                     ]
@@ -436,6 +438,55 @@ async function handleCreatePatientForm() {
             createPatientForm.reset();
         });
     });
+}
+
+// Fetch docotrs data from the API
+async function fetchDoctors() {
+    try {
+        const response = await API.doctors.fetch();
+        const data = await response.data.rows;
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+// Populate the dropdown list for doctors on create visit form
+async function populateDoctorsDropdownOnCreateVisitForm() {
+    const dropdownList = document.querySelector("#doctor-id-on-create-visit");
+
+    const doctorsData = await fetchDoctors();
+
+    if (doctorsData) {
+
+        doctorsData.forEach((doctor) => {
+            
+            const option = document.createElement('option');
+            option.className = 'dropdown-item';
+            option.textContent = `${doctor.firstName} ${doctor.lastName}`;
+            option.value = doctor.doctorId;
+            dropdownList.appendChild(option);
+        });
+    }
+}
+
+// Populate the dropdown list for doctors on update visit form
+async function populateDoctorsDropdownOnUpdateVisitForm() {
+    const dropdownList = document.querySelector("#doctor-id-on-update-visit");
+
+    const doctorsData = await fetchDoctors();
+
+    if (doctorsData) {
+
+        doctorsData.forEach((doctor) => {
+            
+            const option = document.createElement('option');
+            option.className = 'dropdown-item';
+            option.textContent = `${doctor.firstName} ${doctor.lastName}`;
+            option.value = doctor.doctorId;
+            dropdownList.appendChild(option);
+        });
+    }
 }
 
 // Handle create visit form submission
