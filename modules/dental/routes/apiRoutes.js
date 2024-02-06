@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+const { requireLogin } = require("../middlewares/auth");
+
 const { 
     checkAPIStatus,
     createFacility,
@@ -75,105 +77,105 @@ const {
     fetchExpensesByFilterTypeAndByDateRange,
 } = require("../controllers/apiController");
 
-router.get("/status", checkAPIStatus);
+router.get("/status", requireLogin, checkAPIStatus);
 
-router.post("/facilities", createFacility);
-router.get("/facilities/:id", fetchFacilityById);
-router.put("/facilities/:id", updateFacilityById);
-router.put("/facilities/:id/settings/:settingsId", updateFacilitySettingByFacilityIdAndFacilitySettingId);
-router.get("/facilities/:id/settings/:settingsId", fetchFacilitySettingByFacilityIdAndFacilitySettingId);
+router.post("/facilities", requireLogin, createFacility);
+router.get("/facilities/:id", requireLogin, fetchFacilityById);
+router.put("/facilities/:id", requireLogin, updateFacilityById);
+router.put("/facilities/:id/settings/:settingsId", requireLogin, updateFacilitySettingByFacilityIdAndFacilitySettingId);
+router.get("/facilities/:id/settings/:settingsId", requireLogin, fetchFacilitySettingByFacilityIdAndFacilitySettingId);
 
-router.post("/users", createUser);
-router.get("/users", fetchUsers);
-router.put("/users/:id", updateUser);
+router.post("/users", requireLogin, createUser);
+router.get("/users", requireLogin, fetchUsers);
+router.put("/users/:id", requireLogin, updateUser);
 
-router.post("/doctors", createDoctor);
-router.get("/doctors/:id", fetchDoctorByUserId);
-router.put("/doctors/:id", updateDoctor);
-router.get("/doctors", fetchDoctors);
+router.post("/doctors", requireLogin, createDoctor);
+router.get("/doctors/:id", requireLogin, fetchDoctorByUserId);
+router.put("/doctors/:id", requireLogin, updateDoctor);
+router.get("/doctors", requireLogin, fetchDoctors);
 
-router.post("/patients", createPatient);
-router.get("/patients", fetchPatients);
-router.get("/patients/:id", fetchPatientById);
-router.put("/patients/:id", updatePatient);
-router.get("/patients/visit/:visitId", fetchPatientByVisitId);
+router.post("/patients", requireLogin, createPatient);
+router.get("/patients", requireLogin, fetchPatients);
+router.get("/patients/:id", requireLogin, fetchPatientById);
+router.put("/patients/:id", requireLogin, updatePatient);
+router.get("/patients/visit/:visitId", requireLogin, fetchPatientByVisitId);
 
-router.post("/visits", createVisit);
-router.get("/visits", fetchVisits);
-router.get("/visit/:id", fetchVisitById);
-router.put("/visits/:id", updateVisitById);
-router.get("/visits/:id", fetchVisitsByPatientId);
-
-
-router.post("/queues", addPatientToQueue);
-router.get("/queues", fetchAllPatientsOnQueue);
-
-router.post("/triages", createTriage);
-router.put("/triages/:id", updateTriageById);
-
-router.post("/allergies", createAllergy);
-router.put("/allergies/:id", updateAllergyById);
-
-router.post("/services/eye/requests", createClinicalRequestForEye);
-router.put("/services/eye/requests/:id", updateClinicalRequestForEyeById);
-router.patch("/services/eye/requests/:id/payment-status/:status", updateClinicalRequestForEyePaymentStatusById);
-
-router.post("/services/dental/procedures", createClinicalProcedureForDental);
-router.get("/services/dental/procedures", fetchClinicalProceduresForDental);
-router.put("/services/dental/procedures/:id", updateClinicalProcedureForDental);
-router.get("/services/dental/procedures/names", fetchClinicalProcedureNamesForDental);
-
-router.post("/services/dental/requests", createClinicalRequestForDental);
-router.get("/services/dental/requests/:visitId", fetchClinicalRequestForDentalByVisitId);
-router.put("/services/dental/requests/:id", updateClinicalRequestForDentalById);
-router.patch("/services/dental/requests/:id/payment-status/:status", updateClinicalRequestForDentalPaymentStatusById);
-
-router.post("/services/cardiology/requests", createClinicalRequestForCardiology);
-router.put("/services/cardiology/requests/:id", updateClinicalRequestForCardiologyById);
-router.patch("/services/cardiology/requests/:id/payment-status/:status", updateClinicalRequestForCardiologyPaymentStatusById);
-
-router.post("/services/radiology/requests", createClinicalRequestForRadiology);
-router.put("/services/radiology/requests/:id", updateClinicalRequestForRadiologyById);
-router.patch("/services/radiology/requests/:id/payment-status/:status", updateClinicalRequestForRadiologyPaymentStatusById);
+router.post("/visits", requireLogin, createVisit);
+router.get("/visits", requireLogin, fetchVisits);
+router.get("/visit/:id", requireLogin, fetchVisitById);
+router.put("/visits/:id", requireLogin, updateVisitById);
+router.get("/visits/:id", requireLogin, fetchVisitsByPatientId);
 
 
-router.post("/requests", createLabRequest);
-router.put("/requests/:id", updateLabRequestById);
-router.get("/requests/:visitId", fetchLabRequestsByVisitId);
-router.patch("/requests/:requestId/payment-status/:status", updateLabRequestPaymentStatus);
+router.post("/queues", requireLogin, addPatientToQueue);
+router.get("/queues", requireLogin, fetchAllPatientsOnQueue);
 
-router.get("/bills/:visitId", fetchBillsByVisitId);
-router.get("/bills/:visitId/unpaid", fetchUnpaidBillsByVisitId);
+router.post("/triages", requireLogin, createTriage);
+router.put("/triages/:id", requireLogin, updateTriageById);
 
-router.get("/history/:visitId", fetchMedicalHistoryByVisitId);
-router.get("/history-dental/:visitId", fetchMedicalHistoryForDentalByVisitId);
+router.post("/allergies", requireLogin, createAllergy);
+router.put("/allergies/:id", requireLogin, updateAllergyById);
 
-router.post("/results/complete-blood-count", createResultsForCompleteBloodCountTest);
-router.get("/results/complete-blood-count/:requestId", fetchResultsForCompleteBloodCountTestByRequestId);
+router.post("/services/eye/requests", requireLogin, createClinicalRequestForEye);
+router.put("/services/eye/requests/:id", requireLogin, updateClinicalRequestForEyeById);
+router.patch("/services/eye/requests/:id/payment-status/:status", requireLogin, updateClinicalRequestForEyePaymentStatusById);
 
-router.post("/results/urinalysis", createResultsForUrinalysisTest);
-router.get("/results/urinalysis/:requestId", fetchResultsForUrinalysisTestByRequestId);
+router.post("/services/dental/procedures", requireLogin, createClinicalProcedureForDental);
+router.get("/services/dental/procedures", requireLogin, fetchClinicalProceduresForDental);
+router.put("/services/dental/procedures/:id", requireLogin, updateClinicalProcedureForDental);
+router.get("/services/dental/procedures/names", requireLogin, fetchClinicalProcedureNamesForDental);
 
-router.post("/prescriptions", createPrescription);
-router.get("/prescriptions/:visitId", fetchPrescriptionsByVisitId);
+router.post("/services/dental/requests", requireLogin, createClinicalRequestForDental);
+router.get("/services/dental/requests/:visitId", requireLogin, fetchClinicalRequestForDentalByVisitId);
+router.put("/services/dental/requests/:id", requireLogin, updateClinicalRequestForDentalById);
+router.patch("/services/dental/requests/:id/payment-status/:status", requireLogin, updateClinicalRequestForDentalPaymentStatusById);
+
+router.post("/services/cardiology/requests", requireLogin, createClinicalRequestForCardiology);
+router.put("/services/cardiology/requests/:id", requireLogin, updateClinicalRequestForCardiologyById);
+router.patch("/services/cardiology/requests/:id/payment-status/:status", requireLogin, updateClinicalRequestForCardiologyPaymentStatusById);
+
+router.post("/services/radiology/requests", requireLogin, createClinicalRequestForRadiology);
+router.put("/services/radiology/requests/:id", requireLogin, updateClinicalRequestForRadiologyById);
+router.patch("/services/radiology/requests/:id/payment-status/:status", requireLogin, updateClinicalRequestForRadiologyPaymentStatusById);
 
 
-router.get("/tests", fetchTests);
-router.get("/medicines", fetchMedicines);
+router.post("/requests", requireLogin, createLabRequest);
+router.put("/requests/:id", requireLogin, updateLabRequestById);
+router.get("/requests/:visitId", requireLogin, fetchLabRequestsByVisitId);
+router.patch("/requests/:requestId/payment-status/:status", requireLogin, updateLabRequestPaymentStatus);
+
+router.get("/bills/:visitId", requireLogin, fetchBillsByVisitId);
+router.get("/bills/:visitId/unpaid", requireLogin, fetchUnpaidBillsByVisitId);
+
+router.get("/history/:visitId", requireLogin, fetchMedicalHistoryByVisitId);
+router.get("/history-dental/:visitId", requireLogin, fetchMedicalHistoryForDentalByVisitId);
+
+router.post("/results/complete-blood-count", requireLogin, createResultsForCompleteBloodCountTest);
+router.get("/results/complete-blood-count/:requestId", requireLogin, fetchResultsForCompleteBloodCountTestByRequestId);
+
+router.post("/results/urinalysis", requireLogin, createResultsForUrinalysisTest);
+router.get("/results/urinalysis/:requestId", requireLogin, fetchResultsForUrinalysisTestByRequestId);
+
+router.post("/prescriptions", requireLogin, createPrescription);
+router.get("/prescriptions/:visitId", requireLogin, fetchPrescriptionsByVisitId);
 
 
-router.get("/admin/audit-logs", fetchAuditLogs);
-
-router.get("/finance/income", fetchIncome);
-router.post("/finance/expenses", createExpenseRecord);
-router.get("/finance/expenses", fetchExpenses);
+router.get("/tests", requireLogin, fetchTests);
+router.get("/medicines", requireLogin, fetchMedicines);
 
 
-router.get("/analytics/patients/:countType/:startDate/:endDate", fetchPatientsCountByCountTypeAndDateRange);
-router.get("/analytics/income/:startDate/:endDate", fetchIncomeByDateRange);
-router.get("/analytics/expenses/:startDate/:endDate", fetchExpensesByDateRange);
+router.get("/admin/audit-logs", requireLogin, fetchAuditLogs);
 
-router.get("/analytics/income/:filterType/:startDate/:endDate", fetchIncomeByFilterTypeAndByDateRange);
-router.get("/analytics/expenses/:filterType/:startDate/:endDate", fetchExpensesByFilterTypeAndByDateRange);
+router.get("/finance/income", requireLogin, fetchIncome);
+router.post("/finance/expenses", requireLogin, createExpenseRecord);
+router.get("/finance/expenses", requireLogin, fetchExpenses);
+
+
+router.get("/analytics/patients/:countType/:startDate/:endDate", requireLogin, fetchPatientsCountByCountTypeAndDateRange);
+router.get("/analytics/income/:startDate/:endDate", requireLogin, fetchIncomeByDateRange);
+router.get("/analytics/expenses/:startDate/:endDate", requireLogin, fetchExpensesByDateRange);
+
+router.get("/analytics/income/:filterType/:startDate/:endDate", requireLogin, fetchIncomeByFilterTypeAndByDateRange);
+router.get("/analytics/expenses/:filterType/:startDate/:endDate", requireLogin, fetchExpensesByFilterTypeAndByDateRange);
 
 module.exports = router;
