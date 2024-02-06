@@ -56,7 +56,7 @@
                     <li class="menu-item active">
                         <a href="/page/dental">
                             <span class="flex">
-                                <span class="flex"><img src="/assets/actions/dental.png" alt="" class="icon"><span class="text">Dental</span></span>
+                                <span class="flex"><img src="/assets/actions/dental.png" alt="" class="icon"><span class="text">Laboratory</span></span>
                             </span>
                         </a>
                     </li>
@@ -929,7 +929,7 @@
                 </div>
             </div>
 
-                        <!-- Edit dental request modal -->
+            <!-- Edit dental request modal -->
             <div id="edit-patient-dental-service-request-modal" class="form-modal">
                 <div class="form-modal-content">
                     <form class="modal-form" id="edit-patient-dental-service-request-form">
@@ -945,25 +945,107 @@
                             <div class="form-section">
                                 <h2>Medical Information</h2>
                                 <div class="form-group">
-                                    <label for="tooth-type">Tooth Type:</label>
+                                    <label for="tooth-type">Specific Tooth:</label>
                                     <select id="tooth-type" name="toothType">
-                                        <option value="Pre-molar">Pre Molar</option>
-                                        <option value="Molar">Molar Tooth</option>
-                                        <option value="Canine">Canine</option>
-                                        <option value="Incisor">Incisor</option>
+                                        <option value="18">18</option>
+                                        <option value="17">17</option>
+                                        <option value="16">16</option>
+                                        <option value="15">15</option>
+                                        <option value="14">14</option>
+                                        <option value="13">13</option>
+                                        <option value="12">12</option>
+                                        <option value="11">11</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                        <option value="24">24</option>
+                                        <option value="25">25</option>
+                                        <option value="26">26</option>
+                                        <option value="27">27</option>
+                                        <option value="28">28</option>
+                                        <option value="38">38</option>
+                                        <option value="37">37</option>
+                                        <option value="36">36</option>
+                                        <option value="35">35</option>
+                                        <option value="34">34</option>
+                                        <option value="33">33</option>
+                                        <option value="32">32</option>
+                                        <option value="31">31</option>
+                                        <option value="41">41</option>
+                                        <option value="42">42</option>
+                                        <option value="43">43</option>
+                                        <option value="44">44</option>
+                                        <option value="45">45</option>
+                                        <option value="46">46</option>
+                                        <option value="47">47</option>
+                                        <option value="48">48</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="diagnosis">Diagnosis:</label>
-                                    <textarea id="diagnosis" name="diagnosis" class="form-control"></textarea>
+                                    <label for="procedure">Select Procedure:</label>
+                                    <select id="procedure-on-edit-form" name="procedure">
+                                    </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="procedure">Procedure:</label>
-                                    <textarea id="procedure" name="procedure" class="form-control"></textarea>
+                                    <label for="diagnosis">Select Diagnosis:</label>
+                                    <select id="diagnosis" name="diagnosis">
+                                        
+                                        <!-- Caries -->
+                                        <option value="Caries">Caries</option>
+
+                                        <!-- Periodontal Disease -->
+                                        <option value="Periodontal Disease">Periodontal Disease</option>
+
+                                        <!-- Gingivitis -->
+                                        <option value="Gingivitis">Gingivitis</option>
+
+                                        <!-- Tooth Abscess -->
+                                        <option value="Tooth Abscess">Tooth Abscess</option>
+
+                                        <!-- Malocclusion -->
+                                        <option value="Malocclusion">Malocclusion</option>
+
+                                        <!-- Tooth Sensitivity -->
+                                        <option value="Tooth Sensitivity">Tooth Sensitivity</option>
+
+                                        <!-- TMJ Disorder -->
+                                        <option value="TMJ Disorder">TMJ Disorder</option>
+
+                                        <!-- Oral Cancer -->
+                                        <option value="Oral Cancer">Oral Cancer</option>
+
+                                        <!-- Bruxism -->
+                                        <option value="Bruxism">Bruxism</option>
+
+                                        <!-- Impacted Tooth -->
+                                        <option value="Impacted Tooth">Impacted Tooth</option>
+
+                                        <!-- Temporomandibular Joint Disorders -->
+                                        <option value="Temporomandibular Joint Disorders">Temporomandibular Joint Disorders</option>
+
+                                        <!-- Dental Trauma -->
+                                        <option value="Dental Trauma">Dental Trauma</option>
+
+                                        <!-- Dental Erosion -->
+                                        <option value="Dental Erosion">Dental Erosion</option>
+
+                                        <!-- Tooth Fracture -->
+                                        <option value="Tooth Fracture">Tooth Fracture</option>
+
+                                        <!-- Enamel Hypoplasia -->
+                                        <option value="Enamel Hypoplasia">Enamel Hypoplasia</option>
+
+                                        <!-- Orthodontic Issues -->
+                                        <option value="Orthodontic Issues">Orthodontic Issues</option>
+
+                                        <!-- Other -->
+                                        <option value="Other">Other</option>
+
+                                    </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="service-fee">Service Fee:</label>
-                                    <input type="text" id="service-fee" name="serviceFee" class="form-control" required>
+                                    <label for="dental-service-fee-on-edit-form">Service Fee:</label>
+                                    <input type="text" id="dental-service-fee-on-edit-form" name="serviceFee" class="form-control" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="request-status">Service Request Status:</label>
