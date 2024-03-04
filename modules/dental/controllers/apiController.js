@@ -3772,7 +3772,7 @@ const fetchIncomeByWeek = async (startDateTime, endDateTime) => {
   });
 
   // Generate labels and values
-  const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const values = labels.map((dayLabel) => daySums[dayLabel] || 0);
 
   return { labels, values };
@@ -3801,7 +3801,7 @@ const fetchExpensesByWeek = async (startDateTime, endDateTime) => {
   });
 
   // Generate labels and values
-  const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const values = labels.map((dayLabel) => daySums[dayLabel] || 0);
 
   return { labels, values };
