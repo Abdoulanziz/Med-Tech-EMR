@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Med Tech - EMR</title>
+
+
+    <link rel="shortcut icon" href="/assets/svg/favicon.ico" type="image/x-icon"/>
+
+    <link rel="stylesheet" href="/assets/css/utils.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/table.min.css">
+    <link rel="stylesheet" href="/assets/icons/themify-icons.css">
+
+    <script src="/js/libraries/jquery-3.5.1.js"></script>
+    <script src="/js/libraries/jquery.dataTables.min.js"></script>
+
+    <script src="/js/libraries/chart.js"></script>
+    <script src="/js/libraries/jspdf.min.js"></script>
+
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main">
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-logo">
+                    <img src="/assets/svg/512x512.png" alt="" class="app-logo">
+                    <span style="margin-inline-start: .6rem;color: #fff;font-family: 'Tilt Neon';font-weight: bolder;font-size: 27px;"><span style="color: rgb(0, 208, 255);">Med</span> <span style="color: yellowgreen;">Tech</span></span>
+                </div>
+                <ul class="sidebar-menu">
+                    <li class="menu-item">
+                        <a href="/page/patients">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/patients.png" alt="" class="icon"><span class="text">Patients</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/page/visits">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/visits.png" alt="" class="icon"><span class="text">Visits</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/page/queues">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/doctor.png" alt="" class="icon"><span class="text">Queue</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="/page/lab">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/laboratory.png" alt="" class="icon"><span class="text">Laboratory</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/page/pharmacy">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/pharmacy.png" alt="" class="icon"><span class="text">Pharmacy</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <!-- <li class="menu-item">
+                        <a href="#">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/cardiology.png" alt="" class="icon"><span class="text">Cardiology</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/radiology.png" alt="" class="icon"><span class="text">Radiology</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/theatre.png" alt="" class="icon"><span class="text">Theatre</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/dental.png" alt="" class="icon"><span class="text">Dental</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/cashier.png" alt="" class="icon"><span class="text">Cashier</span></span>
+                            </span>
+                        </a>
+                    </li> -->
+                </ul>
+            </div>
+
+            <!-- Main section -->
+            <div class="content">
+
+                <!-- Navbar -->
+                <div class="navbar">
+                    <nav>
+                        <ul class="nav-links flex">
+                            <div class="nav-left-items flex" style="gap: 1.4rem;">
+                                <img src="/assets/svg/cancel.svg" alt="" id="sidebar-toggler" class="sidebar-toggler">
+                                <img src="/assets/svg/business-logo.png" alt="" class="business-logo">
+                            </div>
+                            <div class="nav-badges flex">
+                                <div class="user-badge flex">
+                                    <h4 class="user-name">Logged in as: <%= data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1) %></h4>
+                                    <div class="user-avatar dropdown">
+                                        <div class="dropdown-avatar flex">
+                                            <img src="/assets/img/profiledefault.png" alt="user avatar" class="avatar">
+                                            <i class="ti-angle-down" id="toggle-dropdown"></i>
+                                        </div>
+                                        <div class="dropdown-menu" id="dropdown-menu">
+                                            <ul class="dropdown-items">
+                                                <li class="dropdown-item header">
+                                                    <span id="last-label">Last login:</span>
+                                                    <br>
+                                                    <small id="last-login-value"><%= data.user.lastLogin ? new Date(data.user.lastLogin).toLocaleString() : 'N/A' %></small>
+                                                </li>
+                                                <li class="dropdown-item"><i class="ti-settings"></i> <a href="#">Settings</a></li>
+                                                <li class="dropdown-item"><i class="ti-user"></i> <a href="#">My Profile</a></li>
+                                                <li class="dropdown-item"><i class="ti-info-alt"></i> <a href="#">About</a></li>
+                                                <li class="dropdown-item footer" id="signout-cta"><span>Sign Out</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ul>
+                    </nav>
+                </div>
+
+                <!-- Section 00 -->
+                <div class="sections br-0 inview" id="section_00">
+                    <div class="section-header flex">
+                        <div class="flex left">
+                            <div class="breadcrumb">
+                                <a href="#" class="current">Patients</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-body" style="padding-block-start: .8rem;">
+
+                        <div class="details-card">
+                            <div class="details-card-header">
+                                <h3 class="card-header">Patient Queue</h3>
+                            </div>
+
+                            <div class="details-card-body">
+                                <table id="all-patients-on-queue-table" class="display" style="width:100%;margin-top:.5rem;">
+                                    <thead>
+                                        <tr>
+                                            <th>#ID</th>
+                                            <th>Patient</th>
+                                            <th>Age</th>
+                                            <th>Urgency</th>
+                                            <th>Status</th>
+                                            <th>To See Doctor</th>
+                                            <th>Actions</th>
+                                            <th>Created At</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 01 -->
+                <div class="sections br-0" id="section_01">
+                    <div class="section-header flex">
+                        <div class="flex left">
+                            <div class="breadcrumb">
+                                <a href="#" class="section-toggler" data-section="section_00">Patients</a>
+                                <span class="separator">/</span>
+                                <a href="#" class="current">Visits</a>
+                            </div>
+                        </div>
+                        <!-- <button class="btn section-header-cta modal-trigger" id="open-create-visit-modal-btn" data-modal="create-visit-modal"> <i class="ti-plus"></i> Send to Lab</button> -->
+                    </div>
+                    <div class="section-body" style="padding-block-start: .8rem;">
+
+                        <div class="grid info">
+                            <div class="info-wrapper">
+                                <h2 class="special-heading">Personal Information</h2>
+                                <div class="patient-details" id="patient-info-section_01" style="padding: 0;">
+                                    <div class="patient-info" style="padding: 0;">
+                                        <div class="patient-info-wrapper">
+                                            <div class="left">
+                                                <img src="/assets/img/profiledefault.png" alt="user" width="100">
+                                                <h4 id="patient-name"></h4>
+                                            </div>
+                                            <div class="right">
+                                                <div class="info">
+                                                    <h3>Patient Info</h3>
+                                                    <div class="info-data">
+                                                        <div class="data">
+                                                            <h4>Email</h4>
+                                                            <p id="email">Not provided</p>
+                                                        </div>
+                                                        <div class="data">
+                                                            <h4>Phone</h4>
+                                                            <p id="contact-number"></p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="info-data">
+                                                        <div class="data">
+                                                            <h4>Date of Birth</h4>
+                                                            <p id="date-of-birth"></p>
+                                                        </div>
+                                                        <div class="data">
+                                                            <h4>Age</h4>
+                                                            <p id="age"></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- <div class="info-wrapper">
+                                <h2 class="special-heading">Billing Services</h2>
+                                <div class="ongoing-services"  id="ongoing-services-01">
+                                    <div class="service paid">
+                                      <div class="service-content flex">
+                                        <h3>Consultation (UGX 40,000)</h3>
+                                        <img src="/assets/svg/cancel.png" alt="remove service icon">
+                                      </div>
+                                    </div>
+                                    <div class="service unpaid">
+                                        <div class="service-content flex">
+                                          <h3>Complete Blood Count Test (UGX 25,000)</h3>
+                                          <img src="/assets/svg/cancel.png" alt="remove service icon">
+                                        </div>
+                                    </div>
+                                    <div class="service unpaid">
+                                        <div class="service-content flex">
+                                          <h3>Malaria (UGX 5,000)</h3>
+                                          <img src="/assets/svg/cancel.png" alt="remove service icon">
+                                        </div>
+                                    </div>
+                                    <div class="service unpaid">
+                                        <div class="service-content flex">
+                                          <h3>Root Canal (UGX 200,000)</h3>
+                                          <img src="/assets/svg/cancel.png" alt="remove service icon">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <div class="info-wrapper">
+                                <h2 class="special-heading">Special Documents</h2>
+                                <div class="documents flex" id="special-documents-01">
+                                    <div class="file-upload-container flex" id="file-drop-area">
+                                        <div>
+                                            <label for="file-input" class="file-label">Drag & Drop or Click to Upload</label>
+                                            <input type="file" id="file-input" class="file-input" accept=".pdf, .doc, .docx, .jpg, .png" onchange="displayFileName()">
+                                            <p class="selected-file" id="selected-file"></p> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="details-card">
+                            <div class="details-card-header">
+                                <h3 class="card-header">Recent Visits</h3>
+                            </div>
+
+                            <div class="details-card-body">
+                                 <table id="single-patient-visits" class="display" style="width:100%;margin-top:.5rem;">
+                                    <thead>
+                                        <tr>
+                                            <th>#ID</th>
+                                            <th>To See Doctor</th>
+                                            <th>Visit Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                            <th>Created At</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 02 -->
+                <div class="sections br-0" id="section_02">
+                    <div class="section-header flex">
+                        <div class="flex left">
+                            <div class="breadcrumb">
+                                <a href="#" class="section-toggler" data-section="section_00">Patients</a>
+                                <span class="separator">/</span>
+                                <a href="#" class="section-toggler" data-section="section_01">Visits</a>
+                                <span class="separator">/</span>
+                                <a href="#" class="current">Medical History</a>
+                            </div>
+                        </div>
+                        <!-- <div class="flex" style="gap: .8rem;">
+                            <div class="btn section-header-cta section-dropdown" data-menu="menu_00">
+                                <div class="section-dropdown-cta">
+                                    <span>General <i class="ti-angle-down"></i> </span>
+                                </div>
+                                <div class="section-dropdown-menu" id="menu_00">
+                                    <ul class="section-dropdown-items">
+                                        <li class="section-dropdown-item modal-trigger" data-modal="collect-patient-triage-data-modal"> <i class="ti-plus"></i> <span>Triage</span></li>
+                                        <li class="section-dropdown-item modal-trigger" data-modal="collect-patient-allergies-data-modal"> <i class="ti-plus"></i> <span>Allergies</span></li>
+                                        <li class="section-dropdown-item modal-trigger" data-modal="create-patient-diagnoses-modal"> <i class="ti-plus"></i> <span>Diagnosis</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="btn section-header-cta section-dropdown" data-menu="menu_01">
+                                <div class="section-dropdown-cta">
+                                    <span>Specialties <i class="ti-angle-down"></i> </span>
+                                </div>
+                                <div class="section-dropdown-menu" id="menu_01">
+                                    <ul class="section-dropdown-items">
+                                        <li class="section-dropdown-item modal-trigger" data-modal="send-patient-to-eye-clinic-modal"> <i class="ti-plus"></i> <span>Eye</span></li>
+                                        <li class="section-dropdown-item modal-trigger" data-modal="send-patient-to-dental-clinic-modal"> <i class="ti-plus"></i> <span>Dental Lab</span></li>
+                                        <li class="section-dropdown-item modal-trigger" data-modal="send-patient-to-cardiology-clinic-modal"> <i class="ti-plus"></i> <span>Cardiology</span></li>
+                                        <li class="section-dropdown-item modal-trigger" data-modal="send-patient-to-radiology-clinic-modal"> <i class="ti-plus"></i> <span>Radiology</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="btn section-header-cta section-dropdown" data-menu="menu_02">
+                                <div class="section-dropdown-cta">
+                                    <span>Operations <i class="ti-angle-down"></i> </span>
+                                </div>
+                                <div class="section-dropdown-menu" id="menu_02">
+                                    <ul class="section-dropdown-items">
+                                        <li class="section-dropdown-item modal-trigger" data-modal="send-patient-to-theatre-clinic-modal"> <i class="ti-plus"></i> <span>Theatre</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class="section-body" style="padding-block-start: .8rem;">
+                        <div class="grid info">
+                            <div class="info-wrapper">
+                                <h2 class="special-heading">Personal Information</h2>
+                                <div class="patient-details" id="patient-info-section_02" style="padding: 0;">
+                                    <div class="patient-info" style="padding: 0;">
+                                        <div class="patient-info-wrapper">
+                                            <div class="left">
+                                                <img src="/assets/img/profiledefault.png" alt="user" width="100">
+                                                <h4 id="patient-name"></h4>
+                                            </div>
+                                            <div class="right">
+                                                <div class="info">
+                                                    <h3>Patient Info</h3>
+                                                    <div class="info-data">
+                                                        <div class="data">
+                                                            <h4>Email</h4>
+                                                            <p id="email">Not provided</p>
+                                                        </div>
+                                                        <div class="data">
+                                                            <h4>Phone</h4>
+                                                            <p id="contact-number"></p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="info-data">
+                                                        <div class="data">
+                                                            <h4>Date of Birth</h4>
+                                                            <p id="date-of-birth"></p>
+                                                        </div>
+                                                        <div class="data">
+                                                            <h4>Age</h4>
+                                                            <p id="age"></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-wrapper">
+                                <h2 class="special-heading">Billing Services</h2>
+                                <div class="ongoing-services" id="ongoing-services-02" data-modal="services-payment-modal">
+                                    <div class="ongoing-services-wrapper">
+                                        <div class="ongoing-services-card">
+                                            <div class="ongoing-services-card-left">
+                                                <h4>Bill Balance</h4>
+                                                <div class="bill-content">
+                                                    <h2></h2>
+                                                    <p>The patient has to make payment of the amount indicated above.</p>
+                                                </div>
+                                            </div>
+                                            <div class="ongoing-services-card-right">
+                                                <ul class="">
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="details-card">
+                            <div class="details-card-header">
+                                <h3 class="card-header">Medical History</h3>
+                            </div>
+
+                            <div class="details-card-body">
+                                <table id="single-patient-visit-records" class="display" style="width:100%;margin-top:.5rem;">
+                                    <thead>
+                                        <tr>
+                                            <th>#ID</th>
+                                            <th>Test Name</th>
+                                            <th>Visit Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                            <th>Created At</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <!-- Bottom banner -->
+                <div class="bottom-banner">
+                    <div class="banner-content">
+                        <div class="banner-content-left">
+                            <span class="logged-in-as-label">Logged in as: <span class="logged-in-as-value"> <%= data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1) %> </span></span>
+                        </div>
+                        <div class="banner-content-right">
+                            <span class="system-version-label">System version: <span class="system-version-value"> 1.0.0 </span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <!-- Lab Results and Reports -->
+            <!-- Work on CBC Test modal -->
+            <div id="complete-blood-count-results-modal" class="form-modal">
+                <div class="form-modal-content" style="inline-size: 42%;">
+                    <form class="modal-form" id="complete-blood-count-results-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Fill CBC Test Results</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="complete-blood-count-results-form-body">
+                            <div class="form-section">
+                                <label for="">Complete Blood Count (CBC)</label>
+                                <table class="lab-table" id="cbc-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Test</th>
+                                            <th>Results</th>
+                                            <th>Ref Range</th>
+                                            <th>Remarks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>WHITE BLOOD CELL COUNT</td>
+                                            <td><input type="text" name="whiteBloodCellCount"></td>
+                                            <td>L</td>
+                                            <td>4.0 - 12.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>LYMPHOCYTE ABSOLUTE #</td>
+                                            <td><input type="text" name="lymphocyteAbsolute"></td>
+                                            <td>L</td>
+                                            <td>0.8 - 7.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>MID #</td>
+                                            <td><input type="text" name="mid"></td>
+                                            <td>L</td>
+                                            <td>0.1 - 1.2</td>
+                                        </tr>
+                                        <tr>
+                                            <td>GRAN #</td>
+                                            <td><input type="text" name="gran"></td>
+                                            <td>L</td>
+                                            <td>2.0 - 8.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>LYMPHOCYTE %</td>
+                                            <td><input type="text" name="lymphocytePercentage"></td>
+                                            <td>%</td>
+                                            <td>20.0 - 60.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>MID %</td>
+                                            <td><input type="text" name="midPercentage"></td>
+                                            <td>%</td>
+                                            <td>3.0 - 14.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>GRAN %</td>
+                                            <td><input type="text" name="granPercentage"></td>
+                                            <td>%</td>
+                                            <td>50.0 - 70.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>HAEMOGLOBIN (HB)</td>
+                                            <td><input type="text" name="haemoglobin"></td>
+                                            <td>g/dL</td>
+                                            <td>11.0 - 19.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>RED CELL COUNT</td>
+                                            <td><input type="text" name="redBloodCellCount"></td>
+                                            <td>L</td>
+                                            <td>3.50 - 6.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>HEMATOCRIT/PACKED CELL VOL (PCV)</td>
+                                            <td><input type="text" name="packedCellVolume"></td>
+                                            <td>%</td>
+                                            <td>33.0 - 49.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>MEAN CELL VOLUME (MCV)</td>
+                                            <td><input type="text" name="meanCellVolume"></td>
+                                            <td>fl</td>
+                                            <td>76.0 - 96.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>MEAN CELL HAEMOGLOBIN</td>
+                                            <td><input type="text" name="meanCellHaemoglobin"></td>
+                                            <td>pg</td>
+                                            <td>27.0 - 40.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>MCHC</td>
+                                            <td><input type="text" name="mchc"></td>
+                                            <td>g/dL</td>
+                                            <td>31.0 - 38.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>RDW-CV</td>
+                                            <td><input type="text" name="rdwCv"></td>
+                                            <td>%</td>
+                                            <td>11.0 - 16.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>RDW-SD</td>
+                                            <td><input type="text" name="rdwSd"></td>
+                                            <td>fl</td>
+                                            <td>35.0 - 56.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>PLATELETE COUNT</td>
+                                            <td><input type="text" name="plateleteCount"></td>
+                                            <td>L</td>
+                                            <td>150 - 540</td>
+                                        </tr>
+                                        <tr>
+                                            <td>MPV</td>
+                                            <td><input type="text" name="mpv"></td>
+                                            <td>fl</td>
+                                            <td>6.50 - 12.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>PDW</td>
+                                            <td><input type="text" name="pwd"></td>
+                                            <td></td>
+                                            <td>9.0 - 17.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>PCT</td>
+                                            <td><input type="text" name="pct"></td>
+                                            <td>%</td>
+                                            <td>0.108 - 0.282</td>
+                                        </tr>
+                                        <tr>
+                                            <td>ERYTHROCYTE SEDIMENTATION RATE (ECR)</td>
+                                            <td><input type="text" name="erythrocyteSedimentationRate"></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="form-section">
+                                <label for="complete-blood-count-results-comment-editor">Comments</label>
+                                <textarea id="complete-blood-count-results-comment-editor" style="border-radius: 0 !important;"></textarea>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Complete blood count report modal -->
+            <div id="complete-blood-count-lab-report-modal" class="form-modal">
+                <div class="form-modal-content" style="inline-size: 40%;">
+                    <form class="modal-form" id="complete-blood-count-lab-report-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">CBC Lab Report</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="complete-blood-count-lab-report-form-body" style="padding: 0;">
+                            <textarea id="complete-blood-count-lab-report" name="labReport" style="border-radius: 0 !important;"></textarea>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="button" id="print-lab-report-btn"> <i class="ti-printer"></i> Print</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Work on Urinalysis Test modal -->
+            <div id="urinalysis-results-modal" class="form-modal">
+                <div class="form-modal-content" style="inline-size: 42%;">
+                    <form class="modal-form" id="urinalysis-results-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Fill Urinalysis Test Results</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="urinalysis-results-form-body">
+                            <div class="form-section">
+                                <label for="">Urinalysis</label>
+                                <table class="lab-table" id="urinalysis-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Test</th>
+                                            <th>Results</th>
+                                            <th>Units</th>
+                                            <th>Ref Range</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td colspan="4" style="font-weight: bold;padding-block: 8px;">URINALYSIS (U/A)</td></tr>
+                                        <tr>
+                                            <td>Appearance</td>
+                                            <td><input type="text" name="appearance"></td>
+                                            <td>Pale Yellow and Clear</td>
+                                            <td>Abnormal</td>
+                                        </tr>
+                                        <tr><td colspan="4" style="font-weight: bold;padding-block: 8px;">BIOCHEMISTRY</td></tr>
+                                        <tr>
+                                            <td>Glucose</td>
+                                            <td><input type="text" name="glucose"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ketone</td>
+                                            <td><input type="text" name="ketone"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Blood</td>
+                                            <td><input type="text" name="blood"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>PH</td>
+                                            <td><input type="text" name="ph"></td>
+                                            <td>4.5 - 8.0</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Protein</td>
+                                            <td><input type="text" name="protein"></td>
+                                            <td>Nil - Trace</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nitrites</td>
+                                            <td><input type="text" name="nitrites"></td>
+                                            <td>Negative</td>
+                                            <td>Abnormal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Leucocytes</td>
+                                            <td><input type="text" name="leucocytes"></td>
+                                            <td>Nil</td>
+                                            <td>Abnormal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Urobilinogen</td>
+                                            <td><input type="text" name="urobilinogen"></td>
+                                            <td>0.1 - 1.8 mg/dl</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Biliribin</td>
+                                            <td><input type="text" name="bilirubin"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Specific Gravity</td>
+                                            <td><input type="text" name="specificGravity"></td>
+                                            <td>1.005 - 1.030</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr><td colspan="4" style="font-weight: bold;padding-block: 8px;">MICROSCOPY</td></tr>
+                                        <tr>
+                                            <td>RBC</td>
+                                            <td><input type="text" name="rbc"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pus Cells</td>
+                                            <td><input type="text" name="pusCells"></td>
+                                            <td>Nil</td>
+                                            <td>Abnormal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Epithelial Cells</td>
+                                            <td><input type="text" name="epithelialCells"></td>
+                                            <td>+</td>
+                                            <td>Abnormal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cast (Type)</td>
+                                            <td><input type="text" name="cast"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>WBC</td>
+                                            <td><input type="text" name="wbc"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Parasite</td>
+                                            <td><input type="text" name="parasite"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Crystals</td>
+                                            <td><input type="text" name="crystals"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>T.vaginalis</td>
+                                            <td><input type="text" name="tVaginalis"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Yeast Cells</td>
+                                            <td><input type="text" name="yeastCells"></td>
+                                            <td>Nil</td>
+                                            <td>Normal</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="form-section">
+                                <label for="urinalysis-results-comment-editor">Comments</label>
+                                <textarea id="urinalysis-results-comment-editor" style="border-radius: 0 !important;"></textarea>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Urinalysis report modal -->
+            <div id="urinalysis-lab-report-modal" class="form-modal">
+                <div class="form-modal-content" style="inline-size: 40%;">
+                    <form class="modal-form" id="urinalysis-lab-report-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Urinalysis Lab Report</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="urinalysis-lab-report-form-body" style="padding: 0;">
+                            <textarea id="urinalysis-lab-report" name="labReport" style="border-radius: 0 !important;"></textarea>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="button" id="print-lab-report-btn"> <i class="ti-printer"></i> Print</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Work on Other Test modal -->
+            <div id="other-results-modal" class="form-modal">
+                <div class="form-modal-content" style="inline-size: 42%;">
+                    <form class="modal-form" id="other-results-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Fill Other Test Results</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="other-results-form-body">
+                            <div class="form-section">
+                                <label for="other-results-comment-editor">Comments</label>
+                                <textarea id="other-results-comment-editor" style="border-radius: 0 !important;"></textarea>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Other report modal -->
+            <div id="other-lab-report-modal" class="form-modal">
+                <div class="form-modal-content" style="inline-size: 40%;">
+                    <form class="modal-form" id="other-lab-report-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Other Lab Report</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="other-lab-report-form-body" style="padding: 0;">
+                            <textarea id="other-lab-report" name="labReport" style="border-radius: 0 !important;"></textarea>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="button" id="print-lab-report-btn"> <i class="ti-printer"></i> Print</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Services payment modal -->
+            <div id="services-payment-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="services-payment-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Receive Payment</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="services-payment-form-body">
+                            <style>
+                                .container {
+                                    width: 80%;
+                                    margin: 0 auto;
+                                }
+
+                                .table {
+                                    width: 100%;
+                                    border-collapse: collapse;
+                                }
+
+                                .table th,
+                                .table td {
+                                    padding: 5px;
+                                    border: 1px solid #ccc;
+                                    text-align: left;
+                                }
+
+                                .table th {
+                                    background-color: #eee;
+                                }
+
+                                .total {
+                                    text-align: right;
+                                    font-weight: bold;
+                                }
+
+                                .checkout-button {
+                                    background-color: #007bff;
+                                    color: white;
+                                    padding: 10px 20px;
+                                    border: none;
+                                    cursor: pointer;
+                                }
+
+                                #select-all {
+                                    cursor: pointer;
+                                }
+                            </style>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="select-all"></th>
+                                        <th>Service Name</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="services-payment-table-body">
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2" class="total">Total</td>
+                                        <td class="total-value">0</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="submit" id="update-services-payment-status-btn"> Process</button>
+                            <button class="btn btn-primary btn-save" type="submit" id="update-services-payment-status-and-print-receipt-btn"> Process & Print</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="/js/libraries/moment.min.js"></script>
+    <script src="/js/tinymce/js/tinymce/tinymce.min.js"></script>
+
+    <!-- Load modules -->
+    <script type="module" src="/js/core/ui.js"></script>
+    <script type="module" src="/js/modules/lab.js"></script>
+    
+
+
+    <script>
+        tinymce.init({
+            selector: "#complete-blood-count-results-comment-editor",
+            width: "100%",
+            height: 300,
+            setup: function (editor) {}
+        });
+
+        tinymce.init({
+            selector: "#urinalysis-results-comment-editor",
+            width: "100%",
+            height: 300,
+            setup: function (editor) {}
+        });
+
+        tinymce.init({
+            selector: "#other-results-comment-editor",
+            width: "100%",
+            height: 400,
+            setup: function (editor) {}
+        });
+
+        // Display the selected file name when a file is chosen
+        function displayFileName() {
+            const fileInput = document.querySelector('#file-input');
+            const selectedFile = document.querySelector('#selected-file');
+
+            if (fileInput.files.length > 0) {
+                selectedFile.textContent = 'Selected File: ' + fileInput.files[0].name;
+            } else {
+                selectedFile.textContent = '';
+            }
+        }
+
+        // Enable drag and drop functionality
+        const fileDropArea = document.querySelector('#file-drop-area');
+        fileDropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.add('file-upload-container-active');
+        });
+
+        fileDropArea.addEventListener('dragleave', () => {
+            fileDropArea.classList.remove('file-upload-container-active');
+        });
+
+        fileDropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.remove('file-upload-container-active');
+            const fileInput = document.querySelector('#file-input');
+            fileInput.files = e.dataTransfer.files;
+            displayFileName();
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "development": {
+    "username": "medtech",
+    "password": "medtech",
+    "database": "medtech",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "medtech",
+    "password": "medtech",
+    "database": "medtech",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "postgres",
+    "ssl": true,
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+  }
+}

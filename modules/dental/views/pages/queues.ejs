@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Med Tech - EMR</title>
+
+
+    <link rel="shortcut icon" href="/assets/svg/favicon.ico" type="image/x-icon"/>
+
+    <link rel="stylesheet" href="/assets/css/utils.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/table.min.css">
+    <link rel="stylesheet" href="/assets/icons/themify-icons.css">
+
+    <script src="/js/libraries/jquery-3.5.1.js"></script>
+    <script src="/js/libraries/jquery.dataTables.min.js"></script>
+
+    <script src="/js/libraries/chart.js"></script>
+    <script src="/js/libraries/jspdf.min.js"></script>
+
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main">
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-logo">
+                    <img src="/assets/svg/512x512.png" alt="" class="app-logo">
+                    <span style="margin-inline-start: .6rem;color: #fff;font-family: 'Tilt Neon';font-weight: bolder;font-size: 27px;"><span style="color: rgb(0, 208, 255);">Med</span> <span style="color: yellowgreen;">Tech</span></span>
+                </div>
+                <ul class="sidebar-menu">
+                    <li class="menu-item">
+                        <a href="/page/patients">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/patients.png" alt="" class="icon"><span class="text">Patients</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/page/visits">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/visits.png" alt="" class="icon"><span class="text">Visits</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="/page/queues">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/doctor.png" alt="" class="icon"><span class="text">Queue</span></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/page/dental">
+                            <span class="flex">
+                                <span class="flex"><img src="/assets/actions/dental.png" alt="" class="icon"><span class="text">Laboratory</span></span>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main section -->
+            <div class="content">
+
+                <!-- Navbar -->
+                <div class="navbar">
+                    <nav>
+                        <ul class="nav-links flex">
+                            <div class="nav-left-items flex" style="gap: 1.4rem;">
+                                <img src="/assets/svg/cancel.svg" alt="" id="sidebar-toggler" class="sidebar-toggler">
+                                <img src="/assets/svg/business-logo.png" alt="" class="business-logo">
+                            </div>
+                            <div class="nav-badges flex">
+                                <div class="user-badge flex">
+                                    <h4 class="user-name">Logged in as: <%= data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1) %></h4>
+                                    <div class="user-avatar dropdown">
+                                        <div class="dropdown-avatar flex">
+                                            <img src="/assets/img/profiledefault.png" alt="user avatar" class="avatar">
+                                            <i class="ti-angle-down" id="toggle-dropdown"></i>
+                                        </div>
+                                        <div class="dropdown-menu" id="dropdown-menu">
+                                            <ul class="dropdown-items">
+                                                <li class="dropdown-item header">
+                                                    <span id="last-label">Last login:</span>
+                                                    <br>
+                                                    <small id="last-login-value"><%= data.user.lastLogin ? new Date(data.user.lastLogin).toLocaleString() : 'N/A' %></small>
+                                                </li>
+                                                <li class="dropdown-item"><i class="ti-settings"></i> <a href="#">Settings</a></li>
+                                                <li class="dropdown-item"><i class="ti-user"></i> <a href="#">My Profile</a></li>
+                                                <li class="dropdown-item"><i class="ti-info-alt"></i> <a href="#">About</a></li>
+                                                <li class="dropdown-item footer" id="signout-cta"><span>Sign Out</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ul>
+                    </nav>
+                </div>
+
+                <!-- Section 00 -->
+                <div class="sections br-0 inview" id="section_00">
+                    <div class="section-header flex">
+                        <div class="flex left">
+                            <div class="breadcrumb">
+                                <a href="#" class="current">Patients</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-body" style="padding-block-start: .8rem;">
+
+                        <div class="details-card">
+                            <div class="details-card-header">
+                                <h3 class="card-header">Patient Queue</h3>
+                            </div>
+
+                            <div class="details-card-body">
+                                <table id="all-patients-on-queue-table" class="display" style="width:100%;margin-top:.5rem;">
+                                    <thead>
+                                        <tr>
+                                            <th>#ID</th>
+                                            <th>Patient</th>
+                                            <th>Age</th>
+                                            <th>Urgency</th>
+                                            <th>Status</th>
+                                            <th>To See Doctor</th>
+                                            <th>Actions</th>
+                                            <th>Created At</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 01 -->
+                <div class="sections br-0" id="section_01">
+                    <div class="section-header flex">
+                        <div class="flex left">
+                            <div class="breadcrumb">
+                                <a href="#" class="section-toggler" data-section="section_00">Patients</a>
+                                <span class="separator">/</span>
+                                <a href="#" class="current">Visits</a>
+                            </div>
+                        </div>
+                        <!-- <button class="btn section-header-cta modal-trigger" id="open-create-visit-modal-btn" data-modal="create-visit-modal"> <i class="ti-plus"></i> Send to Lab</button> -->
+                    </div>
+                    <div class="section-body" style="padding-block-start: .8rem;">
+
+                        <div class="grid info">
+                            <div class="info-wrapper">
+                                <h2 class="special-heading">Personal Information</h2>
+                                <div class="patient-details" id="patient-info-section_01" style="padding: 0;">
+                                    <div class="patient-info" style="padding: 0;">
+                                        <div class="patient-info-wrapper">
+                                            <div class="left">
+                                                <img src="/assets/img/profiledefault.png" alt="user" width="100">
+                                                <h4 id="patient-name"></h4>
+                                            </div>
+                                            <div class="right">
+                                                <div class="info">
+                                                    <h3>Patient Info</h3>
+                                                    <div class="info-data">
+                                                        <div class="data">
+                                                            <h4>Email</h4>
+                                                            <p id="email">Not provided</p>
+                                                        </div>
+                                                        <div class="data">
+                                                            <h4>Phone</h4>
+                                                            <p id="contact-number"></p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="info-data">
+                                                        <div class="data">
+                                                            <h4>Date of Birth</h4>
+                                                            <p id="date-of-birth"></p>
+                                                        </div>
+                                                        <div class="data">
+                                                            <h4>Age</h4>
+                                                            <p id="age"></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-wrapper">
+                                <h2 class="special-heading">Special Documents</h2>
+                                <div class="documents flex" id="special-documents-01">
+                                    <div class="file-upload-container flex" id="file-drop-area">
+                                        <div>
+                                            <label for="file-input" class="file-label">Drag & Drop or Click to Upload</label>
+                                            <input type="file" id="file-input" class="file-input" accept=".pdf, .doc, .docx, .jpg, .png" onchange="displayFileName()">
+                                            <p class="selected-file" id="selected-file"></p> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="details-card">
+                            <div class="details-card-header">
+                                <h3 class="card-header">Recent Visits</h3>
+                            </div>
+
+                            <div class="details-card-body">
+                                <table id="single-patient-visits" class="display" style="width:100%;margin-top:.5rem;">
+                                    <thead>
+                                        <tr>
+                                            <th>#ID</th>
+                                            <th>To See Doctor</th>
+                                            <th>Visit Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                            <th>Created At</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 02 -->
+                <div class="sections br-0" id="section_02">
+                    <div class="section-header flex">
+                        <div class="flex left">
+                            <div class="breadcrumb">
+                                <a href="#" class="section-toggler" data-section="section_00">Patients</a>
+                                <span class="separator">/</span>
+                                <a href="#" class="section-toggler" data-section="section_01">Visits</a>
+                                <span class="separator">/</span>
+                                <a href="#" class="current">Medical History</a>
+                            </div>
+                        </div>
+                        <div class="flex" style="gap: .8rem;">
+                            <div class="ctas">
+                                <button class="btn section-header-cta modal-trigger" id="" data-modal="create-patient-dental-service-request-modal"> <i class="ti-plus"></i> Dental Request</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-body" style="padding-block-start: .8rem;">
+                        <div class="grid info">
+                            <div class="info-wrapper">
+                                <h2 class="special-heading">Personal Information</h2>
+                                <div class="patient-details" id="patient-info-section_02" style="padding: 0;">
+                                    <div class="patient-info" style="padding: 0;">
+                                        <div class="patient-info-wrapper">
+                                            <div class="left">
+                                                <img src="/assets/img/profiledefault.png" alt="user" width="100">
+                                                <h4 id="patient-name"></h4>
+                                            </div>
+                                            <div class="right">
+                                                <div class="info">
+                                                    <h3>Patient Info</h3>
+                                                    <div class="info-data">
+                                                        <div class="data">
+                                                            <h4>Email</h4>
+                                                            <p id="email">Not provided</p>
+                                                        </div>
+                                                        <div class="data">
+                                                            <h4>Phone</h4>
+                                                            <p id="contact-number"></p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="info-data">
+                                                        <div class="data">
+                                                            <h4>Date of Birth</h4>
+                                                            <p id="date-of-birth"></p>
+                                                        </div>
+                                                        <div class="data">
+                                                            <h4>Age</h4>
+                                                            <p id="age"></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-wrapper">
+                                <h2 class="special-heading">Billing Services</h2>
+                                <div class="ongoing-services" id="ongoing-services-02" data-modal="services-payment-modal">
+                                    <div class="ongoing-services-wrapper">
+                                        <div class="ongoing-services-card">
+                                            <div class="ongoing-services-card-left">
+                                                <h4>Bill Balance</h4>
+                                                <div class="bill-content">
+                                                    <h2></h2>
+                                                    <p>The patient has to make payment of the amount indicated above.</p>
+                                                </div>
+                                            </div>
+                                            <div class="ongoing-services-card-right">
+                                                <ul class="">
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="details-card">
+                            <div class="details-card-header">
+                                <h3 class="card-header">Medical History</h3>
+                            </div>
+
+                            <div class="details-card-body">
+                                <table id="single-patient-visit-records" class="display" style="width:100%;margin-top:.5rem;">
+                                    <thead>
+                                        <tr>
+                                            <th>#ID</th>
+                                            <th>Test Name</th>
+                                            <th>Visit Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                            <th>Created At</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Bottom banner -->
+                <div class="bottom-banner">
+                    <div class="banner-content">
+                        <div class="banner-content-left">
+                            <span class="logged-in-as-label">Logged in as: <span class="logged-in-as-value"> <%= data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1) %> </span></span>
+                        </div>
+                        <div class="banner-content-right">
+                            <span class="system-version-label">System version: <span class="system-version-value"> 1.0.0 </span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services payment modal -->
+            <div id="services-payment-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="services-payment-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Receive Payment</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+
+                        <div class="modal-form-body" id="services-payment-form-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="select-all"></th>
+                                        <th>Service Name</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="services-payment-table-body">
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2" class="total">Total</td>
+                                        <td class="total-value">0</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="button">Cancel</button>
+                            <button class="btn btn-primary btn-save" type="submit" id="update-services-payment-status-btn"> Process</button>
+                            <button class="btn btn-primary btn-save" type="submit" id="update-services-payment-status-and-print-receipt-btn"> Process & Print</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Create dental request modal -->
+            <div id="create-patient-dental-service-request-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="create-patient-dental-service-request-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Create Dental Service Request</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="create-patient-dental-service-request-form-body">
+                            <div class="form-section">
+                                <h2>Medical Information</h2>
+                                <div class="form-group">
+                                    <label for="tooth-type">Specific Tooth:</label>
+                                    <select id="tooth-type" name="toothType">
+                                        <option value="18">18</option>
+                                        <option value="17">17</option>
+                                        <option value="16">16</option>
+                                        <option value="15">15</option>
+                                        <option value="14">14</option>
+                                        <option value="13">13</option>
+                                        <option value="12">12</option>
+                                        <option value="11">11</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                        <option value="24">24</option>
+                                        <option value="25">25</option>
+                                        <option value="26">26</option>
+                                        <option value="27">27</option>
+                                        <option value="28">28</option>
+                                        <option value="38">38</option>
+                                        <option value="37">37</option>
+                                        <option value="36">36</option>
+                                        <option value="35">35</option>
+                                        <option value="34">34</option>
+                                        <option value="33">33</option>
+                                        <option value="32">32</option>
+                                        <option value="31">31</option>
+                                        <option value="41">41</option>
+                                        <option value="42">42</option>
+                                        <option value="43">43</option>
+                                        <option value="44">44</option>
+                                        <option value="45">45</option>
+                                        <option value="46">46</option>
+                                        <option value="47">47</option>
+                                        <option value="48">48</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="procedure">Select Procedure:</label>
+                                    <select id="procedure-on-create-form" name="procedure">
+                                    </select>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="diagnosis">Select Diagnosis:</label>
+                                    <select id="diagnosis" name="diagnosis">
+                                        
+                                        <!-- Caries -->
+                                        <option value="Caries">Caries</option>
+
+                                        <!-- Periodontal Disease -->
+                                        <option value="Periodontal Disease">Periodontal Disease</option>
+
+                                        <!-- Gingivitis -->
+                                        <option value="Gingivitis">Gingivitis</option>
+
+                                        <!-- Tooth Abscess -->
+                                        <option value="Tooth Abscess">Tooth Abscess</option>
+
+                                        <!-- Malocclusion -->
+                                        <option value="Malocclusion">Malocclusion</option>
+
+                                        <!-- Tooth Sensitivity -->
+                                        <option value="Tooth Sensitivity">Tooth Sensitivity</option>
+
+                                        <!-- TMJ Disorder -->
+                                        <option value="TMJ Disorder">TMJ Disorder</option>
+
+                                        <!-- Oral Cancer -->
+                                        <option value="Oral Cancer">Oral Cancer</option>
+
+                                        <!-- Bruxism -->
+                                        <option value="Bruxism">Bruxism</option>
+
+                                        <!-- Impacted Tooth -->
+                                        <option value="Impacted Tooth">Impacted Tooth</option>
+
+                                        <!-- Temporomandibular Joint Disorders -->
+                                        <option value="Temporomandibular Joint Disorders">Temporomandibular Joint Disorders</option>
+
+                                        <!-- Dental Trauma -->
+                                        <option value="Dental Trauma">Dental Trauma</option>
+
+                                        <!-- Dental Erosion -->
+                                        <option value="Dental Erosion">Dental Erosion</option>
+
+                                        <!-- Tooth Fracture -->
+                                        <option value="Tooth Fracture">Tooth Fracture</option>
+
+                                        <!-- Enamel Hypoplasia -->
+                                        <option value="Enamel Hypoplasia">Enamel Hypoplasia</option>
+
+                                        <!-- Orthodontic Issues -->
+                                        <option value="Orthodontic Issues">Orthodontic Issues</option>
+
+                                        <!-- Other -->
+                                        <option value="Other">Other</option>
+
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="service-fee">Service Fee:</label>
+                                    <input type="text" id="dental-service-fee-on-create-form" name="serviceFee" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="submit">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Edit dental request modal -->
+            <div id="edit-patient-dental-service-request-modal" class="form-modal">
+                <div class="form-modal-content">
+                    <form class="modal-form" id="edit-patient-dental-service-request-form">
+                        <div class="form-modal-header flex">
+                            <div class="form-modal-header-left flex">
+                                <img src="/assets/actions/patients.png" alt="" class="icon">
+                                <h2 class="title">Edit Dental Service Request</h2>
+                            </div>
+                            <span class="form-modal-header-right icon-wrapper close-modal-btn"><i class="ti-close icon"></i></span>
+                        </div>
+            
+                        <div class="modal-form-body" id="edit-patient-dental-service-request-form-body">
+                            <div class="form-section">
+                                <h2>Medical Information</h2>
+                                <div class="form-group">
+                                    <label for="tooth-type">Specific Tooth:</label>
+                                    <select id="tooth-type" name="toothType">
+                                        <option value="18">18</option>
+                                        <option value="17">17</option>
+                                        <option value="16">16</option>
+                                        <option value="15">15</option>
+                                        <option value="14">14</option>
+                                        <option value="13">13</option>
+                                        <option value="12">12</option>
+                                        <option value="11">11</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                        <option value="24">24</option>
+                                        <option value="25">25</option>
+                                        <option value="26">26</option>
+                                        <option value="27">27</option>
+                                        <option value="28">28</option>
+                                        <option value="38">38</option>
+                                        <option value="37">37</option>
+                                        <option value="36">36</option>
+                                        <option value="35">35</option>
+                                        <option value="34">34</option>
+                                        <option value="33">33</option>
+                                        <option value="32">32</option>
+                                        <option value="31">31</option>
+                                        <option value="41">41</option>
+                                        <option value="42">42</option>
+                                        <option value="43">43</option>
+                                        <option value="44">44</option>
+                                        <option value="45">45</option>
+                                        <option value="46">46</option>
+                                        <option value="47">47</option>
+                                        <option value="48">48</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="procedure">Select Procedure:</label>
+                                    <select id="procedure-on-edit-form" name="procedure">
+                                    </select>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="diagnosis">Select Diagnosis:</label>
+                                    <select id="diagnosis" name="diagnosis">
+                                        
+                                        <!-- Caries -->
+                                        <option value="Caries">Caries</option>
+
+                                        <!-- Periodontal Disease -->
+                                        <option value="Periodontal Disease">Periodontal Disease</option>
+
+                                        <!-- Gingivitis -->
+                                        <option value="Gingivitis">Gingivitis</option>
+
+                                        <!-- Tooth Abscess -->
+                                        <option value="Tooth Abscess">Tooth Abscess</option>
+
+                                        <!-- Malocclusion -->
+                                        <option value="Malocclusion">Malocclusion</option>
+
+                                        <!-- Tooth Sensitivity -->
+                                        <option value="Tooth Sensitivity">Tooth Sensitivity</option>
+
+                                        <!-- TMJ Disorder -->
+                                        <option value="TMJ Disorder">TMJ Disorder</option>
+
+                                        <!-- Oral Cancer -->
+                                        <option value="Oral Cancer">Oral Cancer</option>
+
+                                        <!-- Bruxism -->
+                                        <option value="Bruxism">Bruxism</option>
+
+                                        <!-- Impacted Tooth -->
+                                        <option value="Impacted Tooth">Impacted Tooth</option>
+
+                                        <!-- Temporomandibular Joint Disorders -->
+                                        <option value="Temporomandibular Joint Disorders">Temporomandibular Joint Disorders</option>
+
+                                        <!-- Dental Trauma -->
+                                        <option value="Dental Trauma">Dental Trauma</option>
+
+                                        <!-- Dental Erosion -->
+                                        <option value="Dental Erosion">Dental Erosion</option>
+
+                                        <!-- Tooth Fracture -->
+                                        <option value="Tooth Fracture">Tooth Fracture</option>
+
+                                        <!-- Enamel Hypoplasia -->
+                                        <option value="Enamel Hypoplasia">Enamel Hypoplasia</option>
+
+                                        <!-- Orthodontic Issues -->
+                                        <option value="Orthodontic Issues">Orthodontic Issues</option>
+
+                                        <!-- Other -->
+                                        <option value="Other">Other</option>
+
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="service-fee">Service Fee:</label>
+                                    <input type="text" id="dental-service-fee-on-edit-form" name="serviceFee" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="form-modal-footer flex">
+                            <button class="btn btn-primary" type="submit">Cancel</button>
+                            <button class="btn btn-primary btn-save submit-btn" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>  
+            
+        </div>
+    </div>
+
+    <script src="/js/libraries/moment.min.js"></script>
+    <script src="/js/tinymce/js/tinymce/tinymce.min.js"></script>
+
+    <!-- Load modules -->
+    <script type="module" src="/js/core/ui.js"></script>
+    <script type="module" src="/js/modules/queues.js"></script>
+
+    <script>
+        // Display the selected file name when a file is chosen
+        function displayFileName() {
+            const fileInput = document.querySelector('#file-input');
+            const selectedFile = document.querySelector('#selected-file');
+
+            if (fileInput.files.length > 0) {
+                selectedFile.textContent = 'Selected File: ' + fileInput.files[0].name;
+            } else {
+                selectedFile.textContent = '';
+            }
+        }
+
+
+        // Enable drag and drop functionality
+        const fileDropArea = document.querySelector('#file-drop-area');
+        fileDropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.add('file-upload-container-active');
+        });
+
+
+        fileDropArea.addEventListener('dragleave', () => {
+            fileDropArea.classList.remove('file-upload-container-active');
+        });
+
+
+        fileDropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.remove('file-upload-container-active');
+            const fileInput = document.querySelector('#file-input');
+            fileInput.files = e.dataTransfer.files;
+            displayFileName();
+        });
+
+    </script>
+
+</body>
+</html>
