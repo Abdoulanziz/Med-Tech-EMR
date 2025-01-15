@@ -2,7 +2,11 @@
 
 > A modern Electronic Medical Records (EMR) system designed to streamline healthcare operations and improve patient care.
 
-https://drive.google.com/file/d/1_NoHUZMLcsn-iJbab09iYbmIn2xWnlmb/view?usp=drive_link, https://drive.google.com/file/d/1-YM6TW9MvABZHGM8Tpf6ur3zDfOxAIx_/view?usp=drive_link, https://drive.google.com/file/d/1Gj_yOWpqdDMwB4V6bbjbn_NosOI7t1-H/view?usp=drive_link, https://drive.google.com/file/d/1lYMdHxXgoUocMm3fSG-CqocQOE82VO1p/view?usp=drive_link, https://drive.google.com/file/d/1LrL5sFvoKFyA1_XiFWg-b5atS0FA03SL/view?usp=drive_link, https://drive.google.com/file/d/1O6BznmTUYI7k_kthLBRdLnT8CoHA26Bf/view?usp=drive_link, https://drive.google.com/file/d/1og6GjZVkR6kecHJa_ZdR_ne0e2eimeHa/view?usp=drive_link, https://drive.google.com/file/d/1lfI8aKDn1l-oyvbz6rkyfpXXO2FNd0Ye/view?usp=drive_link, https://drive.google.com/file/d/1k8OBhnSipTtyEw6XdK3D-qWWzswZ52X4/view?usp=drive_link, https://drive.google.com/file/d/1LKNx34HXWkXd3M5t6DSJIeamW-D8W-9l/view?usp=drive_link, https://drive.google.com/file/d/1YD9hh-ySdt7xWgeu0OYXuZUtYa5IKRy_/view?usp=drive_link, https://drive.google.com/file/d/1eqEDNaXY56lFhq9n44wut4jxZLn75P6N/view?usp=drive_link, https://drive.google.com/file/d/1bAE8U_stPW59amnpgKA_PZg-xSxLDnnv/view?usp=drive_link, https://drive.google.com/file/d/1_BIOmhWTwW5RD5GFDRIOs-0NLH9JtYvV/view?usp=drive_link, https://drive.google.com/file/d/1xJnGDAS84L7R9VQOpV6MYQQyp1paZyTF/view?usp=drive_link, https://drive.google.com/file/d/1JGYGU5aGuP9Qh8qdsoVyA3Nxa5rYWTD5/view?usp=drive_link
+![EMR System Interface](https://drive.google.com/file/d/1_NoHUZMLcsn-ilbab09iYbmIn2xWnlmb/view?usp=drive_link)
+![Patient Dashboard](https://drive.google.com/file/d/1-YM6TW9MvABZHGM8Tpf6ur3zDfOxAIx_/view?usp=drive_link)
+![Appointment Calendar](https://drive.google.com/file/d/1Gj_yOWpqdDMwB4V6bhJbn_NosOI7t1-H/view?usp=drive_link)
+![Medical Records View](https://drive.google.com/file/d/1lYMdHxXgoUocMm3fSG-CqocQOE82VO1p/view?usp=drive_link)
+![Patient Profile](https://drive.google.com/file/d/1LrL5sFvoKFyA1_XiFWg-b5atS0FA03SL/view?usp=drive_link)
 
 
 ## 📋 Overview
