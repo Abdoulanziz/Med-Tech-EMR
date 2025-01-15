@@ -2,11 +2,12 @@
 
 > A modern Electronic Medical Records (EMR) system designed to streamline healthcare operations and improve patient care.
 
-![EMR System Interface](https://drive.google.com/file/d/1_NoHUZMLcsn-ilbab09iYbmIn2xWnlmb/view?usp=drive_link)
-![Patient Dashboard](https://drive.google.com/file/d/1-YM6TW9MvABZHGM8Tpf6ur3zDfOxAIx_/view?usp=drive_link)
-![Appointment Calendar](https://drive.google.com/file/d/1Gj_yOWpqdDMwB4V6bhJbn_NosOI7t1-H/view?usp=drive_link)
-![Medical Records View](https://drive.google.com/file/d/1lYMdHxXgoUocMm3fSG-CqocQOE82VO1p/view?usp=drive_link)
-![Patient Profile](https://drive.google.com/file/d/1LrL5sFvoKFyA1_XiFWg-b5atS0FA03SL/view?usp=drive_link)
+![EMR System Interface](https://drive.google.com/uc?id=1_NoHUZMLcsn-ilbab09iYbmIn2xWnlmb)
+![Patient Dashboard](https://drive.google.com/uc?id=1-YM6TW9MvABZHGM8Tpf6ur3zDfOxAIx_)
+![Appointment Calendar](https://drive.google.com/uc?id=1Gj_yOWpqdDMwB4V6bhJbn_NosOI7t1-H)
+![Medical Records View](https://drive.google.com/uc?id=1lYMdHxXgoUocMm3fSG-CqocQOE82VO1p)
+![Patient Profile](https://drive.google.com/uc?id=1LrL5sFvoKFyA1_XiFWg-b5atS0FA03SL)
+
 
 
 ## 📋 Overview
