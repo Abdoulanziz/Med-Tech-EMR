@@ -2,11 +2,23 @@
 
 > A modern Electronic Medical Records (EMR) system designed to streamline healthcare operations and improve patient care.
 
-![EMR System Interface](https://drive.google.com/uc?id=1_NoHUZMLcsn-ilbab09iYbmIn2xWnlmb)
-![Patient Dashboard](https://drive.google.com/uc?id=1-YM6TW9MvABZHGM8Tpf6ur3zDfOxAIx_)
-![Appointment Calendar](https://drive.google.com/uc?id=1Gj_yOWpqdDMwB4V6bhJbn_NosOI7t1-H)
-![Medical Records View](https://drive.google.com/uc?id=1lYMdHxXgoUocMm3fSG-CqocQOE82VO1p)
-![Patient Profile](https://drive.google.com/uc?id=1LrL5sFvoKFyA1_XiFWg-b5atS0FA03SL)
+![Screenshot from 2024-01-27 00-44-27](https://github.com/user-attachments/assets/a91d0715-aa93-488d-bf4e-a6b2c2ebad8e)
+![Screenshot from 2024-01-27 00-44-50](https://github.com/user-attachments/assets/9c9026dd-7496-4067-804b-80c522933bbe)
+![Screenshot from 2024-01-27 00-45-01](https://github.com/user-attachments/assets/cf154e83-7ce1-47cf-825b-84d1ad583d54)
+![Screenshot from 2024-01-27 00-45-38](https://github.com/user-attachments/assets/b2507318-0ba3-4cf4-bf44-99ca7bfff0bf)
+![Screenshot from 2024-01-27 00-45-45](https://github.com/user-attachments/assets/4144c298-0d44-4b3f-a5b9-bad9d80299fe)
+![Screenshot from 2024-01-27 00-46-06](https://github.com/user-attachments/assets/b1c3a7e0-b5be-4d69-b9d7-e527db1df162)
+![Screenshot from 2024-01-27 00-46-18](https://github.com/user-attachments/assets/01490777-01ce-4a17-abeb-6af4df904beb)
+![Screenshot from 2024-01-27 00-46-29](https://github.com/user-attachments/assets/a58df2b8-c1e5-46c8-aa0f-769e074db6d4)
+![Screenshot from 2024-01-27 00-46-53](https://github.com/user-attachments/assets/ca9aa2cb-2d1f-40c7-8d5a-4ac5736e2cde)
+![Screenshot from 2024-01-27 00-47-06](https://github.com/user-attachments/assets/a5e00f39-0f7f-4e25-8ffd-2013ac9e3421)
+![Screenshot from 2024-01-27 00-47-12](https://github.com/user-attachments/assets/08c64a36-717a-4a9c-976f-a4df885b1276)
+![Screenshot from 2024-01-27 00-47-16](https://github.com/user-attachments/assets/5f57f9ca-45b2-4701-920e-ce7695c83b0a)
+![Screenshot from 2024-01-27 00-47-42](https://github.com/user-attachments/assets/4b72a72a-a964-4a56-80a4-3a43b5bedc94)
+![Screenshot from 2024-01-27 00-47-47](https://github.com/user-attachments/assets/dfd4c9ff-580f-4472-b3ad-ce39d2887a82)
+![Screenshot from 2024-01-27 00-48-59](https://github.com/user-attachments/assets/c8fc8ca0-4607-40d1-a48e-cd7b84cd04d6)
+![Screenshot from 2024-01-27 00-49-18](https://github.com/user-attachments/assets/e4e538df-a981-43cc-956c-c6c55fbf8e91)
+
 
 
 
